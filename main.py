@@ -46,25 +46,21 @@ class ReuseAddrTCPServer(socketserver.TCPServer):
 
 def main():
     """Main function to start the HTTP server"""
-    # Find available port
-    available_port = find_available_port(PORT)
-    if available_port is None:
-        print("❌ No available ports found")
-        sys.exit(1)
-    
     # Verify index.html exists
     if not os.path.exists('index.html'):
         print("❌ index.html not found in current directory")
         sys.exit(1)
     
+    httpd = None
     try:
-        httpd = ReuseAddrTCPServer(("0.0.0.0", available_port), HTTPHandler)
-        print(f"✅ Dr.MortgageUSA server running on http://0.0.0.0:{available_port}")
+        httpd = ReuseAddrTCPServer(("0.0.0.0", PORT), HTTPHandler)
+        print(f"✅ Dr.MortgageUSA server running on http://0.0.0.0:{PORT}")
         print(f"📁 Serving files from: {os.getcwd()}")
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\n🛑 Server stopped")
-        httpd.shutdown()
+        if httpd:
+            httpd.shutdown()
     except Exception as e:
         print(f"❌ Server error: {e}")
         sys.exit(1)
