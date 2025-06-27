@@ -27,21 +27,16 @@ class TCPServer(socketserver.TCPServer):
 
 def main():
     """Main function to start the production server"""
-    # Ensure we're in the correct directory
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     
-    # Verify index.html exists
     if not os.path.exists('index.html'):
-        print("ERROR: index.html not found in current directory")
+        print("Error: index.html not found")
         sys.exit(1)
     
-    print(f"Starting Dr.MortgageUSA server on port {PORT}")
-    print(f"Serving files from: {os.getcwd()}")
-    
     try:
-        with TCPServer(("0.0.0.0", PORT), Handler) as httpd:
-            print(f"Server running at http://0.0.0.0:{PORT}")
-            httpd.serve_forever()
+        httpd = TCPServer(("0.0.0.0", PORT), Handler)
+        print(f"Server running on http://0.0.0.0:{PORT}")
+        httpd.serve_forever()
     except KeyboardInterrupt:
         print("Server stopped")
     except Exception as e:
