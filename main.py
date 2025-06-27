@@ -51,10 +51,26 @@ def main():
         print("❌ index.html not found in current directory")
         sys.exit(1)
     
+    # Try to find an available port if the default is in use
+    actual_port = PORT
     httpd = None
+    
     try:
-        httpd = ReuseAddrTCPServer(("0.0.0.0", PORT), HTTPHandler)
-        print(f"✅ Dr.MortgageUSA server running on http://0.0.0.0:{PORT}")
+        httpd = ReuseAddrTCPServer(("0.0.0.0", actual_port), HTTPHandler)
+    except OSError as e:
+        if e.errno == 98:  # Address already in use
+            print(f"⚠️  Port {actual_port} is in use, finding alternative...")
+            actual_port = find_available_port(PORT)
+            if actual_port:
+                httpd = ReuseAddrTCPServer(("0.0.0.0", actual_port), HTTPHandler)
+            else:
+                print("❌ No available ports found")
+                sys.exit(1)
+        else:
+            raise
+    
+    try:
+        print(f"✅ Dr.MortgageUSA server running on http://0.0.0.0:{actual_port}")
         print(f"📁 Serving files from: {os.getcwd()}")
         httpd.serve_forever()
     except KeyboardInterrupt:
@@ -63,6 +79,8 @@ def main():
             httpd.shutdown()
     except Exception as e:
         print(f"❌ Server error: {e}")
+        if httpd:
+            httpd.shutdown()
         sys.exit(1)
 
 if __name__ == "__main__":
