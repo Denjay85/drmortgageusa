@@ -114,7 +114,7 @@
     <div id="panel-refi" class="panel hidden max-w-3xl mx-auto">
       <h2 class="text-2xl font-bold mb-4">Refi &amp; Save Strategy</h2>
       <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li>Break‑even calculator on today's rates</li>
+        <li>Break‑even calculator on today’s rates</li>
         <li>2‑1 buydown vs permanent buydown walkthrough</li>
         <li>Zero‑cost streamline refi checklist</li>
       </ul>

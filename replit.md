@@ -107,6 +107,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 27, 2025: Updated branding from "DrMortgageUSA" to "Dr.MortgageUSA" throughout website for proper punctuation
 - June 27, 2025: Fixed deployment issues with multiple server configurations (main.py, run.py, server.py) and proper port handling for Replit deployment
 - June 27, 2025: Implemented comprehensive deployment fixes including multi-tier fallback system (Python → Node.js → NPX serve), automatic port detection, CORS support, and robust error handling for reliable production deployment
+- June 27, 2025: Replaced website with simplified, cleaner version - removed Instagram embeds, streamlined quiz logic, updated form actions to https://drmortgageusa.my1003app.com, and improved overall performance
 
 ## Contact Information
 
