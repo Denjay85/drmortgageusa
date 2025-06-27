@@ -1,8 +1,8 @@
-# DrMortgageUSA - Mortgage Sales Funnel
+# Dr.MortgageUSA - Mortgage Sales Funnel
 
 ## Overview
 
-DrMortgageUSA is a responsive single-page sales funnel designed to convert visitors into qualified mortgage leads. The application features a 60-second quiz system that segments users into targeted pathways (first-time buyers, veterans, credit improvement) and captures leads through personalized forms.
+Dr.MortgageUSA is a responsive single-page sales funnel designed to convert visitors into qualified mortgage leads. The application features a 60-second quiz system that segments users into targeted pathways (first-time buyers, veterans, credit improvement) and captures leads through personalized forms.
 
 ## System Architecture
 
@@ -83,12 +83,13 @@ The project is designed for static hosting deployment:
 - June 27, 2025: Replaced quiz modal with new path-finder quiz featuring 3-step progression and updated segmentation logic
 - June 27, 2025: Enhanced path-finder quiz to collect client first name, personalize experience, and capture comprehensive lead data
 - June 27, 2025: Creatively incorporated Dennis Ross photo throughout website (nav bar, hero section, segment panels, about section, footer) for personal branding
+- June 27, 2025: Updated branding from "DrMortgageUSA" to "Dr.MortgageUSA" throughout website for proper punctuation
 
 ## Contact Information
 
 - **Name**: Dennis Ross
 - **Phone**: 850-346-8514
-- **Brand**: DrMortgageUSA
+- **Brand**: Dr.MortgageUSA
 - **NMLS**: #2018381
 - **License**: Florida Only
 
