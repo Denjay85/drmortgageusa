@@ -1,174 +1,984 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Connect with Dr. Mortgage USA</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr.MortgageUSA - Unlock Your Path to Homeownership</title>
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --navy: #001f3f;
+            --gold: #ffb700;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .bg-navy {
+            background-color: var(--navy);
+        }
+        
+        .bg-gold {
+            background-color: var(--gold);
+        }
+        
+        .text-navy {
+            color: var(--navy);
+        }
+        
+        .text-gold {
+            color: var(--gold);
+        }
+        
+        .btn-gold {
+            background-color: var(--gold);
+            color: var(--navy);
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-gold:hover {
+            background-color: #e6a500;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 183, 0, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quizBtn {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #001f3f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quizBtn:hover {
+            border-color: #ffb700;
+            background-color: #fffbf0;
+            transform: translateY(-2px);
+        }
+        
+        .segment-panel {
+            display: none;
+        }
+        
+        .segment-panel.active {
+            display: block;
+        }
+        
+        .gradient-overlay {
+            background: linear-gradient(135deg, var(--navy) 0%, #003366 100%);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+    
+    <!-- TailwindCSS Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#001f3f',
+                        gold: '#ffb700'
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Analytics Placeholders -->
+    <script>
+        // GA4 Placeholder
+        // gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    <script>
+        // Meta Pixel Placeholder
+        // fbq('init', 'PIXEL_ID'); fbq('track', 'PageView');
+    </script>
+    <script>
+        // TikTok Pixel Placeholder
+        // ttq.load('PIXEL_ID');
+    </script>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans">
-  <!-- ── HERO ───────────────────────────── -->
-  <section class="text-center py-16 px-4">
-    <h1 class="text-4xl font-bold mb-6 leading-tight">
-      Unlock Your Path&nbsp;to Homeownership<br>
-      <span class="text-blue-600">—No Guesswork, No Gimmicks.</span>
-    </h1>
-    <button id="startQuiz"
-      class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl shadow-lg">
-      Start My 60-Second Path Finder
-    </button>
-  </section>
-
-  <!-- ── QUIZ MODAL ─────────────────────── -->
-  <div id="quizModal"
-       class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-      <!-- STEP 1 -->
-      <div data-step="1" class="quiz-step">
-        <h2 class="text-xl font-semibold mb-4">What’s your first name?</h2>
-        <input id="firstName" type="text"
-               class="w-full border rounded-md p-2 mb-6"
-               placeholder="First name">
-        <button class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md">
-          Continue
-        </button>
-      </div>
-      <!-- STEP 2 -->
-      <div data-step="2" class="quiz-step hidden">
-        <h2 class="text-xl font-semibold mb-4">Which best describes you?</h2>
-        <div class="grid gap-3">
-          <button class="segmentBtn px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
-                  data-segment="firstTimer">First-Time Buyer</button>
-          <button class="segmentBtn px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
-                  data-segment="veteran">Veteran / Active-Duty</button>
-          <button class="segmentBtn px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
-                  data-segment="creditBoost">Need Credit Boost</button>
-          <button class="segmentBtn px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
-                  data-segment="refi">Refinance</button>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-navy text-white py-4 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="logo.png" alt="Dr.MortgageUSA Logo" class="h-48 w-auto">
+                <div class="font-poppins font-bold text-xl text-gold">
+                    Dr.MortgageUSA
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="nav-cta" class="btn-gold hidden md:inline-block">
+                    Get Started
+                </button>
+                <img src="dennis-ross.png" alt="Dennis Ross" class="h-12 w-12 rounded-full border-2 border-gold shadow-lg">
+            </div>
         </div>
-      </div>
-      <!-- STEP 3 -->
-      <div data-step="3" class="quiz-step hidden">
-        <h2 class="text-xl font-semibold mb-4">Target timeline?</h2>
-        <select id="timeline" class="w-full border rounded-md p-2 mb-6">
-          <option>0 – 3 months</option>
-          <option>3 – 6 months</option>
-          <option>6 – 12 months</option>
-        </select>
-        <button class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md">
-          Continue
-        </button>
-      </div>
-      <!-- STEP 4 -->
-      <div data-step="4" class="quiz-step hidden">
-        <h2 class="text-xl font-semibold mb-4">Biggest hurdle right now?</h2>
-        <select id="hurdle" class="w-full border rounded-md p-2 mb-6">
-          <option>Down Payment</option>
-          <option>Credit Score</option>
-          <option>High Rates</option>
-          <option>Unsure</option>
-        </select>
-        <button id="finishBtn"
-                class="bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded-md">
-          Show My Game-Plan
-        </button>
-      </div>
-    </div>
-  </div>
+    </nav>
 
-  <!-- ── DEEP-DIVE PANELS ───────────────── -->
-  <section id="deepDive" class="py-16 px-4 hidden">
-    <!-- First-Timer -->
-    <div id="panel-firstTimer" class="panel hidden max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4">First-Timer Game-Plan</h2>
-      <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li>Florida Bond + Hometown Heroes DPA guide</li>
-        <li>3.5 %-down FHA cheat-sheet</li>
-        <li>$0 lender-fee pre-approval certificate</li>
-      </ul>
-      <a href="https://drmortgageusa.my1003app.com" target="_blank"
-         class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg">
-        Get My DPA Game-Plan
-      </a>
-    </div>
-    <!-- Veteran -->
-    <div id="panel-veteran" class="panel hidden max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4">Veteran Home-Run Blueprint</h2>
-      <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li>Top 3 VA loan myths—busted</li>
-        <li>Funding-fee waiver hack for disabled vets</li>
-        <li>21-day express closing roadmap</li>
-      </ul>
-      <a href="https://drmortgageusa.my1003app.com" target="_blank"
-         class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg">
-        Lock In My VA Savings
-      </a>
-    </div>
-    <!-- Credit Boost -->
-    <div id="panel-creditBoost" class="panel hidden max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4">Credit-Boost Fast-Track</h2>
-      <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li>Top 5 score pitfalls blocking approvals</li>
-        <li>$100-off Uqual credit-repair offer</li>
-        <li>60-day rapid-rescore checklist</li>
-      </ul>
-      <a href="https://drmortgageusa.my1003app.com" target="_blank"
-         class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg">
-        Boost My Score
-      </a>
-    </div>
-    <!-- Refi -->
-    <div id="panel-refi" class="panel hidden max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4">Refi & Save Strategy</h2>
-      <ul class="list-disc pl-6 mb-6 space-y-2">
-        <li>Break-even calculator on today’s rates</li>
-        <li>2-1 vs permanent buydown walkthrough</li>
-        <li>Zero-cost streamline refi checklist</li>
-      </ul>
-      <a href="https://drmortgageusa.my1003app.com" target="_blank"
-         class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg">
-        Run My Savings Report
-      </a>
-    </div>
-  </section>
+    <!-- Hero Section -->
+    <section id="hero" class="gradient-overlay text-white min-h-screen flex items-center pt-20 relative">
+        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+            <div class="mb-8">
+                <img src="logo.png" alt="Dr.MortgageUSA Logo" class="h-96 md:h-120 lg:h-144 w-auto mx-auto mb-4">
+            </div>
+            <h1 class="hero-title font-poppins font-bold text-5xl md:text-6xl lg:text-7xl mb-6 text-shadow">
+                Unlock Your Path to Homeownership—No Guesswork, No Gimmicks.
+            </h1>
+            <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-shadow">
+                Choose your roadmap in 60 seconds.
+            </p>
+            <button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4">
+                Start My 60-Second Path Finder
+            </button>
+        </div>
+        <!-- Floating Dennis Photo -->
+        <div class="absolute bottom-10 right-10 hidden lg:block" data-aos="zoom-in" data-aos-delay="800">
+            <div class="relative">
+                <img src="dennis-ross.png" alt="Dennis Ross" class="h-36 w-36 rounded-full border-4 border-gold shadow-2xl">
+                <div class="absolute -bottom-2 -right-2 bg-gold text-navy rounded-full p-2">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="text-center mt-3 bg-navy/80 rounded-lg p-2 backdrop-blur">
+                <p class="text-sm font-bold">Dennis Ross</p>
+                <p class="text-xs text-gold">Ready to Help!</p>
+            </div>
+        </div>
+    </section>
 
-  <!-- ── QUIZ LOGIC ─────────────────────── -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const quizModal = document.getElementById('quizModal');
-      const steps     = document.querySelectorAll('.quiz-step');
-      let current = 0, segment = '';
+    <!-- PATH-FINDER QUIZ (hidden by default, revealed on CTA click) -->
+    <section id="path-finder" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
+        <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl shadow-xl text-center" id="quizCard">
+            <!-- Step 1 - Name Collection -->
+            <div data-step="1">
+                <h2 class="text-2xl font-bold mb-4">What's your first name?</h2>
+                <input type="text" id="firstName" class="w-full p-3 border-2 border-gray-300 rounded-lg text-center text-lg mb-4" placeholder="Enter your first name" maxlength="30">
+                <button class="quizBtn" onclick="handleNameInput()">Continue</button>
+            </div>
+            <!-- Step 2 -->
+            <div data-step="2" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">Which describes you best?</h2>
+                <button class="quizBtn" data-answer="first-time">First-Time Buyer</button>
+                <button class="quizBtn" data-answer="veteran">Veteran / Active Duty</button>
+                <button class="quizBtn" data-answer="credit">Credit-Rebuild</button>
+                <button class="quizBtn" data-answer="refi">Refinance</button>
+            </div>
+            <!-- Step 3 -->
+            <div data-step="3" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">What's your target timeline?</h2>
+                <button class="quizBtn" data-answer="0-3">0-3 months</button>
+                <button class="quizBtn" data-answer="3-6">3-6 months</button>
+                <button class="quizBtn" data-answer="6-12">6-12 months</button>
+            </div>
+            <!-- Step 4 -->
+            <div data-step="4" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">Biggest hurdle right now?</h2>
+                <button class="quizBtn" data-answer="down-payment">Down Payment</button>
+                <button class="quizBtn" data-answer="credit-score">Credit Score</button>
+                <button class="quizBtn" data-answer="rate">High Rates</button>
+                <button class="quizBtn" data-answer="unsure">Unsure</button>
+            </div>
+        </div>
+    </section>
 
-      const showStep = i => steps.forEach((s, idx) =>
-        s.classList.toggle('hidden', idx !== i));
+    <!-- Segment Panels -->
+    <section id="segment-results" class="py-16 bg-gray-50 hidden">
+        <div class="container mx-auto px-4">
+            <!-- First-Time Buyer Panel -->
+            <div id="first-time" class="segment-panel" data-aos="fade-up">
+                <div class="bg-gray-100 rounded-lg shadow-lg p-8 max-w-4xl mx-auto relative">
+                    <!-- Dennis Photo Corner -->
+                    <div class="absolute -top-8 -right-8 hidden md:block">
+                        <img src="dennis-ross.png" alt="Dennis Ross" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                    </div>
+                    <div class="text-center mb-6">
+                        <img src="logo.png" alt="Dr.MortgageUSA Logo" class="h-72 w-auto mx-auto mb-3">
+                        <h2 class="font-poppins font-bold text-3xl text-navy">
+                            First-Time Homebuyer Programs
+                        </h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-gold">Your Benefits Include:</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Down payment assistance programs
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    FHA loans with as little as 3.5% down
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    First-time buyer grants and incentives
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Free homebuyer education courses
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4">Get Your Pre-Approval</h3>
+                            <form id="first-time-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                                <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                                <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
+                                <input type="hidden" name="segment" value="first-time">
+                                <button type="submit" class="btn-gold w-full">
+                                    Get My Pre-Approval
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      // open modal
-      document.getElementById('startQuiz').onclick = () => {
-        quizModal.classList.remove('hidden'); current = 0; showStep(0);
-      };
+            <!-- Veteran Panel -->
+            <div id="veteran" class="segment-panel" data-aos="fade-up">
+                <div class="bg-gray-100 rounded-lg shadow-lg p-8 max-w-4xl mx-auto relative">
+                    <!-- Dennis Photo Corner -->
+                    <div class="absolute -top-8 -right-8 hidden md:block">
+                        <img src="dennis-ross.png" alt="Dennis Ross" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                    </div>
+                    <div class="text-center mb-6">
+                        <img src="logo.png" alt="Dr.MortgageUSA Logo" class="h-72 w-auto mx-auto mb-3">
+                        <h2 class="font-poppins font-bold text-3xl text-navy">
+                            VA Loan Benefits for Veterans
+                        </h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-gold">Your VA Benefits Include:</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    No down payment required
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    No private mortgage insurance (PMI)
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Competitive interest rates
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Flexible credit requirements
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4">Get Your VA Pre-Approval</h3>
+                            <form id="veteran-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                                <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                                <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
+                                <input type="hidden" name="segment" value="veteran">
+                                <button type="submit" class="btn-gold w-full">
+                                    Get My VA Pre-Approval
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      // close on backdrop click
-      quizModal.onclick = e => { if (e.target === quizModal)
-        quizModal.classList.add('hidden'); };
+            <!-- Credit Improvement Panel -->
+            <div id="credit" class="segment-panel" data-aos="fade-up">
+                <div class="bg-gray-100 rounded-lg shadow-lg p-8 max-w-4xl mx-auto relative">
+                    <!-- Dennis Photo Corner -->
+                    <div class="absolute -top-8 -right-8 hidden md:block">
+                        <img src="dennis-ross.png" alt="Dennis Ross" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                    </div>
+                    <div class="text-center mb-6">
+                        <img src="logo.png" alt="Dr.MortgageUSA Logo" class="h-72 w-auto mx-auto mb-3">
+                        <h2 class="font-poppins font-bold text-3xl text-navy">
+                            Credit Improvement Solutions
+                        </h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-gold">We Can Help You:</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Alternative credit evaluation methods
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Credit counseling and repair services
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Non-QM loan options
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Path to homeownership planning
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4">Start Your Journey</h3>
+                            <form id="credit-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                                <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                                <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
+                                <input type="hidden" name="segment" value="credit">
+                                <button type="submit" class="btn-gold w-full">
+                                    Get My Credit Solutions
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      // next buttons
-      document.querySelectorAll('.nextBtn').forEach(b =>
-        b.onclick = () => { current++; showStep(current); });
+    <!-- Social Proof Section -->
+    <section id="social-proof" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="font-poppins font-bold text-4xl text-navy text-center mb-12" data-aos="fade-up">
+                    What Our Clients Say
+                </h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                        <div class="mb-4">
+                            <div class="flex text-gold mb-2">
+                                ★★★★★
+                            </div>
+                            <p class="text-gray-700 italic mb-4">
+                                "Dennis made my first home purchase incredibly smooth. Their team walked me through every step and found me the perfect FHA loan with minimal down payment."
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center text-gold font-bold mr-3">
+                                SM
+                            </div>
+                            <div>
+                                <p class="font-semibold text-navy">Sarah M.</p>
+                                <p class="text-sm text-gray-600">First-Time Homebuyer</p>
+                            </div>
+                        </div>
+                    </div>
 
-      // segment select
-      document.querySelectorAll('.segmentBtn').forEach(b =>
-        b.onclick = () => { segment = b.dataset.segment; current++; showStep(current); });
+                    <!-- Testimonial 2 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                        <div class="mb-4">
+                            <div class="flex text-gold mb-2">
+                                ★★★★★
+                            </div>
+                            <p class="text-gray-700 italic mb-4">
+                                "As a veteran, I was amazed by the VA loan benefits they secured for me. Zero down payment and no PMI saved me thousands. Exceptional service!"
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center text-gold font-bold mr-3">
+                                JR
+                            </div>
+                            <div>
+                                <p class="font-semibold text-navy">James R.</p>
+                                <p class="text-sm text-gray-600">Military Veteran</p>
+                            </div>
+                        </div>
+                    </div>
 
-      // finish
-      document.getElementById('finishBtn').onclick = () => {
-        quizModal.classList.add('hidden');
-        const deepDive = document.getElementById('deepDive');
-        deepDive.classList.remove('hidden');
-        document.querySelectorAll('#deepDive .panel').forEach(p => p.classList.add('hidden'));
-        document.getElementById(`panel-${segment}`).classList.remove('hidden');
-        deepDive.scrollIntoView({behavior:'smooth'});
-      };
-    });
-  </script>
+                    <!-- Testimonial 3 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                        <div class="mb-4">
+                            <div class="flex text-gold mb-2">
+                                ★★★★★
+                            </div>
+                            <p class="text-gray-700 italic mb-4">
+                                "Despite my credit challenges, Dennis found creative solutions and helped me achieve my dream of homeownership. They never gave up on me."
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center text-gold font-bold mr-3">
+                                ML
+                            </div>
+                            <div>
+                                <p class="font-semibold text-navy">Maria L.</p>
+                                <p class="text-sm text-gray-600">Credit Improvement Client</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Testimonials -->
+                <div class="mt-12">
+                    <h3 class="text-center text-xl font-semibold text-navy mb-8">Watch Real Client Success Stories</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Video 1 -->
+                        <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                            <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DJ4WxNBNtK6/" data-instgrm-version="14">
+                                <div style="padding:16px;">
+                                    <a href="https://www.instagram.com/p/DJ4WxNBNtK6/" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">
+                                        <div style="display: flex; flex-direction: row; align-items: center;">
+                                            <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>
+                                            <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                                                <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                                                <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                                            </div>
+                                        </div>
+                                        <div style="padding: 19% 0;"></div>
+                                        <div style="height:50px; margin:0 auto 12px; width:50px;">
+                                            <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                                                        <g>
+                                                            <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <div style="padding-top: 8px;">
+                                            <div style="color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </blockquote>
+                        </div>
+
+                        <!-- Video 2 -->
+                        <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                            <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DI4V6VURiqS/" data-instgrm-version="14">
+                                <div style="padding:16px;">
+                                    <a href="https://www.instagram.com/p/DI4V6VURiqS/" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">
+                                        <div style="display: flex; flex-direction: row; align-items: center;">
+                                            <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>
+                                            <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                                                <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                                                <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                                            </div>
+                                        </div>
+                                        <div style="padding: 19% 0;"></div>
+                                        <div style="height:50px; margin:0 auto 12px; width:50px;">
+                                            <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                                                        <g>
+                                                            <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <div style="padding-top: 8px;">
+                                            <div style="color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </blockquote>
+                        </div>
+
+                        <!-- Video 3 -->
+                        <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                            <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DH9dStthnxT/" data-instgrm-version="14">
+                                <div style="padding:16px;">
+                                    <a href="https://www.instagram.com/p/DH9dStthnxT/" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">
+                                        <div style="display: flex; flex-direction: row; align-items: center;">
+                                            <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>
+                                            <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                                                <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                                                <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                                            </div>
+                                        </div>
+                                        <div style="padding: 19% 0;"></div>
+                                        <div style="height:50px; margin:0 auto 12px; width:50px;">
+                                            <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                                                        <g>
+                                                            <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <div style="padding-top: 8px;">
+                                            <div style="color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apply Now Section -->
+    <section id="apply-now" class="py-16 gradient-overlay text-white">
+        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="font-poppins font-bold text-4xl mb-8">Ready to Apply?</h2>
+                <div class="bg-white/10 rounded-lg p-6 mb-8 text-left max-w-md mx-auto">
+                    <h3 class="font-semibold text-xl mb-4 text-gold">Quick Checklist:</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Employment verification
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Income documentation
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Credit report review
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Down payment planning
+                        </li>
+                    </ul>
+                </div>
+                <a href="https://drmortgageusa.my1003app.com" target="_blank" class="btn-gold text-lg md:text-xl px-8 py-4">
+                    Apply Now - Secure Application
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <img src="logo.png" alt="Dr.MortgageUSA Logo" class="h-96 w-auto mx-auto mb-4">
+                    <h2 class="font-poppins font-bold text-4xl text-navy">
+                        About Dr. MortgageUSA
+                    </h2>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex flex-col md:flex-row items-center gap-8 mb-8" data-aos="fade-up">
+                        <img src="dennis-ross.png" alt="Dennis Ross" class="h-48 w-48 rounded-full border-4 border-navy shadow-xl">
+                        <div class="text-center md:text-left">
+                            <p class="text-lg text-gray-700 leading-relaxed">
+                                Dennis "Dr. Mortgage USA" Ross — Navy veteran, Florida‑licensed mortgage broker, and relentless borrower advocate based in Orlando.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 rounded-lg shadow-lg p-8" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="font-poppins font-bold text-2xl text-gold mb-6 text-center">What sets me apart:</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="border-l-4 border-gold pl-6">
+                                <h4 class="font-semibold text-lg text-navy mb-2">Veteran‑first expertise.</h4>
+                                <p class="text-gray-700">
+                                    Fourteen years in uniform means I know the VA rulebook cold and fight to waive funding fees, secure property‑tax exemptions, and close VA loans in as little as 21 days.
+                                </p>
+                            </div>
+                            
+                            <div class="border-l-4 border-gold pl-6">
+                                <h4 class="font-semibold text-lg text-navy mb-2">39‑lender firepower.</h4>
+                                <p class="text-gray-700">
+                                    As an independent broker I shop three dozen lenders live—so clients get the sharpest pricing and niche programs (from Florida DPAs to crypto‑reserve approvals) without lifting a finger.
+                                </p>
+                            </div>
+                            
+                            <div class="border-l-4 border-gold pl-6">
+                                <h4 class="font-semibold text-lg text-navy mb-2">Radical transparency.</h4>
+                                <p class="text-gray-700">
+                                    Every borrower sees a live Zoom "X‑ray" of their numbers, receives plain‑English after‑action emails, and gets a clear yes/no within 24 hours—no voodoo, no surprises.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 p-6 bg-navy rounded-lg text-center">
+                            <p class="text-white font-semibold text-lg">
+                                <span class="text-gold">Mission:</span> Serve with the same integrity and grit I carried in the Navy—making homeownership simple, affordable, and stress‑free for every Floridian I touch.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compliance Footer -->
+    <footer class="bg-navy text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="mb-8">
+                    <img src="logo.png" alt="Dr.MortgageUSA Logo" class="h-84 w-auto mx-auto mb-4">
+                    <div class="font-poppins font-bold text-2xl text-gold mb-4">
+                        Dr.MortgageUSA
+                    </div>
+                    <div class="flex justify-center items-center gap-4 mb-4">
+                        <img src="dennis-ross.png" alt="Dennis Ross" class="h-16 w-16 rounded-full border-2 border-gold">
+                        <div class="text-left">
+                            <p class="text-gold font-semibold">Dennis Ross</p>
+                            <p class="text-gray-300 text-sm">Your Trusted Mortgage Expert</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        NMLS #2018381 | Licensed in Florida Only
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <div>
+                        <h4 class="font-semibold mb-4">Contact</h4>
+                        <a href="tel:8503468514" class="text-gray-300 hover:text-gold transition-colors">850-346-8514</a>
+                        <p class="text-gray-300">Dennis Ross</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Office Hours</h4>
+                        <p class="text-gray-300">Monday - Friday: 9am - 7pm</p>
+                        <p class="text-gray-300">Saturday: 11am - 5pm</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Equal Housing</h4>
+                        <div class="text-4xl text-gold mb-2">⌂</div>
+                        <p class="text-gray-300 text-sm">Equal Housing Lender</p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-600 pt-8">
+                    <p class="text-gray-300 text-sm mb-4">
+                        <strong>NMLS Consumer Access:</strong> Visit www.nmlsconsumeraccess.org for company and individual licensing information.
+                    </p>
+                    <p class="text-gray-300 text-sm mb-4">
+                        <strong>Equal Housing Opportunity:</strong> We do business in accordance with the Federal Fair Housing Law. Under the Federal Fair Housing Act, it is illegal to discriminate on the basis of race, color, national origin, religion, sex, handicap, or familial status.
+                    </p>
+                    <p class="text-gray-300 text-sm mb-4">
+                        <strong>Department of Defense Disclaimer:</strong> This is not an offer to enter into an agreement. Not all customers will qualify. Information, rates, and programs are subject to change without notice. All products are subject to credit and property approval. Other restrictions and limitations may apply.
+                    </p>
+                    <div class="flex justify-center space-x-6 mb-4">
+                        <a href="#" class="text-gray-300 hover:text-gold text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-300 hover:text-gold text-sm">Terms of Service</a>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-gray-400 text-sm">
+                    © 2025 Dr.MortgageUSA. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Path-finder Quiz functionality
+        let currentStep = 1;
+        let quizAnswers = {};
+        
+        const pathFinder = document.getElementById('path-finder');
+        const segmentResults = document.getElementById('segment-results');
+        const heroCta = document.getElementById('hero-cta');
+        const navCta = document.getElementById('nav-cta');
+        
+        // Event listeners
+        heroCta.addEventListener('click', openPathFinder);
+        navCta.addEventListener('click', openPathFinder);
+        
+        // Quiz button handlers
+        document.querySelectorAll('.quizBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                handleQuizAnswer(this);
+            });
+        });
+        
+        function openPathFinder() {
+            pathFinder.classList.remove('hidden');
+            currentStep = 1;
+            quizAnswers = {};
+            showStep(1);
+        }
+        
+        function closePathFinder() {
+            pathFinder.classList.add('hidden');
+        }
+        
+        function showStep(stepNum) {
+            // Hide all steps
+            document.querySelectorAll('[data-step]').forEach(step => {
+                step.classList.add('hidden');
+            });
+            
+            // Show current step
+            document.querySelector(`[data-step="${stepNum}"]`).classList.remove('hidden');
+        }
+        
+        function handleNameInput() {
+            const nameInput = document.getElementById('firstName');
+            const firstName = nameInput.value.trim();
+            
+            if (firstName.length < 2) {
+                nameInput.style.borderColor = '#ef4444';
+                nameInput.placeholder = 'Please enter your first name';
+                return;
+            }
+            
+            // Store name
+            quizAnswers.firstName = firstName;
+            
+            // Move to next step
+            currentStep = 2;
+            showStep(2);
+            
+            // Update next question to be more personal
+            const step2Title = document.querySelector('[data-step="2"] h2');
+            step2Title.textContent = `Nice to meet you, ${firstName}! Which describes you best?`;
+        }
+        
+        function handleQuizAnswer(button) {
+            const answer = button.getAttribute('data-answer');
+            
+            // Store answer
+            quizAnswers[`step${currentStep}`] = answer;
+            
+            // Visual feedback
+            button.style.backgroundColor = '#ffb700';
+            button.style.color = '#001f3f';
+            button.style.transform = 'scale(0.95)';
+            
+            // Move to next step after delay
+            setTimeout(() => {
+                if (currentStep < 4) {
+                    currentStep++;
+                    showStep(currentStep);
+                } else {
+                    // Quiz complete, determine segment
+                    const segment = determineSegment();
+                    showSegmentResults(segment);
+                    closePathFinder();
+                }
+                
+                // Reset button style
+                button.style.backgroundColor = '';
+                button.style.color = '';
+                button.style.transform = '';
+            }, 600);
+        }
+        
+        function determineSegment() {
+            // Prioritize veteran status
+            if (quizAnswers.step2 === 'veteran') {
+                return 'veteran';
+            }
+            // Then check for credit rebuild
+            else if (quizAnswers.step2 === 'credit') {
+                return 'credit';
+            }
+            // Default to first-time for new buyers and refinance
+            else {
+                return 'first-time';
+            }
+        }
+        
+        function showSegmentResults(segment) {
+            // Hide all panels
+            document.querySelectorAll('.segment-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Show selected panel
+            document.getElementById(segment).classList.add('active');
+            
+            // Personalize the segment panel header with user's name
+            const firstName = quizAnswers.firstName || 'Friend';
+            const segmentPanel = document.getElementById(segment);
+            const titleElement = segmentPanel.querySelector('h2');
+            
+            if (segment === 'first-time') {
+                titleElement.textContent = `${firstName}, Let's Make Your First Home Purchase Perfect`;
+            } else if (segment === 'veteran') {
+                titleElement.textContent = `${firstName}, Your VA Benefits Await`;
+            } else if (segment === 'credit') {
+                titleElement.textContent = `${firstName}, Let's Rebuild Your Credit & Get You Home`;
+            }
+            
+            // Show results section
+            segmentResults.classList.remove('hidden');
+            
+            // Scroll to results
+            segmentResults.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Form handling
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleFormSubmission(this);
+            });
+        });
+        
+        function handleFormSubmission(form) {
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const phone = formData.get('phone');
+            const segment = formData.get('segment');
+            const firstName = quizAnswers.firstName || '';
+            
+            // Add first name to form data for submission
+            const submissionData = { 
+                firstName, 
+                email, 
+                phone, 
+                segment,
+                timeline: quizAnswers.step3 || '',
+                hurdle: quizAnswers.step4 || ''
+            };
+            
+            // Log for testing (replace with actual submission)
+            console.log('Form submitted:', submissionData);
+            
+            // Show success message with personalization
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            const personalizedMessage = firstName ? 
+                `✓ Thanks ${firstName}! We'll contact you soon.` : 
+                '✓ Success! We\'ll contact you soon.';
+            
+            submitBtn.textContent = personalizedMessage;
+            submitBtn.classList.add('bg-green-500');
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.classList.remove('bg-green-500');
+                submitBtn.disabled = false;
+            }, 3000);
+        }
+        
+        // Initialize AOS
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                once: true
+            });
+        });
+        
+        // Close modal on outside click
+        pathFinder.addEventListener('click', function(e) {
+            if (e.target === pathFinder) {
+                closePathFinder();
+            }
+        });
+        
+        // Handle escape key and enter key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !pathFinder.classList.contains('hidden')) {
+                closePathFinder();
+            }
+            
+            // Handle Enter key on name input
+            if (e.key === 'Enter' && currentStep === 1) {
+                handleNameInput();
+            }
+        });
+    </script>
+    
+    <!-- Instagram Embed Script -->
+    <script async src="//www.instagram.com/embed.js"></script>
 </body>
 </html>
