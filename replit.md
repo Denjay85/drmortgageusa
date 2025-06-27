@@ -52,11 +52,14 @@ As a static website, data flow is minimal:
 
 ## Deployment Strategy
 
-The project is designed for static hosting deployment:
-- **Hosting Options**: Any static file hosting service (Netlify, Vercel, GitHub Pages, AWS S3)
+The project is optimized for both static and dynamic hosting deployment:
+- **Primary**: Replit deployment with Python HTTP server (main.py)
+- **Server Files**: Multiple server configurations (main.py, run.py, server.py, start.sh)
+- **Fallback Options**: Static hosting services (Netlify, Vercel, GitHub Pages, AWS S3)
 - **Build Process**: No build step required - direct HTML serving
 - **Performance**: CDN-based external resources for fast loading
-- **Scalability**: Static nature allows for global CDN distribution
+- **Port Configuration**: Configured for port 5000 with fallback port detection
+- **Deployment Files**: Procfile for web processes, startup scripts for reliability
 
 ## Key Features
 
@@ -84,6 +87,7 @@ The project is designed for static hosting deployment:
 - June 27, 2025: Enhanced path-finder quiz to collect client first name, personalize experience, and capture comprehensive lead data
 - June 27, 2025: Creatively incorporated Dennis Ross photo throughout website (nav bar, hero section, segment panels, about section, footer) for personal branding
 - June 27, 2025: Updated branding from "DrMortgageUSA" to "Dr.MortgageUSA" throughout website for proper punctuation
+- June 27, 2025: Fixed deployment issues with multiple server configurations (main.py, run.py, server.py) and proper port handling for Replit deployment
 
 ## Contact Information
 
