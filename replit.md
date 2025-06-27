@@ -1,8 +1,8 @@
-# DrMortgageUSA - Mortgage Services Website
+# DrMortgageUSA - Mortgage Sales Funnel
 
 ## Overview
 
-DrMortgageUSA is a static website for a mortgage services company that positions itself as a trusted mortgage partner. The project is built using HTML and TailwindCSS with a focus on modern design and user experience.
+DrMortgageUSA is a responsive single-page sales funnel designed to convert visitors into qualified mortgage leads. The application features a 60-second quiz system that segments users into targeted pathways (first-time buyers, veterans, credit improvement) and captures leads through personalized forms.
 
 ## System Architecture
 
@@ -58,10 +58,27 @@ The project is designed for static hosting deployment:
 - **Performance**: CDN-based external resources for fast loading
 - **Scalability**: Static nature allows for global CDN distribution
 
+## Key Features
+
+### Sales Funnel Components
+- **Hero Section**: "Unlock Your Path to Homeownership" with 60-second path finder CTA
+- **Interactive Quiz**: 3-question segmentation system (vanilla JavaScript)
+- **Dynamic Segment Panels**: Targeted content for first-time buyers, veterans, and credit improvement
+- **Lead Capture Forms**: Zapier webhook integration for each segment
+- **Social Proof**: Embedded Instagram testimonial videos
+- **Compliance**: NMLS #2018381, Florida-only licensing, DOD disclaimer
+
+### Technical Implementation
+- **Quiz Logic**: Segments users based on home-buying experience, military status, and credit situation
+- **Form Handling**: POST requests to Zapier webhooks with segment tracking
+- **Responsive Design**: Mobile-first approach with large logo placement
+- **Analytics Ready**: GA4, Meta Pixel, and TikTok Pixel placeholder integration
+
 ## Changelog
 
-- June 27, 2025: Initial setup with responsive mortgage funnel
-- June 27, 2025: Integrated client logo throughout website (navigation, hero, quiz modal, segment panels, about section, footer)
+- June 27, 2025: Complete funnel rebuild with new copy, segmentation logic, and compliance requirements
+- June 27, 2025: Integrated client logo throughout website with enlarged sizing
+- June 27, 2025: Added Instagram video embeds and Zapier webhook forms
 
 ## User Preferences
 
