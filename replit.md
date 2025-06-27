@@ -80,6 +80,14 @@ The project is designed for static hosting deployment:
 - June 27, 2025: Integrated client logo throughout website with enlarged sizing
 - June 27, 2025: Added Instagram video embeds and Zapier webhook forms
 
+## Contact Information
+
+- **Name**: Dennis Ross
+- **Phone**: 850-346-8514
+- **Brand**: DrMortgageUSA
+- **NMLS**: #2018381
+- **License**: Florida Only
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
