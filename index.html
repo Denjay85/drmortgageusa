@@ -232,23 +232,29 @@
     <!-- PATH-FINDER QUIZ (hidden by default, revealed on CTA click) -->
     <section id="path-finder" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
         <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl shadow-xl text-center" id="quizCard">
-            <!-- Step 1 -->
+            <!-- Step 1 - Name Collection -->
             <div data-step="1">
+                <h2 class="text-2xl font-bold mb-4">What's your first name?</h2>
+                <input type="text" id="firstName" class="w-full p-3 border-2 border-gray-300 rounded-lg text-center text-lg mb-4" placeholder="Enter your first name" maxlength="30">
+                <button class="quizBtn" onclick="handleNameInput()">Continue</button>
+            </div>
+            <!-- Step 2 -->
+            <div data-step="2" class="hidden">
                 <h2 class="text-2xl font-bold mb-4">Which describes you best?</h2>
                 <button class="quizBtn" data-answer="first-time">First-Time Buyer</button>
                 <button class="quizBtn" data-answer="veteran">Veteran / Active Duty</button>
                 <button class="quizBtn" data-answer="credit">Credit-Rebuild</button>
                 <button class="quizBtn" data-answer="refi">Refinance</button>
             </div>
-            <!-- Step 2 -->
-            <div data-step="2" class="hidden">
+            <!-- Step 3 -->
+            <div data-step="3" class="hidden">
                 <h2 class="text-2xl font-bold mb-4">What's your target timeline?</h2>
                 <button class="quizBtn" data-answer="0-3">0-3 months</button>
                 <button class="quizBtn" data-answer="3-6">3-6 months</button>
                 <button class="quizBtn" data-answer="6-12">6-12 months</button>
             </div>
-            <!-- Step 3 -->
-            <div data-step="3" class="hidden">
+            <!-- Step 4 -->
+            <div data-step="4" class="hidden">
                 <h2 class="text-2xl font-bold mb-4">Biggest hurdle right now?</h2>
                 <button class="quizBtn" data-answer="down-payment">Down Payment</button>
                 <button class="quizBtn" data-answer="credit-score">Credit Score</button>
@@ -762,6 +768,28 @@
             document.querySelector(`[data-step="${stepNum}"]`).classList.remove('hidden');
         }
         
+        function handleNameInput() {
+            const nameInput = document.getElementById('firstName');
+            const firstName = nameInput.value.trim();
+            
+            if (firstName.length < 2) {
+                nameInput.style.borderColor = '#ef4444';
+                nameInput.placeholder = 'Please enter your first name';
+                return;
+            }
+            
+            // Store name
+            quizAnswers.firstName = firstName;
+            
+            // Move to next step
+            currentStep = 2;
+            showStep(2);
+            
+            // Update next question to be more personal
+            const step2Title = document.querySelector('[data-step="2"] h2');
+            step2Title.textContent = `Nice to meet you, ${firstName}! Which describes you best?`;
+        }
+        
         function handleQuizAnswer(button) {
             const answer = button.getAttribute('data-answer');
             
@@ -775,7 +803,7 @@
             
             // Move to next step after delay
             setTimeout(() => {
-                if (currentStep < 3) {
+                if (currentStep < 4) {
                     currentStep++;
                     showStep(currentStep);
                 } else {
@@ -794,11 +822,11 @@
         
         function determineSegment() {
             // Prioritize veteran status
-            if (quizAnswers.step1 === 'veteran') {
+            if (quizAnswers.step2 === 'veteran') {
                 return 'veteran';
             }
             // Then check for credit rebuild
-            else if (quizAnswers.step1 === 'credit') {
+            else if (quizAnswers.step2 === 'credit') {
                 return 'credit';
             }
             // Default to first-time for new buyers and refinance
@@ -815,6 +843,19 @@
             
             // Show selected panel
             document.getElementById(segment).classList.add('active');
+            
+            // Personalize the segment panel header with user's name
+            const firstName = quizAnswers.firstName || 'Friend';
+            const segmentPanel = document.getElementById(segment);
+            const titleElement = segmentPanel.querySelector('h2');
+            
+            if (segment === 'first-time') {
+                titleElement.textContent = `${firstName}, Let's Make Your First Home Purchase Perfect`;
+            } else if (segment === 'veteran') {
+                titleElement.textContent = `${firstName}, Your VA Benefits Await`;
+            } else if (segment === 'credit') {
+                titleElement.textContent = `${firstName}, Let's Rebuild Your Credit & Get You Home`;
+            }
             
             // Show results section
             segmentResults.classList.remove('hidden');
@@ -836,15 +877,29 @@
             const email = formData.get('email');
             const phone = formData.get('phone');
             const segment = formData.get('segment');
+            const firstName = quizAnswers.firstName || '';
+            
+            // Add first name to form data for submission
+            const submissionData = { 
+                firstName, 
+                email, 
+                phone, 
+                segment,
+                timeline: quizAnswers.step3 || '',
+                hurdle: quizAnswers.step4 || ''
+            };
             
             // Log for testing (replace with actual submission)
-            console.log('Form submitted:', { email, phone, segment });
+            console.log('Form submitted:', submissionData);
             
-            // Show success message
+            // Show success message with personalization
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
+            const personalizedMessage = firstName ? 
+                `✓ Thanks ${firstName}! We'll contact you soon.` : 
+                '✓ Success! We\'ll contact you soon.';
             
-            submitBtn.textContent = '✓ Success! We\'ll contact you soon.';
+            submitBtn.textContent = personalizedMessage;
             submitBtn.classList.add('bg-green-500');
             submitBtn.disabled = true;
             
@@ -870,10 +925,15 @@
             }
         });
         
-        // Handle escape key
+        // Handle escape key and enter key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && !pathFinder.classList.contains('hidden')) {
                 closePathFinder();
+            }
+            
+            // Handle Enter key on name input
+            if (e.key === 'Enter' && currentStep === 1) {
+                handleNameInput();
             }
         });
     </script>

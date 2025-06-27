@@ -81,6 +81,7 @@ The project is designed for static hosting deployment:
 - June 27, 2025: Added Instagram video embeds and Zapier webhook forms
 - June 27, 2025: Changed all white backgrounds to grey throughout website for better visual consistency
 - June 27, 2025: Replaced quiz modal with new path-finder quiz featuring 3-step progression and updated segmentation logic
+- June 27, 2025: Enhanced path-finder quiz to collect client first name, personalize experience, and capture comprehensive lead data
 
 ## Contact Information
 
