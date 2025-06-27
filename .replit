@@ -21,7 +21,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python app.py"
+args = "npx serve -s . -l 5000"
 
 [[ports]]
 localPort = 5000
