@@ -85,6 +85,26 @@
             align-items: center;
             justify-content: center;
         }
+
+        .quizBtn {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #001f3f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quizBtn:hover {
+            border-color: #ffb700;
+            background-color: #fffbf0;
+            transform: translateY(-2px);
+        }
         
         .segment-panel {
             display: none;
@@ -209,65 +229,34 @@
         </div>
     </section>
 
-    <!-- Quiz Modal -->
-    <div id="quiz-modal" class="modal">
-        <div class="bg-gray-100 rounded-lg p-8 m-4 max-w-md w-full relative">
-            <div id="quiz-content">
-                <div class="text-center mb-6">
-                    <img src="logo.png" alt="DrMortgageUSA Logo" class="h-60 w-auto mx-auto mb-3">
-                    <h2 class="font-poppins font-bold text-2xl text-navy">
-                        Find Your Perfect Path
-                    </h2>
-                </div>
-                
-                <!-- Question 1 -->
-                <div id="question-1" class="quiz-question">
-                    <h3 class="font-semibold text-lg mb-4">Is this your first time buying a home?</h3>
-                    <div class="space-y-3">
-                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="first-time">
-                            Yes, this is my first home purchase
-                        </button>
-                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="experienced">
-                            No, I've purchased homes before
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Question 2 -->
-                <div id="question-2" class="quiz-question hidden">
-                    <h3 class="font-semibold text-lg mb-4">Are you a military veteran or active service member?</h3>
-                    <div class="space-y-3">
-                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="veteran">
-                            Yes, I'm a veteran or active military
-                        </button>
-                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="civilian">
-                            No, I'm a civilian
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Question 3 -->
-                <div id="question-3" class="quiz-question hidden">
-                    <h3 class="font-semibold text-lg mb-4">How would you describe your credit situation?</h3>
-                    <div class="space-y-3">
-                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="excellent">
-                            Excellent (750+ credit score)
-                        </button>
-                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="good">
-                            Good (650-749 credit score)
-                        </button>
-                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="credit">
-                            Needs improvement (below 650)
-                        </button>
-                    </div>
-                </div>
+    <!-- PATH-FINDER QUIZ (hidden by default, revealed on CTA click) -->
+    <section id="path-finder" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
+        <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl shadow-xl text-center" id="quizCard">
+            <!-- Step 1 -->
+            <div data-step="1">
+                <h2 class="text-2xl font-bold mb-4">Which describes you best?</h2>
+                <button class="quizBtn" data-answer="first-time">First-Time Buyer</button>
+                <button class="quizBtn" data-answer="veteran">Veteran / Active Duty</button>
+                <button class="quizBtn" data-answer="credit">Credit-Rebuild</button>
+                <button class="quizBtn" data-answer="refi">Refinance</button>
             </div>
-            
-            <button id="close-quiz" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">
-                ×
-            </button>
+            <!-- Step 2 -->
+            <div data-step="2" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">What's your target timeline?</h2>
+                <button class="quizBtn" data-answer="0-3">0-3 months</button>
+                <button class="quizBtn" data-answer="3-6">3-6 months</button>
+                <button class="quizBtn" data-answer="6-12">6-12 months</button>
+            </div>
+            <!-- Step 3 -->
+            <div data-step="3" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">Biggest hurdle right now?</h2>
+                <button class="quizBtn" data-answer="down-payment">Down Payment</button>
+                <button class="quizBtn" data-answer="credit-score">Credit Score</button>
+                <button class="quizBtn" data-answer="rate">High Rates</button>
+                <button class="quizBtn" data-answer="unsure">Unsure</button>
+            </div>
         </div>
-    </div>
+    </section>
 
     <!-- Segment Panels -->
     <section id="segment-results" class="py-16 bg-gray-50 hidden">
@@ -732,86 +721,88 @@
     </footer>
 
     <script>
-        // Quiz functionality
-        let currentQuestion = 1;
+        // Path-finder Quiz functionality
+        let currentStep = 1;
         let quizAnswers = {};
         
-        const quizModal = document.getElementById('quiz-modal');
+        const pathFinder = document.getElementById('path-finder');
         const segmentResults = document.getElementById('segment-results');
         const heroCta = document.getElementById('hero-cta');
         const navCta = document.getElementById('nav-cta');
-        const closeQuiz = document.getElementById('close-quiz');
         
         // Event listeners
-        heroCta.addEventListener('click', openQuiz);
-        navCta.addEventListener('click', openQuiz);
-        closeQuiz.addEventListener('click', closeQuizModal);
+        heroCta.addEventListener('click', openPathFinder);
+        navCta.addEventListener('click', openPathFinder);
         
-        // Quiz options
-        document.querySelectorAll('.quiz-option').forEach(option => {
-            option.addEventListener('click', function() {
+        // Quiz button handlers
+        document.querySelectorAll('.quizBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
                 handleQuizAnswer(this);
             });
         });
         
-        function openQuiz() {
-            quizModal.classList.add('active');
-            currentQuestion = 1;
+        function openPathFinder() {
+            pathFinder.classList.remove('hidden');
+            currentStep = 1;
             quizAnswers = {};
-            showQuestion(1);
+            showStep(1);
         }
         
-        function closeQuizModal() {
-            quizModal.classList.remove('active');
+        function closePathFinder() {
+            pathFinder.classList.add('hidden');
         }
         
-        function showQuestion(questionNum) {
-            // Hide all questions
-            document.querySelectorAll('.quiz-question').forEach(q => {
-                q.classList.add('hidden');
+        function showStep(stepNum) {
+            // Hide all steps
+            document.querySelectorAll('[data-step]').forEach(step => {
+                step.classList.add('hidden');
             });
             
-            // Show current question
-            document.getElementById(`question-${questionNum}`).classList.remove('hidden');
+            // Show current step
+            document.querySelector(`[data-step="${stepNum}"]`).classList.remove('hidden');
         }
         
-        function handleQuizAnswer(option) {
-            const questionNum = currentQuestion;
-            const value = option.getAttribute('data-value');
+        function handleQuizAnswer(button) {
+            const answer = button.getAttribute('data-answer');
             
             // Store answer
-            quizAnswers[`question${questionNum}`] = value;
+            quizAnswers[`step${currentStep}`] = answer;
             
             // Visual feedback
-            option.classList.add('border-gold', 'bg-yellow-50');
+            button.style.backgroundColor = '#ffb700';
+            button.style.color = '#001f3f';
+            button.style.transform = 'scale(0.95)';
             
-            // Move to next question after a short delay
+            // Move to next step after delay
             setTimeout(() => {
-                if (currentQuestion < 3) {
-                    currentQuestion++;
-                    showQuestion(currentQuestion);
+                if (currentStep < 3) {
+                    currentStep++;
+                    showStep(currentStep);
                 } else {
                     // Quiz complete, determine segment
                     const segment = determineSegment();
                     showSegmentResults(segment);
-                    closeQuizModal();
+                    closePathFinder();
                 }
                 
-                // Reset visual feedback
-                option.classList.remove('border-gold', 'bg-yellow-50');
-            }, 800);
+                // Reset button style
+                button.style.backgroundColor = '';
+                button.style.color = '';
+                button.style.transform = '';
+            }, 600);
         }
         
         function determineSegment() {
-            // Segment logic based on quiz answers
-            if (quizAnswers.question2 === 'veteran') {
+            // Prioritize veteran status
+            if (quizAnswers.step1 === 'veteran') {
                 return 'veteran';
-            } else if (quizAnswers.question1 === 'first-time') {
-                return 'first-time';
-            } else if (quizAnswers.question3 === 'credit') {
+            }
+            // Then check for credit rebuild
+            else if (quizAnswers.step1 === 'credit') {
                 return 'credit';
-            } else {
-                // Default to first-time for experienced buyers with good credit
+            }
+            // Default to first-time for new buyers and refinance
+            else {
                 return 'first-time';
             }
         }
@@ -873,16 +864,16 @@
         });
         
         // Close modal on outside click
-        quizModal.addEventListener('click', function(e) {
-            if (e.target === quizModal) {
-                closeQuizModal();
+        pathFinder.addEventListener('click', function(e) {
+            if (e.target === pathFinder) {
+                closePathFinder();
             }
         });
         
         // Handle escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && quizModal.classList.contains('active')) {
-                closeQuizModal();
+            if (e.key === 'Escape' && !pathFinder.classList.contains('hidden')) {
+                closePathFinder();
             }
         });
     </script>
