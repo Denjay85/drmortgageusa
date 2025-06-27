@@ -23,5 +23,19 @@ class TCPServer(socketserver.TCPServer):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     
-    with TCPServer(("0.0.0.0", PORT), Handler) as httpd:
-        httpd.serve_forever()
+    # Verify index.html exists
+    if not os.path.exists('index.html'):
+        print("ERROR: index.html not found in current directory")
+        exit(1)
+    
+    print(f"Starting Dr.MortgageUSA web server on port {PORT}")
+    print(f"Serving directory: {os.getcwd()}")
+    
+    try:
+        with TCPServer(("0.0.0.0", PORT), Handler) as httpd:
+            print(f"Server successfully started at http://0.0.0.0:{PORT}")
+            print("Server is ready to accept connections")
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"ERROR: Failed to start server - {e}")
+        exit(1)
