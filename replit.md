@@ -55,18 +55,15 @@ As a static website, data flow is minimal:
 The project is optimized for reliable deployment across multiple hosting platforms with comprehensive fallback options:
 
 ### Server Configurations
-- **Primary**: Python HTTP server (main.py) with optimized error handling and port detection
-- **Backup Servers**: Multiple fallback configurations (run.py, server.py)
-- **Node.js Alternative**: Custom Node.js static file server (start-server.js)
-- **NPX Serve**: Package-based static file serving via npm serve package
+- **Primary**: Python HTTP server (main.py) - single source of truth with optimized error handling and port detection
+- **Fallback**: Comprehensive startup script (start.py) with multiple deployment options
+- **Alternative**: Node.js static file server via Procfile.nodejs
 
 ### Deployment Files
-- **Procfile**: Clean deployment command: `web: python app.py`
-- **app.py**: Deployment-optimized Python server without verbose logging
-- **main.py**: Development server with detailed logging and port detection
-- **package.json**: Auto-generated with serve dependency for Node.js fallback
-- **start.sh**: Comprehensive startup script with dependency checking and error reporting
-- **start-server.js**: Custom Node.js HTTP server with MIME type support and CORS headers
+- **main.py**: Primary deployment server with detailed logging and port detection
+- **start.py**: Comprehensive startup script with fallback options and dependency checking
+- **Procfile.nodejs**: Node.js deployment alternative using npx serve
+- **package.json**: Node.js dependencies for serve package
 
 ### Port and Network Configuration
 - **Primary Port**: 5000 (configurable via PORT environment variable)
@@ -110,6 +107,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 27, 2025: Fixed deployment issues with multiple server configurations (main.py, run.py, server.py) and proper port handling for Replit deployment
 - June 27, 2025: Implemented comprehensive deployment fixes including multi-tier fallback system (Python → Node.js → NPX serve), automatic port detection, CORS support, and robust error handling for reliable production deployment
 - June 27, 2025: Applied critical deployment fixes: enhanced app.py with proper startup messaging, created dual-server deployment (Python on port 5000 + Node.js on port 5001), added comprehensive deployment documentation, and verified both servers serving static files correctly
+- June 27, 2025: Cleaned up deployment files to simplify project structure - removed redundant files (app.py, run.py, server.py, start-server.js, Procfile, run.sh, start.sh) and focused on main.py as single source of truth
 
 ## Contact Information
 
