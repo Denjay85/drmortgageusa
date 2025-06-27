@@ -5,6 +5,7 @@ Optimized for Replit deployment
 """
 import http.server
 import socketserver
+import socket
 import os
 import signal
 import sys
@@ -33,7 +34,7 @@ signal.signal(signal.SIGINT, signal_handler)
 try:
     # Start server with SO_REUSEADDR option
     with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
-        httpd.socket.setsockopt(socketserver.socket.SOL_SOCKET, socketserver.socket.SO_REUSEADDR, 1)
+        httpd.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         print(f"✅ Dr.MortgageUSA server running on http://0.0.0.0:{PORT}")
         httpd.serve_forever()
 except OSError as e:
@@ -42,7 +43,7 @@ except OSError as e:
         for port in range(5001, 5010):
             try:
                 with socketserver.TCPServer(("0.0.0.0", port), Handler) as httpd:
-                    httpd.socket.setsockopt(socketserver.socket.SOL_SOCKET, socketserver.socket.SO_REUSEADDR, 1)
+                    httpd.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                     print(f"✅ Dr.MortgageUSA server running on http://0.0.0.0:{port}")
                     httpd.serve_forever()
                     break
