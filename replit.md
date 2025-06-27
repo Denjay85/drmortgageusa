@@ -82,6 +82,7 @@ The project is designed for static hosting deployment:
 - June 27, 2025: Changed all white backgrounds to grey throughout website for better visual consistency
 - June 27, 2025: Replaced quiz modal with new path-finder quiz featuring 3-step progression and updated segmentation logic
 - June 27, 2025: Enhanced path-finder quiz to collect client first name, personalize experience, and capture comprehensive lead data
+- June 27, 2025: Creatively incorporated Dennis Ross photo throughout website (nav bar, hero section, segment panels, about section, footer) for personal branding
 
 ## Contact Information
 
