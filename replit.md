@@ -52,14 +52,32 @@ As a static website, data flow is minimal:
 
 ## Deployment Strategy
 
-The project is optimized for both static and dynamic hosting deployment:
-- **Primary**: Replit deployment with Python HTTP server (main.py)
-- **Server Files**: Multiple server configurations (main.py, run.py, server.py, start.sh)
-- **Fallback Options**: Static hosting services (Netlify, Vercel, GitHub Pages, AWS S3)
-- **Build Process**: No build step required - direct HTML serving
-- **Performance**: CDN-based external resources for fast loading
-- **Port Configuration**: Configured for port 5000 with fallback port detection
-- **Deployment Files**: Procfile for web processes, startup scripts for reliability
+The project is optimized for reliable deployment across multiple hosting platforms with comprehensive fallback options:
+
+### Server Configurations
+- **Primary**: Python HTTP server (main.py) with optimized error handling and port detection
+- **Backup Servers**: Multiple fallback configurations (run.py, server.py)
+- **Node.js Alternative**: Custom Node.js static file server (start-server.js)
+- **NPX Serve**: Package-based static file serving via npm serve package
+
+### Deployment Files
+- **Procfile**: Multi-tier fallback deployment command: `python main.py || node start-server.js || npx serve -s . -l $PORT`
+- **package.json**: Auto-generated with serve dependency for Node.js fallback
+- **start.sh**: Comprehensive startup script with dependency checking and error reporting
+- **start-server.js**: Custom Node.js HTTP server with MIME type support and CORS headers
+
+### Port and Network Configuration
+- **Primary Port**: 5000 (configurable via PORT environment variable)
+- **Port Detection**: Automatic available port scanning (5000-5019 range)
+- **CORS Support**: Enabled for development and testing
+- **Network Binding**: 0.0.0.0 for external accessibility
+- **Health Checks**: Built-in file existence verification
+
+### Deployment Reliability Features
+- **Multi-language Support**: Python 3.11 and Node.js 20 compatibility
+- **Error Handling**: Comprehensive error messages and graceful fallbacks
+- **Static File Validation**: Automatic index.html existence checking
+- **Platform Independence**: Works on Replit, Heroku, Vercel, and traditional hosting
 
 ## Key Features
 
@@ -88,6 +106,7 @@ The project is optimized for both static and dynamic hosting deployment:
 - June 27, 2025: Creatively incorporated Dennis Ross photo throughout website (nav bar, hero section, segment panels, about section, footer) for personal branding
 - June 27, 2025: Updated branding from "DrMortgageUSA" to "Dr.MortgageUSA" throughout website for proper punctuation
 - June 27, 2025: Fixed deployment issues with multiple server configurations (main.py, run.py, server.py) and proper port handling for Replit deployment
+- June 27, 2025: Implemented comprehensive deployment fixes including multi-tier fallback system (Python → Node.js → NPX serve), automatic port detection, CORS support, and robust error handling for reliable production deployment
 
 ## Contact Information
 
