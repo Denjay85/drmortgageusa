@@ -1,41 +1,12 @@
-modules = ["nodejs-20", "python-3.11"]
+# .replit  – final + valid
+run = "python main.py"
 
-[nix]
-channel = "stable-24_05"
+language   = "python3"
+entrypoint = "main.py"
 
-[workflows]
-runButton = "Project"
-
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Web Server"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Static Serve"
-
-[[workflows.workflow]]
-name = "Web Server"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python main.py"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Static Serve"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npx serve -s . -l 5001"
-waitForPort = 5001
+[deployment]
+run  = ["python", "main.py"]  # Cloud Run uses the same command
+port = 8080                   # Replit sets $PORT=8080 in production
 
 [[ports]]
 localPort = 5000
@@ -45,13 +16,3 @@ externalPort = 80
 localPort = 5001
 externalPort = 3000
 
-[[ports]]
-localPort = 5002
-externalPort = 3001
-
-[[ports]]
-localPort = 5003
-externalPort = 3002
-
-[deployment]
-deploymentTarget = "cloudrun"
