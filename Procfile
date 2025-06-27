@@ -1,1 +1,1 @@
-web: python main.py || node start-server.js || npx serve -s . -l $PORT
+web: python app.py

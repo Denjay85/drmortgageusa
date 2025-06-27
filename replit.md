@@ -61,7 +61,9 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - **NPX Serve**: Package-based static file serving via npm serve package
 
 ### Deployment Files
-- **Procfile**: Multi-tier fallback deployment command: `python main.py || node start-server.js || npx serve -s . -l $PORT`
+- **Procfile**: Clean deployment command: `web: python app.py`
+- **app.py**: Deployment-optimized Python server without verbose logging
+- **main.py**: Development server with detailed logging and port detection
 - **package.json**: Auto-generated with serve dependency for Node.js fallback
 - **start.sh**: Comprehensive startup script with dependency checking and error reporting
 - **start-server.js**: Custom Node.js HTTP server with MIME type support and CORS headers
