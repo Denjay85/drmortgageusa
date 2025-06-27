@@ -60,7 +60,8 @@ The project is designed for static hosting deployment:
 
 ## Changelog
 
-- June 27, 2025. Initial setup
+- June 27, 2025: Initial setup with responsive mortgage funnel
+- June 27, 2025: Integrated client logo throughout website (navigation, hero, quiz modal, segment panels, about section, footer)
 
 ## User Preferences
 
