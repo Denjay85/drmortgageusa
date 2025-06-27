@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
-"""
-Dr.MortgageUSA Production Server
-Deployment-optimized HTTP server for serving the mortgage sales funnel
-"""
 import http.server
 import socketserver
 import os
-import sys
 
 PORT = int(os.environ.get('PORT', 5000))
 
@@ -25,23 +20,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 class TCPServer(socketserver.TCPServer):
     allow_reuse_address = True
 
-def main():
-    """Main function to start the production server"""
+if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     
-    if not os.path.exists('index.html'):
-        print("Error: index.html not found")
-        sys.exit(1)
-    
-    try:
-        httpd = TCPServer(("0.0.0.0", PORT), Handler)
-        print(f"Server running on http://0.0.0.0:{PORT}")
+    with TCPServer(("0.0.0.0", PORT), Handler) as httpd:
         httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("Server stopped")
-    except Exception as e:
-        print(f"Server error: {e}")
-        sys.exit(1)
-
-if __name__ == "__main__":
-    main()
