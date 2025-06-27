@@ -1,1 +1,720 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DrMortgageUSA - Unlock Your Path to Homeownership</title><script src="https://cdn.tailwindcss.com"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"><script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script><style>:root{--navy:#001f3f;--gold:#ffb700;--white:#ffffff}body{font-family:'Inter',sans-serif}.font-poppins{font-family:'Poppins',sans-serif}.bg-navy{background-color:var(--navy)}.bg-gold{background-color:var(--gold)}.text-navy{color:var(--navy)}.text-gold{color:var(--gold)}.btn-gold{background-color:var(--gold);color:var(--navy);padding:16px 32px;border-radius:8px;font-weight:600;transition:all 0.3s ease;text-decoration:none;display:inline-block;font-size:18px}.btn-gold:hover{background-color:#e6a500;transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,183,0,0.3)}.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.8)}.modal.active{display:flex;align-items:center;justify-content:center}.segment-panel{display:none}.segment-panel.active{display:block}.gradient-overlay{background:linear-gradient(135deg,var(--navy) 0%,#003366 100%)}.text-shadow{text-shadow:2px 2px 4px rgba(0,0,0,0.5)}.form-input{width:100%;padding:12px 16px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;transition:border-color 0.3s ease}.form-input:focus{outline:none;border-color:var(--gold)}.video-container{position:relative;width:100%;height:0;padding-bottom:56.25%}.video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%}@media (max-width:768px){.hero-title{font-size:2.5rem;line-height:1.2}.hero-subtitle{font-size:1.25rem}}</style><script>tailwind.config={theme:{extend:{colors:{navy:'#001f3f',gold:'#ffb700'},fontFamily:{'poppins':['Poppins','sans-serif'],'inter':['Inter','sans-serif']}}}}</script><!-- Analytics Placeholders --><script>// GA4 Placeholder gtag('config', 'GA_MEASUREMENT_ID');</script><script>// Meta Pixel Placeholder fbq('init', 'PIXEL_ID'); fbq('track', 'PageView');</script><script>// TikTok Pixel Placeholder ttq.load('PIXEL_ID');</script></head><body class="bg-white"><!-- Navigation --><nav class="bg-navy text-white py-4 fixed w-full top-0 z-50"><div class="container mx-auto px-4 flex justify-between items-center"><div class="flex items-center space-x-3"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-16 w-auto"><div class="font-poppins font-bold text-xl text-gold">DrMortgageUSA</div></div><button id="nav-cta" class="btn-gold hidden md:inline-block">Get Started</button></div></nav><!-- Hero Section --><section id="hero" class="gradient-overlay text-white min-h-screen flex items-center pt-20"><div class="container mx-auto px-4 text-center" data-aos="fade-up"><div class="mb-8"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-32 md:h-40 lg:h-48 w-auto mx-auto mb-4"></div><h1 class="hero-title font-poppins font-bold text-5xl md:text-6xl lg:text-7xl mb-6 text-shadow">Unlock Your Path to Homeownership—No Guesswork, No Gimmicks.</h1><p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-shadow">Choose your roadmap in 60 seconds.</p><button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4">Start My 60-Second Path Finder</button></div></section><!-- Quiz Modal --><div id="quiz-modal" class="modal"><div class="bg-white rounded-lg p-8 m-4 max-w-md w-full"><div id="quiz-content"><div class="text-center mb-6"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-20 w-auto mx-auto mb-3"><h2 class="font-poppins font-bold text-2xl text-navy">Find Your Perfect Path</h2></div><!-- Question 1 --><div id="question-1" class="quiz-question"><h3 class="font-semibold text-lg mb-4">Is this your first time buying a home?</h3><div class="space-y-3"><button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="first-time">Yes, this is my first home purchase</button><button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="experienced">No, I've purchased homes before</button></div></div><!-- Question 2 --><div id="question-2" class="quiz-question hidden"><h3 class="font-semibold text-lg mb-4">Are you a military veteran or active service member?</h3><div class="space-y-3"><button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="veteran">Yes, I'm a veteran or active military</button><button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="civilian">No, I'm a civilian</button></div></div><!-- Question 3 --><div id="question-3" class="quiz-question hidden"><h3 class="font-semibold text-lg mb-4">How would you describe your credit situation?</h3><div class="space-y-3"><button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="excellent">Excellent (750+ credit score)</button><button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="good">Good (650-749 credit score)</button><button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="credit">Needs improvement (below 650)</button></div></div></div><button id="close-quiz" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">×</button></div></div><!-- Segment Panels --><section id="segment-results" class="py-16 bg-gray-50 hidden"><div class="container mx-auto px-4"><!-- First-Time Buyer Panel --><div id="first-time" class="segment-panel" data-aos="fade-up"><div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto"><div class="text-center mb-6"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-24 w-auto mx-auto mb-3"><h2 class="font-poppins font-bold text-3xl text-navy">First-Time Homebuyer Programs</h2></div><div class="grid md:grid-cols-2 gap-8"><div><h3 class="font-semibold text-xl mb-4 text-gold">Your Benefits Include:</h3><ul class="space-y-3 text-gray-700"><li class="flex items-start"><span class="text-gold mr-2">✓</span>Down payment assistance programs</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>FHA loans with as little as 3.5% down</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>First-time buyer grants and incentives</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>Free homebuyer education courses</li></ul></div><div><h3 class="font-semibold text-xl mb-4">Get Your Pre-Approval</h3><form id="first-time-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST"><input type="email" name="email" placeholder="Email Address" class="form-input" required><input type="tel" name="phone" placeholder="Phone Number" class="form-input" required><input type="hidden" name="segment" value="first-time"><button type="submit" class="btn-gold w-full">Get My Pre-Approval</button></form></div></div></div></div><!-- Veteran Panel --><div id="veteran" class="segment-panel" data-aos="fade-up"><div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto"><div class="text-center mb-6"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-24 w-auto mx-auto mb-3"><h2 class="font-poppins font-bold text-3xl text-navy">VA Loan Benefits for Veterans</h2></div><div class="grid md:grid-cols-2 gap-8"><div><h3 class="font-semibold text-xl mb-4 text-gold">Your VA Benefits Include:</h3><ul class="space-y-3 text-gray-700"><li class="flex items-start"><span class="text-gold mr-2">✓</span>No down payment required</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>No private mortgage insurance (PMI)</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>Competitive interest rates</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>Flexible credit requirements</li></ul></div><div><h3 class="font-semibold text-xl mb-4">Get Your VA Pre-Approval</h3><form id="veteran-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST"><input type="email" name="email" placeholder="Email Address" class="form-input" required><input type="tel" name="phone" placeholder="Phone Number" class="form-input" required><input type="hidden" name="segment" value="veteran"><button type="submit" class="btn-gold w-full">Get My VA Pre-Approval</button></form></div></div></div></div><!-- Credit Improvement Panel --><div id="credit" class="segment-panel" data-aos="fade-up"><div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto"><div class="text-center mb-6"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-24 w-auto mx-auto mb-3"><h2 class="font-poppins font-bold text-3xl text-navy">Credit Improvement Solutions</h2></div><div class="grid md:grid-cols-2 gap-8"><div><h3 class="font-semibold text-xl mb-4 text-gold">We Can Help You:</h3><ul class="space-y-3 text-gray-700"><li class="flex items-start"><span class="text-gold mr-2">✓</span>Alternative credit evaluation methods</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>Credit counseling and repair services</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>Non-QM loan options</li><li class="flex items-start"><span class="text-gold mr-2">✓</span>Path to homeownership planning</li></ul></div><div><h3 class="font-semibold text-xl mb-4">Start Your Journey</h3><form id="credit-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST"><input type="email" name="email" placeholder="Email Address" class="form-input" required><input type="tel" name="phone" placeholder="Phone Number" class="form-input" required><input type="hidden" name="segment" value="credit"><button type="submit" class="btn-gold w-full">Get My Credit Solutions</button></form></div></div></div></div></div></section><!-- Social Proof Section --><section id="social-proof" class="py-16 bg-white"><div class="container mx-auto px-4"><div class="max-w-6xl mx-auto"><h2 class="font-poppins font-bold text-4xl text-navy text-center mb-12" data-aos="fade-up">What Our Clients Say</h2><div class="grid md:grid-cols-3 gap-8"><div class="video-container" data-aos="fade-up" data-aos-delay="100"><iframe src="https://www.instagram.com/p/DJ4WxNBNtK6/embed" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; muted"></iframe></div><div class="video-container" data-aos="fade-up" data-aos-delay="200"><iframe src="https://www.instagram.com/p/DI4V6VURiqS/embed" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; muted"></iframe></div><div class="video-container" data-aos="fade-up" data-aos-delay="300"><iframe src="https://www.instagram.com/p/DH9dStthnxT/embed" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; muted"></iframe></div></div></div></div></section><!-- Apply Now Section --><section id="apply-now" class="py-16 gradient-overlay text-white"><div class="container mx-auto px-4 text-center" data-aos="fade-up"><div class="max-w-3xl mx-auto"><h2 class="font-poppins font-bold text-4xl mb-8">Ready to Apply?</h2><div class="bg-white/10 rounded-lg p-6 mb-8 text-left max-w-md mx-auto"><h3 class="font-semibold text-xl mb-4 text-gold">Quick Checklist:</h3><ul class="space-y-2"><li class="flex items-center"><span class="text-gold mr-2">✓</span>Employment verification</li><li class="flex items-center"><span class="text-gold mr-2">✓</span>Income documentation</li><li class="flex items-center"><span class="text-gold mr-2">✓</span>Credit report review</li><li class="flex items-center"><span class="text-gold mr-2">✓</span>Down payment planning</li></ul></div><a href="https://drmortgageusa.my1003app.com" target="_blank" class="btn-gold text-lg md:text-xl px-8 py-4">Apply Now - Secure Application</a></div></div></section><!-- About Section --><section id="about" class="py-16 bg-gray-50"><div class="container mx-auto px-4"><div class="max-w-4xl mx-auto"><div class="text-center mb-12" data-aos="fade-up"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-32 w-auto mx-auto mb-4"><h2 class="font-poppins font-bold text-4xl text-navy">About DrMortgageUSA</h2></div><div class="grid md:grid-cols-2 gap-12 items-center"><div data-aos="fade-right"><h3 class="font-semibold text-2xl mb-6 text-gold">Your Trusted Mortgage Partner</h3><p class="text-gray-700 mb-6">With years of experience in the Florida mortgage market, DrMortgageUSA specializes in helping homebuyers navigate the complex world of home financing. Our personalized approach ensures every client receives the attention and expertise they deserve.</p></div><div data-aos="fade-left"><h4 class="font-semibold text-xl mb-4 text-navy">What Sets Us Apart:</h4><ul class="space-y-3 text-gray-700"><li class="flex items-start"><span class="text-gold mr-2">•</span>Licensed exclusively in Florida with deep local market knowledge</li><li class="flex items-start"><span class="text-gold mr-2">•</span>Specialized programs for first-time buyers, veterans, and credit-challenged clients</li><li class="flex items-start"><span class="text-gold mr-2">•</span>Fast approvals with competitive rates and transparent communication</li></ul></div></div></div></div></section><!-- Compliance Footer --><footer class="bg-navy text-white py-12"><div class="container mx-auto px-4"><div class="max-w-4xl mx-auto text-center"><div class="mb-8"><img src="logo.png" alt="DrMortgageUSA Logo" class="h-28 w-auto mx-auto mb-4"><div class="font-poppins font-bold text-2xl text-gold mb-4">DrMortgageUSA</div><p class="text-gray-300 mb-6">NMLS #2018381 | Licensed in Florida Only</p></div><div class="grid md:grid-cols-3 gap-8 mb-8"><div><h4 class="font-semibold mb-4">Contact</h4><p class="text-gray-300">1-800-DR-MORTGAGE</p><p class="text-gray-300">info@drmortgageusa.com</p></div><div><h4 class="font-semibold mb-4">Office Hours</h4><p class="text-gray-300">Monday - Friday: 8am - 8pm</p><p class="text-gray-300">Saturday: 9am - 5pm</p></div><div><h4 class="font-semibold mb-4">Equal Housing</h4><div class="text-4xl text-gold mb-2">⌂</div><p class="text-gray-300 text-sm">Equal Housing Lender</p></div></div><div class="border-t border-gray-600 pt-8"><p class="text-gray-300 text-sm mb-4"><strong>NMLS Consumer Access:</strong> Visit www.nmlsconsumeraccess.org for company and individual licensing information.</p><p class="text-gray-300 text-sm mb-4"><strong>Equal Housing Opportunity:</strong> We do business in accordance with the Federal Fair Housing Law. Under the Federal Fair Housing Act, it is illegal to discriminate on the basis of race, color, national origin, religion, sex, handicap, or familial status.</p><p class="text-gray-300 text-sm mb-4"><strong>Department of Defense Disclaimer:</strong> This is not an offer to enter into an agreement. Not all customers will qualify. Information, rates, and programs are subject to change without notice. All products are subject to credit and property approval. Other restrictions and limitations may apply.</p><div class="flex justify-center space-x-6 mb-4"><a href="#" class="text-gray-300 hover:text-gold text-sm">Privacy Policy</a><a href="#" class="text-gray-300 hover:text-gold text-sm">Terms of Service</a></div></div><div class="mt-8 text-gray-400 text-sm">© 2025 DrMortgageUSA. All rights reserved.</div></div></div></footer><script>// Quiz functionality let currentQuestion=1;let quizAnswers={};const quizModal=document.getElementById('quiz-modal');const segmentResults=document.getElementById('segment-results');const heroCta=document.getElementById('hero-cta');const navCta=document.getElementById('nav-cta');const closeQuiz=document.getElementById('close-quiz');// Event listeners heroCta.addEventListener('click',openQuiz);navCta.addEventListener('click',openQuiz);closeQuiz.addEventListener('click',closeQuiz);// Quiz options document.querySelectorAll('.quiz-option').forEach(option=>{option.addEventListener('click',function(){handleQuizAnswer(this)})});function openQuiz(){quizModal.classList.add('active');currentQuestion=1;quizAnswers={};showQuestion(1)}function closeQuiz(){quizModal.classList.remove('active')}function showQuestion(questionNum){document.querySelectorAll('.quiz-question').forEach(q=>{q.classList.add('hidden')});document.getElementById(`question-${questionNum}`).classList.remove('hidden')}function handleQuizAnswer(option){const questionNum=currentQuestion;const value=option.getAttribute('data-value');quizAnswers[`question${questionNum}`]=value;option.classList.add('border-gold','bg-yellow-50');setTimeout(()=>{if(currentQuestion<3){currentQuestion++;showQuestion(currentQuestion)}else{const segment=determineSegment();showSegmentResults(segment);closeQuiz()}option.classList.remove('border-gold','bg-yellow-50')},800)}function determineSegment(){if(quizAnswers.question2==='veteran'){return 'veteran'}else if(quizAnswers.question1==='first-time'){return 'first-time'}else if(quizAnswers.question3==='credit'){return 'credit'}else{return 'first-time'}}function showSegmentResults(segment){document.querySelectorAll('.segment-panel').forEach(panel=>{panel.classList.remove('active')});document.getElementById(segment).classList.add('active');segmentResults.classList.remove('hidden');segmentResults.scrollIntoView({behavior:'smooth'})}// Form handling document.querySelectorAll('form').forEach(form=>{form.addEventListener('submit',function(e){e.preventDefault();const formData=new FormData(this);const email=formData.get('email');const phone=formData.get('phone');const segment=formData.get('segment');console.log('Form submitted:',{email,phone,segment});const submitBtn=this.querySelector('button[type="submit"]');const originalText=submitBtn.textContent;submitBtn.textContent='✓ Success! We\'ll contact you soon.';submitBtn.classList.add('bg-green-500');submitBtn.disabled=true;setTimeout(()=>{submitBtn.textContent=originalText;submitBtn.classList.remove('bg-green-500');submitBtn.disabled=false},3000)})});// Initialize AOS document.addEventListener('DOMContentLoaded',function(){AOS.init({duration:800,once:true})});// Close modal on outside click quizModal.addEventListener('click',function(e){if(e.target===quizModal){closeQuiz()}});// Handle escape key document.addEventListener('keydown',function(e){if(e.key==='Escape'&&quizModal.classList.contains('active')){closeQuiz()}});</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrMortgageUSA - Unlock Your Path to Homeownership</title>
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --navy: #001f3f;
+            --gold: #ffb700;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .bg-navy {
+            background-color: var(--navy);
+        }
+        
+        .bg-gold {
+            background-color: var(--gold);
+        }
+        
+        .text-navy {
+            color: var(--navy);
+        }
+        
+        .text-gold {
+            color: var(--gold);
+        }
+        
+        .btn-gold {
+            background-color: var(--gold);
+            color: var(--navy);
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-gold:hover {
+            background-color: #e6a500;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 183, 0, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .segment-panel {
+            display: none;
+        }
+        
+        .segment-panel.active {
+            display: block;
+        }
+        
+        .gradient-overlay {
+            background: linear-gradient(135deg, var(--navy) 0%, #003366 100%);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+    
+    <!-- TailwindCSS Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#001f3f',
+                        gold: '#ffb700'
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Analytics Placeholders -->
+    <script>
+        // GA4 Placeholder
+        // gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    <script>
+        // Meta Pixel Placeholder
+        // fbq('init', 'PIXEL_ID'); fbq('track', 'PageView');
+    </script>
+    <script>
+        // TikTok Pixel Placeholder
+        // ttq.load('PIXEL_ID');
+    </script>
+</head>
+<body class="bg-white">
+    <!-- Navigation -->
+    <nav class="bg-navy text-white py-4 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="logo.png" alt="DrMortgageUSA Logo" class="h-16 w-auto">
+                <div class="font-poppins font-bold text-xl text-gold">
+                    DrMortgageUSA
+                </div>
+            </div>
+            <button id="nav-cta" class="btn-gold hidden md:inline-block">
+                Get Started
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="gradient-overlay text-white min-h-screen flex items-center pt-20">
+        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+            <div class="mb-8">
+                <img src="logo.png" alt="DrMortgageUSA Logo" class="h-32 md:h-40 lg:h-48 w-auto mx-auto mb-4">
+            </div>
+            <h1 class="hero-title font-poppins font-bold text-5xl md:text-6xl lg:text-7xl mb-6 text-shadow">
+                Unlock Your Path to Homeownership—No Guesswork, No Gimmicks.
+            </h1>
+            <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-shadow">
+                Choose your roadmap in 60 seconds.
+            </p>
+            <button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4">
+                Start My 60-Second Path Finder
+            </button>
+        </div>
+    </section>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="modal">
+        <div class="bg-white rounded-lg p-8 m-4 max-w-md w-full relative">
+            <div id="quiz-content">
+                <div class="text-center mb-6">
+                    <img src="logo.png" alt="DrMortgageUSA Logo" class="h-20 w-auto mx-auto mb-3">
+                    <h2 class="font-poppins font-bold text-2xl text-navy">
+                        Find Your Perfect Path
+                    </h2>
+                </div>
+                
+                <!-- Question 1 -->
+                <div id="question-1" class="quiz-question">
+                    <h3 class="font-semibold text-lg mb-4">Is this your first time buying a home?</h3>
+                    <div class="space-y-3">
+                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="first-time">
+                            Yes, this is my first home purchase
+                        </button>
+                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="experienced">
+                            No, I've purchased homes before
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div id="question-2" class="quiz-question hidden">
+                    <h3 class="font-semibold text-lg mb-4">Are you a military veteran or active service member?</h3>
+                    <div class="space-y-3">
+                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="veteran">
+                            Yes, I'm a veteran or active military
+                        </button>
+                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="civilian">
+                            No, I'm a civilian
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div id="question-3" class="quiz-question hidden">
+                    <h3 class="font-semibold text-lg mb-4">How would you describe your credit situation?</h3>
+                    <div class="space-y-3">
+                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="excellent">
+                            Excellent (750+ credit score)
+                        </button>
+                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="good">
+                            Good (650-749 credit score)
+                        </button>
+                        <button class="quiz-option w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-gold transition-colors" data-value="credit">
+                            Needs improvement (below 650)
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="close-quiz" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">
+                ×
+            </button>
+        </div>
+    </div>
+
+    <!-- Segment Panels -->
+    <section id="segment-results" class="py-16 bg-gray-50 hidden">
+        <div class="container mx-auto px-4">
+            <!-- First-Time Buyer Panel -->
+            <div id="first-time" class="segment-panel" data-aos="fade-up">
+                <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
+                    <div class="text-center mb-6">
+                        <img src="logo.png" alt="DrMortgageUSA Logo" class="h-24 w-auto mx-auto mb-3">
+                        <h2 class="font-poppins font-bold text-3xl text-navy">
+                            First-Time Homebuyer Programs
+                        </h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-gold">Your Benefits Include:</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Down payment assistance programs
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    FHA loans with as little as 3.5% down
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    First-time buyer grants and incentives
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Free homebuyer education courses
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4">Get Your Pre-Approval</h3>
+                            <form id="first-time-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                                <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                                <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
+                                <input type="hidden" name="segment" value="first-time">
+                                <button type="submit" class="btn-gold w-full">
+                                    Get My Pre-Approval
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Veteran Panel -->
+            <div id="veteran" class="segment-panel" data-aos="fade-up">
+                <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
+                    <div class="text-center mb-6">
+                        <img src="logo.png" alt="DrMortgageUSA Logo" class="h-24 w-auto mx-auto mb-3">
+                        <h2 class="font-poppins font-bold text-3xl text-navy">
+                            VA Loan Benefits for Veterans
+                        </h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-gold">Your VA Benefits Include:</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    No down payment required
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    No private mortgage insurance (PMI)
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Competitive interest rates
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Flexible credit requirements
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4">Get Your VA Pre-Approval</h3>
+                            <form id="veteran-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                                <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                                <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
+                                <input type="hidden" name="segment" value="veteran">
+                                <button type="submit" class="btn-gold w-full">
+                                    Get My VA Pre-Approval
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credit Improvement Panel -->
+            <div id="credit" class="segment-panel" data-aos="fade-up">
+                <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
+                    <div class="text-center mb-6">
+                        <img src="logo.png" alt="DrMortgageUSA Logo" class="h-24 w-auto mx-auto mb-3">
+                        <h2 class="font-poppins font-bold text-3xl text-navy">
+                            Credit Improvement Solutions
+                        </h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-gold">We Can Help You:</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Alternative credit evaluation methods
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Credit counseling and repair services
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Non-QM loan options
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Path to homeownership planning
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4">Start Your Journey</h3>
+                            <form id="credit-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                                <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                                <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
+                                <input type="hidden" name="segment" value="credit">
+                                <button type="submit" class="btn-gold w-full">
+                                    Get My Credit Solutions
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section id="social-proof" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="font-poppins font-bold text-4xl text-navy text-center mb-12" data-aos="fade-up">
+                    What Our Clients Say
+                </h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="video-container" data-aos="fade-up" data-aos-delay="100">
+                        <iframe src="https://www.instagram.com/p/DJ4WxNBNtK6/embed" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; muted"></iframe>
+                    </div>
+                    <div class="video-container" data-aos="fade-up" data-aos-delay="200">
+                        <iframe src="https://www.instagram.com/p/DI4V6VURiqS/embed" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; muted"></iframe>
+                    </div>
+                    <div class="video-container" data-aos="fade-up" data-aos-delay="300">
+                        <iframe src="https://www.instagram.com/p/DH9dStthnxT/embed" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; muted"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apply Now Section -->
+    <section id="apply-now" class="py-16 gradient-overlay text-white">
+        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="font-poppins font-bold text-4xl mb-8">Ready to Apply?</h2>
+                <div class="bg-white/10 rounded-lg p-6 mb-8 text-left max-w-md mx-auto">
+                    <h3 class="font-semibold text-xl mb-4 text-gold">Quick Checklist:</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Employment verification
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Income documentation
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Credit report review
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-gold mr-2">✓</span>
+                            Down payment planning
+                        </li>
+                    </ul>
+                </div>
+                <a href="https://drmortgageusa.my1003app.com" target="_blank" class="btn-gold text-lg md:text-xl px-8 py-4">
+                    Apply Now - Secure Application
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12" data-aos="fade-up">
+                    <img src="logo.png" alt="DrMortgageUSA Logo" class="h-32 w-auto mx-auto mb-4">
+                    <h2 class="font-poppins font-bold text-4xl text-navy">
+                        About DrMortgageUSA
+                    </h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div data-aos="fade-right">
+                        <h3 class="font-semibold text-2xl mb-6 text-gold">Your Trusted Mortgage Partner</h3>
+                        <p class="text-gray-700 mb-6">
+                            With years of experience in the Florida mortgage market, DrMortgageUSA specializes in helping homebuyers navigate the complex world of home financing. Our personalized approach ensures every client receives the attention and expertise they deserve.
+                        </p>
+                    </div>
+                    <div data-aos="fade-left">
+                        <h4 class="font-semibold text-xl mb-4 text-navy">What Sets Us Apart:</h4>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="text-gold mr-2">•</span>
+                                Licensed exclusively in Florida with deep local market knowledge
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gold mr-2">•</span>
+                                Specialized programs for first-time buyers, veterans, and credit-challenged clients
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gold mr-2">•</span>
+                                Fast approvals with competitive rates and transparent communication
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compliance Footer -->
+    <footer class="bg-navy text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="mb-8">
+                    <img src="logo.png" alt="DrMortgageUSA Logo" class="h-28 w-auto mx-auto mb-4">
+                    <div class="font-poppins font-bold text-2xl text-gold mb-4">
+                        DrMortgageUSA
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        NMLS #2018381 | Licensed in Florida Only
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <div>
+                        <h4 class="font-semibold mb-4">Contact</h4>
+                        <p class="text-gray-300">1-800-DR-MORTGAGE</p>
+                        <p class="text-gray-300">info@drmortgageusa.com</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Office Hours</h4>
+                        <p class="text-gray-300">Monday - Friday: 8am - 8pm</p>
+                        <p class="text-gray-300">Saturday: 9am - 5pm</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Equal Housing</h4>
+                        <div class="text-4xl text-gold mb-2">⌂</div>
+                        <p class="text-gray-300 text-sm">Equal Housing Lender</p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-600 pt-8">
+                    <p class="text-gray-300 text-sm mb-4">
+                        <strong>NMLS Consumer Access:</strong> Visit www.nmlsconsumeraccess.org for company and individual licensing information.
+                    </p>
+                    <p class="text-gray-300 text-sm mb-4">
+                        <strong>Equal Housing Opportunity:</strong> We do business in accordance with the Federal Fair Housing Law. Under the Federal Fair Housing Act, it is illegal to discriminate on the basis of race, color, national origin, religion, sex, handicap, or familial status.
+                    </p>
+                    <p class="text-gray-300 text-sm mb-4">
+                        <strong>Department of Defense Disclaimer:</strong> This is not an offer to enter into an agreement. Not all customers will qualify. Information, rates, and programs are subject to change without notice. All products are subject to credit and property approval. Other restrictions and limitations may apply.
+                    </p>
+                    <div class="flex justify-center space-x-6 mb-4">
+                        <a href="#" class="text-gray-300 hover:text-gold text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-300 hover:text-gold text-sm">Terms of Service</a>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-gray-400 text-sm">
+                    © 2025 DrMortgageUSA. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz functionality
+        let currentQuestion = 1;
+        let quizAnswers = {};
+        
+        const quizModal = document.getElementById('quiz-modal');
+        const segmentResults = document.getElementById('segment-results');
+        const heroCta = document.getElementById('hero-cta');
+        const navCta = document.getElementById('nav-cta');
+        const closeQuiz = document.getElementById('close-quiz');
+        
+        // Event listeners
+        heroCta.addEventListener('click', openQuiz);
+        navCta.addEventListener('click', openQuiz);
+        closeQuiz.addEventListener('click', closeQuizModal);
+        
+        // Quiz options
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                handleQuizAnswer(this);
+            });
+        });
+        
+        function openQuiz() {
+            quizModal.classList.add('active');
+            currentQuestion = 1;
+            quizAnswers = {};
+            showQuestion(1);
+        }
+        
+        function closeQuizModal() {
+            quizModal.classList.remove('active');
+        }
+        
+        function showQuestion(questionNum) {
+            // Hide all questions
+            document.querySelectorAll('.quiz-question').forEach(q => {
+                q.classList.add('hidden');
+            });
+            
+            // Show current question
+            document.getElementById(`question-${questionNum}`).classList.remove('hidden');
+        }
+        
+        function handleQuizAnswer(option) {
+            const questionNum = currentQuestion;
+            const value = option.getAttribute('data-value');
+            
+            // Store answer
+            quizAnswers[`question${questionNum}`] = value;
+            
+            // Visual feedback
+            option.classList.add('border-gold', 'bg-yellow-50');
+            
+            // Move to next question after a short delay
+            setTimeout(() => {
+                if (currentQuestion < 3) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                } else {
+                    // Quiz complete, determine segment
+                    const segment = determineSegment();
+                    showSegmentResults(segment);
+                    closeQuizModal();
+                }
+                
+                // Reset visual feedback
+                option.classList.remove('border-gold', 'bg-yellow-50');
+            }, 800);
+        }
+        
+        function determineSegment() {
+            // Segment logic based on quiz answers
+            if (quizAnswers.question2 === 'veteran') {
+                return 'veteran';
+            } else if (quizAnswers.question1 === 'first-time') {
+                return 'first-time';
+            } else if (quizAnswers.question3 === 'credit') {
+                return 'credit';
+            } else {
+                // Default to first-time for experienced buyers with good credit
+                return 'first-time';
+            }
+        }
+        
+        function showSegmentResults(segment) {
+            // Hide all panels
+            document.querySelectorAll('.segment-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Show selected panel
+            document.getElementById(segment).classList.add('active');
+            
+            // Show results section
+            segmentResults.classList.remove('hidden');
+            
+            // Scroll to results
+            segmentResults.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Form handling
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleFormSubmission(this);
+            });
+        });
+        
+        function handleFormSubmission(form) {
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const phone = formData.get('phone');
+            const segment = formData.get('segment');
+            
+            // Log for testing (replace with actual submission)
+            console.log('Form submitted:', { email, phone, segment });
+            
+            // Show success message
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = '✓ Success! We\'ll contact you soon.';
+            submitBtn.classList.add('bg-green-500');
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.classList.remove('bg-green-500');
+                submitBtn.disabled = false;
+            }, 3000);
+        }
+        
+        // Initialize AOS
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                once: true
+            });
+        });
+        
+        // Close modal on outside click
+        quizModal.addEventListener('click', function(e) {
+            if (e.target === quizModal) {
+                closeQuizModal();
+            }
+        });
+        
+        // Handle escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && quizModal.classList.contains('active')) {
+                closeQuizModal();
+            }
+        });
+    </script>
+</body>
+</html>
