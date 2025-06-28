@@ -111,6 +111,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 27, 2025: Applied critical deployment fixes: enhanced app.py with proper startup messaging, created dual-server deployment (Python on port 5000 + Node.js on port 5001), added comprehensive deployment documentation, and verified both servers serving static files correctly
 - June 27, 2025: Cleaned up deployment files to simplify project structure - removed redundant files (app.py, run.py, server.py, start-server.js, Procfile, run.sh, start.sh) and focused on main.py as single source of truth
 - June 27, 2025: Deployed as static site with serve-static.py - simplified deployment architecture eliminates server complexity and improves reliability for static HTML/CSS/JavaScript content
+- June 27, 2025: Enhanced quiz UX in Step 2 - added Continue button for segment selection, updated JavaScript to highlight choices without auto-advancing, improved user control over quiz progression
 
 ## Contact Information
 

@@ -259,10 +259,16 @@
             <!-- Step 2 -->
             <div data-step="2" class="hidden">
                 <h2 class="text-2xl font-bold mb-4">Which describes you best?</h2>
-                <button class="quizBtn" data-answer="first-time">First-Time Buyer</button>
-                <button class="quizBtn" data-answer="veteran">Veteran / Active Duty</button>
-                <button class="quizBtn" data-answer="credit">Credit-Rebuild</button>
-                <button class="quizBtn" data-answer="refi">Refinance</button>
+                <div class="grid gap-3">
+                    <button class="quizBtn segmentBtn" data-answer="first-time" data-segment="first-time">First-Time Buyer</button>
+                    <button class="quizBtn segmentBtn" data-answer="veteran" data-segment="veteran">Veteran / Active Duty</button>
+                    <button class="quizBtn segmentBtn" data-answer="credit" data-segment="credit">Credit-Rebuild</button>
+                    <button class="quizBtn segmentBtn" data-answer="refi" data-segment="first-time">Refinance</button>
+                </div>
+                <!-- Continue button (Step 2) -->
+                <button class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md mt-4">
+                    Continue
+                </button>
             </div>
             <!-- Step 3 -->
             <div data-step="3" class="hidden">
@@ -783,9 +789,49 @@
         // Quiz button handlers
         document.querySelectorAll('.quizBtn').forEach(btn => {
             btn.addEventListener('click', function() {
-                handleQuizAnswer(this);
+                if (btn.classList.contains('segmentBtn')) {
+                    handleSegmentButton(this);
+                } else {
+                    handleQuizAnswer(this);
+                }
             });
         });
+        
+        // Segment button handlers (Step 2)
+        document.querySelectorAll('.segmentBtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                segment = btn.dataset.segment;
+                // highlight choice
+                document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+                btn.classList.add('bg-blue-600', 'text-white');
+                // Stay on this step; user will click the new Continue button
+            });
+        });
+        
+        // Continue button handler for Step 2
+        document.querySelectorAll('.nextBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (currentStep === 2) {
+                    // Check if a segment was selected
+                    const selectedSegment = document.querySelector('.segmentBtn.bg-blue-600');
+                    if (selectedSegment) {
+                        quizAnswers.step2 = selectedSegment.dataset.answer;
+                        currentStep++;
+                        showStep(currentStep);
+                    }
+                }
+            });
+        });
+        
+        function handleSegmentButton(button) {
+            // For segment buttons, just handle the highlighting
+            // The actual progression is handled by the Continue button
+            const segment = button.getAttribute('data-segment');
+            
+            // highlight choice
+            document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            button.classList.add('bg-blue-600', 'text-white');
+        }
         
         function openPathFinder() {
             pathFinder.classList.remove('hidden');
