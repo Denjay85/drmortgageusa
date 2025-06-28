@@ -106,6 +106,33 @@
             transform: translateY(-2px);
         }
         
+        .step2-option {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #001f3f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .step2-option:hover {
+            border-color: #ffb700;
+            background-color: #fffbf0;
+            transform: translateY(-2px);
+        }
+        
+        .step2-option.selected {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
         .segment-panel {
             display: none;
         }
@@ -260,13 +287,13 @@
             <div data-step="2" class="hidden">
                 <h2 class="text-2xl font-bold mb-4">Which describes you best?</h2>
                 <div class="grid gap-3">
-                    <button class="quizBtn segmentBtn" data-answer="first-time" data-segment="first-time">First-Time Buyer</button>
-                    <button class="quizBtn segmentBtn" data-answer="veteran" data-segment="veteran">Veteran / Active Duty</button>
-                    <button class="quizBtn segmentBtn" data-answer="credit" data-segment="credit">Credit-Rebuild</button>
-                    <button class="quizBtn segmentBtn" data-answer="refi" data-segment="first-time">Refinance</button>
+                    <button class="step2-option" data-answer="first-time" data-segment="first-time">First-Time Buyer</button>
+                    <button class="step2-option" data-answer="veteran" data-segment="veteran">Veteran / Active Duty</button>
+                    <button class="step2-option" data-answer="credit" data-segment="credit">Credit-Rebuild</button>
+                    <button class="step2-option" data-answer="refi" data-segment="first-time">Refinance</button>
                 </div>
                 <!-- Continue button (Step 2) -->
-                <button class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md mt-4">
+                <button class="step2-continue bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md mt-4">
                     Continue
                 </button>
             </div>
@@ -789,18 +816,46 @@
         // Quiz button handlers
         document.querySelectorAll('.quizBtn').forEach(btn => {
             btn.addEventListener('click', function() {
+                console.log('Button clicked:', btn.textContent, 'Current step:', currentStep, 'Has segmentBtn class:', btn.classList.contains('segmentBtn'));
+                
                 if (btn.classList.contains('segmentBtn')) {
+                    console.log('Handling as segment button - only highlighting');
                     // Step 2 segment buttons - only highlight selection
                     document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
                     btn.classList.add('bg-blue-600', 'text-white');
                 } else {
+                    console.log('Handling as regular quiz button - calling handleQuizAnswer');
                     // All other quiz buttons use normal progression
                     handleQuizAnswer(this);
                 }
             });
         });
         
-        // Continue button handler for Step 2
+        // New Step 2 option handlers - completely separate from quiz logic
+        document.querySelectorAll('.step2-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Step 2 option clicked:', btn.textContent);
+                // Remove selected class from all options
+                document.querySelectorAll('.step2-option').forEach(b => b.classList.remove('selected'));
+                // Add selected class to clicked option
+                btn.classList.add('selected');
+            });
+        });
+        
+        // Step 2 continue button handler
+        document.querySelector('.step2-continue').addEventListener('click', function() {
+            console.log('Step 2 continue clicked');
+            const selectedOption = document.querySelector('.step2-option.selected');
+            if (selectedOption) {
+                quizAnswers.step2 = selectedOption.dataset.answer;
+                currentStep = 3;
+                showCurrentStep();
+            } else {
+                alert('Please select an option before continuing.');
+            }
+        });
+        
+        // Continue button handler for Step 2 (legacy - keeping for backup)
         document.querySelectorAll('.nextBtn').forEach(btn => {
             btn.addEventListener('click', function() {
                 if (currentStep === 2) {
@@ -867,8 +922,11 @@
         }
         
         function handleQuizAnswer(button) {
+            console.log('handleQuizAnswer called for:', button.textContent, 'Current step:', currentStep, 'Is segmentBtn:', button.classList.contains('segmentBtn'));
+            
             // Skip auto-advance for Step 2 segment buttons
             if (currentStep === 2 && button.classList.contains('segmentBtn')) {
+                console.log('Skipping auto-advance for Step 2 segment button');
                 return; // Do nothing - Continue button handles progression
             }
             
