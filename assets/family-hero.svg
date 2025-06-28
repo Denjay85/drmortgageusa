@@ -1,4 +1,11 @@
 <svg width="1600" height="900" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1600" height="900" fill="#f0f0f0"/>
-  <text x="800" y="450" text-anchor="middle" font-family="Arial" font-size="48" fill="#999">Happy Family Home Photo</text>
+  <rect width="1600" height="900" fill="#e8f5e9"/>
+  <rect x="600" y="400" width="400" height="300" fill="#8d6e63" stroke="#5d4037" stroke-width="4"/>
+  <polygon points="600,400 800,250 1000,400" fill="#d32f2f" stroke="#b71c1c" stroke-width="4"/>
+  <rect x="700" y="450" width="80" height="80" fill="#1e88e5" stroke="#0d47a1" stroke-width="2"/>
+  <rect x="820" y="450" width="80" height="80" fill="#1e88e5" stroke="#0d47a1" stroke-width="2"/>
+  <rect x="750" y="580" width="100" height="120" fill="#795548" stroke="#5d4037" stroke-width="2"/>
+  <circle cx="300" cy="600" r="40" fill="#388e3c"/>
+  <circle cx="1300" cy="600" r="40" fill="#388e3c"/>
+  <text x="800" y="850" text-anchor="middle" font-family="Arial" font-size="36" fill="#333">Happy Family • New Home</text>
 </svg>
