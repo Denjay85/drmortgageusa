@@ -22,4 +22,23 @@ localPort = 5002
 externalPort = 3001
 
 [workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "TestServer"
+
+[[workflows.workflow]]
+name = "TestServer"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "prybar-python3 serve-static.py"
+waitForPort = 5000
 

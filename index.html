@@ -786,25 +786,24 @@
         heroCta.addEventListener('click', openPathFinder);
         navCta.addEventListener('click', openPathFinder);
         
-        // Quiz button handlers
+        // Quiz button handlers - separate logic for segment buttons vs other quiz buttons
         document.querySelectorAll('.quizBtn').forEach(btn => {
             btn.addEventListener('click', function() {
-                if (btn.classList.contains('segmentBtn')) {
-                    handleSegmentButton(this);
-                } else {
+                if (!btn.classList.contains('segmentBtn')) {
+                    // Only handle non-segment buttons with the old logic
                     handleQuizAnswer(this);
                 }
             });
         });
         
-        // Segment button handlers (Step 2)
+        // Segment button handlers (Step 2) - only highlight, don't advance
         document.querySelectorAll('.segmentBtn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                segment = btn.dataset.segment;
+            btn.addEventListener('click', function() {
                 // highlight choice
                 document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
                 btn.classList.add('bg-blue-600', 'text-white');
-                // Stay on this step; user will click the new Continue button
+                // Store the selected answer for later use
+                btn.parentElement.parentElement.setAttribute('data-selected-answer', btn.dataset.answer);
             });
         });
         
@@ -818,20 +817,18 @@
                         quizAnswers.step2 = selectedSegment.dataset.answer;
                         currentStep++;
                         showStep(currentStep);
+                    } else {
+                        // Show feedback if no selection made
+                        btn.textContent = 'Please make a selection first';
+                        btn.classList.add('bg-red-500');
+                        setTimeout(() => {
+                            btn.textContent = 'Continue';
+                            btn.classList.remove('bg-red-500');
+                        }, 2000);
                     }
                 }
             });
         });
-        
-        function handleSegmentButton(button) {
-            // For segment buttons, just handle the highlighting
-            // The actual progression is handled by the Continue button
-            const segment = button.getAttribute('data-segment');
-            
-            // highlight choice
-            document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
-            button.classList.add('bg-blue-600', 'text-white');
-        }
         
         function openPathFinder() {
             pathFinder.classList.remove('hidden');
