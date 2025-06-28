@@ -113,7 +113,6 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 27, 2025: Deployed as static site with serve-static.py - simplified deployment architecture eliminates server complexity and improves reliability for static HTML/CSS/JavaScript content
 - June 27, 2025: Enhanced quiz UX in Step 2 - added Continue button for segment selection, updated JavaScript to highlight choices without auto-advancing, improved user control over quiz progression
 - June 28, 2025: Replaced entire reviews section with clean video testimonials grid - removed text testimonials and Instagram embeds, created reviews/ folder structure, implemented simple HTML video player grid for authentic client video testimonials
-- June 28, 2025: Updated testimonials implementation - replaced 3-column grid with centered single-column layout, switched from reviews/ folder videos to root-level testimonial-1.mp4, testimonial-2.mp4, testimonial-3.mp4 files, added fallback messages for browser compatibility
 
 ## Contact Information
 
