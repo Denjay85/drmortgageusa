@@ -815,21 +815,19 @@
         heroCta.addEventListener('click', openPathFinder);
         navCta.addEventListener('click', openPathFinder);
         
-        // Quiz button handlers
+        // Quiz button handlers (Steps 1, 3, 4 only - Step 2 handled separately)
         document.querySelectorAll('.quizBtn').forEach(btn => {
             btn.addEventListener('click', function() {
-                console.log('Button clicked:', btn.textContent, 'Current step:', currentStep, 'Has segmentBtn class:', btn.classList.contains('segmentBtn'));
+                console.log('Regular quiz button clicked:', btn.textContent, 'Current step:', currentStep);
                 
-                if (btn.classList.contains('segmentBtn')) {
-                    console.log('Handling as segment button - only highlighting');
-                    // Step 2 segment buttons - only highlight selection
-                    document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
-                    btn.classList.add('bg-blue-600', 'text-white');
-                } else {
-                    console.log('Handling as regular quiz button - calling handleQuizAnswer');
-                    // All other quiz buttons use normal progression
-                    handleQuizAnswer(this);
+                // Skip Step 2 completely - handled by separate system
+                if (currentStep === 2) {
+                    console.log('Ignoring click on Step 2 - handled by step2-option system');
+                    return;
                 }
+                
+                console.log('Calling handleQuizAnswer for non-Step-2 button');
+                handleQuizAnswer(this);
             });
         });
         
@@ -907,7 +905,6 @@
             console.log('=== SHOW STEP CALLED ===');
             console.log('Step number:', stepNum);
             console.log('Current step before:', currentStep);
-            console.log('Stack trace:', new Error().stack);
             
             // Hide all steps
             document.querySelectorAll('[data-step]').forEach(step => {
@@ -916,10 +913,30 @@
             
             // Show current step
             document.querySelector(`[data-step="${stepNum}"]`).classList.remove('hidden');
+            
+            // If this is Step 2, add extra debugging
+            if (stepNum === 2) {
+                console.log('*** STEP 2 SHOWN - WAITING FOR USER INPUT ***');
+                console.log('Current currentStep variable:', currentStep);
+                console.log('Available step2-option buttons:', document.querySelectorAll('.step2-option').length);
+                
+                // Set up a timeout to check if step advances unexpectedly
+                setTimeout(() => {
+                    if (currentStep !== 2) {
+                        console.log('*** UNEXPECTED STEP ADVANCE DETECTED ***');
+                        console.log('Current step is now:', currentStep);
+                        console.log('This should not happen without user clicking Continue!');
+                    } else {
+                        console.log('*** GOOD: Still on Step 2 after 1 second ***');
+                    }
+                }, 1000);
+            }
+            
             console.log('=== END SHOW STEP ===');
         }
         
         function handleNameInput() {
+            console.log('=== HANDLE NAME INPUT CALLED ===');
             const nameInput = document.getElementById('firstName');
             const firstName = nameInput.value.trim();
             
@@ -929,16 +946,22 @@
                 return;
             }
             
+            console.log('Name validated:', firstName);
+            
             // Store name
             quizAnswers.firstName = firstName;
             
             // Move to next step
             currentStep = 2;
+            console.log('Setting currentStep to 2');
             showStep(2);
+            console.log('Called showStep(2)');
             
             // Update next question to be more personal
             const step2Title = document.querySelector('[data-step="2"] h2');
             step2Title.textContent = `Nice to meet you, ${firstName}! Which describes you best?`;
+            console.log('Updated step 2 title');
+            console.log('=== END HANDLE NAME INPUT ===');
         }
         
         function handleQuizAnswer(button) {
