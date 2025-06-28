@@ -786,24 +786,17 @@
         heroCta.addEventListener('click', openPathFinder);
         navCta.addEventListener('click', openPathFinder);
         
-        // Quiz button handlers - separate logic for segment buttons vs other quiz buttons
+        // Quiz button handlers
         document.querySelectorAll('.quizBtn').forEach(btn => {
             btn.addEventListener('click', function() {
-                if (!btn.classList.contains('segmentBtn')) {
-                    // Only handle non-segment buttons with the old logic
+                if (btn.classList.contains('segmentBtn')) {
+                    // Step 2 segment buttons - only highlight selection
+                    document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+                    btn.classList.add('bg-blue-600', 'text-white');
+                } else {
+                    // All other quiz buttons use normal progression
                     handleQuizAnswer(this);
                 }
-            });
-        });
-        
-        // Segment button handlers (Step 2) - only highlight, don't advance
-        document.querySelectorAll('.segmentBtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                // highlight choice
-                document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
-                btn.classList.add('bg-blue-600', 'text-white');
-                // Store the selected answer for later use
-                btn.parentElement.parentElement.setAttribute('data-selected-answer', btn.dataset.answer);
             });
         });
         
@@ -874,6 +867,11 @@
         }
         
         function handleQuizAnswer(button) {
+            // Skip auto-advance for Step 2 segment buttons
+            if (currentStep === 2 && button.classList.contains('segmentBtn')) {
+                return; // Do nothing - Continue button handles progression
+            }
+            
             const answer = button.getAttribute('data-answer');
             
             // Store answer
