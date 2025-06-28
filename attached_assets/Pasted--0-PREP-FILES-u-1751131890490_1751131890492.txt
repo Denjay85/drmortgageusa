@@ -1,0 +1,68 @@
+###############################################################################
+# 0 ── PREP FILES (upload images first)
+###############################################################################
+# Upload a translucent U.S.-flag PNG (≈-1920×600, 20-30 % opacity) 
+# and a warm “happy-family-in-front-of-house” JPG (≈-1600×900).
+# Use whatever royalty-free files you like; the agent will rename them:
+#
+#   uploads/banner-flag.png
+#   uploads/family-hero.jpg
+#
+upload "/mnt/data/banner-flag.png" as assets/banner-flag.png
+upload "/mnt/data/family-hero.jpg" as assets/family-hero.jpg
+
+
+###############################################################################
+# 1 ── RESIZE THE LOGO SITE-WIDE
+###############################################################################
+# Find the <img> tag for your logo (id="logo" was set in an earlier edit)
+# and give it responsive width classes.
+edit file index.html replace \
+  'id="logo"' \
+  'id="logo" class="w-40 md:w-48 lg:w-56 xl:w-64"'
+
+
+###############################################################################
+# 2 ── ADD TRANSLUCENT FLAG OVERLAY TO HERO BANNER
+###############################################################################
+# Turn the existing hero section into a relative container and add a ::before
+# pseudo-element via inline style (quickest in a static site).
+edit file index.html replace \
+  '<section class="text-center py-16 px-4">' \
+  '<section class="relative text-center py-20 px-4 overflow-hidden">\n\
+    <style>\n\
+      /* translucent flag overlay */\n\
+      #hero::before {\n\
+        content:\"\";\n\
+        position:absolute;\n\
+        inset:0;\n\
+        background:url(assets/banner-flag.png) center/cover no-repeat;\n\
+        opacity:0.25;\n\
+        z-index:-1;\n\
+      }\n\
+    </style>'
+
+# give the <section> the id="hero" so the CSS above targets it
+edit file index.html replace \
+  '<section class="relative' \
+  '<section id="hero" class="relative'
+
+###############################################################################
+# 3 ── RESTORE & COMBINE WRITTEN TESTIMONIALS WITH VIDEO GRID
+###############################################################################
+# Insert the written “What Our Clients Say” cards *above* the video grid.
+edit file index.html insert-after '<h2 class="text-2xl font-bold mb-6 text-center">Client Stories</h2>' <<'EOF'
+    <!-- Written testimonials (Sarah, James, Maria) -->
+    <div class="grid gap-6 md:grid-cols-3 mb-10 text-left">
+      <div class="bg-white p-6 rounded-xl shadow-lg border">
+        <p class="italic mb-2">“Dennis took the stress out of our first home purchase. We closed in 23 days!”</p>
+        <span class="font-semibold">— Sarah T.</span>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-lg border">
+        <p class="italic mb-2">“He answered my texts at 9 PM and got us a rate I didn’t think was possible.”</p>
+        <span class="font-semibold">— James R.</span>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-lg border">
+        <p class="italic mb-2">“I teach kindergarten—Dennis explained everything in plain English. Five stars!”</p>
+        <span class="font-semibold">— Maria L.</span>
+      </div>

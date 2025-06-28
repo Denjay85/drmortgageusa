@@ -1,0 +1,10 @@
+<svg width="1920" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="stripes" patternUnits="userSpaceOnUse" width="1920" height="46.15">
+      <rect width="1920" height="46.15" fill="#B22234"/>
+      <rect y="46.15" width="1920" height="46.15" fill="#FFFFFF"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="600" fill="url(#stripes)"/>
+  <rect width="768" height="322.1" fill="#3C3B6E"/>
+</svg>
