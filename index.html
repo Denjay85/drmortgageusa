@@ -281,6 +281,24 @@
             position: relative;
             z-index: 2;
         }
+        
+        /* About section with collage background */
+        #about {
+            position: relative;
+            background-color: #9ca3af;
+        }
+        #about::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url(assets/client-collage.jpg) center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        #about > * {
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
