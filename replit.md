@@ -55,12 +55,14 @@ As a static website, data flow is minimal:
 The project is optimized for reliable deployment across multiple hosting platforms with comprehensive fallback options:
 
 ### Server Configurations
-- **Primary**: Python HTTP server (main.py) - single source of truth with optimized error handling and port detection
+- **Primary**: Static site server (serve-static.py) - ultra-simple static file deployment
+- **Legacy**: Python HTTP server (main.py) with advanced error handling and port detection
 - **Fallback**: Comprehensive startup script (start.py) with multiple deployment options
 - **Alternative**: Node.js static file server via Procfile.nodejs
 
 ### Deployment Files
-- **main.py**: Primary deployment server with detailed logging and port detection
+- **serve-static.py**: Primary static site server for production deployment
+- **main.py**: Advanced deployment server with detailed logging and port detection
 - **start.py**: Comprehensive startup script with fallback options and dependency checking
 - **Procfile.nodejs**: Node.js deployment alternative using npx serve
 - **package.json**: Node.js dependencies for serve package
@@ -108,6 +110,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 27, 2025: Implemented comprehensive deployment fixes including multi-tier fallback system (Python → Node.js → NPX serve), automatic port detection, CORS support, and robust error handling for reliable production deployment
 - June 27, 2025: Applied critical deployment fixes: enhanced app.py with proper startup messaging, created dual-server deployment (Python on port 5000 + Node.js on port 5001), added comprehensive deployment documentation, and verified both servers serving static files correctly
 - June 27, 2025: Cleaned up deployment files to simplify project structure - removed redundant files (app.py, run.py, server.py, start-server.js, Procfile, run.sh, start.sh) and focused on main.py as single source of truth
+- June 27, 2025: Deployed as static site with serve-static.py - simplified deployment architecture eliminates server complexity and improves reliability for static HTML/CSS/JavaScript content
 
 ## Contact Information
 
