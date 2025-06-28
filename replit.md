@@ -113,6 +113,8 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 27, 2025: Deployed as static site with serve-static.py - simplified deployment architecture eliminates server complexity and improves reliability for static HTML/CSS/JavaScript content
 - June 27, 2025: Enhanced quiz UX in Step 2 - added Continue button for segment selection, updated JavaScript to highlight choices without auto-advancing, improved user control over quiz progression
 - June 28, 2025: Replaced entire reviews section with clean video testimonials grid - removed text testimonials and Instagram embeds, created reviews/ folder structure, implemented simple HTML video player grid for authentic client video testimonials
+- June 28, 2025: Enhanced site design - made all logos responsive with width classes (w-40 md:w-48 lg:w-56 xl:w-64), added translucent American flag overlay to hero section (25% opacity), combined written testimonials with video grid for comprehensive social proof
+- June 28, 2025: Added hero lifestyle image below CTA button - displays on medium screens and up for visual engagement
 
 ## Contact Information
 

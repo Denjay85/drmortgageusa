@@ -261,6 +261,18 @@
         // TikTok Pixel Placeholder
         // ttq.load('PIXEL_ID');
     </script>
+    
+    <!-- flag overlay injected -->
+    <style id="flag-css">
+        #hero::before {
+            content:"";
+            position:absolute;
+            inset:0;
+            background:url(assets/banner-flag.svg) center/cover no-repeat;
+            opacity:0.25;          /* adjust translucency here */
+            z-index:-1;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
@@ -283,17 +295,7 @@
 
     <!-- Hero Section -->
     <section id="hero" class="gradient-overlay text-white min-h-screen flex items-center pt-20 relative overflow-hidden">
-        <style>
-            /* translucent flag overlay */
-            #hero::before {
-                content:"";
-                position:absolute;
-                inset:0;
-                background:url(assets/banner-flag.svg) center/cover no-repeat;
-                opacity:0.25;
-                z-index:-1;
-            }
-        </style>
+
         <div class="container mx-auto px-4 text-center" data-aos="fade-up">
             <div class="mb-8">
                 <img src="logo.png" alt="Dr.MortgageUSA Logo" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4">
@@ -307,6 +309,11 @@
             <button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4">
                 Start My 60-Second Path Finder
             </button>
+            
+            <!-- hero lifestyle photo -->
+            <img src="assets/family-hero.svg"
+                 alt="Happy family in front of new home"
+                 class="mx-auto mt-8 rounded-2xl shadow-xl w-full max-w-3xl hidden md:block">
         </div>
         <!-- Floating Dennis Photo -->
         <div class="absolute bottom-10 right-10 hidden lg:block" data-aos="zoom-in" data-aos-delay="800">

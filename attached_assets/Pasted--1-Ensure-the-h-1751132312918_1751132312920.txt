@@ -1,0 +1,53 @@
+################################################################################
+# 1 ── Ensure the hero <section> has id="hero" and the base classes we need
+################################################################################
+# If id="hero" is missing, inject it.
+edit file index.html regex-replace \
+  '(<section[^>]*class="[^"]*text-center[^"]*)"([^>]*>)' \
+  '\1 id="hero"\2'
+
+# Make sure the hero section also has "relative overflow-hidden"
+edit file index.html regex-replace \
+  '(<section[^>]*id="hero"[^>]*class="[^"]*)"' \
+  '\1 relative overflow-hidden"'
+
+################################################################################
+# 2 ── Inject CSS for the translucent flag overlay (only once)
+################################################################################
+# Add a <style id="flag-css"> block just before </head> if it isn't there.
+edit file index.html insert-before '</head>' <<'EOF'
+<!-- flag overlay injected -->
+<style id="flag-css">
+  #hero::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:url(assets/banner-flag.png) center/cover no-repeat;
+    opacity:0.25;          /* adjust translucency here */
+    z-index:-1;
+  }
+</style>
+EOF
+
+################################################################################
+# 3 ── Resize the logo wherever it appears
+################################################################################
+# Add width classes only if they aren’t present.
+edit file index.html regex-replace \
+  '(<img[^>]*src="[^"]*logo[^"]*"[^>]*class=")([^"]*)"' \
+  '\1w-40 md:w-48 lg:w-56 xl:w-64 \2"'
+
+################################################################################
+# 4 ── Inject hero family image under the CTA (if it’s not there)
+################################################################################
+edit file index.html insert-after '<button id="startQuiz"' <<'EOF'
+<!-- hero lifestyle photo (added by script) -->
+<img src="assets/family-hero.jpg"
+     alt="Happy family in front of new home"
+     class="mx-auto mt-8 rounded-2xl shadow-xl w-full max-w-3xl hidden md:block">
+EOF
+
+################################################################################
+# 5 ── Deploy updated static site
+################################################################################
+deploy static-si
