@@ -277,6 +277,7 @@
     <!-- PATH-FINDER QUIZ (hidden by default, revealed on CTA click) -->
     <section id="path-finder" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
         <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl shadow-xl text-center" id="quizCard">
+            <form id="quizForm" onsubmit="return false;">
             <!-- Step 1 - Name Collection -->
             <div data-step="1">
                 <h2 class="text-2xl font-bold mb-4">What's your first name?</h2>
@@ -312,6 +313,7 @@
                 <button class="quizBtn" data-answer="rate">High Rates</button>
                 <button class="quizBtn" data-answer="unsure">Unsure</button>
             </div>
+            </form>
         </div>
     </section>
 
@@ -833,12 +835,24 @@
         
         // New Step 2 option handlers - completely separate from quiz logic
         document.querySelectorAll('.step2-option').forEach(btn => {
-            btn.addEventListener('click', function() {
-                console.log('Step 2 option clicked:', btn.textContent);
+            btn.addEventListener('click', function(event) {
+                console.log('=== STEP 2 OPTION CLICKED ===');
+                console.log('Button text:', btn.textContent);
+                console.log('Current step before click:', currentStep);
+                console.log('Event target:', event.target);
+                console.log('Event type:', event.type);
+                
+                // Prevent any default behavior
+                event.preventDefault();
+                event.stopPropagation();
+                
                 // Remove selected class from all options
                 document.querySelectorAll('.step2-option').forEach(b => b.classList.remove('selected'));
                 // Add selected class to clicked option
                 btn.classList.add('selected');
+                
+                console.log('Current step after selection:', currentStep);
+                console.log('=== END STEP 2 OPTION CLICK ===');
             });
         });
         
@@ -890,6 +904,11 @@
         }
         
         function showStep(stepNum) {
+            console.log('=== SHOW STEP CALLED ===');
+            console.log('Step number:', stepNum);
+            console.log('Current step before:', currentStep);
+            console.log('Stack trace:', new Error().stack);
+            
             // Hide all steps
             document.querySelectorAll('[data-step]').forEach(step => {
                 step.classList.add('hidden');
@@ -897,6 +916,7 @@
             
             // Show current step
             document.querySelector(`[data-step="${stepNum}"]`).classList.remove('hidden');
+            console.log('=== END SHOW STEP ===');
         }
         
         function handleNameInput() {
