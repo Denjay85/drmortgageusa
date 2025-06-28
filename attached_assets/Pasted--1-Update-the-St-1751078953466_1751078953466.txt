@@ -1,0 +1,86 @@
+###############################################################################
+# 1 ── Update the Step-2 HTML (add the Continue button)
+###############################################################################
+edit file index.html replace \
+  '<div data-step="2" class="quiz-step hidden">' \
+  '<div data-step="2" class="quiz-step hidden">\n  <h2 class="text-xl font-semibold mb-4">Which describes you best?</h2>\n  <div class="grid gap-3 mb-6">'
+
+# insert the disabled Continue button right after the closing </div> of the grid
+edit file index.html insert-after '</div><!-- end grid -->' <<'EOF'
+  <button id="step2Continue"
+          class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md"
+          disabled>
+    Continue
+  </button>
+EOF
+
+
+###############################################################################
+# 2 ── Replace the ENTIRE <script>…</script> block with new logic
+###############################################################################
+edit file index.html replace \
+  '<script>' \
+  '<script>\n\
+// ——— Path-Finder quiz logic (fixed) ————————————————————————————————\n\
+document.addEventListener(\"DOMContentLoaded\", () => {\n\
+  const quizModal = document.getElementById(\"quizModal\");\n\
+  const steps     = document.querySelectorAll(\".quiz-step\");\n\
+  let current = 0;\n\
+  let segment = \"\";\n\
+\n\
+  const showStep = i => steps.forEach((s, idx) => s.classList.toggle(\"hidden\", idx !== i));\n\
+\n\
+  // open quiz\n\
+  document.getElementById(\"startQuiz\").onclick = () => {\n\
+    quizModal.classList.remove(\"hidden\");\n\
+    current = 0;\n\
+    showStep(0);\n\
+    document.getElementById(\"step2Continue\").disabled = true; // reset\n\
+  };\n\
+\n\
+  // close modal on backdrop click\n\
+  quizModal.onclick = e => { if (e.target === quizModal) quizModal.classList.add(\"hidden\"); };\n\
+\n\
+  // generic next buttons (Step 1, Step 3)\n\
+  document.querySelectorAll(\".nextBtn\").forEach(btn => {\n\
+    btn.addEventListener(\"click\", () => {\n\
+      current++;\n\
+      showStep(current);\n\
+    });\n\
+  });\n\
+\n\
+  // segment selection (Step 2)\n\
+  const contBtn = document.getElementById(\"step2Continue\");\n\
+  document.querySelectorAll(\".segmentBtn\").forEach(btn => {\n\
+    btn.addEventListener(\"click\", () => {\n\
+      segment = btn.dataset.segment;\n\
+      // highlight\n\
+      document.querySelectorAll(\".segmentBtn\").forEach(b => b.classList.remove(\"bg-blue-600\",\"text-white\"));\n\
+      btn.classList.add(\"bg-blue-600\",\"text-white\");\n\
+      // enable Continue\n\
+      contBtn.disabled = false;\n\
+    });\n\
+  });\n\
+\n\
+  // Continue button for Step 2\n\
+  contBtn.addEventListener(\"click\", () => {\n\
+    current++;\n\
+    showStep(current);\n\
+  });\n\
+\n\
+  // finish (Step 4)\n\
+  document.getElementById(\"finishBtn\").addEventListener(\"click\", () => {\n\
+    quizModal.classList.add(\"hidden\");\n\
+    const deepDive = document.getElementById(\"deepDive\");\n\
+    deepDive.classList.remove(\"hidden\");\n\
+    document.querySelectorAll(\"#deepDive .panel\").forEach(p => p.classList.add(\"hidden\"));\n\
+    document.getElementById(`panel-${segment}`).classList.remove(\"hidden\");\n\
+    deepDive.scrollIntoView({behavior:\"smooth\"});\n\
+  });\n\
+});\n\
+</script>'
+
+###############################################################################
+# 3 ── Redeploy the static site
+###############################################################################
+deploy static-site --update funnel-site

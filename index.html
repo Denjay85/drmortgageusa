@@ -319,41 +319,40 @@
         <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl shadow-xl text-center" id="quizCard">
             <form id="quizForm" onsubmit="return false;">
             <!-- Step 1 - Name Collection -->
-            <div data-step="1">
+            <div data-step="1" class="quiz-step">
                 <h2 class="text-2xl font-bold mb-4">What's your first name?</h2>
                 <input type="text" id="firstName" class="w-full p-3 border-2 border-gray-300 rounded-lg text-center text-lg mb-4" placeholder="Enter your first name" maxlength="30">
-                <button class="quizBtn" onclick="handleNameInput()">Continue</button>
+                <button class="nextBtn quizBtn">Continue</button>
             </div>
             <!-- Step 2 -->
-            <div data-step="2" class="hidden">
-                <h2 class="text-2xl font-bold mb-4">Which describes you best?</h2>
-                <div class="grid gap-3">
+            <div data-step="2" class="quiz-step hidden">
+                <h2 class="text-xl font-semibold mb-4">Which describes you best?</h2>
+                <div class="grid gap-3 mb-6">
                     <button class="segmentBtn quizBtn" data-segment="first-time" data-answer="first-time">First-Time Buyer</button>
                     <button class="segmentBtn quizBtn" data-segment="veteran" data-answer="veteran">Veteran / Active Duty</button>
                     <button class="segmentBtn quizBtn" data-segment="credit" data-answer="credit">Credit-Rebuild</button>
                     <button class="segmentBtn quizBtn" data-segment="first-time" data-answer="refi">Refinance</button>
-                </div>
-                <!-- Continue button for Step 2 -->
-                <button id="continueStep2"
-                        class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md mt-4"
+                </div><!-- end grid -->
+                <button id="step2Continue"
+                        class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md"
                         disabled>
                   Continue
                 </button>
             </div>
             <!-- Step 3 -->
-            <div data-step="3" class="hidden">
+            <div data-step="3" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-4">What's your target timeline?</h2>
-                <button class="quizBtn" data-answer="0-3">0-3 months</button>
-                <button class="quizBtn" data-answer="3-6">3-6 months</button>
-                <button class="quizBtn" data-answer="6-12">6-12 months</button>
+                <button class="nextBtn quizBtn" data-answer="0-3">0-3 months</button>
+                <button class="nextBtn quizBtn" data-answer="3-6">3-6 months</button>
+                <button class="nextBtn quizBtn" data-answer="6-12">6-12 months</button>
             </div>
             <!-- Step 4 -->
-            <div data-step="4" class="hidden">
+            <div data-step="4" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-4">Biggest hurdle right now?</h2>
-                <button class="quizBtn" data-answer="down-payment">Down Payment</button>
-                <button class="quizBtn" data-answer="credit-score">Credit Score</button>
-                <button class="quizBtn" data-answer="rate">High Rates</button>
-                <button class="quizBtn" data-answer="unsure">Unsure</button>
+                <button class="finishBtn quizBtn" data-answer="down-payment">Down Payment</button>
+                <button class="finishBtn quizBtn" data-answer="credit-score">Credit Score</button>
+                <button class="finishBtn quizBtn" data-answer="rate">High Rates</button>
+                <button class="finishBtn quizBtn" data-answer="unsure">Unsure</button>
             </div>
             </form>
         </div>
@@ -844,333 +843,167 @@
     </footer>
 
     <script>
-        // Path-finder Quiz functionality
-        let currentStep = 1;
-        let quizAnswers = {};
-        
-        const pathFinder = document.getElementById('path-finder');
-        const segmentResults = document.getElementById('segment-results');
-        const heroCta = document.getElementById('hero-cta');
-        const navCta = document.getElementById('nav-cta');
-        
-        // Event listeners
-        heroCta.addEventListener('click', openPathFinder);
-        navCta.addEventListener('click', openPathFinder);
-        
-        // Quiz button handlers
-        document.querySelectorAll('.quizBtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                console.log('Quiz button clicked:', btn.textContent, 'Current step:', currentStep);
-                
-                // Handle segment buttons differently - no auto-advance
-                if (btn.classList.contains('segmentBtn')) {
-                    // highlight selected button
-                    document.querySelectorAll('.segmentBtn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
-                    btn.classList.add('bg-blue-600', 'text-white');
-                    // enable the Continue button
-                    document.getElementById("continueStep2").disabled = false;
-                    return;
-                }
-                
-                console.log('Calling handleQuizAnswer for regular button');
-                handleQuizAnswer(this);
-            });
-        });
-        
-        // New Step 2 option handlers - completely separate from quiz logic
-        document.querySelectorAll('.step2-option').forEach(btn => {
-            btn.addEventListener('click', function(event) {
-                console.log('=== STEP 2 OPTION CLICKED ===');
-                console.log('Button text:', btn.textContent);
-                console.log('Current step before click:', currentStep);
-                console.log('Event target:', event.target);
-                console.log('Event type:', event.type);
-                
-                // Prevent any default behavior
-                event.preventDefault();
-                event.stopPropagation();
-                
-                // Remove selected class from all options
-                document.querySelectorAll('.step2-option').forEach(b => b.classList.remove('selected'));
-                // Add selected class to clicked option
-                btn.classList.add('selected');
-                
-                console.log('Current step after selection:', currentStep);
-                console.log('=== END STEP 2 OPTION CLICK ===');
-            });
-        });
-        
-        // Step 2 continue button handler
-        document.querySelector('.step2-continue').addEventListener('click', function() {
-            console.log('Step 2 continue clicked');
-            const selectedOption = document.querySelector('.step2-option.selected');
-            if (selectedOption) {
-                quizAnswers.step2 = selectedOption.dataset.answer;
-                currentStep = 3;
-                showCurrentStep();
-            } else {
-                alert('Please select an option before continuing.');
-            }
-        });
-        
-        // Continue button handler for Step 2
-        document.querySelectorAll('.nextBtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (currentStep === 2 && btn.id === 'continueStep2') {
-                    // Check if a segment was selected
-                    const selectedSegment = document.querySelector('.segmentBtn.bg-blue-600');
-                    if (selectedSegment) {
-                        quizAnswers.step2 = selectedSegment.dataset.answer;
-                        currentStep++;
-                        showStep(currentStep);
-                    } else {
-                        // Show feedback if no selection made
-                        btn.textContent = 'Please make a selection first';
-                        btn.classList.add('bg-red-500');
-                        setTimeout(() => {
-                            btn.textContent = 'Continue';
-                            btn.classList.remove('bg-red-500');
-                        }, 2000);
-                    }
-                }
-            });
-        });
-        
-        function openPathFinder() {
-            pathFinder.classList.remove('hidden');
-            currentStep = 1;
-            quizAnswers = {};
-            showStep(1);
-        }
-        
-        function closePathFinder() {
-            pathFinder.classList.add('hidden');
-        }
-        
-        function showStep(stepNum) {
-            console.log('=== SHOW STEP CALLED ===');
-            console.log('Step number:', stepNum);
-            console.log('Current step before:', currentStep);
-            
-            // Hide all steps
-            document.querySelectorAll('[data-step]').forEach(step => {
-                step.classList.add('hidden');
-            });
-            
-            // Show current step
-            document.querySelector(`[data-step="${stepNum}"]`).classList.remove('hidden');
-            
-            // If this is Step 2, add extra debugging
-            if (stepNum === 2) {
-                console.log('*** STEP 2 SHOWN - WAITING FOR USER INPUT ***');
-                console.log('Current currentStep variable:', currentStep);
-                console.log('Available step2-option buttons:', document.querySelectorAll('.step2-option').length);
-                
-                // Set up a timeout to check if step advances unexpectedly
-                setTimeout(() => {
-                    if (currentStep !== 2) {
-                        console.log('*** UNEXPECTED STEP ADVANCE DETECTED ***');
-                        console.log('Current step is now:', currentStep);
-                        console.log('This should not happen without user clicking Continue!');
-                    } else {
-                        console.log('*** GOOD: Still on Step 2 after 1 second ***');
-                    }
-                }, 1000);
-            }
-            
-            console.log('=== END SHOW STEP ===');
-        }
-        
-        function handleNameInput() {
-            console.log('=== HANDLE NAME INPUT CALLED ===');
-            const nameInput = document.getElementById('firstName');
-            const firstName = nameInput.value.trim();
-            
-            if (firstName.length < 2) {
-                nameInput.style.borderColor = '#ef4444';
-                nameInput.placeholder = 'Please enter your first name';
-                return;
-            }
-            
-            console.log('Name validated:', firstName);
-            
-            // Store name
-            quizAnswers.firstName = firstName;
-            
-            // Move to next step
-            currentStep = 2;
-            console.log('Setting currentStep to 2');
-            showStep(2);
-            console.log('Called showStep(2)');
-            
-            // Update next question to be more personal
-            const step2Title = document.querySelector('[data-step="2"] h2');
-            step2Title.textContent = `Nice to meet you, ${firstName}! Which describes you best?`;
-            console.log('Updated step 2 title');
-            console.log('=== END HANDLE NAME INPUT ===');
-        }
-        
-        function handleQuizAnswer(button) {
-            console.log('handleQuizAnswer called for:', button.textContent, 'Current step:', currentStep);
-            
-            // COMPLETELY BLOCK Step 2 from auto-advancing
-            if (currentStep === 2) {
-                console.log('BLOCKED: Step 2 cannot auto-advance via handleQuizAnswer');
-                return false;
-            }
-            
-            const answer = button.getAttribute('data-answer');
-            
-            // Store answer
-            quizAnswers[`step${currentStep}`] = answer;
-            
-            // Visual feedback
-            button.style.backgroundColor = '#ffb700';
-            button.style.color = '#001f3f';
-            button.style.transform = 'scale(0.95)';
-            
-            // Move to next step after delay (but NEVER for Step 2)
-            setTimeout(() => {
-                if (currentStep === 2) {
-                    console.log('TIMEOUT BLOCKED: Will not advance from Step 2');
-                    return;
-                }
-                
-                if (currentStep < 4) {
-                    currentStep++;
-                    showStep(currentStep);
-                } else {
-                    // Quiz complete, determine segment
-                    const segment = determineSegment();
-                    showSegmentResults(segment);
-                    closePathFinder();
-                }
-                
-                // Reset button style
-                button.style.backgroundColor = '';
-                button.style.color = '';
-                button.style.transform = '';
-            }, 600);
-        }
-        
+// ——— Path-Finder quiz logic (fixed) ————————————————————————————————
+document.addEventListener("DOMContentLoaded", () => {
+  const quizModal = document.getElementById("path-finder");
+  const steps     = document.querySelectorAll(".quiz-step");
+  let current = 0;
+  let segment = "";
+  let quizAnswers = {};
+  const showStep = i => steps.forEach((s, idx) => s.classList.toggle("hidden", idx !== i));
 
+  // open quiz
+  document.getElementById("hero-cta").onclick = () => {
+    quizModal.classList.remove("hidden");
+    current = 0;
+    showStep(0);
+    document.getElementById("step2Continue").disabled = true; // reset
+  };
+
+  document.getElementById("nav-cta").onclick = () => {
+    quizModal.classList.remove("hidden");
+    current = 0;
+    showStep(0);
+    document.getElementById("step2Continue").disabled = true; // reset
+  };
+
+  // close modal on backdrop click
+  quizModal.onclick = e => { if (e.target === quizModal) quizModal.classList.add("hidden"); };
         
-        function determineSegment() {
-            // Prioritize veteran status
-            if (quizAnswers.step2 === 'veteran') {
-                return 'veteran';
-            }
-            // Then check for credit rebuild
-            else if (quizAnswers.step2 === 'credit') {
-                return 'credit';
-            }
-            // Default to first-time for new buyers and refinance
-            else {
-                return 'first-time';
-            }
+  // Handle Step 1 name input
+  document.querySelector('[data-step="1"] .nextBtn').addEventListener('click', () => {
+    const nameInput = document.getElementById('firstName');
+    const firstName = nameInput.value.trim();
+    
+    if (firstName.length < 2) {
+      nameInput.style.borderColor = '#ef4444';
+      nameInput.placeholder = 'Please enter your first name';
+      return;
+    }
+    
+    quizAnswers.firstName = firstName;
+    current++;
+    showStep(current);
+    
+    // Update Step 2 title
+    const step2Title = document.querySelector('[data-step="2"] h2');
+    step2Title.textContent = `Nice to meet you, ${firstName}! Which describes you best?`;
+  });
+
+  // generic next buttons (Step 3)
+  document.querySelectorAll('[data-step="3"] .nextBtn').forEach(btn => {
+    btn.addEventListener("click", () => {
+      const answer = btn.getAttribute('data-answer');
+      quizAnswers.step3 = answer;
+      current++;
+      showStep(current);
+    });
+  });
+
+  // segment selection (Step 2)
+  const contBtn = document.getElementById("step2Continue");
+  document.querySelectorAll(".segmentBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      segment = btn.dataset.segment;
+      quizAnswers.step2 = btn.dataset.answer;
+      // highlight
+      document.querySelectorAll(".segmentBtn").forEach(b => b.classList.remove("bg-blue-600","text-white"));
+      btn.classList.add("bg-blue-600","text-white");
+      // enable Continue
+      contBtn.disabled = false;
+    });
+  });
+
+  // Continue button for Step 2
+  contBtn.addEventListener("click", () => {
+    current++;
+    showStep(current);
+  });
+        
+  // finish (Step 4)
+  document.querySelectorAll(".finishBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const answer = btn.getAttribute('data-answer');
+      quizAnswers.step4 = answer;
+      
+      quizModal.classList.add("hidden");
+      const deepDive = document.getElementById("segment-results");
+      deepDive.classList.remove("hidden");
+      document.querySelectorAll(".segment-panel").forEach(p => p.classList.remove("active"));
+      document.getElementById(segment).classList.add("active");
+      
+      // Personalize the segment panel
+      const firstName = quizAnswers.firstName || 'Friend';
+      const segmentTitle = document.querySelector(`#${segment} h2`);
+      if (segmentTitle) {
+        const originalTitle = segmentTitle.textContent;
+        if (!originalTitle.includes(firstName)) {
+          segmentTitle.textContent = `Perfect ${firstName}! ${originalTitle}`;
         }
+      }
+      
+      deepDive.scrollIntoView({behavior:"smooth"});
+    });
+  });
         
-        function showSegmentResults(segment) {
-            // Hide all panels
-            document.querySelectorAll('.segment-panel').forEach(panel => {
-                panel.classList.remove('active');
-            });
-            
-            // Show selected panel
-            document.getElementById(segment).classList.add('active');
-            
-            // Personalize the segment panel header with user's name
-            const firstName = quizAnswers.firstName || 'Friend';
-            const segmentPanel = document.getElementById(segment);
-            const titleElement = segmentPanel.querySelector('h2');
-            
-            if (segment === 'first-time') {
-                titleElement.textContent = `${firstName}, Let's Make Your First Home Purchase Perfect`;
-            } else if (segment === 'veteran') {
-                titleElement.textContent = `${firstName}, Your VA Benefits Await`;
-            } else if (segment === 'credit') {
-                titleElement.textContent = `${firstName}, Let's Rebuild Your Credit & Get You Home`;
-            }
-            
-            // Show results section
-            segmentResults.classList.remove('hidden');
-            
-            // Scroll to results
-            segmentResults.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Form handling
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                handleFormSubmission(this);
-            });
-        });
-        
-        function handleFormSubmission(form) {
-            const formData = new FormData(form);
-            const email = formData.get('email');
-            const phone = formData.get('phone');
-            const segment = formData.get('segment');
-            const firstName = quizAnswers.firstName || '';
-            
-            // Add first name to form data for submission
-            const submissionData = { 
-                firstName, 
-                email, 
-                phone, 
-                segment,
-                timeline: quizAnswers.step3 || '',
-                hurdle: quizAnswers.step4 || ''
-            };
-            
-            // Log for testing (replace with actual submission)
-            console.log('Form submitted:', submissionData);
-            
-            // Show success message with personalization
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            const personalizedMessage = firstName ? 
-                `✓ Thanks ${firstName}! We'll contact you soon.` : 
-                '✓ Success! We\'ll contact you soon.';
-            
-            submitBtn.textContent = personalizedMessage;
-            submitBtn.classList.add('bg-green-500');
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.classList.remove('bg-green-500');
-                submitBtn.disabled = false;
-            }, 3000);
-        }
-        
-        // Initialize AOS
-        document.addEventListener('DOMContentLoaded', function() {
-            AOS.init({
-                duration: 800,
-                once: true
-            });
-        });
-        
-        // Close modal on outside click
-        pathFinder.addEventListener('click', function(e) {
-            if (e.target === pathFinder) {
-                closePathFinder();
-            }
-        });
-        
-        // Handle escape key and enter key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && !pathFinder.classList.contains('hidden')) {
-                closePathFinder();
-            }
-            
-            // Handle Enter key on name input
-            if (e.key === 'Enter' && currentStep === 1) {
-                handleNameInput();
-            }
-        });
+  // Form handling
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const email = formData.get('email');
+      const phone = formData.get('phone');
+      const segmentValue = formData.get('segment');
+      const firstName = quizAnswers.firstName || '';
+      
+      const submissionData = { 
+        firstName, 
+        email, 
+        phone, 
+        segment: segmentValue,
+        timeline: quizAnswers.step3 || '',
+        hurdle: quizAnswers.step4 || ''
+      };
+      
+      console.log('Form submitted:', submissionData);
+      
+      // Show success message
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      const personalizedMessage = firstName ? 
+        `✓ Thanks ${firstName}! We'll contact you soon.` : 
+        '✓ Success! We\'ll contact you soon.';
+      
+      submitBtn.textContent = personalizedMessage;
+      submitBtn.classList.add('bg-green-500');
+      submitBtn.disabled = true;
+      
+      setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.classList.remove('bg-green-500');
+        submitBtn.disabled = false;
+      }, 3000);
+    });
+  });
+
+  // Initialize AOS
+  AOS.init({
+    duration: 800,
+    once: true
+  });
+
+  // Handle escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !quizModal.classList.contains('hidden')) {
+      quizModal.classList.add('hidden');
+    }
+    
+    // Handle Enter key on name input
+    if (e.key === 'Enter' && current === 0) {
+      document.querySelector('[data-step="1"] .nextBtn').click();
+    }
+  });
+});
     </script>
     
     <!-- Instagram Embed Script -->
