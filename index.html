@@ -676,166 +676,85 @@
         </div>
     </footer>
 
+
     <script>
-// ——— Path-Finder quiz logic (fixed) ————————————————————————————————
+/* --- Path-Finder quiz logic (fixed) -------------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   const quizModal = document.getElementById("path-finder");
   const steps     = document.querySelectorAll(".quiz-step");
   let current = 0;
   let segment = "";
-  let quizAnswers = {};
-  const showStep = i => steps.forEach((s, idx) => s.classList.toggle("hidden", idx !== i));
 
-  // open quiz
+  const showStep = i =>
+    steps.forEach((s, idx) => s.classList.toggle("hidden", idx !== i));
+
+  // open
   document.getElementById("hero-cta").onclick = () => {
     quizModal.classList.remove("hidden");
     current = 0;
     showStep(0);
-    document.getElementById("step2Continue").disabled = true; // reset
+    document.getElementById("step2Continue").disabled = true;
+    // clear highlight
+    document.querySelectorAll(".segmentBtn").forEach(b =>
+      b.classList.remove("bg-blue-600","text-white"));
   };
-
+  
   document.getElementById("nav-cta").onclick = () => {
     quizModal.classList.remove("hidden");
     current = 0;
     showStep(0);
-    document.getElementById("step2Continue").disabled = true; // reset
+    document.getElementById("step2Continue").disabled = true;
+    // clear highlight
+    document.querySelectorAll(".segmentBtn").forEach(b =>
+      b.classList.remove("bg-blue-600","text-white"));
   };
 
-  // close modal on backdrop click
+  // backdrop close
   quizModal.onclick = e => { if (e.target === quizModal) quizModal.classList.add("hidden"); };
-        
-  // Handle Step 1 name input
-  document.querySelector('[data-step="1"] .nextBtn').addEventListener('click', () => {
-    const nameInput = document.getElementById('firstName');
-    const firstName = nameInput.value.trim();
-    
-    if (firstName.length < 2) {
-      nameInput.style.borderColor = '#ef4444';
-      nameInput.placeholder = 'Please enter your first name';
-      return;
-    }
-    
-    quizAnswers.firstName = firstName;
-    current++;
-    showStep(current);
-    
-    // Update Step 2 title
-    const step2Title = document.querySelector('[data-step="2"] h2');
-    step2Title.textContent = `Nice to meet you, ${firstName}! Which describes you best?`;
-  });
 
-  // generic next buttons (Step 3)
-  document.querySelectorAll('[data-step="3"] .nextBtn').forEach(btn => {
+  // generic next buttons (Step 1 & Step 3)
+  document.querySelectorAll(".nextBtn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const answer = btn.getAttribute('data-answer');
-      quizAnswers.step3 = answer;
+      // Skip if it's the step 2 continue button
+      if (btn.id === "step2Continue") return;
+      
       current++;
       showStep(current);
     });
   });
 
-  // segment selection (Step 2)
+  // Step 2 segment pick
   const contBtn = document.getElementById("step2Continue");
   document.querySelectorAll(".segmentBtn").forEach(btn => {
     btn.addEventListener("click", () => {
       segment = btn.dataset.segment;
-      quizAnswers.step2 = btn.dataset.answer;
       // highlight
-      document.querySelectorAll(".segmentBtn").forEach(b => b.classList.remove("bg-blue-600","text-white"));
+      document.querySelectorAll(".segmentBtn").forEach(b =>
+        b.classList.remove("bg-blue-600","text-white"));
       btn.classList.add("bg-blue-600","text-white");
       // enable Continue
       contBtn.disabled = false;
     });
   });
 
-  // Continue button for Step 2
-  contBtn.addEventListener("click", () => {
-    current++;
-    showStep(current);
-  });
-        
   // finish (Step 4)
   document.querySelectorAll(".finishBtn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const answer = btn.getAttribute('data-answer');
-      quizAnswers.step4 = answer;
-      
       quizModal.classList.add("hidden");
-      const deepDive = document.getElementById("segment-results");
-      deepDive.classList.remove("hidden");
-      document.querySelectorAll(".segment-panel").forEach(p => p.classList.remove("active"));
-      document.getElementById(segment).classList.add("active");
+      const segmentResults = document.getElementById("segment-results");
+      segmentResults.classList.remove("hidden");
       
-      // Personalize the segment panel
-      const firstName = quizAnswers.firstName || 'Friend';
-      const segmentTitle = document.querySelector(`#${segment} h2`);
-      if (segmentTitle) {
-        const originalTitle = segmentTitle.textContent;
-        if (!originalTitle.includes(firstName)) {
-          segmentTitle.textContent = `Perfect ${firstName}! ${originalTitle}`;
-        }
+      // Hide all segment panels
+      document.querySelectorAll(".segment-panel").forEach(p => p.classList.remove("active"));
+      
+      // Show the selected segment panel
+      const targetPanel = document.getElementById(segment);
+      if (targetPanel) {
+        targetPanel.classList.add("active");
       }
       
-      deepDive.scrollIntoView({behavior:"smooth"});
+      segmentResults.scrollIntoView({behavior:"smooth"});
     });
-  });
-        
-  // Form handling
-  document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const email = formData.get('email');
-      const phone = formData.get('phone');
-      const segmentValue = formData.get('segment');
-      const firstName = quizAnswers.firstName || '';
-      
-      const submissionData = { 
-        firstName, 
-        email, 
-        phone, 
-        segment: segmentValue,
-        timeline: quizAnswers.step3 || '',
-        hurdle: quizAnswers.step4 || ''
-      };
-      
-      console.log('Form submitted:', submissionData);
-      
-      // Show success message
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      const personalizedMessage = firstName ? 
-        `✓ Thanks ${firstName}! We'll contact you soon.` : 
-        '✓ Success! We\'ll contact you soon.';
-      
-      submitBtn.textContent = personalizedMessage;
-      submitBtn.classList.add('bg-green-500');
-      submitBtn.disabled = true;
-      
-      setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.classList.remove('bg-green-500');
-        submitBtn.disabled = false;
-      }, 3000);
-    });
-  });
-
-  // Initialize AOS
-  AOS.init({
-    duration: 800,
-    once: true
-  });
-
-  // Handle escape key
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !quizModal.classList.contains('hidden')) {
-      quizModal.classList.add('hidden');
-    }
-    
-    // Handle Enter key on name input
-    if (e.key === 'Enter' && current === 0) {
-      document.querySelector('[data-step="1"] .nextBtn').click();
-    }
   });
 });
     </script>
