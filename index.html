@@ -133,6 +133,33 @@
             border-color: #2563eb;
         }
         
+        .step2-simple {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #001f3f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .step2-simple:hover {
+            border-color: #ffb700;
+            background-color: #fffbf0;
+            transform: translateY(-2px);
+        }
+        
+        .step2-simple.selected {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
         .segment-panel {
             display: none;
         }
@@ -288,13 +315,13 @@
             <div data-step="2" class="hidden">
                 <h2 class="text-2xl font-bold mb-4">Which describes you best?</h2>
                 <div class="grid gap-3">
-                    <button class="step2-option" data-answer="first-time" data-segment="first-time">First-Time Buyer</button>
-                    <button class="step2-option" data-answer="veteran" data-segment="veteran">Veteran / Active Duty</button>
-                    <button class="step2-option" data-answer="credit" data-segment="credit">Credit-Rebuild</button>
-                    <button class="step2-option" data-answer="refi" data-segment="first-time">Refinance</button>
+                    <button class="step2-simple" data-answer="first-time" onclick="selectStep2Option(this)">First-Time Buyer</button>
+                    <button class="step2-simple" data-answer="veteran" onclick="selectStep2Option(this)">Veteran / Active Duty</button>
+                    <button class="step2-simple" data-answer="credit" onclick="selectStep2Option(this)">Credit-Rebuild</button>
+                    <button class="step2-simple" data-answer="refi" onclick="selectStep2Option(this)">Refinance</button>
                 </div>
                 <!-- Continue button (Step 2) -->
-                <button class="step2-continue bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md mt-4">
+                <button id="step2-continue-btn" class="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md mt-4" onclick="continueFromStep2()">
                     Continue
                 </button>
             </div>
@@ -965,12 +992,12 @@
         }
         
         function handleQuizAnswer(button) {
-            console.log('handleQuizAnswer called for:', button.textContent, 'Current step:', currentStep, 'Is segmentBtn:', button.classList.contains('segmentBtn'));
+            console.log('handleQuizAnswer called for:', button.textContent, 'Current step:', currentStep);
             
-            // Skip auto-advance for Step 2 segment buttons
-            if (currentStep === 2 && button.classList.contains('segmentBtn')) {
-                console.log('Skipping auto-advance for Step 2 segment button');
-                return; // Do nothing - Continue button handles progression
+            // COMPLETELY BLOCK Step 2 from auto-advancing
+            if (currentStep === 2) {
+                console.log('BLOCKED: Step 2 cannot auto-advance via handleQuizAnswer');
+                return false;
             }
             
             const answer = button.getAttribute('data-answer');
@@ -983,8 +1010,13 @@
             button.style.color = '#001f3f';
             button.style.transform = 'scale(0.95)';
             
-            // Move to next step after delay
+            // Move to next step after delay (but NEVER for Step 2)
             setTimeout(() => {
+                if (currentStep === 2) {
+                    console.log('TIMEOUT BLOCKED: Will not advance from Step 2');
+                    return;
+                }
+                
                 if (currentStep < 4) {
                     currentStep++;
                     showStep(currentStep);
@@ -1000,6 +1032,50 @@
                 button.style.color = '';
                 button.style.transform = '';
             }, 600);
+        }
+        
+        // SIMPLE Step 2 functions - completely isolated
+        let step2SelectedAnswer = null;
+        
+        function selectStep2Option(button) {
+            console.log('=== SIMPLE STEP 2 OPTION SELECTED ===');
+            console.log('Button:', button.textContent);
+            console.log('Answer:', button.dataset.answer);
+            
+            // Remove selected class from all step2-simple buttons
+            document.querySelectorAll('.step2-simple').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked button
+            button.classList.add('selected');
+            
+            // Store the selection
+            step2SelectedAnswer = button.dataset.answer;
+            
+            console.log('Step2 answer stored:', step2SelectedAnswer);
+            console.log('Current step is still:', currentStep);
+            console.log('=== END SIMPLE STEP 2 SELECTION ===');
+        }
+        
+        function continueFromStep2() {
+            console.log('=== CONTINUE FROM STEP 2 CLICKED ===');
+            console.log('Selected answer:', step2SelectedAnswer);
+            
+            if (!step2SelectedAnswer) {
+                alert('Please select an option before continuing.');
+                return;
+            }
+            
+            // Store answer in quiz answers
+            quizAnswers.step2 = step2SelectedAnswer;
+            
+            // Manually advance to step 3
+            currentStep = 3;
+            showStep(3);
+            
+            console.log('Advanced to step 3');
+            console.log('=== END CONTINUE FROM STEP 2 ===');
         }
         
         function determineSegment() {
