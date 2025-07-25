@@ -115,6 +115,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 28, 2025: Replaced entire reviews section with clean video testimonials grid - removed text testimonials and Instagram embeds, created reviews/ folder structure, implemented simple HTML video player grid for authentic client video testimonials
 - June 28, 2025: Enhanced site design - made all logos responsive with width classes (w-40 md:w-48 lg:w-56 xl:w-64), added translucent American flag overlay to hero section (25% opacity), combined written testimonials with video grid for comprehensive social proof
 - June 28, 2025: Added hero lifestyle image below CTA button - displays on medium screens and up for visual engagement
+- July 25, 2025: Updated application links from drmortgageusa.my1003app.com to home1st.my1003app.com/2018381/register for new application system
 
 ## Contact Information
 
