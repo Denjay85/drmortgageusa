@@ -443,7 +443,7 @@
                         </div>
                         <div>
                             <h3 class="font-semibold text-xl mb-4">Get Your Pre-Approval</h3>
-                            <form id="first-time-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                            <form id="first-time-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/" method="POST">
                                 <input type="email" name="email" placeholder="Email Address" class="form-input" required>
                                 <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
                                 <input type="hidden" name="segment" value="first-time">
@@ -493,7 +493,7 @@
                         </div>
                         <div>
                             <h3 class="font-semibold text-xl mb-4">Get Your VA Pre-Approval</h3>
-                            <form id="veteran-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                            <form id="veteran-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/" method="POST">
                                 <input type="email" name="email" placeholder="Email Address" class="form-input" required>
                                 <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
                                 <input type="hidden" name="segment" value="veteran">
@@ -543,7 +543,7 @@
                         </div>
                         <div>
                             <h3 class="font-semibold text-xl mb-4">Start Your Journey</h3>
-                            <form id="credit-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/placeholder/" method="POST">
+                            <form id="credit-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/" method="POST">
                                 <input type="email" name="email" placeholder="Email Address" class="form-input" required>
                                 <input type="tel" name="phone" placeholder="Phone Number" class="form-input" required>
                                 <input type="hidden" name="segment" value="credit">
@@ -891,57 +891,55 @@ document.addEventListener("DOMContentLoaded", () => {
       const segmentValue = formData.get('segment');
       const firstName = quizAnswers.firstName || '';
       
-      const submissionData = { 
-        firstName, 
-        email, 
-        phone, 
-        segment: segmentValue,
-        timeline: quizAnswers.step3 || '',
-        hurdle: quizAnswers.step4 || ''
-      };
+      // Add quiz data to form
+      formData.append('firstName', firstName);
+      formData.append('timeline', quizAnswers.step3 || '');
+      formData.append('hurdle', quizAnswers.step4 || '');
       
-      console.log('Form submitted:', submissionData);
-      
-      // TEST MODE: Show what data would be sent to Zapier
-      const testDataDisplay = `
-        <div class="mt-4 p-4 bg-green-100 border-2 border-green-500 rounded-lg">
-          <h4 class="font-bold text-green-700 mb-2">✓ Form Test Successful!</h4>
-          <p class="text-sm text-green-600 mb-2">This data would be sent to Zapier:</p>
-          <pre class="text-xs bg-white p-2 rounded overflow-x-auto">
-Name: ${submissionData.firstName}
-Email: ${submissionData.email}
-Phone: ${submissionData.phone}
-Segment: ${submissionData.segment}
-Timeline: ${submissionData.timeline}
-Biggest Hurdle: ${submissionData.hurdle}
-          </pre>
-          <p class="text-xs text-gray-600 mt-2">Note: Forms are using placeholder Zapier URLs. Replace with your actual webhook URLs to capture leads.</p>
-        </div>
-      `;
-      
-      // Insert test data display after the form
-      const existingDisplay = form.parentElement.querySelector('.bg-green-100');
-      if (existingDisplay) {
-        existingDisplay.remove();
-      }
-      form.insertAdjacentHTML('afterend', testDataDisplay);
-      
-      // Show success message on button
+      // Show loading state
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalText = submitBtn.textContent;
-      const personalizedMessage = firstName ? 
-        `✓ Thanks ${firstName}! Check test results below.` : 
-        '✓ Success! Check test results below.';
-      
-      submitBtn.textContent = personalizedMessage;
-      submitBtn.classList.add('bg-green-500');
+      submitBtn.textContent = 'Submitting...';
       submitBtn.disabled = true;
       
-      setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.classList.remove('bg-green-500');
-        submitBtn.disabled = false;
-      }, 3000);
+      // Submit to Zapier
+      fetch(form.action, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          // Success message
+          const personalizedMessage = firstName ? 
+            `✓ Thanks ${firstName}! We'll contact you soon.` : 
+            '✓ Success! We\'ll contact you soon.';
+          
+          submitBtn.textContent = personalizedMessage;
+          submitBtn.classList.add('bg-green-500');
+          
+          // Clear form
+          form.reset();
+          
+          setTimeout(() => {
+            submitBtn.textContent = originalText;
+            submitBtn.classList.remove('bg-green-500');
+            submitBtn.disabled = false;
+          }, 5000);
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        submitBtn.textContent = 'Error - Please try again';
+        submitBtn.classList.add('bg-red-500');
+        
+        setTimeout(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.classList.remove('bg-red-500');
+          submitBtn.disabled = false;
+        }, 3000);
+      });
     });
   });
 
