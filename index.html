@@ -881,13 +881,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
         
-  // Form handling - Let forms submit naturally to avoid CORS issues
+  // Create hidden iframe for form submission
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.name = 'hidden-form-target';
+  document.body.appendChild(iframe);
+  
+  // Form handling - Submit to hidden iframe to prevent page redirect
   document.querySelectorAll('form').forEach(form => {
+    // Set form target to hidden iframe
+    form.target = 'hidden-form-target';
+    
     form.addEventListener('submit', function(e) {
-      // Don't prevent default - let the form submit naturally
-      
       const formData = new FormData(form);
       const firstName = quizAnswers.firstName || '';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
       
       // Add hidden fields for quiz data before submission
       if (!form.querySelector('input[name="firstName"]')) {
@@ -915,11 +924,28 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       
       // Show loading state
-      const submitBtn = form.querySelector('button[type="submit"]');
       submitBtn.textContent = 'Submitting...';
       submitBtn.disabled = true;
       
-      // Form will submit naturally and redirect to Zapier success page
+      // After submission, show success message
+      setTimeout(() => {
+        const personalizedMessage = firstName ? 
+          `✓ Thanks ${firstName}! We'll contact you soon.` : 
+          '✓ Success! We\'ll contact you soon.';
+        
+        submitBtn.textContent = personalizedMessage;
+        submitBtn.classList.add('bg-green-500');
+        
+        // Clear form
+        form.reset();
+        
+        // Reset button after delay
+        setTimeout(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.classList.remove('bg-green-500');
+          submitBtn.disabled = false;
+        }, 5000);
+      }, 1500);
     });
   });
 
