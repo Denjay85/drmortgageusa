@@ -881,93 +881,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
         
-  // Form handling
+  // Form handling - Let forms submit naturally to avoid CORS issues
   document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', function(e) {
-      e.preventDefault();
+      // Don't prevent default - let the form submit naturally
+      
       const formData = new FormData(form);
-      const email = formData.get('email');
-      const phone = formData.get('phone');
-      const segmentValue = formData.get('segment');
       const firstName = quizAnswers.firstName || '';
       
-      // Add quiz data to form
-      formData.append('firstName', firstName);
-      formData.append('timeline', quizAnswers.step3 || '');
-      formData.append('hurdle', quizAnswers.step4 || '');
+      // Add hidden fields for quiz data before submission
+      if (!form.querySelector('input[name="firstName"]')) {
+        const firstNameInput = document.createElement('input');
+        firstNameInput.type = 'hidden';
+        firstNameInput.name = 'firstName';
+        firstNameInput.value = firstName;
+        form.appendChild(firstNameInput);
+      }
+      
+      if (!form.querySelector('input[name="timeline"]')) {
+        const timelineInput = document.createElement('input');
+        timelineInput.type = 'hidden';
+        timelineInput.name = 'timeline';
+        timelineInput.value = quizAnswers.step3 || '';
+        form.appendChild(timelineInput);
+      }
+      
+      if (!form.querySelector('input[name="hurdle"]')) {
+        const hurdleInput = document.createElement('input');
+        hurdleInput.type = 'hidden';
+        hurdleInput.name = 'hurdle';
+        hurdleInput.value = quizAnswers.step4 || '';
+        form.appendChild(hurdleInput);
+      }
       
       // Show loading state
       const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
       submitBtn.textContent = 'Submitting...';
       submitBtn.disabled = true;
       
-      // Convert FormData to URL-encoded format for Zapier
-      const urlEncodedData = new URLSearchParams();
-      for (const pair of formData) {
-        urlEncodedData.append(pair[0], pair[1]);
-      }
-      
-      // Log what we're sending for debugging
-      console.log('Submitting to:', form.action);
-      console.log('Data:', urlEncodedData.toString());
-      
-      // Submit to Zapier
-      fetch(form.action, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: urlEncodedData.toString()
-      })
-      .then(response => {
-        console.log('Response status:', response.status);
-        return response.text().then(text => {
-          console.log('Response text:', text);
-          if (response.ok) {
-            // Success message
-            const personalizedMessage = firstName ? 
-              `✓ Thanks ${firstName}! We'll contact you soon.` : 
-              '✓ Success! We\'ll contact you soon.';
-            
-            submitBtn.textContent = personalizedMessage;
-            submitBtn.classList.add('bg-green-500');
-            
-            // Clear form
-            form.reset();
-            
-            setTimeout(() => {
-              submitBtn.textContent = originalText;
-              submitBtn.classList.remove('bg-green-500');
-              submitBtn.disabled = false;
-            }, 5000);
-          } else {
-            throw new Error(`Server returned ${response.status}: ${text}`);
-          }
-        });
-      })
-      .catch(error => {
-        console.error('Form submission error:', error);
-        console.error('Error details:', error.message);
-        
-        // More specific error message
-        let errorMsg = 'Error - Please try again';
-        if (error.message.includes('Failed to fetch')) {
-          errorMsg = 'Connection error - Check internet';
-        } else if (error.message.includes('CORS')) {
-          errorMsg = 'Configuration error';
-        }
-        
-        submitBtn.textContent = errorMsg;
-        submitBtn.classList.add('bg-red-500');
-        
-        setTimeout(() => {
-          submitBtn.textContent = originalText;
-          submitBtn.classList.remove('bg-red-500');
-          submitBtn.disabled = false;
-        }, 3000);
-      });
+      // Form will submit naturally and redirect to Zapier success page
     });
   });
 
