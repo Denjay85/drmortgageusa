@@ -584,6 +584,58 @@
         </div>
     </section>
 
+    <!-- ───────── Mortgage Calculator ───────── -->
+    <section id="calculator" class="py-16 bg-white">
+      <div class="max-w-3xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-6 text-[#001f3f]">Mortgage Payment Calculator</h2>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-1">Home Price ($)</label>
+            <input id="price" type="number" class="w-full border p-3 rounded" value="400000">
+          </div>
+
+          <div>
+            <label class="block mb-1">Down Payment ($)</label>
+            <input id="down" type="number" class="w-full border p-3 rounded" value="20000">
+          </div>
+
+          <div>
+            <label class="block mb-1">Loan Term&nbsp;(years)</label>
+            <input id="years" type="number" class="w-full border p-3 rounded" value="30">
+          </div>
+
+          <div>
+            <label class="block mb-1">Interest Rate&nbsp;(%)</label>
+            <input id="rate" step="0.01" type="number" class="w-full border p-3 rounded" value="7">
+          </div>
+
+          <div>
+            <label class="block mb-1">Annual Property Tax ($)</label>
+            <input id="tax" type="number" class="w-full border p-3 rounded" value="4500">
+          </div>
+
+          <div>
+            <label class="block mb-1">Annual Insurance ($)</label>
+            <input id="ins" type="number" class="w-full border p-3 rounded" value="1800">
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block mb-1">Monthly HOA ($)</label>
+            <input id="hoa" type="number" class="w-full border p-3 rounded" value="0">
+          </div>
+        </div>
+
+        <button id="calcBtn"
+                class="mt-6 bg-[#ffb700] text-white py-3 px-6 rounded font-bold hover:opacity-90">
+          Calculate
+        </button>
+
+        <div id="result" class="mt-6 text-xl font-semibold"></div>
+      </div>
+    </section>
+    <!-- ───────── End Mortgage Calculator ───── -->
+
     <!-- Reviews Section -->
     <section id="reviews" class="bg-white text-gray-900 py-16 px-4">
         <h2 class="text-2xl font-bold mb-6 text-center">Client Stories</h2>
@@ -954,6 +1006,99 @@ document.addEventListener("DOMContentLoaded", () => {
     duration: 800,
     once: true
   });
+
+  // Mortgage Calculator Logic
+  function calculateMortgage() {
+    // Get input values
+    const homePrice = parseFloat(document.getElementById('price').value) || 0;
+    const downPayment = parseFloat(document.getElementById('down').value) || 0;
+    const loanTerm = parseFloat(document.getElementById('years').value) || 30;
+    const interestRate = parseFloat(document.getElementById('rate').value) || 0;
+    const annualTax = parseFloat(document.getElementById('tax').value) || 0;
+    const annualInsurance = parseFloat(document.getElementById('ins').value) || 0;
+    const monthlyHOA = parseFloat(document.getElementById('hoa').value) || 0;
+    
+    // Calculate loan amount
+    const loanAmount = homePrice - downPayment;
+    
+    // Calculate monthly interest rate
+    const monthlyRate = interestRate / 100 / 12;
+    const numPayments = loanTerm * 12;
+    
+    // Calculate principal & interest payment
+    let monthlyPI = 0;
+    if (monthlyRate > 0) {
+      monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+                  (Math.pow(1 + monthlyRate, numPayments) - 1);
+    } else {
+      monthlyPI = loanAmount / numPayments;
+    }
+    
+    // Calculate monthly tax and insurance
+    const monthlyTax = annualTax / 12;
+    const monthlyInsurance = annualInsurance / 12;
+    
+    // Calculate total monthly payment
+    const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyHOA;
+    
+    // Display results
+    const resultDiv = document.getElementById('result');
+    if (loanAmount > 0) {
+      resultDiv.innerHTML = `
+        <div class="bg-gray-50 rounded-lg p-6 space-y-4">
+          <div class="text-2xl font-bold text-[#001f3f]">
+            Total Monthly Payment: $${totalMonthly.toFixed(2)}
+          </div>
+          <div class="space-y-2 text-gray-700">
+            <div class="flex justify-between">
+              <span>Principal & Interest:</span>
+              <span class="font-semibold">$${monthlyPI.toFixed(2)}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Property Tax:</span>
+              <span class="font-semibold">$${monthlyTax.toFixed(2)}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Insurance:</span>
+              <span class="font-semibold">$${monthlyInsurance.toFixed(2)}</span>
+            </div>
+            ${monthlyHOA > 0 ? `
+            <div class="flex justify-between">
+              <span>HOA:</span>
+              <span class="font-semibold">$${monthlyHOA.toFixed(2)}</span>
+            </div>` : ''}
+            <div class="border-t pt-2 mt-2">
+              <div class="flex justify-between">
+                <span>Loan Amount:</span>
+                <span class="font-semibold">$${loanAmount.toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Down Payment:</span>
+                <span class="font-semibold">${((downPayment / homePrice) * 100).toFixed(1)}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      resultDiv.innerHTML = '<p class="text-red-500">Please enter valid values</p>';
+    }
+  }
+  
+  // Attach calculator to button click
+  document.getElementById('calcBtn').addEventListener('click', calculateMortgage);
+  
+  // Also calculate when pressing Enter in any input field
+  document.querySelectorAll('#calculator input').forEach(input => {
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        calculateMortgage();
+      }
+    });
+  });
+  
+  // Calculate on page load with default values
+  calculateMortgage();
 
   // Handle escape key
   document.addEventListener('keydown', function(e) {
