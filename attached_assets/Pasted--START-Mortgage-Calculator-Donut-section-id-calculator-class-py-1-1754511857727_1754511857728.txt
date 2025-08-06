@@ -1,0 +1,138 @@
+<!-- ───────── START: Mortgage Calculator + Donut ───────── -->
+<section id="calculator" class="py-16 bg-white">
+  <div class="max-w-3xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6 text-[#001f3f]">Mortgage Payment Calculator</h2>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block mb-1">Home Price ($)</label>
+        <input id="price" type="number" class="w-full border p-3 rounded" value="400000">
+      </div>
+      <div>
+        <label class="block mb-1">Down Payment ($)</label>
+        <input id="down" type="number" class="w-full border p-3 rounded" value="20000">
+      </div>
+      <div>
+        <label class="block mb-1">Loan Term (years)</label>
+        <input id="years" type="number" class="w-full border p-3 rounded" value="30">
+      </div>
+      <div>
+        <label class="block mb-1">Interest Rate (%)</label>
+        <input id="rate" step="0.01" type="number" class="w-full border p-3 rounded" value="7">
+      </div>
+      <div>
+        <label class="block mb-1">Annual Property Tax ($)</label>
+        <input id="tax" type="number" class="w-full border p-3 rounded" value="4500">
+      </div>
+      <div>
+        <label class="block mb-1">Annual Insurance ($)</label>
+        <input id="ins" type="number" class="w-full border p-3 rounded" value="1800">
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block mb-1">Monthly HOA ($)</label>
+        <input id="hoa" type="number" class="w-full border p-3 rounded" value="0">
+      </div>
+    </div>
+
+    <button id="calcBtn"
+            class="mt-6 bg-[#ffb700] text-white py-3 px-6 rounded font-bold hover:opacity-90">
+      Calculate
+    </button>
+
+    <div id="result" class="mt-6 text-xl font-semibold"></div>
+
+    <!-- Donut chart -->
+    <canvas id="breakdownChart" class="mt-8 max-w-md mx-auto"></canvas>
+  </div>
+</section>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Calculator + Chart logic -->
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const round = v => Math.round(v * 100) / 100;
+
+  const colors = {
+    pi:  '#005f7f',
+    tax: '#8b004b',
+    ins: '#3d8b37',
+    pmi: '#d69800',
+    hoa: '#c45100'
+  };
+
+  let chart;
+
+  function buildChart(data) {
+    const ctx = $('breakdownChart').getContext('2d');
+    chart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: [
+          'Principal & Interest',
+          'Property Tax',
+          "Homeowner's Insurance",
+          'PMI',
+          'HOA Fees'
+        ],
+        datasets: [{
+          data,
+          backgroundColor: [
+            colors.pi,
+            colors.tax,
+            colors.ins,
+            colors.pmi,
+            colors.hoa
+          ],
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position: 'right', labels: { boxWidth: 18 } },
+          tooltip: { callbacks: { label: ctx => `$ ${round(ctx.parsed)}` } }
+        },
+        cutout: '60%'
+      }
+    });
+  }
+
+  function updateChart(data) {
+    chart.data.datasets[0].data = data;
+    chart.update();
+  }
+
+  function calc() {
+    const price  = +$('price').value || 0;
+    const down   = +$('down').value  || 0;
+    const years  = +$('years').value || 30;
+    const rate   = (+$('rate').value || 0) / 100 / 12;
+    const tax    = (+$('tax').value  || 0) / 12;
+    const ins    = (+$('ins').value  || 0) / 12;
+    const hoa    = +$('hoa').value   || 0;
+    const pmi    = 0; // replace with PMI logic if needed
+
+    const n      = years * 12;
+    const loan   = price - down;
+    const pAndI  = rate === 0
+                 ? loan / n
+                 : loan * (rate / (1 - Math.pow(1 + rate, -n)));
+    const total  = pAndI + tax + ins + pmi + hoa;
+
+    $('result').innerHTML =
+      `Principal &amp; Interest: $${round(pAndI).toLocaleString()}/mo<br>
+       Taxes &amp; Insurance: $${round(tax + ins).toLocaleString()}/mo<br>
+       HOA: $${round(hoa).toLocaleString()}/mo<br>
+       <span class="text-[#001f3f]">Estimated Total Payment: $${round(total).toLocaleString()}/mo</span>`;
+
+    const slices = [round(pAndI), round(tax), round(ins), round(pmi), round(hoa)];
+    chart ? updateChart(slices) : buildChart(slices);
+  }
+
+  $('calcBtn').addEventListener('click', calc);
+  calc(); // initial render
+})();
+</script>
+<!-- ───────── END: Mortgage Calculator + Donut ───────── -->

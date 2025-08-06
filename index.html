@@ -613,8 +613,8 @@
 
     </section>
 
-    <!-- ───────── Mortgage Calculator ───────── -->
-    <section id="calculator" class="py-16 bg-gray-50">
+    <!-- ───────── START: Mortgage Calculator + Donut ───────── -->
+    <section id="calculator" class="py-16 bg-white">
       <div class="max-w-3xl mx-auto px-6">
         <h2 class="text-3xl font-bold mb-6 text-[#001f3f]">Mortgage Payment Calculator</h2>
 
@@ -623,32 +623,26 @@
             <label class="block mb-1">Home Price ($)</label>
             <input id="price" type="number" class="w-full border p-3 rounded" value="400000">
           </div>
-
           <div>
             <label class="block mb-1">Down Payment ($)</label>
             <input id="down" type="number" class="w-full border p-3 rounded" value="20000">
           </div>
-
           <div>
-            <label class="block mb-1">Loan Term&nbsp;(years)</label>
+            <label class="block mb-1">Loan Term (years)</label>
             <input id="years" type="number" class="w-full border p-3 rounded" value="30">
           </div>
-
           <div>
-            <label class="block mb-1">Interest Rate&nbsp;(%)</label>
+            <label class="block mb-1">Interest Rate (%)</label>
             <input id="rate" step="0.01" type="number" class="w-full border p-3 rounded" value="7">
           </div>
-
           <div>
             <label class="block mb-1">Annual Property Tax ($)</label>
             <input id="tax" type="number" class="w-full border p-3 rounded" value="4500">
           </div>
-
           <div>
             <label class="block mb-1">Annual Insurance ($)</label>
             <input id="ins" type="number" class="w-full border p-3 rounded" value="1800">
           </div>
-
           <div class="sm:col-span-2">
             <label class="block mb-1">Monthly HOA ($)</label>
             <input id="hoa" type="number" class="w-full border p-3 rounded" value="0">
@@ -661,9 +655,102 @@
         </button>
 
         <div id="result" class="mt-6 text-xl font-semibold"></div>
+
+        <!-- Donut chart -->
+        <canvas id="breakdownChart" class="mt-8 max-w-md mx-auto"></canvas>
       </div>
     </section>
-    <!-- ───────── End Mortgage Calculator ───── -->
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Calculator + Chart logic -->
+    <script>
+    (() => {
+      const $ = id => document.getElementById(id);
+      const round = v => Math.round(v * 100) / 100;
+
+      const colors = {
+        pi:  '#005f7f',
+        tax: '#8b004b',
+        ins: '#3d8b37',
+        pmi: '#d69800',
+        hoa: '#c45100'
+      };
+
+      let chart;
+
+      function buildChart(data) {
+        const ctx = $('breakdownChart').getContext('2d');
+        chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: [
+              'Principal & Interest',
+              'Property Tax',
+              "Homeowner's Insurance",
+              'PMI',
+              'HOA Fees'
+            ],
+            datasets: [{
+              data,
+              backgroundColor: [
+                colors.pi,
+                colors.tax,
+                colors.ins,
+                colors.pmi,
+                colors.hoa
+              ],
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            plugins: {
+              legend: { position: 'right', labels: { boxWidth: 18 } },
+              tooltip: { callbacks: { label: ctx => `$ ${round(ctx.parsed)}` } }
+            },
+            cutout: '60%'
+          }
+        });
+      }
+
+      function updateChart(data) {
+        chart.data.datasets[0].data = data;
+        chart.update();
+      }
+
+      function calc() {
+        const price  = +$('price').value || 0;
+        const down   = +$('down').value  || 0;
+        const years  = +$('years').value || 30;
+        const rate   = (+$('rate').value || 0) / 100 / 12;
+        const tax    = (+$('tax').value  || 0) / 12;
+        const ins    = (+$('ins').value  || 0) / 12;
+        const hoa    = +$('hoa').value   || 0;
+        const pmi    = 0; // replace with PMI logic if needed
+
+        const n      = years * 12;
+        const loan   = price - down;
+        const pAndI  = rate === 0
+                     ? loan / n
+                     : loan * (rate / (1 - Math.pow(1 + rate, -n)));
+        const total  = pAndI + tax + ins + pmi + hoa;
+
+        $('result').innerHTML =
+          `Principal &amp; Interest: $${round(pAndI).toLocaleString()}/mo<br>
+           Taxes &amp; Insurance: $${round(tax + ins).toLocaleString()}/mo<br>
+           HOA: $${round(hoa).toLocaleString()}/mo<br>
+           <span class="text-[#001f3f]">Estimated Total Payment: $${round(total).toLocaleString()}/mo</span>`;
+
+        const slices = [round(pAndI), round(tax), round(ins), round(pmi), round(hoa)];
+        chart ? updateChart(slices) : buildChart(slices);
+      }
+
+      $('calcBtn').addEventListener('click', calc);
+      calc(); // initial render
+    })();
+    </script>
+    <!-- ───────── END: Mortgage Calculator + Donut ───────── -->
 
     <!-- Apply Now Section -->
     <section id="apply-now" class="py-16 gradient-overlay text-white">
@@ -1007,98 +1094,7 @@ document.addEventListener("DOMContentLoaded", () => {
     once: true
   });
 
-  // Mortgage Calculator Logic
-  function calculateMortgage() {
-    // Get input values
-    const homePrice = parseFloat(document.getElementById('price').value) || 0;
-    const downPayment = parseFloat(document.getElementById('down').value) || 0;
-    const loanTerm = parseFloat(document.getElementById('years').value) || 30;
-    const interestRate = parseFloat(document.getElementById('rate').value) || 0;
-    const annualTax = parseFloat(document.getElementById('tax').value) || 0;
-    const annualInsurance = parseFloat(document.getElementById('ins').value) || 0;
-    const monthlyHOA = parseFloat(document.getElementById('hoa').value) || 0;
-    
-    // Calculate loan amount
-    const loanAmount = homePrice - downPayment;
-    
-    // Calculate monthly interest rate
-    const monthlyRate = interestRate / 100 / 12;
-    const numPayments = loanTerm * 12;
-    
-    // Calculate principal & interest payment
-    let monthlyPI = 0;
-    if (monthlyRate > 0) {
-      monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
-                  (Math.pow(1 + monthlyRate, numPayments) - 1);
-    } else {
-      monthlyPI = loanAmount / numPayments;
-    }
-    
-    // Calculate monthly tax and insurance
-    const monthlyTax = annualTax / 12;
-    const monthlyInsurance = annualInsurance / 12;
-    
-    // Calculate total monthly payment
-    const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyHOA;
-    
-    // Display results
-    const resultDiv = document.getElementById('result');
-    if (loanAmount > 0) {
-      resultDiv.innerHTML = `
-        <div class="bg-gray-50 rounded-lg p-6 space-y-4">
-          <div class="text-2xl font-bold text-[#001f3f]">
-            Total Monthly Payment: $${totalMonthly.toFixed(2)}
-          </div>
-          <div class="space-y-2 text-gray-700">
-            <div class="flex justify-between">
-              <span>Principal & Interest:</span>
-              <span class="font-semibold">$${monthlyPI.toFixed(2)}</span>
-            </div>
-            <div class="flex justify-between">
-              <span>Property Tax:</span>
-              <span class="font-semibold">$${monthlyTax.toFixed(2)}</span>
-            </div>
-            <div class="flex justify-between">
-              <span>Insurance:</span>
-              <span class="font-semibold">$${monthlyInsurance.toFixed(2)}</span>
-            </div>
-            ${monthlyHOA > 0 ? `
-            <div class="flex justify-between">
-              <span>HOA:</span>
-              <span class="font-semibold">$${monthlyHOA.toFixed(2)}</span>
-            </div>` : ''}
-            <div class="border-t pt-2 mt-2">
-              <div class="flex justify-between">
-                <span>Loan Amount:</span>
-                <span class="font-semibold">$${loanAmount.toLocaleString()}</span>
-              </div>
-              <div class="flex justify-between">
-                <span>Down Payment:</span>
-                <span class="font-semibold">${((downPayment / homePrice) * 100).toFixed(1)}%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    } else {
-      resultDiv.innerHTML = '<p class="text-red-500">Please enter valid values</p>';
-    }
-  }
-  
-  // Attach calculator to button click
-  document.getElementById('calcBtn').addEventListener('click', calculateMortgage);
-  
-  // Also calculate when pressing Enter in any input field
-  document.querySelectorAll('#calculator input').forEach(input => {
-    input.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        calculateMortgage();
-      }
-    });
-  });
-  
-  // Calculate on page load with default values
-  calculateMortgage();
+  // Mortgage calculator logic is now in the inline script with Chart.js
 
   // Handle escape key
   document.addEventListener('keydown', function(e) {
