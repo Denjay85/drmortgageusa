@@ -657,7 +657,7 @@
         <div id="result" class="mt-6 text-xl font-semibold"></div>
 
         <!-- Donut chart -->
-        <canvas id="breakdownChart" class="mt-8 max-w-md mx-auto"></canvas>
+        <canvas id="breakdownChart" class="mt-8 max-w-2xl mx-auto" style="max-height: 500px;"></canvas>
       </div>
     </section>
 
@@ -705,8 +705,18 @@
             }]
           },
           options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 1.5,
             plugins: {
-              legend: { position: 'right', labels: { boxWidth: 18 } },
+              legend: { 
+                position: 'right', 
+                labels: { 
+                  boxWidth: 24,
+                  font: { size: 14 },
+                  padding: 15
+                } 
+              },
               tooltip: { callbacks: { label: ctx => `$ ${round(ctx.parsed)}` } }
             },
             cutout: '60%'
