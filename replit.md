@@ -122,6 +122,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - August 6, 2025: Moved mortgage calculator to new position between Client Stories and Ready to Apply sections per user request
 - August 6, 2025: Enhanced mortgage calculator with Chart.js donut chart visualization showing payment breakdown with color-coded categories
 - August 6, 2025: Doubled donut chart size from max-w-md to max-w-2xl with aspect ratio 1.5 for improved visibility and readability
+- August 6, 2025: Fixed application button under mission statement to link to correct URL (https://home1st.my1003app.com/2018381/register) instead of local anchor
 
 ## Contact Information
 
