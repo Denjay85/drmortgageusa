@@ -117,6 +117,9 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - June 28, 2025: Added hero lifestyle image below CTA button - displays on medium screens and up for visual engagement
 - July 25, 2025: Updated application links from drmortgageusa.my1003app.com to home1st.my1003app.com/2018381/register for new application system
 - July 25, 2025: Updated lender count from 39 to 79 lenders in the About section to reflect expanded network capabilities
+- August 6, 2025: Fixed form submission issue - changed from JavaScript fetch to iframe submission to avoid CORS errors, forms now stay on same page and show success message
+- August 6, 2025: Added functional mortgage calculator with payment breakdown showing principal, interest, tax, insurance, HOA, loan amount and down payment percentage
+- August 6, 2025: Moved mortgage calculator to new position between Client Stories and Ready to Apply sections per user request
 
 ## Contact Information
 
