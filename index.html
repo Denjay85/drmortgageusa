@@ -899,29 +899,51 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Repeat-Buyer Panel -->
-        <div id="repeatBuyer" class="segment-panel" data-aos="fade-up">
-            <div class="container mx-auto px-4 py-16">
-                <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-3xl mx-auto">
-                    <div class="flex items-center gap-4 mb-8">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto">
-                        <h3 class="font-poppins font-bold text-3xl text-navy">Smart Strategies for Repeat Buyers</h3>
+            <!-- Repeat-Buyer Panel -->
+            <div id="repeatBuyer" class="segment-panel" data-aos="fade-up">
+                <div class="bg-navy rounded-lg shadow-xl p-8 max-w-4xl mx-auto relative border-2 border-gold">
+                <!-- Dennis Photo Corner -->
+                <div class="absolute -top-8 -right-8 hidden md:block">
+                    <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                </div>
+                <div class="text-center mb-6">
+                    <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3">
+                    <h2 class="font-poppins font-bold text-3xl text-white">
+                        Smart Strategies for Repeat Buyers
+                    </h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-xl mb-4 text-gold">Your Advantages Include:</h3>
+                        <ul class="space-y-3 text-white">
+                            <li class="flex items-start">
+                                <span class="text-gold mr-2">✓</span>
+                                Compare fixed and adjustable rates for maximum savings
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gold mr-2">✓</span>
+                                Ask sellers for a 2-1 buydown to lower first year payments
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gold mr-2">✓</span>
+                                Strategic refinance planning when rates drop
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-gold mr-2">✓</span>
+                                Leverage your home equity for better terms
+                            </li>
+                        </ul>
                     </div>
-                    
-                    <ul class="list-disc pl-6 mb-6 space-y-2 text-gray-700">
-                        <li>Compare both fixed and adjustable rates to see what saves you the most</li>
-                        <li>Ask sellers to pay for a <strong>2-1 buydown</strong> to lower your first year payments</li>
-                        <li>Set up a plan now to refinance and save money when rates drop</li>
-                    </ul>
-                    
-                    <div class="bg-gold/10 rounded-lg p-6">
-                        <h4 class="font-semibold text-lg mb-4 text-navy">Get Your Personalized Savings Plan</h4>
-                        <a href="https://home1st.my1003app.com/2018381/register" target="_blank" 
-                           class="btn-gold w-full block text-center">
-                            Unlock My Savings Plan
-                        </a>
+                    <div>
+                        <h3 class="font-semibold text-xl mb-4 text-white">Get Your Savings Plan</h3>
+                        <form id="repeat-buyer-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/" method="POST">
+                            <input type="email" name="email" placeholder="Email Address" class="form-input bg-white" required>
+                            <input type="tel" name="phone" placeholder="Phone Number" class="form-input bg-white" required>
+                            <input type="hidden" name="segment" value="repeat-buyer">
+                            <button type="submit" class="btn-gold w-full">
+                                Unlock My Savings Plan
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
