@@ -42,3 +42,6 @@ task = "shell.exec"
 args = "prybar-python3 serve-static.py"
 waitForPort = 5000
 
+[agent]
+expertMode = true
+
