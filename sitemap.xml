@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <!-- Main Homepage -->
+    <url>
+        <loc>https://drmortgageusa.com/</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://drmortgageusa.com/logo.png</image:loc>
+            <image:title>Dr.MortgageUSA Florida Mortgage Broker</image:title>
+            <image:caption>Dr.MortgageUSA - Your trusted Florida mortgage broker with 79+ lenders</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://drmortgageusa.com/dennis-ross.png</image:loc>
+            <image:title>Dennis Ross - Florida Mortgage Expert</image:title>
+            <image:caption>Dennis Ross, Navy veteran and mortgage specialist, NMLS #2018381</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Section URLs (for single-page apps with anchors) -->
+    <url>
+        <loc>https://drmortgageusa.com/#quiz</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://drmortgageusa.com/#first-time</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://drmortgageusa.com/#veterans</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://drmortgageusa.com/#credit-improvement</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://drmortgageusa.com/#calculator</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://drmortgageusa.com/#testimonials</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://drmortgageusa.com/#about</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://drmortgageusa.com/#apply</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- External Application URL -->
+    <url>
+        <loc>https://home1st.my1003app.com/2018381/register</loc>
+        <lastmod>2025-11-24</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+</urlset>
