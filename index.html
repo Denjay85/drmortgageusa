@@ -819,37 +819,489 @@
 
     </section>
 
-    <!-- ───────── START: Home1st Mortgage Calculator ───────── -->
+    <!-- ───────── START: Comprehensive Mortgage Calculator ───────── -->
     <section id="calculator" class="py-16 bg-gray-100">
       <div class="container mx-auto px-4">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-5xl mx-auto">
           <h2 class="font-poppins font-bold text-4xl text-navy text-center mb-4">Mortgage Payment Calculator</h2>
-          <p class="text-center text-gray-700 mb-8">Powered by Home1st Lending - Access our comprehensive calculator with multiple loan types</p>
           
-          <!-- Calculator iframe container -->
-          <div class="bg-white rounded-lg shadow-xl p-4">
-            <iframe 
-              src="https://myhome1st.com/mortgage-calculator/" 
-              width="100%" 
-              height="900" 
-              frameborder="0"
-              style="border: none; width: 100%; min-height: 900px;"
-              title="Home1st Mortgage Calculator">
-            </iframe>
+          <!-- Phone Number Banner -->
+          <div class="bg-gradient-to-r from-navy to-blue-900 text-white rounded-lg p-4 mb-6 text-center shadow-xl">
+            <p class="text-lg font-semibold mb-2">Have Questions? Call Dennis Ross Today!</p>
+            <a href="tel:8503468514" class="text-3xl font-bold text-gold hover:text-yellow-400 transition-colors">
+              📞 850-346-8514
+            </a>
+            <p class="text-sm mt-2">NMLS #2018381 | Powered by Home1st Lending, LLC</p>
+          </div>
+          
+          <!-- Calculator Tabs -->
+          <div class="bg-white rounded-lg shadow-xl p-6">
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap justify-center gap-2 mb-6 border-b border-gray-200">
+              <button onclick="switchTab('purchase')" id="tab-purchase" class="tab-btn active px-6 py-3 font-semibold text-navy border-b-4 border-gold transition-colors">
+                Purchase Calculator
+              </button>
+              <button onclick="switchTab('affordability')" id="tab-affordability" class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                Affordability Calculator
+              </button>
+              <button onclick="switchTab('refinance')" id="tab-refinance" class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                Refinance Calculator
+              </button>
+            </div>
+            
+            <!-- Purchase Calculator Tab -->
+            <div id="calc-purchase" class="calc-tab">
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Home Price</label>
+                  <input type="number" id="purchase-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="400000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Down Payment</label>
+                  <div class="flex gap-2">
+                    <input type="number" id="purchase-down" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="20000">
+                    <select id="purchase-down-type" class="px-3 py-2 border border-gray-300 rounded-lg">
+                      <option value="amount">$</option>
+                      <option value="percent">%</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Term</label>
+                  <select id="purchase-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="30">30 years</option>
+                    <option value="15">15 years</option>
+                    <option value="20">20 years</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="purchase-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="7.0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Property Tax (Annual)</label>
+                  <input type="number" id="purchase-tax" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="4800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Home Insurance (Annual)</label>
+                  <input type="number" id="purchase-insurance" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="1800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">HOA Fees (Monthly)</label>
+                  <input type="number" id="purchase-hoa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">PMI (Monthly)</label>
+                  <input type="number" id="purchase-pmi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0" placeholder="Auto-calculated if <20% down">
+                </div>
+              </div>
+              
+              <button onclick="calculatePurchase()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Calculate Monthly Payment
+              </button>
+              
+              <!-- Results -->
+              <div id="purchase-results" class="mt-6 hidden">
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <canvas id="purchase-chart" class="max-w-full" style="max-height: 300px;"></canvas>
+                  </div>
+                  <div class="space-y-3">
+                    <div class="bg-navy text-white p-4 rounded-lg">
+                      <p class="text-sm">Total Monthly Payment</p>
+                      <p id="purchase-total" class="text-3xl font-bold text-gold">$0</p>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Principal & Interest:</span>
+                        <span id="purchase-pi" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Property Tax:</span>
+                        <span id="purchase-tax-mo" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Home Insurance:</span>
+                        <span id="purchase-ins-mo" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">HOA Fees:</span>
+                        <span id="purchase-hoa-mo" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">PMI:</span>
+                        <span id="purchase-pmi-mo" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Affordability Calculator Tab -->
+            <div id="calc-affordability" class="calc-tab hidden">
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Annual Gross Income</label>
+                  <input type="number" id="afford-income" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="75000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Debt Payments</label>
+                  <input type="number" id="afford-debt" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="500" placeholder="Car loans, credit cards, etc.">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Down Payment Available</label>
+                  <input type="number" id="afford-down" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="20000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="afford-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="7.0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Term</label>
+                  <select id="afford-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="30">30 years</option>
+                    <option value="15">15 years</option>
+                    <option value="20">20 years</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Type</label>
+                  <select id="afford-type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="conventional">Conventional</option>
+                    <option value="fha">FHA</option>
+                    <option value="va">VA</option>
+                    <option value="usda">USDA</option>
+                  </select>
+                </div>
+              </div>
+              
+              <button onclick="calculateAffordability()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Calculate What I Can Afford
+              </button>
+              
+              <!-- Results -->
+              <div id="afford-results" class="mt-6 hidden">
+                <div class="bg-gradient-to-r from-navy to-blue-900 text-white p-6 rounded-lg text-center mb-4">
+                  <p class="text-lg mb-2">Maximum Home Price You Can Afford</p>
+                  <p id="afford-max-price" class="text-5xl font-bold text-gold">$0</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4">
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Max Monthly Payment</p>
+                    <p id="afford-max-payment" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Debt-to-Income Ratio</p>
+                    <p id="afford-dti" class="text-2xl font-bold text-navy">0%</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Max Loan Amount</p>
+                    <p id="afford-max-loan" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Refinance Calculator Tab -->
+            <div id="calc-refinance" class="calc-tab hidden">
+              <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-navy font-semibold">Current Loan Information</p>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Current Loan Balance</label>
+                  <input type="number" id="refi-balance" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="350000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Current Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="refi-current-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="8.0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Years Remaining</label>
+                  <input type="number" id="refi-years-left" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="28">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Current Monthly Payment</label>
+                  <input type="number" id="refi-current-payment" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="2560">
+                </div>
+              </div>
+              
+              <div class="bg-green-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-navy font-semibold">New Loan Information</p>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">New Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="refi-new-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="6.5">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">New Loan Term</label>
+                  <select id="refi-new-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="30">30 years</option>
+                    <option value="15">15 years</option>
+                    <option value="20">20 years</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Cash Out Amount</label>
+                  <input type="number" id="refi-cashout" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Closing Costs</label>
+                  <input type="number" id="refi-closing" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="5000">
+                </div>
+              </div>
+              
+              <button onclick="calculateRefinance()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Calculate Refinance Savings
+              </button>
+              
+              <!-- Results -->
+              <div id="refi-results" class="mt-6 hidden">
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                  <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600 mb-2">Current Monthly Payment</p>
+                    <p id="refi-old-payment" class="text-3xl font-bold text-red-600">$0</p>
+                  </div>
+                  <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600 mb-2">New Monthly Payment</p>
+                    <p id="refi-new-payment" class="text-3xl font-bold text-green-600">$0</p>
+                  </div>
+                </div>
+                <div class="bg-gradient-to-r from-green-600 to-green-700 text-white p-6 rounded-lg text-center">
+                  <p class="text-lg mb-2">Monthly Savings</p>
+                  <p id="refi-monthly-savings" class="text-4xl font-bold">$0</p>
+                  <p class="text-sm mt-2">Break-even in <span id="refi-breakeven" class="font-bold">0</span> months</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Total Interest Savings</p>
+                    <p id="refi-interest-savings" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">New Loan Amount</p>
+                    <p id="refi-new-loan" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           
           <!-- Call to Action below calculator -->
-          <div class="text-center mt-8">
-            <p class="text-lg text-gray-700 mb-4">Ready to get started with your mortgage application?</p>
-            <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="inline-block bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-4 px-8 rounded-lg shadow-xl transition-all duration-300 transform hover:scale-105">
-              Apply Now with Dennis Ross - NMLS #2018381
-            </a>
-            <p class="text-sm text-gray-600 mt-2">Access 79 lenders for the best rates and programs</p>
+          <div class="bg-white rounded-lg shadow-xl p-6 mt-6 text-center">
+            <p class="text-lg text-gray-700 mb-4">Get personalized rates and expert guidance!</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="tel:8503468514" class="bg-gradient-to-r from-navy to-blue-900 hover:from-blue-900 hover:to-navy text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+                📞 Call 850-346-8514
+              </a>
+              <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+                Apply Online Now
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
-    <!-- ───────── END: Home1st Mortgage Calculator ───────── -->
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Calculator JavaScript -->
+    <script>
+    let purchaseChart = null;
+    
+    // Tab switching
+    function switchTab(tab) {
+      // Hide all tabs
+      document.querySelectorAll('.calc-tab').forEach(t => t.classList.add('hidden'));
+      // Show selected tab
+      document.getElementById('calc-' + tab).classList.remove('hidden');
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'text-navy', 'border-b-4', 'border-gold');
+        btn.classList.add('text-gray-600');
+      });
+      document.getElementById('tab-' + tab).classList.add('active', 'text-navy', 'border-b-4', 'border-gold');
+      document.getElementById('tab-' + tab).classList.remove('text-gray-600');
+    }
+    
+    // Purchase Calculator
+    function calculatePurchase() {
+      const price = parseFloat(document.getElementById('purchase-price').value) || 0;
+      const downType = document.getElementById('purchase-down-type').value;
+      let downValue = parseFloat(document.getElementById('purchase-down').value) || 0;
+      
+      // Calculate down payment
+      const downPayment = downType === 'percent' ? (price * downValue / 100) : downValue;
+      const loanAmount = price - downPayment;
+      const downPercent = (downPayment / price) * 100;
+      
+      const term = parseFloat(document.getElementById('purchase-term').value);
+      const rate = parseFloat(document.getElementById('purchase-rate').value) / 100 / 12;
+      const n = term * 12;
+      
+      // Calculate monthly payment
+      const monthlyPI = rate === 0 ? loanAmount / n : loanAmount * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+      
+      // Get other monthly costs
+      const monthlyTax = parseFloat(document.getElementById('purchase-tax').value) / 12 || 0;
+      const monthlyIns = parseFloat(document.getElementById('purchase-insurance').value) / 12 || 0;
+      const monthlyHOA = parseFloat(document.getElementById('purchase-hoa').value) || 0;
+      
+      // Calculate PMI if down payment is less than 20%
+      let monthlyPMI = parseFloat(document.getElementById('purchase-pmi').value) || 0;
+      if (downPercent < 20 && monthlyPMI === 0) {
+        monthlyPMI = loanAmount * 0.005 / 12; // 0.5% annually
+      }
+      
+      const totalPayment = monthlyPI + monthlyTax + monthlyIns + monthlyHOA + monthlyPMI;
+      
+      // Update display
+      document.getElementById('purchase-total').textContent = '$' + totalPayment.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('purchase-pi').textContent = '$' + monthlyPI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('purchase-tax-mo').textContent = '$' + monthlyTax.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('purchase-ins-mo').textContent = '$' + monthlyIns.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('purchase-hoa-mo').textContent = '$' + monthlyHOA.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('purchase-pmi-mo').textContent = '$' + monthlyPMI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      
+      // Update chart
+      updatePurchaseChart([monthlyPI, monthlyTax, monthlyIns, monthlyHOA, monthlyPMI]);
+      
+      // Show results
+      document.getElementById('purchase-results').classList.remove('hidden');
+    }
+    
+    function updatePurchaseChart(data) {
+      const ctx = document.getElementById('purchase-chart').getContext('2d');
+      
+      if (purchaseChart) {
+        purchaseChart.destroy();
+      }
+      
+      purchaseChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Principal & Interest', 'Property Tax', 'Home Insurance', 'HOA', 'PMI'],
+          datasets: [{
+            data: data,
+            backgroundColor: ['#001f3f', '#ffb700', '#4ade80', '#8b5cf6', '#ef4444'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 10,
+                font: { size: 12 }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Affordability Calculator
+    function calculateAffordability() {
+      const annualIncome = parseFloat(document.getElementById('afford-income').value) || 0;
+      const monthlyIncome = annualIncome / 12;
+      const monthlyDebt = parseFloat(document.getElementById('afford-debt').value) || 0;
+      const downPayment = parseFloat(document.getElementById('afford-down').value) || 0;
+      const rate = parseFloat(document.getElementById('afford-rate').value) / 100 / 12;
+      const term = parseFloat(document.getElementById('afford-term').value);
+      const loanType = document.getElementById('afford-type').value;
+      
+      // DTI limits by loan type
+      const dtiLimits = {
+        'conventional': 0.43,
+        'fha': 0.43,
+        'va': 0.41,
+        'usda': 0.41
+      };
+      
+      const maxDTI = dtiLimits[loanType] || 0.43;
+      const maxMonthlyPayment = (monthlyIncome * maxDTI) - monthlyDebt;
+      
+      // Calculate max loan amount
+      const n = term * 12;
+      const maxLoanAmount = rate === 0 ? maxMonthlyPayment * n : maxMonthlyPayment * (Math.pow(1 + rate, n) - 1) / (rate * Math.pow(1 + rate, n));
+      
+      // Calculate max home price
+      const maxHomePrice = maxLoanAmount + downPayment;
+      
+      // Calculate actual DTI
+      const actualDTI = ((maxMonthlyPayment + monthlyDebt) / monthlyIncome) * 100;
+      
+      // Update display
+      document.getElementById('afford-max-price').textContent = '$' + maxHomePrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('afford-max-payment').textContent = '$' + maxMonthlyPayment.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('afford-dti').textContent = actualDTI.toFixed(1) + '%';
+      document.getElementById('afford-max-loan').textContent = '$' + maxLoanAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      
+      // Show results
+      document.getElementById('afford-results').classList.remove('hidden');
+    }
+    
+    // Refinance Calculator
+    function calculateRefinance() {
+      const currentBalance = parseFloat(document.getElementById('refi-balance').value) || 0;
+      const currentRate = parseFloat(document.getElementById('refi-current-rate').value) / 100 / 12;
+      const yearsLeft = parseFloat(document.getElementById('refi-years-left').value);
+      const currentPayment = parseFloat(document.getElementById('refi-current-payment').value) || 0;
+      
+      const newRate = parseFloat(document.getElementById('refi-new-rate').value) / 100 / 12;
+      const newTerm = parseFloat(document.getElementById('refi-new-term').value);
+      const cashOut = parseFloat(document.getElementById('refi-cashout').value) || 0;
+      const closingCosts = parseFloat(document.getElementById('refi-closing').value) || 0;
+      
+      // Calculate new loan amount
+      const newLoanAmount = currentBalance + cashOut + closingCosts;
+      
+      // Calculate new payment
+      const n = newTerm * 12;
+      const newPayment = newRate === 0 ? newLoanAmount / n : newLoanAmount * (newRate * Math.pow(1 + newRate, n)) / (Math.pow(1 + newRate, n) - 1);
+      
+      // Calculate savings
+      const monthlySavings = currentPayment - newPayment;
+      const breakEvenMonths = closingCosts > 0 ? Math.ceil(closingCosts / monthlySavings) : 0;
+      
+      // Calculate total interest
+      const remainingMonths = yearsLeft * 12;
+      const currentTotalInterest = (currentPayment * remainingMonths) - currentBalance;
+      const newTotalInterest = (newPayment * n) - newLoanAmount;
+      const interestSavings = currentTotalInterest - newTotalInterest;
+      
+      // Update display
+      document.getElementById('refi-old-payment').textContent = '$' + currentPayment.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('refi-new-payment').textContent = '$' + newPayment.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('refi-monthly-savings').textContent = '$' + Math.abs(monthlySavings).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('refi-breakeven').textContent = breakEvenMonths;
+      document.getElementById('refi-interest-savings').textContent = '$' + interestSavings.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('refi-new-loan').textContent = '$' + newLoanAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      
+      // Show results
+      document.getElementById('refi-results').classList.remove('hidden');
+    }
+    
+    // Initialize with purchase calculator on load
+    document.addEventListener('DOMContentLoaded', function() {
+      calculatePurchase();
+    });
+    </script>
+    <!-- ───────── END: Comprehensive Mortgage Calculator ───────── -->
 
     <!-- Apply Now Section -->
     <section id="apply-now" class="py-16 gradient-overlay text-white">
