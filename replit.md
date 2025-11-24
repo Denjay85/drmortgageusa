@@ -125,6 +125,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 24, 2025: Integrated Home1st's comprehensive mortgage calculator from myhome1st.com to replace custom calculator - includes multiple loan types (Conventional, FHA, VA, USDA, Jumbo) and calculation modes (Purchase, Refinance, Rent vs Buy)
 - November 24, 2025: Added "Powered by Home1st Lending, LLC NMLS #1418" to footer section for proper licensing disclosure
 - November 24, 2025: Updated all Dennis Ross thumbnails site-wide with new patriotic headshot featuring American flag background
 - November 24, 2025: Added intro video to hero section - replaced static Dr.MortgageUSA logo with autoplay intro video for immediate engagement
