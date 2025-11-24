@@ -125,6 +125,8 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 24, 2025: Optimized 60-second quiz into 5-step conversion funnel with progress indicator, capturing price range, name/email, buyer type, down payment capability, and timeline with urgency elements
+- November 24, 2025: Quiz now posts enriched payload to Zapier webhook with all qualifying data and tracks completion time for analytics
 - November 24, 2025: Replaced Home1st iframe calculator with native multi-tab calculator featuring Purchase, Affordability, and Refinance calculators with prominent phone number (850-346-8514) display
 - November 24, 2025: Added "Powered by Home1st Lending, LLC NMLS #1418" to footer section for proper licensing disclosure
 - November 24, 2025: Updated all Dennis Ross thumbnails site-wide with new patriotic headshot featuring American flag background
