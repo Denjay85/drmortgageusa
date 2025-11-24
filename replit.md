@@ -125,6 +125,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 24, 2025: Updated social media preview image to use Dennis Ross headshot instead of logo when links are shared via text/social media
 - November 24, 2025: Optimized 60-second quiz into 5-step conversion funnel with progress indicator, capturing price range, name/email, buyer type, down payment capability, and timeline with urgency elements
 - November 24, 2025: Quiz now posts enriched payload to Zapier webhook with all qualifying data and tracks completion time for analytics
 - November 24, 2025: Replaced Home1st iframe calculator with native multi-tab calculator featuring Purchase, Affordability, and Refinance calculators with prominent phone number (850-346-8514) display
