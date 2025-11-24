@@ -567,45 +567,160 @@
 
     <!-- PATH-FINDER QUIZ (hidden by default, revealed on CTA click) -->
     <section id="path-finder" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
-        <div class="bg-white w-11/12 max-w-md p-6 rounded-2xl shadow-xl text-center" id="quizCard">
+        <div class="bg-white w-11/12 max-w-lg p-6 rounded-2xl shadow-2xl" id="quizCard">
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-semibold text-navy">Your Path to Homeownership</span>
+                    <span id="quiz-timer" class="text-sm text-gray-600">⏱️ 60 seconds</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progress-bar" class="bg-gradient-to-r from-gold to-yellow-600 h-2 rounded-full transition-all duration-500" style="width: 20%"></div>
+                </div>
+                <div class="flex justify-between mt-1">
+                    <span id="step-indicator" class="text-xs text-gray-500">Step 1 of 5</span>
+                    <span class="text-xs text-gold font-semibold">Instant Results</span>
+                </div>
+            </div>
+            
             <form id="quizForm" onsubmit="return false;">
-            <!-- Step 1 - Name Collection -->
+            <!-- Step 1 - Price Range & Location (Better Qualification) -->
             <div data-step="1" class="quiz-step">
-                <h2 class="text-2xl font-bold mb-4">What's your first name?</h2>
-                <input type="text" id="firstName" class="w-full p-3 border-2 border-gray-300 rounded-lg text-center text-lg mb-4" placeholder="Enter your first name" maxlength="30">
-                <button class="nextBtn quizBtn">Continue</button>
+                <h2 class="text-2xl font-bold mb-2 text-navy">What's your target home price?</h2>
+                <p class="text-sm text-gray-600 mb-4">This helps us find the right loan programs for you</p>
+                <div class="grid gap-2">
+                    <button class="priceBtn quizBtn text-left" data-price="0-250">
+                        <span class="font-semibold">$0 - $250,000</span>
+                        <span class="text-xs text-gray-500 block">Great starter home range</span>
+                    </button>
+                    <button class="priceBtn quizBtn text-left" data-price="250-400">
+                        <span class="font-semibold">$250,000 - $400,000</span>
+                        <span class="text-xs text-gray-500 block">Most popular range in Florida</span>
+                    </button>
+                    <button class="priceBtn quizBtn text-left" data-price="400-600">
+                        <span class="font-semibold">$400,000 - $600,000</span>
+                        <span class="text-xs text-gray-500 block">Move-up buyer range</span>
+                    </button>
+                    <button class="priceBtn quizBtn text-left" data-price="600+">
+                        <span class="font-semibold">$600,000+</span>
+                        <span class="text-xs text-gray-500 block">Luxury & jumbo loans</span>
+                    </button>
+                    <button class="priceBtn quizBtn text-left" data-price="unsure">
+                        <span class="font-semibold">Not sure yet</span>
+                        <span class="text-xs text-gray-500 block">Let's figure it out together</span>
+                    </button>
+                </div>
             </div>
-            <!-- Step 2 -->
+            
+            <!-- Step 2 - Email Capture (Early Lead Recovery) -->
             <div data-step="2" class="quiz-step hidden">
-                <h2 class="text-xl font-semibold mb-4">Which describes you best?</h2>
-                <div class="grid gap-3 mb-6">
-                    <button class="segmentBtn quizBtn" data-segment="first-time" data-answer="first-time">First-Time Buyer</button>
-                    <button class="segmentBtn quizBtn" data-segment="veteran" data-answer="veteran">Veteran / Active Duty</button>
-                    <button class="segmentBtn quizBtn" data-segment="credit" data-answer="credit">Credit-Rebuild</button>
-                    <button class="segmentBtn quizBtn" data-segment="repeatBuyer" data-answer="repeatBuyer">I've purchased a home before</button>
-                </div><!-- end grid -->
-                <button id="step2Continue"
-                        class="nextBtn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-md"
-                        disabled>
-                  Continue
+                <h2 class="text-2xl font-bold mb-2 text-navy">Great! What's your first name?</h2>
+                <p class="text-sm text-gray-600 mb-4">So I can personalize your results</p>
+                <input type="text" id="firstName" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg mb-3" placeholder="First name" required maxlength="30">
+                
+                <p class="text-sm text-gray-600 mb-2">Email (to save your results)</p>
+                <input type="email" id="quizEmail" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg mb-4" placeholder="your@email.com" required>
+                
+                <button type="button" class="nextBtn bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg w-full transition-all duration-300 transform hover:scale-105">
+                    Continue - Almost Done!
                 </button>
+                <p class="text-xs text-gray-500 mt-2">🔒 Your info is 100% secure & never sold</p>
             </div>
-            <!-- Step 3 -->
+            
+            <!-- Step 3 - Buyer Type with Credit Check -->
             <div data-step="3" class="quiz-step hidden">
-                <h2 class="text-2xl font-bold mb-4">What's your target timeline?</h2>
-                <button class="nextBtn quizBtn" data-answer="0-3">0-3 months</button>
-                <button class="nextBtn quizBtn" data-answer="3-6">3-6 months</button>
-                <button class="nextBtn quizBtn" data-answer="6-12">6-12 months</button>
+                <h2 id="step3-greeting" class="text-2xl font-bold mb-2 text-navy">Which best describes you?</h2>
+                <p class="text-sm text-gray-600 mb-4">This unlocks specialized programs</p>
+                <div class="grid gap-2">
+                    <button class="buyerBtn quizBtn text-left" data-buyer="first-time" data-segment="first-time">
+                        <span class="font-semibold">🏠 First-Time Buyer</span>
+                        <span class="text-xs text-green-600 block">Qualify for special grants & lower down payments</span>
+                    </button>
+                    <button class="buyerBtn quizBtn text-left" data-buyer="veteran" data-segment="veteran">
+                        <span class="font-semibold">🇺🇸 Veteran / Active Military</span>
+                        <span class="text-xs text-green-600 block">$0 down VA loans available</span>
+                    </button>
+                    <button class="buyerBtn quizBtn text-left" data-buyer="repeat" data-segment="repeatBuyer">
+                        <span class="font-semibold">🔄 Current/Previous Homeowner</span>
+                        <span class="text-xs text-gray-500 block">Upgrade, downsize, or refinance</span>
+                    </button>
+                    <button class="buyerBtn quizBtn text-left" data-buyer="investor" data-segment="investor">
+                        <span class="font-semibold">💼 Real Estate Investor</span>
+                        <span class="text-xs text-gray-500 block">Rental & investment properties</span>
+                    </button>
+                    <button class="buyerBtn quizBtn text-left" data-buyer="credit-rebuild" data-segment="credit">
+                        <span class="font-semibold">🔧 Working on Credit</span>
+                        <span class="text-xs text-green-600 block">Programs for scores as low as 500</span>
+                    </button>
+                </div>
             </div>
-            <!-- Step 4 -->
+            
+            <!-- Step 4 - Down Payment Reality Check -->
             <div data-step="4" class="quiz-step hidden">
-                <h2 class="text-2xl font-bold mb-4">Biggest hurdle right now?</h2>
-                <button class="finishBtn quizBtn" data-answer="down-payment">Down Payment</button>
-                <button class="finishBtn quizBtn" data-answer="credit-score">Credit Score</button>
-                <button class="finishBtn quizBtn" data-answer="rate">High Rates</button>
-                <button class="finishBtn quizBtn" data-answer="unsure">Unsure</button>
+                <h2 class="text-2xl font-bold mb-2 text-navy">How much can you put down?</h2>
+                <p class="text-sm text-gray-600 mb-4">Many programs require less than you think!</p>
+                <div class="grid gap-2">
+                    <button class="downBtn quizBtn text-left" data-down="0-3">
+                        <span class="font-semibold">0% - 3.5%</span>
+                        <span class="text-xs text-green-600 block">VA, USDA, FHA options available</span>
+                    </button>
+                    <button class="downBtn quizBtn text-left" data-down="5">
+                        <span class="font-semibold">5%</span>
+                        <span class="text-xs text-gray-500 block">Conventional loans start here</span>
+                    </button>
+                    <button class="downBtn quizBtn text-left" data-down="10-15">
+                        <span class="font-semibold">10% - 15%</span>
+                        <span class="text-xs text-gray-500 block">Better rates, lower PMI</span>
+                    </button>
+                    <button class="downBtn quizBtn text-left" data-down="20+">
+                        <span class="font-semibold">20% or more</span>
+                        <span class="text-xs text-green-600 block">Best rates, no PMI required</span>
+                    </button>
+                    <button class="downBtn quizBtn text-left" data-down="need-help">
+                        <span class="font-semibold">Need down payment help</span>
+                        <span class="text-xs text-gold block">Grants & assistance available!</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 5 - Urgency & Timeline -->
+            <div data-step="5" class="quiz-step hidden">
+                <h2 class="text-2xl font-bold mb-2 text-navy">When do you want to move?</h2>
+                <div class="bg-yellow-50 border-l-4 border-gold p-3 mb-4">
+                    <p class="text-sm font-semibold text-navy">🎯 Current Rate: 6.8%</p>
+                    <p class="text-xs text-gray-600">Rates change daily - lock in your pre-approval!</p>
+                </div>
+                <div class="grid gap-2">
+                    <button class="finishBtn quizBtn text-left" data-timeline="asap">
+                        <span class="font-semibold">ASAP - Found a home!</span>
+                        <span class="text-xs text-red-600 block">⚡ Priority processing available</span>
+                    </button>
+                    <button class="finishBtn quizBtn text-left" data-timeline="0-30">
+                        <span class="font-semibold">Within 30 days</span>
+                        <span class="text-xs text-gray-500 block">Let's get pre-approved today</span>
+                    </button>
+                    <button class="finishBtn quizBtn text-left" data-timeline="1-3">
+                        <span class="font-semibold">1-3 months</span>
+                        <span class="text-xs text-gray-500 block">Perfect timing to start</span>
+                    </button>
+                    <button class="finishBtn quizBtn text-left" data-timeline="3-6">
+                        <span class="font-semibold">3-6 months</span>
+                        <span class="text-xs text-gray-500 block">Let's build your plan</span>
+                    </button>
+                    <button class="finishBtn quizBtn text-left" data-timeline="6+">
+                        <span class="font-semibold">6+ months</span>
+                        <span class="text-xs text-gray-500 block">Credit improvement time</span>
+                    </button>
+                </div>
             </div>
             </form>
+            
+            <!-- Close button -->
+            <button onclick="closeQuiz()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
     </section>
 
@@ -1471,106 +1586,206 @@
     </footer>
 
     <script>
-// ——— Path-Finder quiz logic (fixed) ————————————————————————————————
+// ——— Optimized Path-Finder Quiz Logic ————————————————————————————————
 document.addEventListener("DOMContentLoaded", () => {
   const quizModal = document.getElementById("path-finder");
-  const steps     = document.querySelectorAll(".quiz-step");
+  const steps = document.querySelectorAll(".quiz-step");
+  const progressBar = document.getElementById("progress-bar");
+  const stepIndicator = document.getElementById("step-indicator");
   let current = 0;
   let segment = "";
   let quizAnswers = {};
-  const showStep = i => steps.forEach((s, idx) => s.classList.toggle("hidden", idx !== i));
+  let startTime = null;
+  
+  const showStep = i => {
+    steps.forEach((s, idx) => s.classList.toggle("hidden", idx !== i));
+    // Update progress bar
+    const progress = ((i + 1) / steps.length) * 100;
+    if (progressBar) progressBar.style.width = progress + "%";
+    if (stepIndicator) stepIndicator.textContent = `Step ${i + 1} of ${steps.length}`;
+  };
 
-  // open quiz
+  // Close quiz function
+  window.closeQuiz = () => {
+    quizModal.classList.add("hidden");
+    current = 0;
+    quizAnswers = {};
+    segment = "";
+  };
+
+  // Open quiz from hero CTA
   document.getElementById("hero-cta").onclick = () => {
     quizModal.classList.remove("hidden");
     current = 0;
+    quizAnswers = {};
+    segment = "";
+    startTime = Date.now();
     showStep(0);
-    document.getElementById("step2Continue").disabled = true; // reset
   };
 
+  // Open quiz from nav CTA
   document.getElementById("nav-cta").onclick = () => {
     quizModal.classList.remove("hidden");
     current = 0;
+    quizAnswers = {};
+    segment = "";
+    startTime = Date.now();
     showStep(0);
-    document.getElementById("step2Continue").disabled = true; // reset
   };
 
-  // close modal on backdrop click
+  // Close modal on backdrop click
   quizModal.onclick = e => { if (e.target === quizModal) quizModal.classList.add("hidden"); };
-        
-  // Handle Step 1 name input
-  document.querySelector('[data-step="1"] .nextBtn').addEventListener('click', () => {
-    const nameInput = document.getElementById('firstName');
-    const firstName = nameInput.value.trim();
-    
-    if (firstName.length < 2) {
-      nameInput.style.borderColor = '#ef4444';
-      nameInput.placeholder = 'Please enter your first name';
-      return;
-    }
-    
-    quizAnswers.firstName = firstName;
-    current++;
-    showStep(current);
-    
-    // Update Step 2 title
-    const step2Title = document.querySelector('[data-step="2"] h2');
-    step2Title.textContent = `Nice to meet you, ${firstName}! Which describes you best?`;
-  });
 
-  // generic next buttons (Step 3)
-  document.querySelectorAll('[data-step="3"] .nextBtn').forEach(btn => {
+  // Step 1: Price Range Selection
+  document.querySelectorAll(".priceBtn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const answer = btn.getAttribute('data-answer');
-      quizAnswers.step3 = answer;
-      current++;
+      quizAnswers.priceRange = btn.dataset.price;
+      current = 1;
       showStep(current);
     });
   });
 
-  // segment selection (Step 2)
-  const contBtn = document.getElementById("step2Continue");
-  document.querySelectorAll(".segmentBtn").forEach(btn => {
+  // Step 2: Name and Email Capture
+  const step2Btn = document.querySelector("div[data-step='2'] .nextBtn");
+  if (step2Btn) {
+    step2Btn.addEventListener("click", () => {
+      const nameInput = document.getElementById("firstName");
+      const emailInput = document.getElementById("quizEmail");
+      
+      if (!nameInput.value.trim() || nameInput.value.length < 2) {
+        nameInput.style.borderColor = "#ef4444";
+        nameInput.placeholder = "Please enter your name";
+        return;
+      }
+      if (!emailInput.value.trim() || !emailInput.validity.valid) {
+        emailInput.style.borderColor = "#ef4444";
+        emailInput.placeholder = "Please enter valid email";
+        return;
+      }
+      
+      quizAnswers.firstName = nameInput.value.trim();
+      quizAnswers.email = emailInput.value.trim();
+      nameInput.style.borderColor = "";
+      emailInput.style.borderColor = "";
+      
+      // Personalize Step 3 greeting
+      const step3Greeting = document.getElementById("step3-greeting");
+      if (step3Greeting) {
+        step3Greeting.textContent = `Thanks ${quizAnswers.firstName}! Which best describes you?`;
+      }
+      
+      current = 2;
+      showStep(current);
+    });
+  }
+
+  // Step 3: Buyer Type Selection
+  document.querySelectorAll(".buyerBtn").forEach(btn => {
     btn.addEventListener("click", () => {
       segment = btn.dataset.segment;
-      quizAnswers.step2 = btn.dataset.answer;
-      // highlight
-      document.querySelectorAll(".segmentBtn").forEach(b => b.classList.remove("bg-blue-600","text-white"));
-      btn.classList.add("bg-blue-600","text-white");
-      // enable Continue
-      contBtn.disabled = false;
+      quizAnswers.buyerType = btn.dataset.buyer;
+      current = 3;
+      showStep(current);
     });
   });
 
-  // Continue button for Step 2
-  contBtn.addEventListener("click", () => {
-    current++;
-    showStep(current);
+  // Step 4: Down Payment Selection
+  document.querySelectorAll(".downBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      quizAnswers.downPayment = btn.dataset.down;
+      current = 4;
+      showStep(current);
+    });
   });
-        
-  // finish (Step 4)
+
+  // Step 5: Timeline Selection (Finish)
   document.querySelectorAll(".finishBtn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const answer = btn.getAttribute('data-answer');
-      quizAnswers.step4 = answer;
+      quizAnswers.timeline = btn.dataset.timeline;
       
-      quizModal.classList.add("hidden");
-      const deepDive = document.getElementById("segment-results");
-      deepDive.classList.remove("hidden");
-      document.querySelectorAll(".segment-panel").forEach(p => p.classList.remove("active"));
-      document.getElementById(segment).classList.add("active");
+      // Calculate quiz completion time
+      if (startTime) {
+        const completionTime = Math.round((Date.now() - startTime) / 1000);
+        quizAnswers.completionSeconds = completionTime;
+      }
       
-      // Personalize the segment panel
-      const firstName = quizAnswers.firstName || 'Friend';
-      const segmentTitle = document.querySelector(`#${segment} h2`);
-      if (segmentTitle) {
-        const originalTitle = segmentTitle.textContent;
-        if (!originalTitle.includes(firstName)) {
-          segmentTitle.textContent = `Perfect ${firstName}! ${originalTitle}`;
+      // Smart segmentation logic
+      if (!segment) {
+        // Fallback segmentation based on answers
+        if (quizAnswers.buyerType === "veteran") {
+          segment = "veteran";
+        } else if (quizAnswers.buyerType === "first-time") {
+          segment = "first-time";
+        } else if (quizAnswers.buyerType === "credit-rebuild") {
+          segment = "credit";
+        } else {
+          segment = "first-time"; // Default fallback
         }
       }
       
-      deepDive.scrollIntoView({behavior:"smooth"});
+      // Send data to Zapier webhook immediately
+      const webhookData = {
+        firstName: quizAnswers.firstName,
+        email: quizAnswers.email,
+        priceRange: quizAnswers.priceRange,
+        buyerType: quizAnswers.buyerType,
+        downPayment: quizAnswers.downPayment,
+        timeline: quizAnswers.timeline,
+        segment: segment,
+        completionSeconds: quizAnswers.completionSeconds || 0,
+        timestamp: new Date().toISOString(),
+        source: "60-second-quiz"
+      };
+      
+      // Fire webhook (async, don't wait)
+      fetch("https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/", {
+        method: "POST",
+        body: JSON.stringify(webhookData),
+        headers: { "Content-Type": "application/json" }
+      }).catch(err => console.log("Webhook error:", err));
+      
+      // Show results
+      quizModal.classList.add("hidden");
+      const deepDive = document.getElementById("segment-results");
+      if (deepDive) {
+        deepDive.classList.remove("hidden");
+        document.querySelectorAll(".segment-panel").forEach(p => p.classList.remove("active"));
+        
+        // Show appropriate segment panel
+        const segmentPanel = document.getElementById(segment);
+        if (segmentPanel) {
+          segmentPanel.classList.add("active");
+          
+          // Personalize the segment panel
+          const firstName = quizAnswers.firstName || "Friend";
+          const segmentTitle = segmentPanel.querySelector("h2");
+          if (segmentTitle) {
+            const originalTitle = segmentTitle.getAttribute("data-original-title") || segmentTitle.textContent;
+            segmentTitle.setAttribute("data-original-title", originalTitle);
+            
+            // Add urgency based on timeline
+            let urgencyText = "";
+            if (quizAnswers.timeline === "asap") {
+              urgencyText = " - Priority Processing Available!";
+            } else if (quizAnswers.timeline === "0-30") {
+              urgencyText = " - Let's Move Fast!";
+            }
+            
+            segmentTitle.innerHTML = `Perfect ${firstName}! ${originalTitle}${urgencyText}`;
+          }
+          
+          // Pre-fill form fields if they exist
+          const segmentForm = segmentPanel.querySelector("form");
+          if (segmentForm) {
+            const nameField = segmentForm.querySelector("input[name='name'], input[name='firstName']");
+            const emailField = segmentForm.querySelector("input[name='email'], input[type='email']");
+            if (nameField) nameField.value = firstName;
+            if (emailField) emailField.value = quizAnswers.email;
+          }
+        }
+        
+        deepDive.scrollIntoView({ behavior: "smooth" });
+      }
     });
   });
         
