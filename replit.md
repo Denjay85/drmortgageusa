@@ -125,6 +125,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 24, 2025: Rewrote all website copy to sound more natural and conversational, removing AI-generated hyphens and formal language
 - November 24, 2025: Updated social media preview image to use Dennis Ross headshot instead of logo when links are shared via text/social media
 - November 24, 2025: Optimized 60-second quiz into 5-step conversion funnel with progress indicator, capturing price range, name/email, buyer type, down payment capability, and timeline with urgency elements
 - November 24, 2025: Quiz now posts enriched payload to Zapier webhook with all qualifying data and tracks completion time for analytics
