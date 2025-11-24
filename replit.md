@@ -96,8 +96,36 @@ The project is optimized for reliable deployment across multiple hosting platfor
 - **Responsive Design**: Mobile-first approach with large logo placement
 - **Analytics Ready**: GA4, Meta Pixel, and TikTok Pixel placeholder integration
 
+## SEO Optimization
+
+### Meta Tags and Open Graph
+- Optimized title tag with primary keywords and NMLS number
+- Comprehensive meta description with call-to-action
+- Open Graph tags for social media sharing
+- Twitter Card meta tags for enhanced Twitter visibility
+- Geo-targeting meta tags for Florida location
+
+### Schema Markup (Structured Data)
+- **FinancialService Schema**: Defines business as mortgage broker with services
+- **LocalBusiness Schema**: Establishes Florida location and business hours
+- **FAQPage Schema**: Structures frequently asked questions for featured snippets
+- **BreadcrumbList Schema**: Improves navigation display in search results
+- **AggregateRating**: Shows 4.9/5 rating from 127 reviews
+
+### Technical SEO
+- **robots.txt**: Guides search engine crawling with sitemap reference
+- **sitemap.xml**: Lists all page sections for better indexing
+- **Canonical URL**: Prevents duplicate content issues
+- **Image Alt Text**: Keyword-optimized descriptions for all images
+
+### SEO Keywords Targeted
+- Primary: Florida mortgage broker, Dennis Ross mortgage, Dr.MortgageUSA
+- Secondary: FHA loans Florida, VA loans Florida, first-time homebuyer Florida
+- Long-tail: Florida mortgage rates, NMLS 2018381, mortgage calculator
+
 ## Changelog
 
+- November 24, 2025: Comprehensive SEO optimization - added meta tags, Open Graph, Twitter Cards, multiple schema markups (FinancialService, LocalBusiness, FAQPage, BreadcrumbList), optimized image alt text, created robots.txt and sitemap.xml for improved search visibility
 - June 27, 2025: Complete funnel rebuild with new copy, segmentation logic, and compliance requirements
 - June 27, 2025: Integrated client logo throughout website with enlarged sizing
 - June 27, 2025: Added Instagram video embeds and Zapier webhook forms
