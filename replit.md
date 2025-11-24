@@ -125,6 +125,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 24, 2025: Added intro video to hero section - replaced static Dr.MortgageUSA logo with autoplay intro video for immediate engagement
 - November 24, 2025: Replaced review videos with three new client testimonials - Jose & Jamie, Alex & Vivian, and Larry's video testimonials now featured in the Client Stories section
 - November 24, 2025: Comprehensive SEO optimization - added meta tags, Open Graph, Twitter Cards, multiple schema markups (FinancialService, LocalBusiness, FAQPage, BreadcrumbList), optimized image alt text, created robots.txt and sitemap.xml for improved search visibility
 - June 27, 2025: Complete funnel rebuild with new copy, segmentation logic, and compliance requirements
