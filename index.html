@@ -540,13 +540,21 @@
             <h1 class="hero-title font-poppins font-bold text-5xl md:text-6xl lg:text-7xl mb-6 text-shadow">
                 Your Dream Home Is Closer Than You Think
             </h1>
-            <p class="hero-subtitle text-xl md:text-2xl mb-4 max-w-3xl mx-auto text-shadow">
+            <p class="hero-subtitle text-xl md:text-2xl mb-6 max-w-3xl mx-auto text-shadow">
                 Choose your roadmap in 60 seconds.
             </p>
-            <p class="text-lg text-white mb-8 font-semibold">
-                Today's Rate: <span id="current-rate" class="text-gold">6.34%</span> 
-                <span class="text-sm font-normal">(30-Year Fixed)</span>
-            </p>
+            
+            <!-- Current Rates Display -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6 max-w-4xl mx-auto">
+                <h3 class="text-lg font-semibold text-gold mb-3">Today's Mortgage Rates</h3>
+                <div id="rates-display" class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm md:text-base">
+                    <!-- Rates will be inserted here by JavaScript -->
+                </div>
+                <p class="text-xs text-gray-200 mt-3 italic">Updated: <span id="rate-date">November 24, 2025</span></p>
+                <p id="rate-disclaimer" class="text-xs text-gray-300 mt-2 leading-relaxed">
+                    <!-- Disclaimer will be inserted by JavaScript -->
+                </p>
+            </div>
             <button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4">
                 Start My 60-Second Path Finder
             </button>
@@ -695,9 +703,15 @@
             <div data-step="5" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-2 text-navy">When do you want to move?</h2>
                 <div class="bg-yellow-50 border-l-4 border-gold p-3 mb-4">
-                    <p class="text-sm font-semibold text-navy">🎯 Current Rate: <span id="current-rate">6.34%</span></p>
-                    <p class="text-xs text-gray-600">Rates change daily - lock in your pre-approval!</p>
-                    <p class="text-xs text-gray-500 mt-1">Updated: <span id="rate-date">November 24, 2025</span></p>
+                    <p class="text-sm font-semibold text-navy mb-2">🎯 Current Market Rates</p>
+                    <div id="quiz-rates-display" class="grid grid-cols-2 gap-2 text-xs mb-2">
+                        <!-- Rates will be inserted here by JavaScript -->
+                    </div>
+                    <p class="text-xs text-gray-600 border-t pt-2">Rates change daily - lock in your pre-approval!</p>
+                    <p class="text-xs text-gray-500">Updated: <span id="quiz-rate-date">November 24, 2025</span></p>
+                    <p id="quiz-rate-disclaimer" class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                        <!-- Disclaimer will be inserted by JavaScript -->
+                    </p>
                 </div>
                 <div class="grid gap-2">
                     <button class="finishBtn quizBtn text-left" data-timeline="asap">
@@ -1600,13 +1614,24 @@
 // ============================================
 // TO UPDATE RATES:
 // 1. Visit: https://www.mortgagenewsdaily.com/mortgage-rates
-// 2. Look for "30 Yr. Fixed" rate (currently showing as first rate)
-// 3. Update the rate and date below
-// 4. Save the file - rate will automatically update everywhere on the site
+// 2. Update all rates below from the main rate boxes
+// 3. Update the date
+// 4. Save the file - rates will automatically update everywhere on the site
 // ============================================
 
-const CURRENT_MORTGAGE_RATE = "6.34%"; // Update this number
+const MORTGAGE_RATES = {
+  "Conventional 30-Year": "6.32%",
+  "Conventional 15-Year": "5.80%",
+  "FHA 30-Year": "5.91%",
+  "VA 30-Year": "5.93%",
+  "USDA 30-Year": "5.85%", // Estimate based on typical USDA rates
+  "Jumbo 30-Year": "6.41%"
+};
+
 const RATE_UPDATE_DATE = "November 24, 2025"; // Update this date
+
+// Rate disclaimer for legal compliance
+const RATE_DISCLAIMER = "Rates shown are general market ranges. Your actual rate depends on your credit score, debt to income ratio, loan to value ratio, loan program, and current market pricing. You may not qualify for the ranges shown. All rates are subject to change without notice until locked with a lender.";
 
 // Note: MortgageNewsDaily updates rates daily at 4PM EST
 // Consider checking and updating weekly or when rates change significantly
@@ -1614,15 +1639,46 @@ const RATE_UPDATE_DATE = "November 24, 2025"; // Update this date
 // --- Optimized Path-Finder Quiz Logic ---
 document.addEventListener("DOMContentLoaded", () => {
   // Update rate displays throughout the page
-  const rateElements = document.querySelectorAll("#current-rate");
-  const dateElements = document.querySelectorAll("#rate-date");
   
-  rateElements.forEach(el => {
-    if (el) el.textContent = CURRENT_MORTGAGE_RATE;
-  });
+  // Hero section rates display
+  const heroRatesDisplay = document.getElementById("rates-display");
+  if (heroRatesDisplay) {
+    let ratesHTML = "";
+    for (const [loanType, rate] of Object.entries(MORTGAGE_RATES)) {
+      ratesHTML += `
+        <div class="text-white">
+          <span class="text-xs block opacity-80">${loanType}</span>
+          <span class="text-gold font-bold">${rate}</span>
+        </div>
+      `;
+    }
+    heroRatesDisplay.innerHTML = ratesHTML;
+  }
   
+  // Quiz section rates display
+  const quizRatesDisplay = document.getElementById("quiz-rates-display");
+  if (quizRatesDisplay) {
+    let quizRatesHTML = "";
+    for (const [loanType, rate] of Object.entries(MORTGAGE_RATES)) {
+      quizRatesHTML += `
+        <div class="text-navy">
+          <span class="font-semibold">${loanType}:</span> ${rate}
+        </div>
+      `;
+    }
+    quizRatesDisplay.innerHTML = quizRatesHTML;
+  }
+  
+  // Update all date elements
+  const dateElements = document.querySelectorAll("#rate-date, #quiz-rate-date");
   dateElements.forEach(el => {
     if (el) el.textContent = RATE_UPDATE_DATE;
+  });
+  
+  // Update disclaimer elements
+  const disclaimerElements = document.querySelectorAll("#rate-disclaimer, #quiz-rate-disclaimer");
+  disclaimerElements.forEach(el => {
+    if (el) el.textContent = RATE_DISCLAIMER;
   });
   
   const quizModal = document.getElementById("path-finder");

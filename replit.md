@@ -125,6 +125,9 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 24, 2025: Expanded rate display to show all loan types (Conventional 30/15-Year, FHA, VA, USDA, Jumbo) instead of just conventional rates
+- November 24, 2025: Added comprehensive rate disclaimer for legal compliance explaining factors that affect actual rates (credit score, DTI, LTV, loan program, market pricing)
+- November 24, 2025: Integrated current mortgage rates from MortgageNewsDaily with centralized manual update system (lines 1611-1618 in index.html)
 - November 24, 2025: Rewrote all website copy to sound more natural and conversational, removing AI-generated hyphens and formal language
 - November 24, 2025: Updated social media preview image to use Dennis Ross headshot instead of logo when links are shared via text/social media
 - November 24, 2025: Optimized 60-second quiz into 5-step conversion funnel with progress indicator, capturing price range, name/email, buyer type, down payment capability, and timeline with urgency elements
