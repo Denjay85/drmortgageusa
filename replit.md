@@ -125,6 +125,7 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 25, 2025: Implemented video testimonial carousel - shows one video at a time with next/prev navigation buttons, dot indicators, and video titles (Jose & Jamie, Alex & Vivian, Larry's stories). Replaced horizontal scrolling layout for better mobile experience and vertical space savings.
 - November 25, 2025: Fixed multiple UI issues - videos now display horizontally in scrollable row, fixed quiz button functionality with global openQuiz function, "Get Pre-Approved Now" links to application URL, renamed "Path Finder" to "Home Qualifier" across all buttons
 - November 25, 2025: Implemented hybrid redesign combining proven 5-step quiz funnel with cleaner modern layouts:
   - Hero section: Two-column layout with gold stats (600+ families, 15 years Navy, 79 lenders), intro video, and rates card
