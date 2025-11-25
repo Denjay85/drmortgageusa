@@ -3,11 +3,13 @@ run = "python main.py"
 
 language   = "python3"
 entrypoint = "main.py"
+modules = ["python-3.11"]
 
 [deployment]
 port = 8080                   # Replit sets $PORT=8080 in production
-deploymentTarget = "static"
+deploymentTarget = "scheduled"
 publicDir = "/"
+run = ["python", "update_rates.py"]
 
 [[ports]]
 localPort = 5000
@@ -24,6 +26,10 @@ externalPort = 3001
 [[ports]]
 localPort = 40583
 externalPort = 3002
+
+[[ports]]
+localPort = 41919
+externalPort = 3003
 
 [workflows]
 runButton = "Project"
@@ -48,4 +54,7 @@ waitForPort = 5000
 
 [agent]
 expertMode = true
+
+[nix]
+channel = "stable-25_05"
 
