@@ -507,17 +507,54 @@
     <!-- Navigation -->
     <nav class="bg-navy text-white py-3 md:py-4 fixed w-full top-0 z-50">
         <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <img src="logo.png" alt="Dr.MortgageUSA Florida Mortgage Broker Logo" class="h-16 md:h-20 lg:h-24 w-auto object-contain">
-                <div class="font-poppins font-bold text-xl md:text-2xl text-gold whitespace-nowrap">
+            <div class="flex items-center space-x-3">
+                <img src="logo.png" alt="Dr.MortgageUSA Florida Mortgage Broker Logo" class="h-12 md:h-16 lg:h-20 w-auto object-contain">
+                <div class="font-poppins font-bold text-lg md:text-xl text-gold whitespace-nowrap">
                     Dr.MortgageUSA
                 </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <button id="nav-cta" class="btn-gold hidden md:inline-block">
-                    Get Started
+            
+            <!-- Desktop Navigation Links -->
+            <div class="hidden lg:flex items-center space-x-6">
+                <a href="#hero" class="text-white hover:text-gold transition-colors font-medium">Home</a>
+                <a href="#stories" class="text-white hover:text-gold transition-colors font-medium">Client Stories</a>
+                <a href="#calculator" class="text-white hover:text-gold transition-colors font-medium">Calculators</a>
+                <a href="#about" class="text-white hover:text-gold transition-colors font-medium">About</a>
+                <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="btn-gold">Apply Now</a>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <!-- Mobile Hamburger Button -->
+                <button id="mobile-menu-btn" class="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
+                    <svg id="menu-icon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <svg id="close-icon" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
                 </button>
-                <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-14 w-14 md:h-16 md:w-16 rounded-full border-2 border-gold shadow-lg">
+                <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg">
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-navy/95 backdrop-blur-sm border-t border-white/10">
+            <div class="container mx-auto px-4 py-4 space-y-3">
+                <a href="#hero" onclick="closeMobileMenu()" class="block py-3 px-4 text-white hover:bg-gold hover:text-navy rounded-lg transition-colors font-medium text-center">
+                    Home
+                </a>
+                <a href="#stories" onclick="closeMobileMenu()" class="block py-3 px-4 text-white hover:bg-gold hover:text-navy rounded-lg transition-colors font-medium text-center">
+                    Client Stories
+                </a>
+                <a href="#calculator" onclick="closeMobileMenu()" class="block py-3 px-4 text-white hover:bg-gold hover:text-navy rounded-lg transition-colors font-medium text-center">
+                    Calculators
+                </a>
+                <a href="#about" onclick="closeMobileMenu()" class="block py-3 px-4 text-white hover:bg-gold hover:text-navy rounded-lg transition-colors font-medium text-center">
+                    About
+                </a>
+                <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="block py-3 px-4 bg-gold text-navy font-bold rounded-lg text-center">
+                    Apply Now
+                </a>
             </div>
         </div>
     </nav>
@@ -1068,7 +1105,7 @@
     </section>
 
     <!-- Client Stories Section -->
-    <section id="reviews" class="py-20 bg-white">
+    <section id="stories" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12" data-aos="fade-up">
                 <h2 class="font-poppins font-bold text-3xl md:text-4xl text-navy mb-4">Client Stories</h2>
@@ -2016,6 +2053,47 @@ document.addEventListener("DOMContentLoaded", () => {
     currentVideoIndex = index;
     updateVideo(currentVideoIndex);
   };
+
+  // Mobile Menu Functions
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const menuIcon = document.getElementById("menu-icon");
+  const closeIcon = document.getElementById("close-icon");
+  
+  function toggleMobileMenu() {
+    mobileMenu.classList.toggle("hidden");
+    menuIcon.classList.toggle("hidden");
+    closeIcon.classList.toggle("hidden");
+  }
+  
+  window.closeMobileMenu = () => {
+    mobileMenu.classList.add("hidden");
+    menuIcon.classList.remove("hidden");
+    closeIcon.classList.add("hidden");
+  };
+  
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener("click", toggleMobileMenu);
+  }
+  
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId !== '#') {
+        e.preventDefault();
+        const target = document.querySelector(targetId);
+        if (target) {
+          const navHeight = 80;
+          const targetPosition = target.offsetTop - navHeight;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  });
 
   // Open quiz from hero CTA
   document.getElementById("hero-cta").onclick = () => {
