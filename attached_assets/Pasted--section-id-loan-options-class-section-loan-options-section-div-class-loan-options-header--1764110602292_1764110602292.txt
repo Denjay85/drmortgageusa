@@ -1,0 +1,61 @@
+<section id="loan-options" class="section loan-options-section">
+  <div class="loan-options-header">
+    <h2 class="loan-options-title">Loan Options You Can Qualify For</h2>
+    <p class="loan-options-subtitle">
+      You get matched with the best loan across seventy nine lenders. I compare every option for you so you understand your numbers before you make a move.
+    </p>
+  </div>
+
+  <div class="loan-options-grid">
+    <div class="loan-card">
+      <h3 class="loan-card-title">FHA Loans</h3>
+      <p class="loan-card-body">
+        Minimum 3.5 percent down. Strong option for buyers building or rebuilding credit.
+      </p>
+    </div>
+
+    <div class="loan-card">
+      <h3 class="loan-card-title">VA Loans</h3>
+      <p class="loan-card-body">
+        Zero down. No PMI. The strongest financing available for eligible veterans and active duty.
+      </p>
+    </div>
+
+    <div class="loan-card">
+      <h3 class="loan-card-title">Conventional Loans</h3>
+      <p class="loan-card-body">
+        Starting at 3 percent down. Best rates and lowest costs for strong credit.
+      </p>
+    </div>
+
+    <div class="loan-card">
+      <h3 class="loan-card-title">USDA Loans</h3>
+      <p class="loan-card-body">
+        Zero down in qualifying rural areas. Lower monthly cost for buyers outside metro zones.
+      </p>
+    </div>
+
+    <div class="loan-card">
+      <h3 class="loan-card-title">Bank Statement Loans</h3>
+      <p class="loan-card-body">
+        Twelve to twenty four months of business deposits used as income. Ideal for self employed buyers who do not show high taxable income.
+      </p>
+    </div>
+
+    <div class="loan-card">
+      <h3 class="loan-card-title">DSCR Investor Loans</h3>
+      <p class="loan-card-body">
+        Approval based on rental income, not personal income. Clean solution for investors expanding their portfolio.
+      </p>
+    </div>
+  </div>
+
+  <div class="loan-options-cta">
+    <p class="loan-options-cta-text">
+      Not sure which option fits you
+    </p>
+    <button class="btn-primary" onclick="document.getElementById('qualifier').scrollIntoView({ behavior: 'smooth' });">
+      Start your 60 second home qualifier
+    </button>
+  </div>
+</section>
