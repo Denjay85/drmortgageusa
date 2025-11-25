@@ -566,7 +566,7 @@
     <!-- Hero Section -->
     <section id="hero" class="text-white min-h-screen flex items-center pt-24 pb-12 relative overflow-hidden">
 
-        <div class="container mx-auto px-4" data-aos="fade-up">
+        <div class="container mx-auto px-4">
             <div class="grid lg:grid-cols-2 gap-8 items-center">
                 <!-- Left Column - Content -->
                 <div class="text-center lg:text-left">
@@ -2109,15 +2109,18 @@ document.addEventListener("DOMContentLoaded", () => {
     showStep(0);
   };
 
-  // Open quiz from nav CTA
-  document.getElementById("nav-cta").onclick = () => {
-    quizModal.classList.remove("hidden");
-    current = 0;
-    quizAnswers = {};
-    segment = "";
-    startTime = Date.now();
-    showStep(0);
-  };
+  // Open quiz from nav CTA (if it exists)
+  const navCta = document.getElementById("nav-cta");
+  if (navCta) {
+    navCta.onclick = () => {
+      quizModal.classList.remove("hidden");
+      current = 0;
+      quizAnswers = {};
+      segment = "";
+      startTime = Date.now();
+      showStep(0);
+    };
+  }
 
   // Close modal on backdrop click
   quizModal.onclick = e => { if (e.target === quizModal) quizModal.classList.add("hidden"); };
