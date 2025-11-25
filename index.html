@@ -553,7 +553,7 @@
                     </div>
                     
                     <button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4 mb-6">
-                        Start My 60-Second Path Finder
+                        Start My 60-Second Home Qualifier
                     </button>
                     <p class="text-sm text-gray-300">Takes less than a minute. No credit check required.</p>
                 </div>
@@ -1017,7 +1017,7 @@
             
             <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="400">
                 <button onclick="openQuiz()" class="btn-gold text-lg px-8 py-4">
-                    Start My Path Now
+                    Start My 60-Second Home Qualifier
                 </button>
             </div>
         </div>
@@ -1109,16 +1109,16 @@
                 </div>
             </div>
             
-            <!-- Video testimonials -->
-            <div class="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
-                <div class="rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="100">
-                    <video src="reviews/jose-jamie-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+            <!-- Video testimonials - horizontal scrolling row -->
+            <div class="flex gap-4 overflow-x-auto pb-4 max-w-6xl mx-auto snap-x snap-mandatory">
+                <div class="flex-shrink-0 w-72 md:w-80 rounded-2xl overflow-hidden shadow-lg snap-start" data-aos="fade-up" data-aos-delay="100">
+                    <video src="reviews/jose-jamie-review.mp4" autoplay muted loop playsinline controls class="w-full h-48 object-cover"></video>
                 </div>
-                <div class="rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="200">
-                    <video src="reviews/alex-vivian-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+                <div class="flex-shrink-0 w-72 md:w-80 rounded-2xl overflow-hidden shadow-lg snap-start" data-aos="fade-up" data-aos-delay="200">
+                    <video src="reviews/alex-vivian-review.mp4" autoplay muted loop playsinline controls class="w-full h-48 object-cover"></video>
                 </div>
-                <div class="rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="300">
-                    <video src="reviews/larry-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+                <div class="flex-shrink-0 w-72 md:w-80 rounded-2xl overflow-hidden shadow-lg snap-start" data-aos="fade-up" data-aos-delay="300">
+                    <video src="reviews/larry-review.mp4" autoplay muted loop playsinline controls class="w-full h-48 object-cover"></video>
                 </div>
             </div>
         </div>
@@ -1732,9 +1732,9 @@
                         
                         <div class="mt-6 pt-6 border-t">
                             <p class="text-center text-navy font-semibold mb-3">Ready to lock in your rate?</p>
-                            <button onclick="openQuiz()" class="btn-gold w-full text-lg py-3">
+                            <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="btn-gold w-full text-lg py-3 block text-center">
                                 Get Pre-Approved Now
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1761,7 +1761,7 @@
             <p class="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">Join 600+ Florida families who found their path to homeownership with Dr. MortgageUSA</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <button onclick="openQuiz()" class="btn-gold text-lg px-8 py-4">
-                    Start My 60-Second Quiz
+                    Start My 60-Second Home Qualifier
                 </button>
                 <a href="tel:8503468514" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg transition-colors">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
@@ -1947,6 +1947,16 @@ document.addEventListener("DOMContentLoaded", () => {
     current = 0;
     quizAnswers = {};
     segment = "";
+  };
+  
+  // Global openQuiz function for onclick handlers
+  window.openQuiz = () => {
+    quizModal.classList.remove("hidden");
+    current = 0;
+    quizAnswers = {};
+    segment = "";
+    startTime = Date.now();
+    showStep(0);
   };
 
   // Open quiz from hero CTA
