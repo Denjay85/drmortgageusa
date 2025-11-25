@@ -523,53 +523,81 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="hero" class="text-white min-h-screen flex items-center pt-20 relative overflow-hidden">
+    <section id="hero" class="text-white min-h-screen flex items-center pt-24 pb-12 relative overflow-hidden">
 
-        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
-            <div class="mb-8">
-                <video src="intro-video.mp4" 
-                       autoplay 
-                       muted 
-                       loop 
-                       playsinline 
-                       controls 
-                       class="h-auto mx-auto mb-4 rounded-xl shadow-2xl" 
-                       style="width: 640px; max-width: 90vw;">
-                </video>
-            </div>
-            <h1 class="hero-title font-poppins font-bold text-5xl md:text-6xl lg:text-7xl mb-6 text-shadow">
-                Your Dream Home Is Closer Than You Think
-            </h1>
-            <p class="hero-subtitle text-xl md:text-2xl mb-6 max-w-3xl mx-auto text-shadow">
-                Choose your roadmap in 60 seconds.
-            </p>
-            
-            <!-- Current Rates Display -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6 max-w-4xl mx-auto">
-                <h3 class="text-lg font-semibold text-gold mb-3">Today's Mortgage Rates</h3>
-                <div id="rates-display" class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm md:text-base">
-                    <!-- Rates will be inserted here by JavaScript -->
+        <div class="container mx-auto px-4" data-aos="fade-up">
+            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                <!-- Left Column - Content -->
+                <div class="text-center lg:text-left">
+                    <h1 class="hero-title font-poppins font-bold text-4xl md:text-5xl lg:text-6xl mb-4 text-shadow leading-tight">
+                        Your Dream Home Is Closer Than You Think
+                    </h1>
+                    <p class="hero-subtitle text-xl md:text-2xl mb-6 text-shadow opacity-90">
+                        Navy veteran helping Florida families achieve homeownership since 2009
+                    </p>
+                    
+                    <!-- Gold Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 mb-8">
+                        <div class="text-center lg:text-left">
+                            <div class="text-4xl md:text-5xl font-bold text-gold">600+</div>
+                            <div class="text-sm text-gray-200">Families Helped</div>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <div class="text-4xl md:text-5xl font-bold text-gold">15</div>
+                            <div class="text-sm text-gray-200">Years Navy Service</div>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <div class="text-4xl md:text-5xl font-bold text-gold">79</div>
+                            <div class="text-sm text-gray-200">Lender Partners</div>
+                        </div>
+                    </div>
+                    
+                    <button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4 mb-6">
+                        Start My 60-Second Path Finder
+                    </button>
+                    <p class="text-sm text-gray-300">Takes less than a minute. No credit check required.</p>
                 </div>
-                <p class="text-xs text-gray-200 mt-3 italic">Updated: <span id="rate-date">November 24, 2025</span></p>
-                <p id="rate-disclaimer" class="text-xs text-gray-300 mt-2 leading-relaxed">
-                    <!-- Disclaimer will be inserted by JavaScript -->
-                </p>
+                
+                <!-- Right Column - Video & Rates -->
+                <div class="space-y-6">
+                    <!-- Intro Video -->
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 shadow-2xl">
+                        <video src="intro-video.mp4" 
+                               autoplay 
+                               muted 
+                               loop 
+                               playsinline 
+                               controls 
+                               class="w-full rounded-xl">
+                        </video>
+                    </div>
+                    
+                    <!-- Current Rates Card -->
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                        <h3 class="text-lg font-semibold text-gold mb-3 text-center">Today's Mortgage Rates</h3>
+                        <div id="rates-display" class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                        </div>
+                        <p class="text-xs text-gray-300 mt-3 text-center">Updated: <span id="rate-date">November 25, 2025</span></p>
+                        <p id="rate-disclaimer" class="text-xs text-gray-400 mt-2 leading-relaxed text-center">
+                        </p>
+                    </div>
+                </div>
             </div>
-            <button id="hero-cta" class="btn-gold text-lg md:text-xl px-8 py-4">
-                Start My 60-Second Path Finder
-            </button>
             
-            <!-- hero lifestyle photo -->
-            <img src="assets/family-photo.png"
-                 alt="Happy family in front of new home"
-                 class="mx-auto mt-8 rounded-2xl shadow-xl w-full max-w-3xl hidden md:block">
+            <!-- Hero lifestyle photo - centered below on larger screens -->
+            <div class="mt-12 hidden lg:block" data-aos="fade-up" data-aos-delay="200">
+                <img src="assets/family-photo.png"
+                     alt="Happy family in front of new home"
+                     class="mx-auto rounded-2xl shadow-xl w-full max-w-4xl">
+            </div>
         </div>
+        
         <!-- Floating Dennis Photo -->
-        <div class="absolute bottom-10 right-10 hidden lg:block" data-aos="zoom-in" data-aos-delay="800">
+        <div class="absolute bottom-10 right-10 hidden xl:block" data-aos="zoom-in" data-aos-delay="800">
             <div class="relative">
-                <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-36 w-36 rounded-full border-4 border-gold shadow-2xl">
+                <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl">
                 <div class="absolute -bottom-2 -right-2 bg-gold text-navy rounded-full p-2">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"/>
                     </svg>
                 </div>
@@ -950,33 +978,150 @@
         </div>
     </section>
 
-    <!-- Reviews Section -->
-    <section id="reviews" class="bg-white text-gray-900 py-16 px-4">
-        <h2 class="text-2xl font-bold mb-6 text-center">Client Stories</h2>
-        
-        <!-- Written testimonials -->
-        <div class="grid gap-6 md:grid-cols-3 mb-10 text-left">
-            <div class="bg-white p-6 rounded-xl shadow-lg border">
-                <p class="italic mb-2">"Dennis took the stress out of our first home purchase. We closed in 23 days!"</p>
-                <span class="font-semibold">Sarah T.</span>
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="font-poppins font-bold text-3xl md:text-4xl text-navy mb-4">How It Works</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Getting pre-approved is simpler than you think. Three easy steps to your dream home.</p>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-lg border">
-                <p class="italic mb-2">"He answered my texts at 9 PM and got us a rate I didn't think was possible."</p>
-                <span class="font-semibold">James R.</span>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Step 1 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-gold to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-navy text-2xl font-bold">1</span>
+                    </div>
+                    <h3 class="font-poppins font-bold text-xl text-navy mb-3">Take the 60-Second Quiz</h3>
+                    <p class="text-gray-600">Answer a few quick questions about your home buying goals. No credit check required.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-gradient-to-br from-gold to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-navy text-2xl font-bold">2</span>
+                    </div>
+                    <h3 class="font-poppins font-bold text-xl text-navy mb-3">Get Your Custom Plan</h3>
+                    <p class="text-gray-600">I'll match you with the perfect loan programs from my network of 79 lenders.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-gold to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-navy text-2xl font-bold">3</span>
+                    </div>
+                    <h3 class="font-poppins font-bold text-xl text-navy mb-3">Close on Your Home</h3>
+                    <p class="text-gray-600">With pre-approval in hand, you'll make offers with confidence. Most clients close in 21-30 days.</p>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-lg border">
-                <p class="italic mb-2">"I teach kindergarten and Dennis explained everything in plain English. Five stars!"</p>
-                <span class="font-semibold">Maria L.</span>
+            
+            <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="400">
+                <button onclick="openQuiz()" class="btn-gold text-lg px-8 py-4">
+                    Start My Path Now
+                </button>
             </div>
         </div>
-        
-        <!-- Video testimonials -->
-        <div class="grid gap-6 md:grid-cols-3">
-            <video src="reviews/jose-jamie-review.mp4" autoplay muted loop playsinline controls class="w-full rounded-xl shadow-lg"></video>
-            <video src="reviews/alex-vivian-review.mp4" autoplay muted loop playsinline controls class="w-full rounded-xl shadow-lg"></video>
-            <video src="reviews/larry-review.mp4" autoplay muted loop playsinline controls class="w-full rounded-xl shadow-lg"></video>
-        </div>
+    </section>
 
+    <!-- Loan Programs Section -->
+    <section id="loan-programs" class="py-20 bg-navy">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="font-poppins font-bold text-3xl md:text-4xl text-white mb-4">Loan Programs</h2>
+                <p class="text-gray-300 text-lg max-w-2xl mx-auto">Whether you're a first-timer, veteran, or working on your credit, there's a program for you.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <!-- FHA Loans -->
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-gold text-3xl mb-4">🏠</div>
+                    <h3 class="font-bold text-xl text-white mb-2">FHA Loans</h3>
+                    <p class="text-gray-300 text-sm mb-4">As low as 3.5% down. Credit scores from 500 accepted.</p>
+                    <p class="text-gold font-semibold text-sm">Perfect for first-time buyers</p>
+                </div>
+                
+                <!-- VA Loans -->
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-gold text-3xl mb-4">🇺🇸</div>
+                    <h3 class="font-bold text-xl text-white mb-2">VA Loans</h3>
+                    <p class="text-gray-300 text-sm mb-4">Zero down payment. No PMI. Competitive rates.</p>
+                    <p class="text-gold font-semibold text-sm">For veterans & active military</p>
+                </div>
+                
+                <!-- Conventional -->
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-gold text-3xl mb-4">📋</div>
+                    <h3 class="font-bold text-xl text-white mb-2">Conventional</h3>
+                    <p class="text-gray-300 text-sm mb-4">Starting at 3% down. Best rates for strong credit.</p>
+                    <p class="text-gold font-semibold text-sm">Most flexible options</p>
+                </div>
+                
+                <!-- USDA -->
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-gold text-3xl mb-4">🌾</div>
+                    <h3 class="font-bold text-xl text-white mb-2">USDA Loans</h3>
+                    <p class="text-gray-300 text-sm mb-4">Zero down in eligible rural areas. Low mortgage insurance.</p>
+                    <p class="text-gold font-semibold text-sm">Great for suburban homes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Client Stories Section -->
+    <section id="reviews" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="font-poppins font-bold text-3xl md:text-4xl text-navy mb-4">Client Stories</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Real families, real results. Here's what they're saying about working with Dr. MortgageUSA.</p>
+            </div>
+            
+            <!-- Written testimonials -->
+            <div class="grid gap-6 md:grid-cols-3 mb-12 max-w-5xl mx-auto">
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-md border-l-4 border-gold" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-4">
+                        <div class="text-gold text-2xl">★★★★★</div>
+                    </div>
+                    <p class="italic text-gray-700 mb-4">"Dennis took the stress out of our first home purchase. We closed in 23 days!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-navy rounded-full flex items-center justify-center text-white font-bold mr-3">S</div>
+                        <span class="font-semibold text-navy">Sarah T.</span>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-md border-l-4 border-gold" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center mb-4">
+                        <div class="text-gold text-2xl">★★★★★</div>
+                    </div>
+                    <p class="italic text-gray-700 mb-4">"He answered my texts at 9 PM and got us a rate I didn't think was possible."</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-navy rounded-full flex items-center justify-center text-white font-bold mr-3">J</div>
+                        <span class="font-semibold text-navy">James R.</span>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-2xl shadow-md border-l-4 border-gold" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center mb-4">
+                        <div class="text-gold text-2xl">★★★★★</div>
+                    </div>
+                    <p class="italic text-gray-700 mb-4">"I teach kindergarten and Dennis explained everything in plain English. Five stars!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-navy rounded-full flex items-center justify-center text-white font-bold mr-3">M</div>
+                        <span class="font-semibold text-navy">Maria L.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video testimonials -->
+            <div class="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
+                <div class="rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                    <video src="reviews/jose-jamie-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                    <video src="reviews/alex-vivian-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                    <video src="reviews/larry-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- ───────── START: Comprehensive Mortgage Calculator ───────── -->
@@ -1565,19 +1710,63 @@
         </div>
     </section>
 
-    <!-- Instagram Follow Section - Live Widget from Elfsight -->
-    <section id="instagram" class="py-16 bg-gray-100">
+    <!-- Stay Connected Section - Rates + Instagram Side by Side -->
+    <section id="stay-connected" class="py-20 bg-gray-100">
         <div class="container mx-auto px-4">
-            <div class="max-w-5xl mx-auto">
-                <!-- Section Header -->
-                <div class="text-center mb-8">
-                    <h2 class="font-poppins font-bold text-3xl md:text-4xl text-navy mb-2">Follow Me on Instagram</h2>
-                    <p class="text-gray-600">@dr.mortgageusa</p>
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="font-poppins font-bold text-3xl md:text-4xl text-navy mb-4">Stay Connected</h2>
+                <p class="text-gray-600 text-lg">Keep up with the latest rates and mortgage tips</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Today's Rates Card -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <div class="bg-gradient-to-r from-navy to-blue-900 p-6">
+                        <h3 class="font-poppins font-bold text-2xl text-white mb-2">Today's Mortgage Rates</h3>
+                        <p class="text-gray-300 text-sm">Updated daily from MortgageNewsDaily</p>
+                    </div>
+                    <div class="p-6">
+                        <div id="rates-display-2" class="space-y-4">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4 italic">Rates as of <span id="rate-date-2">November 25, 2025</span>. Your actual rate depends on your credit score, loan type, and other factors.</p>
+                        
+                        <div class="mt-6 pt-6 border-t">
+                            <p class="text-center text-navy font-semibold mb-3">Ready to lock in your rate?</p>
+                            <button onclick="openQuiz()" class="btn-gold w-full text-lg py-3">
+                                Get Pre-Approved Now
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- Elfsight Instagram Feed Widget - LIVE -->
-                <script src="https://elfsightcdn.com/platform.js" async></script>
-                <div class="elfsight-app-ace53a51-68ba-4bc7-8f55-5aa157062a28" data-elfsight-app-lazy></div>
+                <!-- Instagram Feed Card -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-6">
+                        <h3 class="font-poppins font-bold text-2xl text-white mb-2">Follow @dr.mortgageusa</h3>
+                        <p class="text-gray-100 text-sm">Tips, market updates & success stories</p>
+                    </div>
+                    <div class="p-4">
+                        <script src="https://elfsightcdn.com/platform.js" async></script>
+                        <div class="elfsight-app-ace53a51-68ba-4bc7-8f55-5aa157062a28" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gradient CTA Band -->
+    <section class="py-16 bg-gradient-to-r from-navy via-blue-900 to-navy">
+        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+            <h2 class="font-poppins font-bold text-3xl md:text-4xl text-white mb-4">Ready to Make Your Move?</h2>
+            <p class="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">Join 600+ Florida families who found their path to homeownership with Dr. MortgageUSA</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button onclick="openQuiz()" class="btn-gold text-lg px-8 py-4">
+                    Start My 60-Second Quiz
+                </button>
+                <a href="tel:8503468514" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                    Call: 850-346-8514
+                </a>
             </div>
         </div>
     </section>
@@ -1708,8 +1897,23 @@ document.addEventListener("DOMContentLoaded", () => {
     quizRatesDisplay.innerHTML = quizRatesHTML;
   }
   
+  // Stay Connected section rates display (side-by-side with Instagram)
+  const ratesDisplay2 = document.getElementById("rates-display-2");
+  if (ratesDisplay2) {
+    let rates2HTML = "";
+    for (const [loanType, rate] of Object.entries(MORTGAGE_RATES)) {
+      rates2HTML += `
+        <div class="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+          <span class="text-gray-700">${loanType}</span>
+          <span class="text-navy font-bold text-lg">${rate}</span>
+        </div>
+      `;
+    }
+    ratesDisplay2.innerHTML = rates2HTML;
+  }
+  
   // Update all date elements
-  const dateElements = document.querySelectorAll("#rate-date, #quiz-rate-date");
+  const dateElements = document.querySelectorAll("#rate-date, #quiz-rate-date, #rate-date-2");
   dateElements.forEach(el => {
     if (el) el.textContent = RATE_UPDATE_DATE;
   });
