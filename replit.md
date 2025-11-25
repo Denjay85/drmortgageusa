@@ -125,6 +125,14 @@ The project is optimized for reliable deployment across multiple hosting platfor
 
 ## Changelog
 
+- November 25, 2025: Implemented hybrid redesign combining proven 5-step quiz funnel with cleaner modern layouts:
+  - Hero section: Two-column layout with gold stats (600+ families, 15 years Navy, 79 lenders), intro video, and rates card
+  - Added "How It Works" section: 3-step card-based design explaining the process
+  - Added "Loan Programs" section: Card-based display of FHA, VA, Conventional, USDA loan options
+  - Enhanced "Client Stories" section: Star ratings, avatar initials, and improved video grid
+  - Added "Stay Connected" section: Side-by-side Rates and Instagram feed cards
+  - Added gradient CTA band before footer with call button
+  - All rates synchronized from centralized MORTGAGE_RATES config across 3 displays
 - November 24, 2025: Expanded rate display to show all loan types (Conventional 30/15-Year, FHA, VA, USDA, Jumbo) instead of just conventional rates
 - November 24, 2025: Added comprehensive rate disclaimer for legal compliance explaining factors that affect actual rates (credit score, DTI, LTV, loan program, market pricing)
 - November 24, 2025: Integrated current mortgage rates from MortgageNewsDaily with centralized manual update system (lines 1611-1618 in index.html)
