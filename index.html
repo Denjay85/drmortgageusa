@@ -1109,17 +1109,36 @@
                 </div>
             </div>
             
-            <!-- Video testimonials - horizontal scrolling row with natural aspect ratio -->
-            <div class="flex gap-4 overflow-x-auto pb-4 max-w-6xl mx-auto snap-x snap-mandatory" style="scrollbar-width: thin;">
-                <div class="flex-shrink-0 w-48 md:w-56 rounded-2xl overflow-hidden shadow-lg snap-start bg-black" data-aos="fade-up" data-aos-delay="100">
-                    <video src="reviews/jose-jamie-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+            <!-- Video testimonials - Single video carousel with next/prev buttons -->
+            <div class="max-w-sm mx-auto" data-aos="fade-up">
+                <div class="relative">
+                    <!-- Video Container -->
+                    <div id="video-carousel" class="rounded-2xl overflow-hidden shadow-lg bg-black">
+                        <video id="testimonial-video" src="reviews/jose-jamie-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                    <button onclick="prevVideo()" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 bg-navy hover:bg-gold text-white hover:text-navy w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg flex items-center justify-center transition-colors">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="nextVideo()" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 bg-navy hover:bg-gold text-white hover:text-navy w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg flex items-center justify-center transition-colors">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
                 </div>
-                <div class="flex-shrink-0 w-48 md:w-56 rounded-2xl overflow-hidden shadow-lg snap-start bg-black" data-aos="fade-up" data-aos-delay="200">
-                    <video src="reviews/alex-vivian-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
+                
+                <!-- Video Indicators -->
+                <div class="flex justify-center gap-2 mt-4">
+                    <button onclick="goToVideo(0)" id="video-dot-0" class="video-dot w-3 h-3 rounded-full bg-gold"></button>
+                    <button onclick="goToVideo(1)" id="video-dot-1" class="video-dot w-3 h-3 rounded-full bg-gray-300"></button>
+                    <button onclick="goToVideo(2)" id="video-dot-2" class="video-dot w-3 h-3 rounded-full bg-gray-300"></button>
                 </div>
-                <div class="flex-shrink-0 w-48 md:w-56 rounded-2xl overflow-hidden shadow-lg snap-start bg-black" data-aos="fade-up" data-aos-delay="300">
-                    <video src="reviews/larry-review.mp4" autoplay muted loop playsinline controls class="w-full"></video>
-                </div>
+                
+                <!-- Video Title -->
+                <p id="video-title" class="text-center text-navy font-semibold mt-3">Jose & Jamie's Story</p>
             </div>
         </div>
     </section>
@@ -1957,6 +1976,45 @@ document.addEventListener("DOMContentLoaded", () => {
     segment = "";
     startTime = Date.now();
     showStep(0);
+  };
+
+  // Video Carousel Functions
+  const videoSources = [
+    { src: "reviews/jose-jamie-review.mp4", title: "Jose & Jamie's Story" },
+    { src: "reviews/alex-vivian-review.mp4", title: "Alex & Vivian's Story" },
+    { src: "reviews/larry-review.mp4", title: "Larry's Story" }
+  ];
+  let currentVideoIndex = 0;
+  
+  function updateVideo(index) {
+    const video = document.getElementById("testimonial-video");
+    const title = document.getElementById("video-title");
+    if (video && title) {
+      video.src = videoSources[index].src;
+      title.textContent = videoSources[index].title;
+      video.play();
+      
+      // Update dots
+      document.querySelectorAll(".video-dot").forEach((dot, i) => {
+        dot.classList.toggle("bg-gold", i === index);
+        dot.classList.toggle("bg-gray-300", i !== index);
+      });
+    }
+  }
+  
+  window.nextVideo = () => {
+    currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
+    updateVideo(currentVideoIndex);
+  };
+  
+  window.prevVideo = () => {
+    currentVideoIndex = (currentVideoIndex - 1 + videoSources.length) % videoSources.length;
+    updateVideo(currentVideoIndex);
+  };
+  
+  window.goToVideo = (index) => {
+    currentVideoIndex = index;
+    updateVideo(currentVideoIndex);
   };
 
   // Open quiz from hero CTA
