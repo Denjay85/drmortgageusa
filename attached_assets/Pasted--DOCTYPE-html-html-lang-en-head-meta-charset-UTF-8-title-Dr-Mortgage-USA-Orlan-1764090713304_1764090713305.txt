@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dr. Mortgage USA | Orlando Mortgage Broker | VA, FHA, First Time Buyers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Dr. Mortgage USA helps homebuyers across Florida make smart financing decisions. VA loans, FHA, first time buyer programs, and clear numbers before you make a move." />
+
+  <!-- BASIC STYLES, TAILWIND OR OTHER CAN REPLACE THIS -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      color: #111827;
+      background-color: #f3f4f6;
+      line-height: 1.5;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+    }
+    header .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    header img.logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      border: 2px solid #1d4ed8;
+      object-fit: cover;
+    }
+    header .brand-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+    header .brand-sub {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+    header nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    header nav a {
+      color: #374151;
+    }
+    header nav a.primary-link {
+      padding: 0.55rem 0.95rem;
+      border-radius: 999px;
+      background-color: #1d4ed8;
+      color: white;
+      font-weight: 600;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 2rem;
+      align-items: center;
+      padding: 2rem 0 1.5rem 0;
+    }
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #1d4ed8;
+      margin-bottom: 0.5rem;
+    }
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      color: #111827;
+    }
+    .hero-sub {
+      font-size: 0.98rem;
+      color: #4b5563;
+      margin-bottom: 1.25rem;
+      max-width: 33rem;
+    }
+    .hero-sub strong {
+      font-weight: 700;
+      color: #111827;
+    }
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .btn-primary {
+      padding: 0.8rem 1.35rem;
+      border-radius: 999px;
+      background-color: #1d4ed8;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      padding: 0.8rem 1.35rem;
+      border-radius: 999px;
+      background-color: #e5e7eb;
+      color: #111827;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+    }
+    .hero-note {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .stat {
+      min-width: 8rem;
+    }
+    .stat-number {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #111827;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .hero-card {
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      box-shadow: 0 6px 24px rgba(15, 23, 42, 0.12);
+      border: 1px solid #e5e7eb;
+    }
+    .hero-card h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #111827;
+    }
+    .hero-card p {
+      font-size: 0.88rem;
+      color: #4b5563;
+      margin-bottom: 0.85rem;
+    }
+    .qualifier-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .qualifier-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+    @media (max-width: 600px) {
+      .qualifier-row {
+        flex-direction: column;
+      }
+    }
+    .qualifier-form label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    .qualifier-form input,
+    .qualifier-form select {
+      width: 100%;
+      padding: 0.55rem 0.6rem;
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+      font-size: 0.85rem;
+    }
+    .qualifier-disclaimer {
+      font-size: 0.72rem;
+      color: #6b7280;
+      margin-top: 0.3rem;
+    }
+
+    .section {
+      padding: 2.25rem 0 1.5rem 0;
+    }
+    .section-header {
+      margin-bottom: 1.25rem;
+    }
+    .section-kicker {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #1d4ed8;
+      margin-bottom: 0.25rem;
+    }
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 0.2rem;
+    }
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: #4b5563;
+      max-width: 35rem;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    @media (max-width: 900px) {
+      .how-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .how-card {
+      background-color: #ffffff;
+      border-radius: 0.9rem;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+    }
+    .how-step {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #6b7280;
+      margin-bottom: 0.3rem;
+    }
+    .how-card h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #111827;
+    }
+    .how-card p {
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    @media (max-width: 900px) {
+      .programs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .program-card {
+      background-color: #ffffff;
+      border-radius: 0.9rem;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+    }
+    .program-card h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #111827;
+    }
+    .program-card p {
+      font-size: 0.85rem;
+      color: #4b5563;
+      margin-bottom: 0.4rem;
+    }
+    .program-card ul {
+      list-style: disc;
+      padding-left: 1.1rem;
+      font-size: 0.82rem;
+      color: #4b5563;
+    }
+
+    .reviews-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    @media (max-width: 900px) {
+      .reviews-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .review-list {
+      display: grid;
+      gap: 0.9rem;
+    }
+    .review-card {
+      background-color: #ffffff;
+      border-radius: 0.9rem;
+      padding: 0.9rem;
+      border: 1px solid #e5e7eb;
+    }
+    .review-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      color: #111827;
+    }
+    .review-tagline {
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-bottom: 0.35rem;
+    }
+    .review-text {
+      font-size: 0.82rem;
+      color: #4b5563;
+    }
+    .review-badge {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 0.3rem;
+    }
+    .review-video-card {
+      background-color: #ffffff;
+      border-radius: 0.9rem;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+    }
+    .review-video-thumb {
+      width: 100%;
+      border-radius: 0.75rem;
+      background-color: #000000;
+      aspect-ratio: 16 / 9;
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      font-size: 0.8rem;
+    }
+
+    .tools {
+      background-color: #e5e7eb;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      border: 1px solid #d1d5db;
+    }
+    .tools p {
+      font-size: 0.9rem;
+      color: #374151;
+      margin-bottom: 0.75rem;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 2fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .about-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .about-layout p {
+      font-size: 0.9rem;
+      color: #374151;
+      margin-bottom: 0.6rem;
+    }
+    .about-layout ul {
+      list-style: disc;
+      padding-left: 1.1rem;
+      font-size: 0.86rem;
+      color: #374151;
+    }
+    .about-photo {
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 0.75rem;
+      border: 1px solid #e5e7eb;
+      text-align: center;
+    }
+    .about-photo img {
+      width: 100%;
+      border-radius: 0.75rem;
+      object-fit: cover;
+    }
+    .about-photo-caption {
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-top: 0.4rem;
+    }
+
+    .cta-band {
+      background-color: #1d4ed8;
+      border-radius: 1rem;
+      padding: 1.35rem 1.2rem;
+      color: #ffffff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+    .cta-band h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .cta-band p {
+      font-size: 0.9rem;
+      max-width: 28rem;
+    }
+
+    footer {
+      font-size: 0.75rem;
+      color: #6b7280;
+      border-top: 1px solid #e5e7eb;
+      padding: 1rem 0 0.5rem 0;
+      margin-top: 0.5rem;
+    }
+    footer .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo-area">
+        <!-- Replace src with your headshot -->
+        <img src="YOUR-HEADSHOT.jpg" alt="Dr. Mortgage USA, Dennis Ross" class="logo" />
+        <div>
+          <div class="brand-title">Dr. Mortgage USA</div>
+          <div class="brand-sub">Dennis Ross, Mortgage Broker in Orlando, Florida</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#how">How it works</a>
+        <a href="#programs">Loan programs</a>
+        <a href="#reviews">Client stories</a>
+        <a href="#tools">Tools</a>
+        <a href="#about">About</a>
+        <a href="#qualifier" class="primary-link">Start your 60 second qualifier</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div>
+        <div class="hero-eyebrow">Mortgage broker for Florida homebuyers</div>
+        <h1>See your buying power before you fall in love with a home.</h1>
+        <p class="hero-sub">
+          I help you understand your numbers, not just your rate. You get clear options, real talk on VA, FHA, and first time buyer programs, and a plan you can explain to your family.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#qualifier">
+            <button class="btn-primary">Start your 60 second qualifier</button>
+          </a>
+          <a href="#reviews">
+            <button class="btn-secondary">Watch client stories</button>
+          </a>
+        </div>
+
+        <p class="hero-note">
+          No hard credit pull on this first step. I follow up with a real plan, not a sales script.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number">600+</div>
+            <div class="stat-label">Families helped to buy or refinance</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">15 years</div>
+            <div class="stat-label">United States Navy service, active duty and reserves</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">39</div>
+            <div class="stat-label">Lenders available as a broker, not a single bank</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUALIFIER CARD -->
+      <div class="hero-card" id="qualifier">
+        <h2>Start your 60 second buying power check.</h2>
+        <p>Tell me a few basics so I can map out your next step. No spam. No pressure. Just a clear path.</p>
+
+        <!-- Replace action with your Bonzo or funnel endpoint -->
+        <form class="qualifier-form" method="post" action="YOUR-FORM-ENDPOINT">
+          <div>
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" placeholder="First and last name" required />
+          </div>
+          <div class="qualifier-row">
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required />
+            </div>
+            <div>
+              <label for="phone">Mobile number</label>
+              <input type="tel" id="phone" name="phone" placeholder="555 555 5555" required />
+            </div>
+          </div>
+          <div class="qualifier-row">
+            <div>
+              <label for="timeline">When do you want to move</label>
+              <select id="timeline" name="timeline">
+                <option value="0-3">0 to 3 months</option>
+                <option value="3-6">3 to 6 months</option>
+                <option value="6-12">6 to 12 months</option>
+                <option value="12plus">More than 12 months</option>
+                <option value="just-looking">Just gathering information</option>
+              </select>
+            </div>
+            <div>
+              <label for="home-type">What are you planning to do</label>
+              <select id="home-type" name="home_type">
+                <option value="buy-first">Buy my first home</option>
+                <option value="buy-next">Buy my next home</option>
+                <option value="refi">Refinance my current home</option>
+                <option value="va">Use my VA loan benefit</option>
+                <option value="investment">Buy an investment property</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="location">Where in Florida are you looking</label>
+            <input type="text" id="location" name="location" placeholder="City or county in Florida" />
+          </div>
+          <div>
+            <label for="notes">Anything I should know before we talk</label>
+            <input type="text" id="notes" name="notes" placeholder="Credit questions, job changes, VA disability, etc." />
+          </div>
+
+          <button type="submit" class="btn-primary">Submit and see your next step</button>
+
+          <p class="qualifier-disclaimer">
+            By hitting submit you agree that I can contact you by phone, text, or email about mortgage options. I do not sell your information. Ever.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+      <div class="section-header">
+        <div class="section-kicker">How it works</div>
+        <h2 class="section-title">Simple process, clear numbers, no surprises.</h2>
+        <p class="section-subtitle">
+          You get a guided plan from first question to clear to close. I stay with you and your agent from preapproval to keys.
+        </p>
+      </div>
+
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-step">Step 1</div>
+          <h3>60 second qualifier and call</h3>
+          <p>
+            You fill out the short form, I review your answers, then we jump on a call or Zoom. I learn your story, your income, and your comfort zone for a monthly payment.
+          </p>
+        </div>
+        <div class="how-card">
+          <div class="how-step">Step 2</div>
+          <h3>Numbers, options, and a written plan</h3>
+          <p>
+            I check your credit the right way, run your file through my 39 lender options, and build a side by side breakdown for VA, FHA, or conventional. You see payment, cash to close, and strategy.
+          </p>
+        </div>
+        <div class="how-card">
+          <div class="how-step">Step 3</div>
+          <h3>Offer, contract, and support through closing</h3>
+          <p>
+            I coordinate with your realtor, help you structure offers with seller credits, and keep you updated at every milestone. You get a calm guide, not a call center.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRAMS / WHO I SERVE -->
+    <section class="section" id="programs">
+      <div class="section-header">
+        <div class="section-kicker">Loan programs</div>
+        <h2 class="section-title">VA, FHA, and first time buyer loans in Florida.</h2>
+        <p class="section-subtitle">
+          I am a broker in Orlando who serves every family in Florida and every family relocating to our beautiful state of Florida. We pick the right program based on your goals, not a quota.
+        </p>
+      </div>
+
+      <div class="programs-grid">
+        <div class="program-card">
+          <h3>VA loans in Florida</h3>
+          <p>
+            You earned this benefit. I treat it that way. I help active duty, Guard, and veterans use VA to own in Florida.
+          </p>
+          <ul>
+            <li>Zero down options for eligible buyers</li>
+            <li>No monthly mortgage insurance</li>
+            <li>Strategies for VA disability and property tax savings</li>
+            <li>Guidance on multi unit, assumptions, and future refi plans</li>
+          </ul>
+        </div>
+
+        <div class="program-card">
+          <h3>FHA and first time buyer programs</h3>
+          <p>
+            FHA is flexible when life has had some bumps. I use it to help first time buyers, credit rebuilders, and folks with higher debt.
+          </p>
+          <ul>
+            <li>Low down payment options</li>
+            <li>Lenient credit and debt guidelines</li>
+            <li>Florida first time buyer assistance where available</li>
+            <li>Clear roadmap to refinance when your profile improves</li>
+          </ul>
+        </div>
+
+        <div class="program-card">
+          <h3>Conventional and move up borrowers</h3>
+          <p>
+            When your credit and income are strong, conventional can work best. I show you where it wins and where it does not.
+          </p>
+          <ul>
+            <li>Primary homes, second homes, and investment options</li>
+            <li>Side by side comparisons to VA or FHA when you qualify</li>
+            <li>Strategies for keeping or selling your current home</li>
+            <li>Long term plan for future refinances and equity</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENT STORIES / REVIEWS -->
+    <section class="section" id="reviews">
+      <div class="section-header">
+        <div class="section-kicker">Client stories</div>
+        <h2 class="section-title">Real Florida families I have helped.</h2>
+        <p class="section-subtitle">
+          These are not scripts. These are people who had questions, fears, and deadlines. We walked it together.
+        </p>
+      </div>
+
+      <div class="reviews-layout">
+        <div class="review-list">
+          <div class="review-card">
+            <div class="review-name">Pamela, Army veteran</div>
+            <div class="review-tagline">Used VA loan and disability benefits to lower costs</div>
+            <div class="review-text">
+              "Dennis broke down my VA loan, disability rating, and property tax savings in a way nobody else did. I knew my payment, my benefits, and my options, and I never felt rushed."
+            </div>
+            <div class="review-badge">VA homebuyer in Central Florida</div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-name">Alex and Calandra</div>
+            <div class="review-tagline">First time buyers with tight budget</div>
+            <div class="review-text">
+              "We were renting and nervous about money. Dennis showed us what we could afford, how Florida assistance worked, and how to protect our budget. We felt coached, not sold."
+            </div>
+            <div class="review-badge">First time buyers in Florida</div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-name">Juan and Naomi</div>
+            <div class="review-tagline">Refi from high rate into conventional</div>
+            <div class="review-text">
+              "He helped us move from a high rate loan into a conventional with a strong plan to refi again when rates improve. Every number was clear before we signed."
+            </div>
+            <div class="review-badge">Refinance clients in Florida</div>
+          </div>
+        </div>
+
+        <div class="review-video-card">
+          <div class="review-video-thumb">
+            <!-- Replace with thumbnail image and link -->
+            Horizontal client video highlight goes here.
+          </div>
+          <p style="font-size:0.85rem; color:#4b5563;">
+            I record short walk throughs with my clients that show the full process, from preapproval to closing table. Watch a few to see how I communicate and support each family.
+          </p>
+          <a href="YOUR-VIDEO-PLAYLIST-LINK" style="font-size:0.85rem; color:#1d4ed8; font-weight:600;">Watch video testimonials</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLS AND CALCULATORS -->
+    <section class="section" id="tools">
+      <div class="section-header">
+        <div class="section-kicker">Tools</div>
+        <h2 class="section-title">Payment and affordability calculators for Florida buyers.</h2>
+        <p class="section-subtitle">
+          These tools give you ballpark numbers. I still review everything with you before you make decisions.
+        </p>
+      </div>
+
+      <div class="tools">
+        <p>
+          Use these calculators to explore payment and price ranges, then complete the 60 second qualifier so I can give you a custom plan with real numbers for your situation.
+        </p>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <a href="/calculators/monthly-payment">
+            <button class="btn-secondary">Monthly payment calculator</button>
+          </a>
+          <a href="/calculators/affordability">
+            <button class="btn-secondary">How much home can I afford</button>
+          </a>
+          <a href="/calculators/refinance">
+            <button class="btn-secondary">Refinance savings calculator</button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="section-header">
+        <div class="section-kicker">About</div>
+        <h2 class="section-title">Who is Dr. Mortgage USA.</h2>
+        <p class="section-subtitle">
+          I am a mortgage broker in Orlando, a Navy combat veteran, and a teacher at heart. My job is to give you clarity and calm in a chaotic market.
+        </p>
+      </div>
+
+      <div class="about-layout">
+        <div>
+          <p>
+            My name is Dennis Ross. I serve as a mortgage broker with Home First Lending and as a senior enlisted member of the United States Navy Reserve.
+          </p>
+          <p>
+            I have been in the Navy for 15 years, with 5 years of active duty and two combat deployments, and 10 years in the reserves. The same discipline, communication, and care I bring to my sailors is what I bring to your home loan.
+          </p>
+          <p>
+            I specialize in VA loans, FHA financing, and first time buyer programs in Florida. I also work on refinance strategies for families who want to lower payments, tap equity, or reset their plan without losing sleep.
+          </p>
+          <ul>
+            <li>I have helped more than 600 families buy or refinance homes.</li>
+            <li>I partner with over 39 wholesale lenders to match you with the right fit, not just the lender of the month.</li>
+            <li>I explain every option in clear language so you understand your numbers before you make a move.</li>
+            <li>I stay accessible by phone, text, Zoom, and email throughout your process.</li>
+          </ul>
+          <p style="margin-top:0.75rem;">
+            My mission is simple. For every family I serve in Florida and every family relocating to our beautiful state of Florida, I want you to walk away with a home you can afford, a payment you understand, and a plan you feel proud of.
+          </p>
+        </div>
+
+        <div class="about-photo">
+          <!-- Replace src with your on-brand photo -->
+          <img src="YOUR-ON-BRAND-PHOTO.jpg" alt="Dr. Mortgage USA, Dennis Ross, VA and FHA mortgage broker in Orlando Florida" />
+          <div class="about-photo-caption">
+            Dennis Ross, Dr. Mortgage USA. Orlando based mortgage broker serving homebuyers across Florida.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="cta-band">
+      <div>
+        <h2>Ready to see your buying power.</h2>
+        <p>
+          Fill out the 60 second qualifier and I will send you a clear, simple plan for your next move in Florida. No hype. No pressure. Just the truth about your options.
+        </p>
+      </div>
+      <a href="#qualifier">
+        <button class="btn-primary">Start your 60 second qualifier</button>
+      </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-row">
+        <div>
+          NMLS 2018381. Dr. Mortgage USA. Home First Lending.
+          Licensed to serve homebuyers and homeowners across the state of Florida.
+        </div>
+        <div>
+          Contact: <a href="tel:18503468514">(850) 346 8514</a> ·
+          <a href="mailto:YOUR-EMAIL-HERE">YOUR-EMAIL-HERE</a> ·
+          Orlando, Florida.
+        </div>
+      </div>
+      <div style="margin-top:0.35rem;">
+        This site is for educational and informational purposes and does not constitute a commitment to lend. All loans subject to underwriting approval, credit, income, and property qualifications.
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
