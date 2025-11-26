@@ -757,6 +757,38 @@
                 </div>
             </div>
             
+            <!-- Step 3b - Investor Loan Type (Only shown for investors) -->
+            <div data-step="3-investor" class="quiz-step hidden">
+                <h2 id="step3b-greeting" class="text-2xl font-bold mb-2 text-navy">What type of investor financing do you need?</h2>
+                <p class="text-sm text-gray-600 mb-4">Select the option that best fits your investment strategy</p>
+                <div class="grid gap-2">
+                    <button class="investorLoanBtn quizBtn text-left" data-loan-type="dscr">
+                        <span class="font-semibold">💰 DSCR Loan</span>
+                        <span class="text-xs text-green-600 block">Qualify based on rental income, not personal income</span>
+                    </button>
+                    <button class="investorLoanBtn quizBtn text-left" data-loan-type="fix-flip">
+                        <span class="font-semibold">🔨 Fix and Flip Loan</span>
+                        <span class="text-xs text-gray-500 block">Short-term financing for property renovations</span>
+                    </button>
+                    <button class="investorLoanBtn quizBtn text-left" data-loan-type="hard-money">
+                        <span class="font-semibold">🏗️ Hard Money Renovation Loan</span>
+                        <span class="text-xs text-gray-500 block">Fast funding for rehab projects</span>
+                    </button>
+                    <button class="investorLoanBtn quizBtn text-left" data-loan-type="bank-statement">
+                        <span class="font-semibold">📄 Bank Statement Investor Loan</span>
+                        <span class="text-xs text-green-600 block">Use bank deposits instead of tax returns</span>
+                    </button>
+                    <button class="investorLoanBtn quizBtn text-left" data-loan-type="heloc">
+                        <span class="font-semibold">🏠 Investment Property HELOC</span>
+                        <span class="text-xs text-gray-500 block">Access equity in your rental properties</span>
+                    </button>
+                    <button class="investorLoanBtn quizBtn text-left" data-loan-type="portfolio-blanket">
+                        <span class="font-semibold">📊 Portfolio or Blanket Loan</span>
+                        <span class="text-xs text-gray-500 block">Finance multiple properties under one loan</span>
+                    </button>
+                </div>
+            </div>
+            
             <!-- Step 4 - Down Payment Reality Check -->
             <div data-step="4" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-2 text-navy">How much can you put down?</h2>
@@ -1042,6 +1074,67 @@
                 </div>
             </div>
         </div>
+            <!-- Investor Panel -->
+            <div id="investor" class="segment-panel" data-aos="fade-up">
+                <div class="bg-navy rounded-lg shadow-xl p-8 max-w-4xl mx-auto relative border-2 border-gold">
+                    <!-- Dennis Photo Corner -->
+                    <div class="absolute -top-8 -right-8 hidden md:block">
+                        <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                        </a>
+                    </div>
+                    <div class="text-center mb-6">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3">
+                        <h2 class="font-poppins font-bold text-3xl text-white">
+                            Investor Financing Solutions
+                        </h2>
+                        <p id="investor-loan-selected" class="text-gold mt-2 text-lg"></p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-gold">Investor Programs Available:</h3>
+                            <ul class="space-y-3 text-white">
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    DSCR loans - qualify on rental income alone
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Fix and flip with fast closings
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Hard money and renovation financing
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Bank statement loans for self-employed investors
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Portfolio and blanket loans for multiple properties
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gold mr-2">✓</span>
+                                    Investment property HELOCs
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-xl mb-4 text-white">Get Your Investor Quote</h3>
+                            <form id="investor-form" class="space-y-4" action="https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/" method="POST">
+                                <input type="email" name="email" placeholder="Email Address" class="form-input bg-white" required>
+                                <input type="tel" name="phone" placeholder="Phone Number" class="form-input bg-white" required>
+                                <input type="hidden" name="segment" value="investor">
+                                <input type="hidden" name="investorLoanType" id="investorLoanTypeHidden" value="">
+                                <button type="submit" class="btn-gold w-full">
+                                    Get My Investor Financing Options
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </section>
 
     <!-- How It Works Section -->
@@ -2034,7 +2127,25 @@ document.addEventListener("DOMContentLoaded", () => {
   let quizAnswers = {};
   let startTime = null;
   
-  const showStep = i => {
+  const showStep = (i, specialStep = null) => {
+    // Handle special investor step
+    if (specialStep === "3-investor") {
+      steps.forEach(s => s.classList.add("hidden"));
+      const investorStep = document.querySelector("div[data-step='3-investor']");
+      if (investorStep) {
+        investorStep.classList.remove("hidden");
+        // Personalize greeting
+        const greeting = document.getElementById("step3b-greeting");
+        if (greeting && quizAnswers.firstName) {
+          greeting.textContent = `Great ${quizAnswers.firstName}! What type of investor financing do you need?`;
+        }
+      }
+      // Update progress bar (between step 3 and 4)
+      if (progressBar) progressBar.style.width = "55%";
+      if (stepIndicator) stepIndicator.textContent = `Step 4 of 6`;
+      return;
+    }
+    
     steps.forEach((s, idx) => s.classList.toggle("hidden", idx !== i));
     // Update progress bar
     const progress = ((i + 1) / steps.length) * 100;
@@ -2214,6 +2325,34 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       segment = btn.dataset.segment;
       quizAnswers.buyerType = btn.dataset.buyer;
+      
+      // If investor selected, show investor loan type step
+      if (btn.dataset.buyer === "investor") {
+        showStep(null, "3-investor");
+      } else {
+        current = 3;
+        showStep(current);
+      }
+    });
+  });
+
+  // Step 3b: Investor Loan Type Selection
+  document.querySelectorAll(".investorLoanBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      quizAnswers.investorLoanType = btn.dataset.loanType;
+      
+      // Map loan type to display name
+      const loanTypeNames = {
+        "dscr": "DSCR Loan",
+        "fix-flip": "Fix and Flip Loan",
+        "hard-money": "Hard Money Renovation Loan",
+        "bank-statement": "Bank Statement Investor Loan",
+        "heloc": "Investment Property HELOC",
+        "portfolio-blanket": "Portfolio or Blanket Loan"
+      };
+      quizAnswers.investorLoanTypeName = loanTypeNames[btn.dataset.loanType] || btn.dataset.loanType;
+      
+      // Continue to step 4 (down payment)
       current = 3;
       showStep(current);
     });
@@ -2262,6 +2401,8 @@ document.addEventListener("DOMContentLoaded", () => {
         downPayment: quizAnswers.downPayment,
         timeline: quizAnswers.timeline,
         segment: segment,
+        investorLoanType: quizAnswers.investorLoanType || "",
+        investorLoanTypeName: quizAnswers.investorLoanTypeName || "",
         completionSeconds: quizAnswers.completionSeconds || 0,
         timestamp: new Date().toISOString(),
         source: "60-second-quiz"
@@ -2311,6 +2452,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const emailField = segmentForm.querySelector("input[name='email'], input[type='email']");
             if (nameField) nameField.value = firstName;
             if (emailField) emailField.value = quizAnswers.email;
+          }
+          
+          // For investor segment, show selected loan type
+          if (segment === "investor" && quizAnswers.investorLoanTypeName) {
+            const loanSelectedDisplay = document.getElementById("investor-loan-selected");
+            if (loanSelectedDisplay) {
+              loanSelectedDisplay.textContent = `Interested in: ${quizAnswers.investorLoanTypeName}`;
+            }
+            const loanTypeHidden = document.getElementById("investorLoanTypeHidden");
+            if (loanTypeHidden) {
+              loanTypeHidden.value = quizAnswers.investorLoanTypeName;
+            }
           }
         }
         

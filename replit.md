@@ -1,189 +1,33 @@
 # Dr.MortgageUSA - Mortgage Sales Funnel
 
 ## Overview
-
-Dr.MortgageUSA is a responsive single-page sales funnel designed to convert visitors into qualified mortgage leads. The application features a 60-second quiz system that segments users into targeted pathways (first-time buyers, veterans, credit improvement) and captures leads through personalized forms.
-
-## System Architecture
-
-### Frontend Architecture
-- **Static HTML Website**: Single-page application built with vanilla HTML
-- **Styling Framework**: TailwindCSS via CDN for utility-first CSS styling
-- **Typography**: Google Fonts (Poppins and Inter) for professional typography
-- **Animations**: AOS (Animate On Scroll) library for scroll-triggered animations
-- **Design System**: Custom CSS variables for brand colors (Navy: #001f3f, Gold: #ffb700)
-
-### Technology Stack
-- HTML5 for structure
-- TailwindCSS for styling
-- CSS custom properties for theming
-- Google Fonts for typography
-- AOS library for animations
-
-## Key Components
-
-### Design System
-- **Primary Colors**: Navy (#001f3f) and Gold (#ffb700) establishing brand identity
-- **Typography**: Inter as primary font, Poppins as secondary font for headings
-- **Responsive Design**: Mobile-first approach using TailwindCSS utilities
-
-### External Libraries
-- **TailwindCSS**: Utility-first CSS framework loaded via CDN
-- **Google Fonts**: Web fonts for enhanced typography
-- **AOS Library**: Scroll animations for improved user experience
-
-## Data Flow
-
-As a static website, data flow is minimal:
-1. HTML content is served directly to browsers
-2. External fonts and libraries are loaded from CDNs
-3. CSS animations trigger based on user scroll behavior
-
-## External Dependencies
-
-### CDN Dependencies
-- TailwindCSS (cdn.tailwindcss.com)
-- Google Fonts (fonts.googleapis.com, fonts.gstatic.com)
-- AOS Library (unpkg.com)
-
-### Design Assets
-- Custom color scheme using CSS variables
-- Font stack: Inter (primary), Poppins (secondary)
-
-## Deployment Strategy
-
-The project is optimized for reliable deployment across multiple hosting platforms with comprehensive fallback options:
-
-### Server Configurations
-- **Primary**: Static site server (serve-static.py) - ultra-simple static file deployment
-- **Legacy**: Python HTTP server (main.py) with advanced error handling and port detection
-- **Fallback**: Comprehensive startup script (start.py) with multiple deployment options
-- **Alternative**: Node.js static file server via Procfile.nodejs
-
-### Deployment Files
-- **serve-static.py**: Primary static site server for production deployment
-- **main.py**: Advanced deployment server with detailed logging and port detection
-- **start.py**: Comprehensive startup script with fallback options and dependency checking
-- **Procfile.nodejs**: Node.js deployment alternative using npx serve
-- **package.json**: Node.js dependencies for serve package
-
-### Port and Network Configuration
-- **Primary Port**: 5000 (configurable via PORT environment variable)
-- **Port Detection**: Automatic available port scanning (5000-5019 range)
-- **CORS Support**: Enabled for development and testing
-- **Network Binding**: 0.0.0.0 for external accessibility
-- **Health Checks**: Built-in file existence verification
-
-### Deployment Reliability Features
-- **Multi-language Support**: Python 3.11 and Node.js 20 compatibility
-- **Error Handling**: Comprehensive error messages and graceful fallbacks
-- **Static File Validation**: Automatic index.html existence checking
-- **Platform Independence**: Works on Replit, Heroku, Vercel, and traditional hosting
-
-## Key Features
-
-### Sales Funnel Components
-- **Hero Section**: "Unlock Your Path to Homeownership" with 60-second path finder CTA
-- **Interactive Quiz**: 3-question segmentation system (vanilla JavaScript)
-- **Dynamic Segment Panels**: Targeted content for first-time buyers, veterans, and credit improvement
-- **Lead Capture Forms**: Zapier webhook integration for each segment
-- **Social Proof**: Embedded Instagram testimonial videos
-- **Compliance**: NMLS #2018381, Florida-only licensing, DOD disclaimer
-
-### Technical Implementation
-- **Quiz Logic**: Segments users based on home-buying experience, military status, and credit situation
-- **Form Handling**: POST requests to Zapier webhooks with segment tracking
-- **Responsive Design**: Mobile-first approach with large logo placement
-- **Analytics Ready**: GA4, Meta Pixel, and TikTok Pixel placeholder integration
-
-## SEO Optimization
-
-### Meta Tags and Open Graph
-- Optimized title tag with primary keywords and NMLS number
-- Comprehensive meta description with call-to-action
-- Open Graph tags for social media sharing
-- Twitter Card meta tags for enhanced Twitter visibility
-- Geo-targeting meta tags for Florida location
-
-### Schema Markup (Structured Data)
-- **FinancialService Schema**: Defines business as mortgage broker with services
-- **LocalBusiness Schema**: Establishes Florida location and business hours
-- **FAQPage Schema**: Structures frequently asked questions for featured snippets
-- **BreadcrumbList Schema**: Improves navigation display in search results
-- **AggregateRating**: Shows 4.9/5 rating from 127 reviews
-
-### Technical SEO
-- **robots.txt**: Guides search engine crawling with sitemap reference
-- **sitemap.xml**: Lists all page sections for better indexing
-- **Canonical URL**: Prevents duplicate content issues
-- **Image Alt Text**: Keyword-optimized descriptions for all images
-
-### SEO Keywords Targeted
-- Primary: Florida mortgage broker, Dennis Ross mortgage, Dr.MortgageUSA
-- Secondary: FHA loans Florida, VA loans Florida, first-time homebuyer Florida
-- Long-tail: Florida mortgage rates, NMLS 2018381, mortgage calculator
-
-## Changelog
-
-- November 25, 2025: Added CTA badge below hero stats section with "Get personalized rates and expert guidance!" message and dual action buttons (Call 850-346-8514 navy button and Apply Online Now gold button)
-- November 25, 2025: Made all Dennis Ross face photos clickable throughout site - clicking any Dennis photo triggers phone call (tel:8503468514). Applies to nav bar, hero floating photo, segment panels, about section, and footer.
-- November 25, 2025: Implemented video testimonial carousel - shows one video at a time with next/prev navigation buttons, dot indicators, and video titles (Jose & Jamie, Alex & Vivian, Larry's stories). Replaced horizontal scrolling layout for better mobile experience and vertical space savings.
-- November 25, 2025: Fixed multiple UI issues - videos now display horizontally in scrollable row, fixed quiz button functionality with global openQuiz function, "Get Pre-Approved Now" links to application URL, renamed "Path Finder" to "Home Qualifier" across all buttons
-- November 25, 2025: Implemented hybrid redesign combining proven 5-step quiz funnel with cleaner modern layouts:
-  - Hero section: Two-column layout with gold stats (600+ families, 15 years Navy, 79 lenders), intro video, and rates card
-  - Added "How It Works" section: 3-step card-based design explaining the process
-  - Added "Loan Programs" section: Card-based display of FHA, VA, Conventional, USDA loan options
-  - Enhanced "Client Stories" section: Star ratings, avatar initials, and improved video grid
-  - Added "Stay Connected" section: Side-by-side Rates and Instagram feed cards
-  - Added gradient CTA band before footer with call button
-  - All rates synchronized from centralized MORTGAGE_RATES config across 3 displays
-- November 24, 2025: Expanded rate display to show all loan types (Conventional 30/15-Year, FHA, VA, USDA, Jumbo) instead of just conventional rates
-- November 24, 2025: Added comprehensive rate disclaimer for legal compliance explaining factors that affect actual rates (credit score, DTI, LTV, loan program, market pricing)
-- November 24, 2025: Integrated current mortgage rates from MortgageNewsDaily with centralized manual update system (lines 1611-1618 in index.html)
-- November 24, 2025: Rewrote all website copy to sound more natural and conversational, removing AI-generated hyphens and formal language
-- November 24, 2025: Updated social media preview image to use Dennis Ross headshot instead of logo when links are shared via text/social media
-- November 24, 2025: Optimized 60-second quiz into 5-step conversion funnel with progress indicator, capturing price range, name/email, buyer type, down payment capability, and timeline with urgency elements
-- November 24, 2025: Quiz now posts enriched payload to Zapier webhook with all qualifying data and tracks completion time for analytics
-- November 24, 2025: Replaced Home1st iframe calculator with native multi-tab calculator featuring Purchase, Affordability, and Refinance calculators with prominent phone number (850-346-8514) display
-- November 24, 2025: Added "Powered by Home1st Lending, LLC NMLS #1418" to footer section for proper licensing disclosure
-- November 24, 2025: Updated all Dennis Ross thumbnails site-wide with new patriotic headshot featuring American flag background
-- November 24, 2025: Added intro video to hero section - replaced static Dr.MortgageUSA logo with autoplay intro video for immediate engagement
-- November 24, 2025: Replaced review videos with three new client testimonials - Jose & Jamie, Alex & Vivian, and Larry's video testimonials now featured in the Client Stories section
-- November 24, 2025: Comprehensive SEO optimization - added meta tags, Open Graph, Twitter Cards, multiple schema markups (FinancialService, LocalBusiness, FAQPage, BreadcrumbList), optimized image alt text, created robots.txt and sitemap.xml for improved search visibility
-- June 27, 2025: Complete funnel rebuild with new copy, segmentation logic, and compliance requirements
-- June 27, 2025: Integrated client logo throughout website with enlarged sizing
-- June 27, 2025: Added Instagram video embeds and Zapier webhook forms
-- June 27, 2025: Changed all white backgrounds to grey throughout website for better visual consistency
-- June 27, 2025: Replaced quiz modal with new path-finder quiz featuring 3-step progression and updated segmentation logic
-- June 27, 2025: Enhanced path-finder quiz to collect client first name, personalize experience, and capture comprehensive lead data
-- June 27, 2025: Creatively incorporated Dennis Ross photo throughout website (nav bar, hero section, segment panels, about section, footer) for personal branding
-- June 27, 2025: Updated branding from "DrMortgageUSA" to "Dr.MortgageUSA" throughout website for proper punctuation
-- June 27, 2025: Fixed deployment issues with multiple server configurations (main.py, run.py, server.py) and proper port handling for Replit deployment
-- June 27, 2025: Implemented comprehensive deployment fixes including multi-tier fallback system (Python → Node.js → NPX serve), automatic port detection, CORS support, and robust error handling for reliable production deployment
-- June 27, 2025: Applied critical deployment fixes: enhanced app.py with proper startup messaging, created dual-server deployment (Python on port 5000 + Node.js on port 5001), added comprehensive deployment documentation, and verified both servers serving static files correctly
-- June 27, 2025: Cleaned up deployment files to simplify project structure - removed redundant files (app.py, run.py, server.py, start-server.js, Procfile, run.sh, start.sh) and focused on main.py as single source of truth
-- June 27, 2025: Deployed as static site with serve-static.py - simplified deployment architecture eliminates server complexity and improves reliability for static HTML/CSS/JavaScript content
-- June 27, 2025: Enhanced quiz UX in Step 2 - added Continue button for segment selection, updated JavaScript to highlight choices without auto-advancing, improved user control over quiz progression
-- June 28, 2025: Replaced entire reviews section with clean video testimonials grid - removed text testimonials and Instagram embeds, created reviews/ folder structure, implemented simple HTML video player grid for authentic client video testimonials
-- June 28, 2025: Enhanced site design - made all logos responsive with width classes (w-40 md:w-48 lg:w-56 xl:w-64), added translucent American flag overlay to hero section (25% opacity), combined written testimonials with video grid for comprehensive social proof
-- June 28, 2025: Added hero lifestyle image below CTA button - displays on medium screens and up for visual engagement
-- July 25, 2025: Updated application links from drmortgageusa.my1003app.com to home1st.my1003app.com/2018381/register for new application system
-- July 25, 2025: Updated lender count from 39 to 79 lenders in the About section to reflect expanded network capabilities
-- August 6, 2025: Fixed form submission issue - changed from JavaScript fetch to iframe submission to avoid CORS errors, forms now stay on same page and show success message
-- August 6, 2025: Added functional mortgage calculator with payment breakdown showing principal, interest, tax, insurance, HOA, loan amount and down payment percentage
-- August 6, 2025: Moved mortgage calculator to new position between Client Stories and Ready to Apply sections per user request
-- August 6, 2025: Enhanced mortgage calculator with Chart.js donut chart visualization showing payment breakdown with color-coded categories
-- August 6, 2025: Doubled donut chart size from max-w-md to max-w-2xl with aspect ratio 1.5 for improved visibility and readability
-- August 6, 2025: Fixed application button under mission statement to link to correct URL (https://home1st.my1003app.com/2018381/register) instead of local anchor
-
-## Contact Information
-
-- **Name**: Dennis Ross
-- **Phone**: 850-346-8514
-- **Brand**: Dr.MortgageUSA
-- **NMLS**: #2018381
-- **License**: Florida Only
+Dr.MortgageUSA is a responsive single-page sales funnel designed to convert visitors into qualified mortgage leads. It features a 60-second quiz system that segments users into targeted pathways (first-time buyers, veterans, credit improvement, real estate investors) and captures leads through personalized forms. The project aims to provide an efficient and engaging platform for mortgage lead generation, leveraging interactive elements and robust SEO.
 
 ## User Preferences
-
 Preferred communication style: Simple, everyday language.
+
+## System Architecture
+### Frontend
+- **Framework**: Vanilla HTML for a static single-page application.
+- **Styling**: TailwindCSS via CDN for utility-first approach; custom CSS variables for branding (Navy: #001f3f, Gold: #ffb700).
+- **Typography**: Google Fonts (Poppins for headings, Inter for body text).
+- **Animations**: AOS (Animate On Scroll) library.
+- **Responsiveness**: Mobile-first design using TailwindCSS.
+
+### Core Features
+- **Interactive Quiz**: 3-question JavaScript-driven segmentation, including a specialized path for real estate investors with various financing options.
+- **Dynamic Segment Panels**: Targeted content and lead capture forms for different user segments.
+- **Lead Capture**: Zapier webhook integration for form submissions, including detailed user data and segment tracking.
+- **Social Proof**: Embedded video testimonials and client stories.
+- **Mortgage Calculator**: Native multi-tab calculator (Purchase, Affordability, Refinance) with Chart.js donut chart visualization.
+- **SEO Optimization**: Extensive meta tags, Open Graph, Twitter Cards, and multiple schema markups (FinancialService, LocalBusiness, FAQPage, BreadcrumbList) for improved search visibility. Includes `robots.txt` and `sitemap.xml`.
+- **Compliance**: NMLS #2018381, Florida-only licensing, DOD disclaimer.
+- **Deployment**: Optimized for static site deployment with Python-based servers (e.g., `serve-static.py`, `main.py`) and Node.js alternatives, featuring automatic port detection, CORS support, and robust error handling.
+
+## External Dependencies
+- **TailwindCSS CDN**: `cdn.tailwindcss.com`
+- **Google Fonts**: `fonts.googleapis.com`, `fonts.gstatic.com`
+- **AOS Library**: `unpkg.com`
+- **Zapier**: For webhook integration and lead processing.
+- **Chart.js**: For mortgage calculator visualizations.
+- **Google Analytics 4 (GA4)**, **Meta Pixel**, **TikTok Pixel**: Placeholders for analytics integration.
