@@ -9,7 +9,7 @@ modules = ["python-3.11"]
 port = 8080                   # Replit sets $PORT=8080 in production
 deploymentTarget = "scheduled"
 publicDir = "/"
-run = ["python", "update_rates.py"]
+run = ["python3", "update_rates.py"]
 
 [[ports]]
 localPort = 5000
