@@ -401,6 +401,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                         </tr>
                     </thead>
                     <tbody>
+                        {% if leads %}
                         {% for lead in leads %}
                         <tr class="border-b hover:bg-gray-50">
                             <td class="px-4 py-3 text-sm">{{ lead.created_at.strftime('%m/%d/%Y %I:%M %p') if lead.created_at else 'N/A' }}</td>
@@ -431,13 +432,14 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                                 {% endif %}
                             </td>
                         </tr>
-                        {% empty %}
+                        {% endfor %}
+                        {% else %}
                         <tr>
                             <td colspan="8" class="px-4 py-8 text-center text-gray-500">
                                 No leads found. Quiz submissions will appear here.
                             </td>
                         </tr>
-                        {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
