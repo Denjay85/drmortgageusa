@@ -3,7 +3,7 @@ run = "python main.py"
 
 language   = "python3"
 entrypoint = "main.py"
-modules = ["python-3.11"]
+modules = ["python-3.11", "postgresql-16"]
 
 [deployment]
 port = 8080                   # Replit sets $PORT=8080 in production
