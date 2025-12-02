@@ -1,0 +1,37 @@
+About Me section
+(Replace everything from “I’m Dennis Ross, but you can call me Dr. Mortgage USA.” down through your mission sentence.)
+
+I'm Dennis Ross, but you can call me Dr. Mortgage USA. I am a Navy veteran with fifteen years of service, five years on active duty with two combat deployments, and ten years in the reserves. I bring that background into every part of my work as a Florida mortgage broker based in Orlando.
+
+Meet Dennis Ross  
+Florida mortgage broker, Navy veteran, and guide for buyers who want clear answers without the runaround.
+
+I started in the mortgage business in 2020 after serving five years on active duty and ten years in the Navy Reserve. The military taught me discipline, accuracy, and how to keep people calm when the pressure is real. I bring that same mindset into every loan I handle.
+
+My focus is simple. I help first time buyers, single buyers, and veterans understand their numbers, compare smart options, and get approved with confidence. You will always know what your payment looks like, what your best loan options are, and what steps come next.
+
+I work as a wholesale mortgage broker, which means you get more loan options than any local bank or credit union in Florida. I shop the market for you and build a plan that fits your situation.
+
+Whether you are buying your first home in Florida or moving here from out of state, my job is to make the process clear, predictable, and low stress.
+
+What sets me apart:
+
+Veterans come first.  
+I lived this life. I know how VA loans actually work. I fight to get funding fees waived where possible, help you secure property tax relief, and close clean VA loans.
+
+More loan options than any local bank.  
+As an independent broker, I am not locked into one menu. I compare real time options across many lenders so we can match your credit, income, and goals to the right program.
+
+You will understand every number.  
+I walk you through your figures on Zoom so you see everything in real time. I follow up with plain language summaries. You get clear answers, not jargon.
+
+My mission:  
+Serve every family in Florida and every family relocating to our beautiful state of Florida with honest guidance, clear communication, and financing that fits their goals.
+
+
+How to do it:
+
+• In Replit, scroll to the “About Dr. MortgageUSA” section.
+• Leave the heading and image as they are.
+• Replace the current paragraphs and subheadings with the text above.
+• Again, do not touch the surrounding HTML tags, only the words inside them.
