@@ -19,7 +19,13 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
-ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'drmortgage2024')
+
+def get_admin_password():
+    """Get admin password from environment - required for security"""
+    password = os.environ.get('ADMIN_PASSWORD')
+    if not password:
+        raise RuntimeError("ADMIN_PASSWORD environment variable must be set")
+    return password
 
 def get_db_connection():
     """Get database connection using environment variables"""
@@ -109,9 +115,13 @@ def admin_login():
 def admin_login_post():
     """Handle admin login"""
     password = request.form.get('password', '')
-    admin_pw = os.environ.get('ADMIN_PASSWORD', 'drmortgage2024')
     
-    if password == admin_pw:
+    try:
+        admin_pw = get_admin_password()
+    except RuntimeError:
+        return render_template_string(ADMIN_LOGIN_TEMPLATE, error="Admin not configured")
+    
+    if secrets.compare_digest(password, admin_pw):
         session['admin_logged_in'] = True
         return redirect(url_for('admin_dashboard'))
     
