@@ -1,0 +1,146 @@
+PATH TO HOMEOWNERSHIP HEADER
+
+Replace this line:
+
+Your Path to Homeownership ⏱️ 60 seconds
+
+With this:
+
+Your Path to Homeownership in 60 seconds
+
+FIRST TIME HOMEBUYER PROGRAMS
+
+Replace the whole body under this heading with:
+
+Make your first home feel possible, not overwhelming.
+
+What you can get:
+Down payment assistance where available
+FHA loans with as little as 3.5 percent down
+Access to first time buyer grants and incentives
+Clear guidance so you know what to expect before you make an offer
+
+Button text stays the same.
+
+VA LOAN BENEFITS FOR VETERANS
+
+Replace the body with:
+
+Use the benefits you earned. No confusion. No complications.
+
+Your VA benefits can include:
+Zero down payment on many purchases
+No private mortgage insurance
+Competitive fixed interest rates
+Flexible credit and guideline allowances
+
+Button text stays the same.
+
+CREDIT IMPROVEMENT SOLUTIONS
+
+Replace the content with:
+
+Not ready yet is still a plan if you follow the right steps.
+
+Here is how I help:
+Review your credit picture
+Give direct steps to raise your scores
+Connect you with trusted credit partners
+Show you loan options that fit as scores improve
+
+Replace the button text with:
+
+Get My Credit Game Plan
+
+SMART STRATEGIES FOR REPEAT BUYERS
+
+Replace the text with:
+
+Use the equity and experience you already have to get a better move.
+
+Smart options for repeat buyers:
+Compare fixed and adjustable loans for long term savings
+Use seller paid buydowns to lower your payment early
+Plan for a refinance when rates shift
+Decide when to tap equity and when to hold it
+
+Replace the button text with:
+
+See My Savings Options
+
+INVESTOR FINANCING SOLUTIONS
+
+Add this one intro line under the heading:
+
+Real options for investors at every level, from first rental to full portfolio.
+
+Keep the six products.
+
+Replace the CTA sentence with:
+
+Tell me what you want to build and I will map out the best financing options for it.
+
+Replace the CTA button text with:
+
+Get My Investor Plan
+
+HOW IT WORKS SECTION
+
+Replace the intro line with:
+
+Three clear steps to your home loan.
+
+Replace each step with these:
+
+Step 1 title:
+Take the 60 second quiz
+
+Step 1 body:
+Answer a few quick questions about your goals. No credit check.
+
+Step 2 title:
+Get your custom plan
+
+Step 2 body:
+I match you with smart loan options and show you a clear payment.
+
+Step 3 title:
+Close on your home
+
+Step 3 body:
+Shop with a strong pre approval. Most clients close in about 21 to 30 days.
+
+Button stays the same.
+
+LOAN OPTIONS INTRO LINE
+
+Replace your current intro line with:
+
+You get matched with the best loan options across many lenders. I compare everything for you so you understand your numbers before you make a move.
+
+READY TO APPLY SECTION
+
+Replace the text with:
+
+If you are close to making an offer, here is what helps us move fast.
+
+You should have:
+Basic employment and income details
+Recent pay stubs or tax returns
+A snapshot of your savings or retirement accounts
+Permission to pull your credit when you feel ready
+
+Button text stays the same.
+
+QUIZ TIMING OPTION CLEANUP
+
+Replace:
+
+ASAP - Found a home! ⚡ Priority processing available
+
+With:
+
+ASAP, I found a home
+We can prioritize your file
+
+Leave all other timing options as is.
