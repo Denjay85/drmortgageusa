@@ -7,9 +7,9 @@ modules = ["python-3.11", "postgresql-16"]
 
 [deployment]
 port = 8080                   # Replit sets $PORT=8080 in production
-deploymentTarget = "scheduled"
+deploymentTarget = "autoscale"
 publicDir = "/"
-run = ["python3", "update_rates.py"]
+run = ["gunicorn", "--bind=0.0.0.0:5000", "--reuse-port", "app:app"]
 
 [[ports]]
 localPort = 5000
