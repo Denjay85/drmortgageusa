@@ -167,48 +167,88 @@ def admin_logout():
 @login_required
 def admin_dashboard():
     """Admin dashboard showing all leads"""
-    conn = get_db_connection()
-    cur = conn.cursor()
-    
-    segment_filter = request.args.get('segment', '')
-    search = request.args.get('search', '')
-    
-    query = "SELECT * FROM leads WHERE 1=1"
-    params = []
-    
-    if segment_filter:
-        query += " AND segment = %s"
-        params.append(segment_filter)
-    
-    if search:
-        query += " AND (first_name ILIKE %s OR email ILIKE %s OR phone ILIKE %s)"
-        search_param = f"%{search}%"
-        params.extend([search_param, search_param, search_param])
-    
-    query += " ORDER BY created_at DESC"
-    
-    cur.execute(query, params)
-    columns = [desc[0] for desc in cur.description] if cur.description else []
-    leads = [dict(zip(columns, row)) for row in cur.fetchall()]
-    
-    cur.execute("SELECT COUNT(*) FROM leads")
-    count_result = cur.fetchone()
-    total_leads = count_result[0] if count_result else 0
-    
-    cur.execute("SELECT segment, COUNT(*) FROM leads GROUP BY segment")
-    segment_counts = dict(cur.fetchall())
-    
-    cur.close()
-    conn.close()
-    
-    return render_template_string(
-        ADMIN_DASHBOARD_TEMPLATE, 
-        leads=leads, 
-        total_leads=total_leads,
-        segment_counts=segment_counts,
-        current_segment=segment_filter,
-        search_query=search
-    )
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS leads (
+                id SERIAL PRIMARY KEY,
+                first_name VARCHAR(100),
+                email VARCHAR(255),
+                phone VARCHAR(50),
+                segment VARCHAR(50),
+                price_range VARCHAR(100),
+                down_payment VARCHAR(100),
+                timeline VARCHAR(100),
+                credit_score VARCHAR(50),
+                military_status VARCHAR(50),
+                property_type VARCHAR(100),
+                investor_loan_type VARCHAR(100),
+                zapier_forwarded BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        conn.commit()
+        
+        segment_filter = request.args.get('segment', '')
+        search = request.args.get('search', '')
+        
+        query = "SELECT * FROM leads WHERE 1=1"
+        params = []
+        
+        if segment_filter:
+            query += " AND segment = %s"
+            params.append(segment_filter)
+        
+        if search:
+            query += " AND (first_name ILIKE %s OR email ILIKE %s OR phone ILIKE %s)"
+            search_param = f"%{search}%"
+            params.extend([search_param, search_param, search_param])
+        
+        query += " ORDER BY created_at DESC"
+        
+        cur.execute(query, params)
+        columns = [desc[0] for desc in cur.description] if cur.description else []
+        leads = [dict(zip(columns, row)) for row in cur.fetchall()]
+        
+        cur.execute("SELECT COUNT(*) FROM leads")
+        count_result = cur.fetchone()
+        total_leads = count_result[0] if count_result else 0
+        
+        cur.execute("SELECT segment, COUNT(*) FROM leads GROUP BY segment")
+        segment_counts = dict(cur.fetchall())
+        
+        cur.close()
+        conn.close()
+        
+        return render_template_string(
+            ADMIN_DASHBOARD_TEMPLATE, 
+            leads=leads, 
+            total_leads=total_leads,
+            segment_counts=segment_counts,
+            current_segment=segment_filter,
+            search_query=search
+        )
+    except Exception as e:
+        error_msg = f"Database error: {str(e)}"
+        print(error_msg)
+        return render_template_string('''
+            <!DOCTYPE html>
+            <html>
+            <head><title>Dashboard Error</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+            </head>
+            <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+                <div class="bg-white rounded-xl shadow-lg p-8 max-w-lg">
+                    <h1 class="text-2xl font-bold text-red-600 mb-4">Database Connection Error</h1>
+                    <p class="text-gray-700 mb-4">{{ error }}</p>
+                    <p class="text-gray-600 text-sm mb-4">This usually means the production database needs to be set up. Please contact support if this persists.</p>
+                    <a href="/admin/logout" class="bg-blue-600 text-white px-4 py-2 rounded">Logout</a>
+                </div>
+            </body>
+            </html>
+        ''', error=error_msg)
 
 ADMIN_LOGIN_TEMPLATE = '''
 <!DOCTYPE html>
