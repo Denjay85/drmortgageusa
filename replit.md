@@ -15,14 +15,27 @@ Preferred communication style: Simple, everyday language.
 - **Responsiveness**: Mobile-first design using TailwindCSS.
 
 ### Core Features
-- **Interactive Quiz**: 3-question JavaScript-driven segmentation, including a specialized path for real estate investors with various financing options.
+- **Interactive Quiz**: 5-step JavaScript-driven segmentation with early email capture, including specialized paths for first-time buyers, veterans, credit improvement, and real estate investors.
 - **Dynamic Segment Panels**: Targeted content and lead capture forms for different user segments.
-- **Lead Capture**: Zapier webhook integration for form submissions, including detailed user data and segment tracking.
+- **Lead Capture**: Dual storage - PostgreSQL database for internal management AND Zapier webhook forwarding for automation.
+- **Admin Dashboard**: Password-protected dashboard at `/admin` to view and manage quiz lead submissions with search and filter functionality.
 - **Social Proof**: Embedded video testimonials and client stories.
 - **Mortgage Calculator**: Native multi-tab calculator (Purchase, Affordability, Refinance) with Chart.js donut chart visualization.
 - **SEO Optimization**: Extensive meta tags, Open Graph, Twitter Cards, and multiple schema markups (FinancialService, LocalBusiness, FAQPage, BreadcrumbList) for improved search visibility. Includes `robots.txt` and `sitemap.xml`.
 - **Compliance**: NMLS #2018381, Florida-only licensing, DOD disclaimer.
-- **Deployment**: Optimized for static site deployment with Python-based servers (e.g., `serve-static.py`, `main.py`) and Node.js alternatives, featuring automatic port detection, CORS support, and robust error handling.
+- **Deployment**: Flask-based server (app.py) with PostgreSQL database integration, session-based authentication, and robust error handling.
+
+### Backend (Flask)
+- **app.py**: Main Flask application handling static file serving, quiz submission API, and admin dashboard.
+- **Routes**:
+  - `/`: Main website
+  - `/api/quiz-submit`: POST endpoint for quiz submissions (stores in DB + forwards to Zapier)
+  - `/admin`: Password-protected admin login
+  - `/admin/dashboard`: Lead management dashboard with search and segment filtering
+- **Security**: 
+  - ADMIN_PASSWORD environment variable required (no fallbacks)
+  - Constant-time password comparison to prevent timing attacks
+  - Secure session management
 
 ## External Dependencies
 - **TailwindCSS CDN**: `cdn.tailwindcss.com`
