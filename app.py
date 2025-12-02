@@ -31,6 +31,36 @@ def get_db_connection():
     """Get database connection using environment variables"""
     return psycopg2.connect(os.environ['DATABASE_URL'])
 
+def init_database():
+    """Create leads table if it doesn't exist"""
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS leads (
+                id SERIAL PRIMARY KEY,
+                first_name VARCHAR(100),
+                email VARCHAR(255),
+                phone VARCHAR(50),
+                segment VARCHAR(50),
+                price_range VARCHAR(100),
+                down_payment VARCHAR(100),
+                timeline VARCHAR(100),
+                credit_score VARCHAR(50),
+                military_status VARCHAR(50),
+                property_type VARCHAR(100),
+                investor_loan_type VARCHAR(100),
+                zapier_forwarded BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+        print("Database initialized successfully")
+    except Exception as e:
+        print(f"Database initialization error: {e}")
+
 def login_required(f):
     """Decorator to require admin login"""
     @wraps(f)
@@ -376,6 +406,8 @@ ADMIN_DASHBOARD_TEMPLATE = '''
 </body>
 </html>
 '''
+
+init_database()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
