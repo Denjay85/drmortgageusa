@@ -16,12 +16,12 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 5001
-externalPort = 3000
-
-[[ports]]
 localPort = 5002
 externalPort = 3001
+
+[[ports]]
+localPort = 35047
+externalPort = 3000
 
 [[ports]]
 localPort = 40557
@@ -49,16 +49,19 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "TestServer"
+args = "WebServer"
 
 [[workflows.workflow]]
-name = "TestServer"
+name = "WebServer"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "prybar-python3 serve-static.py"
+args = "python app.py"
 waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [agent]
 expertMode = true

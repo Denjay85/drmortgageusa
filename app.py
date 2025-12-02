@@ -75,7 +75,8 @@ def quiz_submit():
         """, (first_name, email, phone, segment, price_range, down_payment, 
               timeline, credit_score, military_status, property_type, investor_loan_type))
         
-        lead_id = cur.fetchone()[0]
+        result = cur.fetchone()
+        lead_id = result[0] if result else None
         
         zapier_forwarded = False
         try:
@@ -147,11 +148,12 @@ def admin_dashboard():
     query += " ORDER BY created_at DESC"
     
     cur.execute(query, params)
-    columns = [desc[0] for desc in cur.description]
+    columns = [desc[0] for desc in cur.description] if cur.description else []
     leads = [dict(zip(columns, row)) for row in cur.fetchall()]
     
     cur.execute("SELECT COUNT(*) FROM leads")
-    total_leads = cur.fetchone()[0]
+    count_result = cur.fetchone()
+    total_leads = count_result[0] if count_result else 0
     
     cur.execute("SELECT segment, COUNT(*) FROM leads GROUP BY segment")
     segment_counts = dict(cur.fetchall())
