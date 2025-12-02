@@ -163,6 +163,21 @@ def admin_logout():
     session.pop('admin_logged_in', None)
     return redirect(url_for('admin_login'))
 
+@app.route('/admin/delete/<int:lead_id>', methods=['POST'])
+@login_required
+def delete_lead(lead_id):
+    """Delete a lead from the database (not from Zapier)"""
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM leads WHERE id = %s", (lead_id,))
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"Error deleting lead: {e}")
+    return redirect(url_for('admin_dashboard'))
+
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
@@ -398,6 +413,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                             <th class="px-4 py-3 text-left">Timeline</th>
                             <th class="px-4 py-3 text-left">Price Range</th>
                             <th class="px-4 py-3 text-center">Zapier</th>
+                            <th class="px-4 py-3 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -431,11 +447,19 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                                 <span class="text-red-600">&#10007;</span>
                                 {% endif %}
                             </td>
+                            <td class="px-4 py-3 text-center">
+                                <form method="POST" action="/admin/delete/{{ lead.id }}" 
+                                      onsubmit="return confirm('Delete this lead? This only removes it from the dashboard, not from Zapier.');">
+                                    <button type="submit" class="text-red-600 hover:text-red-800 hover:bg-red-100 px-2 py-1 rounded text-sm">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         {% endfor %}
                         {% else %}
                         <tr>
-                            <td colspan="8" class="px-4 py-8 text-center text-gray-500">
+                            <td colspan="9" class="px-4 py-8 text-center text-gray-500">
                                 No leads found. Quiz submissions will appear here.
                             </td>
                         </tr>
