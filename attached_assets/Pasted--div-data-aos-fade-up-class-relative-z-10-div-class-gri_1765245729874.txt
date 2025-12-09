@@ -1,0 +1,58 @@
+<div data-aos="fade-up" class="relative z-10">
+    
+    <div class="grid md:grid-cols-3 gap-6">
+        
+        <div class="glass-panel p-6 rounded-2xl border border-white/10 hover:border-gold/50 transition-colors">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg">J</div>
+                    <div>
+                        <p class="font-bold text-white text-sm">Jose & Jamie</p>
+                        <p class="text-xs text-gray-400">2 weeks ago</p>
+                    </div>
+                </div>
+                <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+            </div>
+            <div class="flex text-gold mb-3 text-sm">★★★★★</div>
+            <p class="text-gray-300 text-sm leading-relaxed">"Dennis made our VA loan process incredibly smooth. We thought buying a home in this market would be impossible, but he broke down the numbers and showed us exactly how to make it work. True professional."</p>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-white/10 hover:border-gold/50 transition-colors">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-lg">A</div>
+                    <div>
+                        <p class="font-bold text-white text-sm">Alex & Vivian</p>
+                        <p class="text-xs text-gray-400">1 month ago</p>
+                    </div>
+                </div>
+                <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+            </div>
+            <div class="flex text-gold mb-3 text-sm">★★★★★</div>
+            <p class="text-gray-300 text-sm leading-relaxed">"As a first time buyer, I was terrified of the interest rates. Dennis didn't just give me a loan, he gave me a strategy. He explained the buy-down option which saved us hundreds a month."</p>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-white/10 hover:border-gold/50 transition-colors">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold text-lg">L</div>
+                    <div>
+                        <p class="font-bold text-white text-sm">Larry M.</p>
+                        <p class="text-xs text-gray-400">2 months ago</p>
+                    </div>
+                </div>
+                <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+            </div>
+            <div class="flex text-gold mb-3 text-sm">★★★★★</div>
+            <p class="text-gray-300 text-sm leading-relaxed">"I've worked with many lenders for my investment properties, but Dennis is on another level. He understands the BRRRR method and structured my loan perfectly for cash flow. Highly recommend."</p>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-10">
+        <a href="https://www.google.com/search?q=Dennis+Ross+Mortgage+Reviews" target="_blank" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors border-b border-gray-600 hover:border-white pb-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+            <span>Read all 127+ Reviews on Google</span>
+        </a>
+    </div>
+</div>
