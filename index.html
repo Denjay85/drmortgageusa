@@ -43,7 +43,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- AOS Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -223,7 +223,9 @@
     <style>
         :root {
             --navy: #001f3f;
+            --navy-dark: #00152b;
             --gold: #ffb700;
+            --gold-light: #ffc733;
             --white: #ffffff;
         }
         
@@ -233,6 +235,10 @@
         
         .font-poppins {
             font-family: 'Poppins', sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
         }
         
         .bg-navy {
@@ -251,8 +257,31 @@
             color: var(--gold);
         }
         
+        /* Gradient Text Effect */
+        .text-gradient {
+            background: linear-gradient(to right, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Glass Card Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(255, 183, 0, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Enhanced Gold Button */
         .btn-gold {
-            background-color: var(--gold);
+            background: linear-gradient(135deg, var(--gold) 0%, #e6a500 100%);
             color: var(--navy);
             padding: 16px 32px;
             border-radius: 8px;
@@ -263,12 +292,28 @@
             font-size: 18px;
             cursor: pointer;
             border: none;
+            box-shadow: 0 0 20px rgba(255, 183, 0, 0.2);
         }
         
         .btn-gold:hover {
-            background-color: #e6a500;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 183, 0, 0.3);
+            box-shadow: 0 0 35px rgba(255, 183, 0, 0.4);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--navy-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a5f;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
         }
         
         .modal {
@@ -430,6 +475,54 @@
                 font-size: 1.25rem;
             }
         }
+        
+        /* Enhanced Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Glow Effect for Important Elements */
+        .glow-gold {
+            box-shadow: 0 0 20px rgba(255, 183, 0, 0.2);
+        }
+        
+        .glow-gold:hover {
+            box-shadow: 0 0 35px rgba(255, 183, 0, 0.4);
+        }
+        
+        /* Smooth fade animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Rate card enhancements */
+        .rate-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 31, 63, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .rate-card:hover {
+            border-color: rgba(255, 183, 0, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0, 31, 63, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Enhanced selection */
+        ::selection {
+            background: var(--gold);
+            color: var(--navy);
+        }
     </style>
     
     <!-- TailwindCSS Config -->
@@ -438,12 +531,21 @@
             theme: {
                 extend: {
                     colors: {
-                        navy: '#001f3f',
-                        gold: '#ffb700'
+                        navy: {
+                            DEFAULT: '#001f3f',
+                            dark: '#00152b',
+                            light: '#003366'
+                        },
+                        gold: {
+                            DEFAULT: '#ffb700',
+                            light: '#ffc733',
+                            dark: '#e6a500'
+                        }
                     },
                     fontFamily: {
                         'poppins': ['Poppins', 'sans-serif'],
-                        'inter': ['Inter', 'sans-serif']
+                        'inter': ['Inter', 'sans-serif'],
+                        'display': ['Space Grotesk', 'sans-serif']
                     }
                 }
             }
@@ -505,7 +607,7 @@
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-navy text-white py-3 md:py-4 fixed w-full top-0 z-50">
+    <nav class="bg-navy/90 backdrop-blur-md text-white py-3 md:py-4 fixed w-full top-0 z-50 border-b border-white/5">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <img src="logo.png" alt="Dr.MortgageUSA Florida Mortgage Broker Logo" class="h-12 md:h-16 lg:h-20 w-auto object-contain">
@@ -521,7 +623,7 @@
                 <a href="#calculator" class="text-white hover:text-gold transition-colors font-medium">Calculators</a>
                 <a href="#rates" class="text-white hover:text-gold transition-colors font-medium">Today's Rates</a>
                 <a href="#about" class="text-white hover:text-gold transition-colors font-medium">About</a>
-                <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="btn-gold">Apply Now</a>
+                <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="btn-gold glow-gold">Apply Now</a>
             </div>
             
             <div class="flex items-center space-x-3">
@@ -1858,7 +1960,7 @@
             
             <div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
                 <!-- Today's Rates Card -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="100">
                     <div class="bg-gradient-to-r from-navy to-blue-900 p-6">
                         <h3 class="font-poppins font-bold text-2xl text-white mb-2">Today's Mortgage Rates</h3>
                         <p class="text-gray-300 text-sm">Updated daily from MortgageNewsDaily</p>
@@ -1878,7 +1980,7 @@
                 </div>
                 
                 <!-- Instagram Follow Card -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="200">
                     <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-6">
                         <h3 class="font-poppins font-bold text-2xl text-white mb-2">Follow @dr.mortgageusa</h3>
                         <p class="text-gray-100 text-sm">Tips, market updates & success stories</p>
