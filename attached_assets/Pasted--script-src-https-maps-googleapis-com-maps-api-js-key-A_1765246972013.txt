@@ -1,0 +1,65 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGS_FJMCNUodWv7zlg6YAbOsCo1q1dtYM&libraries=places"></script>
+
+<script>
+function initReviews() {
+    // Your Specific Place ID
+    const myPlaceId = 'ChIJC64FQcdz54gRP0pbWW3OJDU'; 
+
+    const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+    service.getDetails({
+        placeId: myPlaceId,
+        fields: ['reviews'] 
+    }, (place, status) => {
+        const container = document.getElementById('google-reviews-container');
+        
+        if (status === google.maps.places.PlacesServiceStatus.OK && place.reviews) {
+            container.innerHTML = ''; // Clear loading spinner
+
+            // Filter for high ratings and take top 3
+            const topReviews = place.reviews
+                .filter(r => r.rating >= 4)
+                .slice(0, 3);
+
+            topReviews.forEach((review, index) => {
+                // Create Card Element
+                const card = document.createElement('div');
+                // Apply Premium Glass Styles
+                card.className = "glass-panel p-8 rounded-3xl relative group hover:bg-white/5 transition-colors border border-white/5";
+                card.setAttribute('data-aos', 'fade-up');
+                card.setAttribute('data-aos-delay', index * 100);
+
+                // Generate Stars
+                const stars = "★".repeat(review.rating);
+                
+                // Truncate text if needed
+                const text = review.text.length > 180 ? review.text.substring(0, 180) + "..." : review.text;
+
+                card.innerHTML = `
+                    <div class="absolute top-8 right-8 opacity-30 group-hover:opacity-100 transition-opacity">
+                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+                    </div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="${review.profile_photo_url}" class="w-12 h-12 rounded-full border border-white/10" alt="${review.author_name}" referrerpolicy="no-referrer">
+                        <div>
+                            <h4 class="font-bold text-white text-lg font-display">${review.author_name}</h4>
+                            <div class="flex text-gold text-sm tracking-widest">${stars}</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed italic text-sm">"${text}"</p>
+                    <div class="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">${review.relative_time_description}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        } else {
+            console.error("Google Maps Error:", status);
+            container.innerHTML = `<p class="text-center text-red-400 col-span-3">Unable to load reviews. Please check API Key configuration.</p>`;
+        }
+    });
+}
+
+// Run immediately
+window.addEventListener('load', initReviews);
+</script>
