@@ -523,6 +523,85 @@
             background: var(--gold);
             color: var(--navy);
         }
+        
+        /* Premium Section Dividers */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 183, 0, 0.3), transparent);
+        }
+        
+        /* Premium Input Styling */
+        .premium-input {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 31, 63, 0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        
+        .premium-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(255, 183, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Premium Card White */
+        .premium-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 31, 63, 0.08);
+            border: 1px solid rgba(0, 31, 63, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .premium-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 31, 63, 0.12);
+            transform: translateY(-2px);
+        }
+        
+        /* Subtle Gold Accent Line */
+        .gold-accent {
+            position: relative;
+        }
+        
+        .gold-accent::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--gold), var(--gold-light));
+            border-radius: 2px;
+        }
+        
+        /* Premium Badge Styling */
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, rgba(255, 183, 0, 0.1) 0%, rgba(255, 183, 0, 0.05) 100%);
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Smooth hover transitions for all interactive elements */
+        a, button {
+            transition: all 0.3s ease;
+        }
+        
+        /* Premium shadow for images */
+        .img-shadow {
+            box-shadow: 0 20px 60px -15px rgba(0, 31, 63, 0.25);
+        }
     </style>
     
     <!-- TailwindCSS Config -->
@@ -637,7 +716,7 @@
                     </svg>
                 </button>
                 <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                    <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg">
+                    <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/30 transition-shadow">
                 </a>
             </div>
         </div>
@@ -754,7 +833,7 @@
         <div class="absolute bottom-10 right-10 hidden xl:block" data-aos="zoom-in" data-aos-delay="800">
             <div class="relative">
                 <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                    <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl">
+                    <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl hover:shadow-gold/40 transition-all">
                 </a>
                 <div class="absolute -bottom-2 -right-2 bg-gold text-navy rounded-full p-2">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
