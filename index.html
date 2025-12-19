@@ -1858,7 +1858,7 @@
         input.value = '0';
         input.disabled = true;
         input.placeholder = 'N/A - VA has no PMI';
-        if (resultLabel) resultLabel.textContent = 'VA Funding Fee:';
+        if (resultLabel) resultLabel.textContent = 'PMI/MIP:';
       } else if (loanType === 'fha') {
         label.textContent = 'MIP (Monthly)';
         note.textContent = 'FHA: 0.55% annual MIP for life of loan';
@@ -1913,8 +1913,8 @@
       if (loanType === 'va') {
         // VA loans have NO monthly mortgage insurance
         monthlyMI = 0;
-        miLabel = 'MI (None)';
-        document.getElementById('purchase-mi-result-label').textContent = 'MI (None):';
+        miLabel = 'PMI/MIP';
+        document.getElementById('purchase-mi-result-label').textContent = 'PMI/MIP:';
       } else if (loanType === 'fha') {
         // FHA MIP: 0.55% annual rate for most loans (>15 yr, LTV >95%)
         if (monthlyMI === 0) {
