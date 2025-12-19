@@ -1565,6 +1565,14 @@
                   </div>
                 </div>
                 <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Type</label>
+                  <select id="purchase-loan-type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" onchange="updateMortgageInsuranceLabel()">
+                    <option value="conventional">Conventional</option>
+                    <option value="fha">FHA</option>
+                    <option value="va">VA</option>
+                  </select>
+                </div>
+                <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Loan Term</label>
                   <select id="purchase-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
                     <option value="30">30 years</option>
@@ -1588,9 +1596,10 @@
                   <label class="block text-sm font-medium text-gray-700 mb-1">HOA Fees (Monthly)</label>
                   <input type="number" id="purchase-hoa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
                 </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">PMI (Monthly)</label>
-                  <input type="number" id="purchase-pmi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0" placeholder="Auto-calculated if <20% down">
+                <div id="purchase-mi-container">
+                  <label id="purchase-mi-label" class="block text-sm font-medium text-gray-700 mb-1">PMI (Monthly)</label>
+                  <input type="number" id="purchase-pmi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0" placeholder="Auto-calculated based on loan type">
+                  <p id="purchase-mi-note" class="text-xs text-gray-500 mt-1">Conventional: PMI if &lt;20% down</p>
                 </div>
               </div>
               
@@ -1635,7 +1644,7 @@
                     </div>
                     <div class="bg-gray-50 p-3 rounded-lg">
                       <div class="flex justify-between">
-                        <span class="text-gray-600">PMI:</span>
+                        <span id="purchase-mi-result-label" class="text-gray-600">PMI:</span>
                         <span id="purchase-pmi-mo" class="font-semibold">$0</span>
                       </div>
                     </div>
@@ -1834,15 +1843,56 @@
     }
     
     // Purchase Calculator
+    function updateMortgageInsuranceLabel() {
+      const loanType = document.getElementById('purchase-loan-type').value;
+      const label = document.getElementById('purchase-mi-label');
+      const note = document.getElementById('purchase-mi-note');
+      const container = document.getElementById('purchase-mi-container');
+      const input = document.getElementById('purchase-pmi');
+      const resultLabel = document.getElementById('purchase-mi-result-label');
+      
+      if (loanType === 'va') {
+        label.textContent = 'Mortgage Insurance';
+        note.textContent = 'VA loans have NO monthly mortgage insurance!';
+        note.className = 'text-xs text-green-600 mt-1 font-medium';
+        input.value = '0';
+        input.disabled = true;
+        input.placeholder = 'N/A - VA has no PMI';
+        if (resultLabel) resultLabel.textContent = 'VA Funding Fee:';
+      } else if (loanType === 'fha') {
+        label.textContent = 'MIP (Monthly)';
+        note.textContent = 'FHA: 0.55% annual MIP for life of loan';
+        note.className = 'text-xs text-blue-600 mt-1';
+        input.value = '0';
+        input.disabled = false;
+        input.placeholder = 'Auto-calculated (0.55% annual)';
+        if (resultLabel) resultLabel.textContent = 'MIP:';
+      } else {
+        label.textContent = 'PMI (Monthly)';
+        note.textContent = 'Conventional: PMI if <20% down, removable at 20% equity';
+        note.className = 'text-xs text-gray-500 mt-1';
+        input.value = '0';
+        input.disabled = false;
+        input.placeholder = 'Auto-calculated if <20% down';
+        if (resultLabel) resultLabel.textContent = 'PMI:';
+      }
+    }
+
     function calculatePurchase() {
       const price = parseFloat(document.getElementById('purchase-price').value) || 0;
       const downType = document.getElementById('purchase-down-type').value;
       let downValue = parseFloat(document.getElementById('purchase-down').value) || 0;
+      const loanType = document.getElementById('purchase-loan-type').value;
       
       // Calculate down payment
       const downPayment = downType === 'percent' ? (price * downValue / 100) : downValue;
-      const loanAmount = price - downPayment;
+      let loanAmount = price - downPayment;
       const downPercent = (downPayment / price) * 100;
+      
+      // FHA loans add upfront MIP (1.75%) to loan amount
+      if (loanType === 'fha') {
+        loanAmount = loanAmount * 1.0175; // Add 1.75% upfront MIP
+      }
       
       const term = parseFloat(document.getElementById('purchase-term').value);
       const rate = parseFloat(document.getElementById('purchase-rate').value) / 100 / 12;
@@ -1856,13 +1906,34 @@
       const monthlyIns = parseFloat(document.getElementById('purchase-insurance').value) / 12 || 0;
       const monthlyHOA = parseFloat(document.getElementById('purchase-hoa').value) || 0;
       
-      // Calculate PMI if down payment is less than 20%
-      let monthlyPMI = parseFloat(document.getElementById('purchase-pmi').value) || 0;
-      if (downPercent < 20 && monthlyPMI === 0) {
-        monthlyPMI = loanAmount * 0.005 / 12; // 0.5% annually
+      // Calculate mortgage insurance based on loan type
+      let monthlyMI = parseFloat(document.getElementById('purchase-pmi').value) || 0;
+      let miLabel = 'PMI';
+      
+      if (loanType === 'va') {
+        // VA loans have NO monthly mortgage insurance
+        monthlyMI = 0;
+        miLabel = 'MI (None)';
+        document.getElementById('purchase-mi-result-label').textContent = 'MI (None):';
+      } else if (loanType === 'fha') {
+        // FHA MIP: 0.55% annual rate for most loans (>15 yr, LTV >95%)
+        if (monthlyMI === 0) {
+          monthlyMI = loanAmount * 0.0055 / 12; // 0.55% annual MIP
+        }
+        miLabel = 'MIP';
+        document.getElementById('purchase-mi-result-label').textContent = 'MIP:';
+      } else {
+        // Conventional PMI: only if down payment < 20%
+        if (downPercent < 20 && monthlyMI === 0) {
+          monthlyMI = loanAmount * 0.005 / 12; // ~0.5% annually
+        } else if (downPercent >= 20) {
+          monthlyMI = 0; // No PMI needed with 20%+ down
+        }
+        miLabel = 'PMI';
+        document.getElementById('purchase-mi-result-label').textContent = 'PMI:';
       }
       
-      const totalPayment = monthlyPI + monthlyTax + monthlyIns + monthlyHOA + monthlyPMI;
+      const totalPayment = monthlyPI + monthlyTax + monthlyIns + monthlyHOA + monthlyMI;
       
       // Update display
       document.getElementById('purchase-total').textContent = '$' + totalPayment.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -1870,16 +1941,16 @@
       document.getElementById('purchase-tax-mo').textContent = '$' + monthlyTax.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       document.getElementById('purchase-ins-mo').textContent = '$' + monthlyIns.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       document.getElementById('purchase-hoa-mo').textContent = '$' + monthlyHOA.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      document.getElementById('purchase-pmi-mo').textContent = '$' + monthlyPMI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      document.getElementById('purchase-pmi-mo').textContent = '$' + monthlyMI.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       
-      // Update chart
-      updatePurchaseChart([monthlyPI, monthlyTax, monthlyIns, monthlyHOA, monthlyPMI]);
+      // Update chart with appropriate label
+      updatePurchaseChart([monthlyPI, monthlyTax, monthlyIns, monthlyHOA, monthlyMI], miLabel);
       
       // Show results
       document.getElementById('purchase-results').classList.remove('hidden');
     }
     
-    function updatePurchaseChart(data) {
+    function updatePurchaseChart(data, miLabel = 'PMI') {
       const ctx = document.getElementById('purchase-chart').getContext('2d');
       
       if (purchaseChart) {
@@ -1889,7 +1960,7 @@
       purchaseChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Principal & Interest', 'Property Tax', 'Home Insurance', 'HOA', 'PMI'],
+          labels: ['Principal & Interest', 'Property Tax', 'Home Insurance', 'HOA', miLabel],
           datasets: [{
             data: data,
             backgroundColor: ['#001f3f', '#ffb700', '#4ade80', '#8b5cf6', '#ef4444'],
