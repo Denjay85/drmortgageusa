@@ -9,6 +9,11 @@
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/favicon.png">
     
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="logo.png" as="image">
+    <link rel="preload" href="dennis-ross.png" as="image">
+    <link rel="dns-prefetch" href="https://maps.googleapis.com">
+    
     <!-- SEO Meta Tags -->
     <meta name="description" content="Get approved for your Florida home loan in 60 seconds. Dennis Ross, Navy veteran & mortgage expert, offers FHA, VA, conventional loans with 79+ lenders. NMLS #2018381. Apply now!">
     <meta name="keywords" content="Florida mortgage broker, Florida home loans, FHA loans Florida, VA loans Florida, first-time homebuyer Florida, Dennis Ross mortgage, Dr.MortgageUSA, NMLS 2018381, Florida mortgage rates, mortgage calculator">
@@ -184,6 +189,30 @@
                     "@type": "Answer",
                     "text": "You'll typically need: 2 years of tax returns, recent pay stubs or proof of income, bank statements, driver's license or ID, and Social Security card. Veterans will also need their DD-214 or Certificate of Eligibility for VA loans."
                 }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I get a VA loan in Florida with no down payment?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! VA loans offer 100% financing with zero down payment for eligible veterans, active-duty service members, and qualifying surviving spouses. VA loans also have no monthly mortgage insurance, making them one of the best loan options available. Dennis Ross at Dr.MortgageUSA is a Navy veteran who specializes in VA loans in Florida."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What are current mortgage rates in Florida?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Florida mortgage rates change daily based on market conditions. Dr.MortgageUSA displays live rates updated daily from MortgageNewsDaily.com for Conventional, FHA, VA, Jumbo, and USDA loans. With access to 79+ lenders, Dennis Ross can help you find the most competitive rate for your specific situation."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does Dr.MortgageUSA help with credit improvement for mortgages?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! Dr.MortgageUSA offers a free credit analysis and personalized improvement plan. Many clients see a 40-80 point credit score increase within 90 days. Even if your credit isn't perfect today, Dennis Ross can help you create a roadmap to mortgage approval."
+                }
             }
         ]
     }
@@ -271,6 +300,10 @@
             --gold: #ffb700;
             --gold-light: #ffc733;
             --white: #ffffff;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
@@ -879,7 +912,7 @@
             
             <!-- Hero lifestyle photo - centered below on larger screens -->
             <div class="mt-12 hidden lg:block" data-aos="fade-up" data-aos-delay="200">
-                <img src="assets/family-photo.png"
+                <img src="assets/family-photo.png" loading="lazy"
                      alt="Happy family in front of new home"
                      class="mx-auto rounded-2xl shadow-xl w-full max-w-4xl">
             </div>
@@ -889,7 +922,7 @@
         <div class="absolute bottom-10 right-10 hidden xl:block" data-aos="zoom-in" data-aos-delay="800">
             <div class="relative">
                 <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                    <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl hover:shadow-gold/40 transition-all">
+                    <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl hover:shadow-gold/40 transition-all" loading="lazy">
                 </a>
                 <div class="absolute -bottom-2 -right-2 bg-gold text-navy rounded-full p-2">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -1079,11 +1112,11 @@
                     <!-- Dennis Photo Corner -->
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             First-Time Homebuyer Programs
                         </h2>
@@ -1132,11 +1165,11 @@
                     <!-- Dennis Photo Corner -->
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             VA Loan Benefits for Veterans
                         </h2>
@@ -1185,11 +1218,11 @@
                     <!-- Dennis Photo Corner -->
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             Credit Improvement Solutions
                         </h2>
@@ -1237,11 +1270,11 @@
                 <!-- Dennis Photo Corner -->
                 <div class="absolute -top-8 -right-8 hidden md:block">
                     <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                        <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                        <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
                     </a>
                 </div>
                 <div class="text-center mb-6">
-                    <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3">
+                    <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
                     <h2 class="font-poppins font-bold text-3xl text-white">
                         Smart Strategies for Repeat Buyers
                     </h2>
@@ -1289,11 +1322,11 @@
                     <!-- Dennis Photo Corner -->
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             Investor Financing Solutions
                         </h2>
@@ -2111,7 +2144,7 @@
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-12" data-aos="fade-up">
-                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4">
+                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4" loading="lazy">
                     <h2 class="font-poppins font-bold text-4xl text-navy">
                         About Dr. MortgageUSA
                     </h2>
@@ -2119,7 +2152,7 @@
                 <div class="max-w-4xl mx-auto">
                     <div class="flex flex-col md:flex-row items-center gap-8 mb-8" data-aos="fade-up">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-48 w-48 rounded-full border-4 border-navy shadow-xl object-cover">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-48 w-48 rounded-full border-4 border-navy shadow-xl object-cover" loading="lazy">
                         </a>
                         <div class="text-center md:text-left">
                             <p class="text-lg text-gray-700 leading-relaxed mb-4">
@@ -2271,13 +2304,13 @@
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <div class="mb-8">
-                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4">
+                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4" loading="lazy">
                     <div class="font-poppins font-bold text-2xl text-gold mb-4">
                         Dr.MortgageUSA
                     </div>
                     <div class="flex justify-center items-center gap-4 mb-4">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-16 w-16 rounded-full border-2 border-gold">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-16 w-16 rounded-full border-2 border-gold" loading="lazy">
                         </a>
                         <div class="text-left">
                             <p class="text-gold font-semibold">Dennis Ross</p>
@@ -2349,15 +2382,15 @@
 // ============================================
 
 const MORTGAGE_RATES = {
-  "Conventional 30-Year": "6.20%",
-  "Conventional 15-Year": "5.76%",
-  "FHA 30-Year": "5.84%",
-  "VA 30-Year": "5.86%",
-  "USDA 30-Year": "5.73%", // Estimate based on typical USDA rates
-  "Jumbo 30-Year": "6.35%"
+  "Conventional 30-Year": "6.16%",
+  "Conventional 15-Year": "5.73%",
+  "FHA 30-Year": "5.76%",
+  "VA 30-Year": "5.78%",
+  "USDA 30-Year": "5.69%", // Estimate based on typical USDA rates
+  "Jumbo 30-Year": "6.33%"
 };
 
-const RATE_UPDATE_DATE = "February 03, 2026"; // Update this date
+const RATE_UPDATE_DATE = "February 09, 2026"; // Update this date
 
 // Rate disclaimer for legal compliance
 const RATE_DISCLAIMER = "Rates shown are general market ranges. Your actual rate depends on your credit score, debt to income ratio, loan to value ratio, loan program, and current market pricing. You may not qualify for the ranges shown. All rates are subject to change without notice until locked with a lender.";
@@ -2908,6 +2941,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     window.addEventListener('load', initReviews);
+    </script>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" onclick="window.scrollTo({top:0})" class="fixed bottom-6 right-6 z-50 bg-gold text-navy w-12 h-12 rounded-full shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-gold-light hover:scale-110" aria-label="Back to top">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+    </button>
+    <script>
+    (function(){
+        const btn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', function(){
+            if(window.scrollY > 600){
+                btn.style.opacity='1'; btn.style.pointerEvents='auto';
+            } else {
+                btn.style.opacity='0'; btn.style.pointerEvents='none';
+            }
+        });
+    })();
     </script>
 </body>
 </html>
