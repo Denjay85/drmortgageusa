@@ -1568,15 +1568,30 @@
           <!-- Calculator Tabs -->
           <div class="bg-white rounded-lg shadow-xl p-6">
             <!-- Tab Navigation -->
-            <div class="flex flex-wrap justify-center gap-2 mb-6 border-b border-gray-200">
-              <button onclick="switchTab('purchase')" id="tab-purchase" class="tab-btn active px-6 py-3 font-semibold text-navy border-b-4 border-gold transition-colors">
-                Purchase Calculator
+            <div class="flex overflow-x-auto whitespace-nowrap gap-2 mb-6 border-b border-gray-200 pb-1">
+              <button onclick="switchTab('purchase')" id="tab-purchase" class="tab-btn flex-shrink-0 active px-6 py-3 font-semibold text-navy border-b-4 border-gold transition-colors">
+                Purchase
               </button>
-              <button onclick="switchTab('affordability')" id="tab-affordability" class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
-                Affordability Calculator
+              <button onclick="switchTab('affordability')" id="tab-affordability" class="tab-btn flex-shrink-0 px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                Affordability
               </button>
-              <button onclick="switchTab('refinance')" id="tab-refinance" class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
-                Refinance Calculator
+              <button onclick="switchTab('refinance')" id="tab-refinance" class="tab-btn flex-shrink-0 px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                Refinance
+              </button>
+              <button onclick="switchTab('rentbuy')" id="tab-rentbuy" class="tab-btn flex-shrink-0 px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                Rent vs Buy
+              </button>
+              <button onclick="switchTab('vapurchase')" id="tab-vapurchase" class="tab-btn flex-shrink-0 px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                VA Purchase
+              </button>
+              <button onclick="switchTab('varefinance')" id="tab-varefinance" class="tab-btn flex-shrink-0 px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                VA Refinance
+              </button>
+              <button onclick="switchTab('dscr')" id="tab-dscr" class="tab-btn flex-shrink-0 px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                DSCR
+              </button>
+              <button onclick="switchTab('fixflip')" id="tab-fixflip" class="tab-btn flex-shrink-0 px-6 py-3 font-semibold text-gray-600 hover:text-navy transition-colors">
+                Fix & Flip
               </button>
             </div>
             
@@ -1834,6 +1849,452 @@
                 </div>
               </div>
             </div>
+
+            <!-- Rent vs Buy Calculator Tab -->
+            <div id="calc-rentbuy" class="calc-tab hidden">
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Home Price</label>
+                  <input type="number" id="rvb-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="400000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Down Payment</label>
+                  <input type="number" id="rvb-down" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="80000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="rvb-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="7.0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Term</label>
+                  <select id="rvb-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="30">30 years</option>
+                    <option value="15">15 years</option>
+                    <option value="20">20 years</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Property Tax (Annual)</label>
+                  <input type="number" id="rvb-tax" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="4800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Home Insurance (Annual)</label>
+                  <input type="number" id="rvb-insurance" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="1800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">HOA (Monthly)</label>
+                  <input type="number" id="rvb-hoa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Rent</label>
+                  <input type="number" id="rvb-rent" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="2000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Annual Rent Increase (%)</label>
+                  <input type="number" step="0.1" id="rvb-rent-increase" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="3.0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Annual Home Appreciation (%)</label>
+                  <input type="number" step="0.1" id="rvb-appreciation" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="3.5">
+                </div>
+              </div>
+              <button onclick="calculateRentVsBuy()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Compare Rent vs Buy
+              </button>
+              <div id="rvb-results" class="mt-6 hidden">
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                  <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600 mb-2">Monthly Buying Cost</p>
+                    <p id="rvb-buy-cost" class="text-3xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-orange-50 border border-orange-200 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600 mb-2">Monthly Rent Cost</p>
+                    <p id="rvb-rent-cost" class="text-3xl font-bold text-orange-600">$0</p>
+                  </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4 mb-4">
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600">Net Cost After 5 Years</p>
+                    <p id="rvb-5yr" class="text-lg font-bold text-navy">$0</p>
+                    <p id="rvb-5yr-winner" class="text-xs mt-1 font-semibold"></p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600">Net Cost After 10 Years</p>
+                    <p id="rvb-10yr" class="text-lg font-bold text-navy">$0</p>
+                    <p id="rvb-10yr-winner" class="text-xs mt-1 font-semibold"></p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600">Net Cost After 15 Years</p>
+                    <p id="rvb-15yr" class="text-lg font-bold text-navy">$0</p>
+                    <p id="rvb-15yr-winner" class="text-xs mt-1 font-semibold"></p>
+                  </div>
+                </div>
+                <div id="rvb-verdict" class="bg-gradient-to-r from-navy to-blue-900 text-white p-6 rounded-lg text-center">
+                  <p class="text-lg mb-1">Verdict</p>
+                  <p id="rvb-verdict-text" class="text-2xl font-bold text-gold"></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- VA Purchase Calculator Tab -->
+            <div id="calc-vapurchase" class="calc-tab hidden">
+              <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-navy font-semibold">VA Loan — No Monthly Mortgage Insurance Required</p>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Home Value</label>
+                  <input type="number" id="va-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="400000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Down Payment</label>
+                  <input type="number" id="va-down" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="va-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="6.5">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Term</label>
+                  <select id="va-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="30">30 years</option>
+                    <option value="15">15 years</option>
+                    <option value="20">20 years</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">VA Funding Fee Status</label>
+                  <select id="va-fee-status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="first">First-time VA Loan</option>
+                    <option value="subsequent">Used VA Loan Before</option>
+                    <option value="exempt">Exempt (Disability)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Property Tax (Annual)</label>
+                  <input type="number" id="va-tax" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="4800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Home Insurance (Annual)</label>
+                  <input type="number" id="va-insurance" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="1800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">HOA (Monthly)</label>
+                  <input type="number" id="va-hoa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
+                </div>
+              </div>
+              <button onclick="calculateVAPurchase()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Calculate VA Payment
+              </button>
+              <div id="va-results" class="mt-6 hidden">
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <canvas id="va-chart" class="max-w-full" style="max-height: 300px;"></canvas>
+                  </div>
+                  <div class="space-y-3">
+                    <div class="bg-navy text-white p-4 rounded-lg">
+                      <p class="text-sm">Total Monthly Payment</p>
+                      <p id="va-total" class="text-3xl font-bold text-gold">$0</p>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Principal & Interest:</span>
+                        <span id="va-pi" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Property Tax:</span>
+                        <span id="va-tax-mo" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Home Insurance:</span>
+                        <span id="va-ins-mo" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">HOA Fees:</span>
+                        <span id="va-hoa-mo" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">VA Funding Fee:</span>
+                        <span id="va-funding-fee" class="font-semibold">$0</span>
+                      </div>
+                      <p class="text-xs text-gray-500 mt-1">Financed into loan amount</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VA Refinance Calculator Tab -->
+            <div id="calc-varefinance" class="calc-tab hidden">
+              <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-navy font-semibold">Current Loan Information</p>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Current Loan Balance</label>
+                  <input type="number" id="varefi-balance" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="350000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Current Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="varefi-current-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="7.5">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Current Term Remaining (Years)</label>
+                  <input type="number" id="varefi-years-left" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="27">
+                </div>
+              </div>
+              <div class="bg-green-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-navy font-semibold">New VA Loan Information</p>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">New Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="varefi-new-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="6.0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">New Loan Term</label>
+                  <select id="varefi-new-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="30">30 years</option>
+                    <option value="15">15 years</option>
+                    <option value="20">20 years</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Refinance Purpose</label>
+                  <select id="varefi-purpose" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" onchange="document.getElementById('varefi-cashout-container').style.display = this.value === 'cashout' ? 'block' : 'none'">
+                    <option value="irrrl">IRRRL (Rate Reduction)</option>
+                    <option value="cashout">Cash-Out Refinance</option>
+                  </select>
+                </div>
+                <div id="varefi-cashout-container" style="display:none;">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Cash Out Amount</label>
+                  <input type="number" id="varefi-cashout" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">VA Funding Fee Status</label>
+                  <select id="varefi-fee-status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="first">First-time VA Loan</option>
+                    <option value="subsequent">Used VA Loan Before</option>
+                    <option value="exempt">Exempt (Disability)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Closing Costs</label>
+                  <input type="number" id="varefi-closing" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="4000">
+                </div>
+              </div>
+              <button onclick="calculateVARefinance()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Calculate VA Refinance
+              </button>
+              <div id="varefi-results" class="mt-6 hidden">
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                  <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600 mb-2">Current Monthly Payment</p>
+                    <p id="varefi-old-payment" class="text-3xl font-bold text-red-600">$0</p>
+                  </div>
+                  <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600 mb-2">New Monthly Payment</p>
+                    <p id="varefi-new-payment" class="text-3xl font-bold text-green-600">$0</p>
+                  </div>
+                </div>
+                <div class="bg-gradient-to-r from-green-600 to-green-700 text-white p-6 rounded-lg text-center">
+                  <p class="text-lg mb-2">Monthly Savings</p>
+                  <p id="varefi-monthly-savings" class="text-4xl font-bold">$0</p>
+                  <p class="text-sm mt-2">Break-even in <span id="varefi-breakeven" class="font-bold">0</span> months</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4 mt-4">
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Total Interest Savings</p>
+                    <p id="varefi-interest-savings" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">New Loan Amount</p>
+                    <p id="varefi-new-loan" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">VA Funding Fee</p>
+                    <p id="varefi-funding-fee" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DSCR Calculator Tab -->
+            <div id="calc-dscr" class="calc-tab hidden">
+              <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-navy font-semibold">Investment Property — Debt-Service Coverage Ratio Loan</p>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Property Purchase Price</label>
+                  <input type="number" id="dscr-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="350000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Down Payment (%)</label>
+                  <input type="number" step="1" id="dscr-down" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="25">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="dscr-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="7.5">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Term</label>
+                  <select id="dscr-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold">
+                    <option value="30">30 years</option>
+                    <option value="15">15 years</option>
+                    <option value="20">20 years</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Rental Income</label>
+                  <input type="number" id="dscr-rental" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="2800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Property Tax (Annual)</label>
+                  <input type="number" id="dscr-tax" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="4200">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Insurance (Annual)</label>
+                  <input type="number" id="dscr-insurance" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="1800">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">HOA (Monthly)</label>
+                  <input type="number" id="dscr-hoa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Property Management Fee (%)</label>
+                  <input type="number" step="1" id="dscr-mgmt" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="10">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Vacancy Rate (%)</label>
+                  <input type="number" step="1" id="dscr-vacancy" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="5">
+                </div>
+              </div>
+              <button onclick="calculateDSCR()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Calculate DSCR
+              </button>
+              <div id="dscr-results" class="mt-6 hidden">
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <canvas id="dscr-chart" class="max-w-full" style="max-height: 300px;"></canvas>
+                  </div>
+                  <div class="space-y-3">
+                    <div id="dscr-ratio-card" class="p-4 rounded-lg text-center">
+                      <p class="text-sm mb-1">DSCR Ratio</p>
+                      <p id="dscr-ratio" class="text-4xl font-bold">0.00</p>
+                      <p id="dscr-ratio-label" class="text-sm mt-1 font-semibold"></p>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Monthly Payment (P&I):</span>
+                        <span id="dscr-pi" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Monthly Cash Flow:</span>
+                        <span id="dscr-cashflow" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Cap Rate:</span>
+                        <span id="dscr-caprate" class="font-semibold">0%</span>
+                      </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Total Monthly Cost:</span>
+                        <span id="dscr-total-cost" class="font-semibold">$0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fix & Flip Calculator Tab -->
+            <div id="calc-fixflip" class="calc-tab hidden">
+              <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-navy font-semibold">Short-Term Rehab Loan — Fix & Flip Analysis</p>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Purchase Price</label>
+                  <input type="number" id="flip-purchase" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="250000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Renovation Budget</label>
+                  <input type="number" id="flip-reno" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="50000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">After Repair Value (ARV)</label>
+                  <input type="number" id="flip-arv" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="400000">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Amount (% of Purchase)</label>
+                  <input type="number" step="1" id="flip-ltv" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="90">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                  <input type="number" step="0.1" id="flip-rate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="10.0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loan Term (Months)</label>
+                  <input type="number" id="flip-term" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="12">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Holding Costs / Month (Utilities, Insurance, Taxes)</label>
+                  <input type="number" id="flip-holding" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="1500">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Selling Costs (% of ARV)</label>
+                  <input type="number" step="0.1" id="flip-selling" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold" value="9.0">
+                </div>
+              </div>
+              <button onclick="calculateFixFlip()" class="w-full bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                Calculate Fix & Flip
+              </button>
+              <div id="flip-results" class="mt-6 hidden">
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                  <div class="bg-navy text-white p-4 rounded-lg text-center">
+                    <p class="text-sm mb-1">Estimated Profit</p>
+                    <p id="flip-profit" class="text-3xl font-bold text-gold">$0</p>
+                  </div>
+                  <div class="bg-navy text-white p-4 rounded-lg text-center">
+                    <p class="text-sm mb-1">Return on Investment</p>
+                    <p id="flip-roi" class="text-3xl font-bold text-gold">0%</p>
+                  </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Total Project Cost</p>
+                    <p id="flip-total-cost" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Total Loan Cost (Interest)</p>
+                    <p id="flip-loan-cost" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Total Holding Costs</p>
+                    <p id="flip-holding-total" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                  <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Total Selling Costs</p>
+                    <p id="flip-selling-total" class="text-2xl font-bold text-navy">$0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
           
           <!-- Call to Action below calculator -->
@@ -1858,6 +2319,8 @@
     <!-- Calculator JavaScript -->
     <script>
     let purchaseChart = null;
+    let vaChart = null;
+    let dscrChart = null;
     
     // Tab switching
     function switchTab(tab) {
@@ -2098,6 +2561,305 @@
       document.getElementById('refi-results').classList.remove('hidden');
     }
     
+    // Rent vs Buy Calculator
+    function calculateRentVsBuy() {
+      const price = parseFloat(document.getElementById('rvb-price').value) || 0;
+      const down = parseFloat(document.getElementById('rvb-down').value) || 0;
+      const rate = parseFloat(document.getElementById('rvb-rate').value) / 100 / 12;
+      const term = parseFloat(document.getElementById('rvb-term').value);
+      const taxAnnual = parseFloat(document.getElementById('rvb-tax').value) || 0;
+      const insAnnual = parseFloat(document.getElementById('rvb-insurance').value) || 0;
+      const hoa = parseFloat(document.getElementById('rvb-hoa').value) || 0;
+      const monthlyRent = parseFloat(document.getElementById('rvb-rent').value) || 0;
+      const rentIncrease = parseFloat(document.getElementById('rvb-rent-increase').value) / 100;
+      const appreciation = parseFloat(document.getElementById('rvb-appreciation').value) / 100;
+
+      const loanAmount = price - down;
+      const n = term * 12;
+      const pi = rate === 0 ? loanAmount / n : loanAmount * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+      const monthlyBuyCost = pi + taxAnnual / 12 + insAnnual / 12 + hoa;
+
+      const fmt = v => '$' + Math.abs(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      document.getElementById('rvb-buy-cost').textContent = fmt(monthlyBuyCost);
+      document.getElementById('rvb-rent-cost').textContent = fmt(monthlyRent);
+
+      function netCost(years) {
+        let totalBuy = down;
+        let totalRent = 0;
+        let currentRent = monthlyRent;
+        for (let y = 0; y < years; y++) {
+          totalBuy += monthlyBuyCost * 12;
+          totalRent += currentRent * 12;
+          currentRent *= (1 + rentIncrease);
+        }
+        const homeValue = price * Math.pow(1 + appreciation, years);
+        const remainingMonths = n - years * 12;
+        let balance = loanAmount;
+        for (let m = 0; m < years * 12 && m < n; m++) {
+          const interestPayment = balance * rate;
+          const principalPayment = pi - interestPayment;
+          balance -= principalPayment;
+        }
+        if (balance < 0) balance = 0;
+        const netBuy = totalBuy - (homeValue - balance);
+        const netRent = totalRent;
+        return { netBuy, netRent };
+      }
+
+      [5, 10, 15].forEach(yr => {
+        const result = netCost(yr);
+        const buyBetter = result.netBuy < result.netRent;
+        document.getElementById('rvb-' + yr + 'yr').textContent = fmt(Math.min(result.netBuy, result.netRent));
+        const winnerEl = document.getElementById('rvb-' + yr + 'yr-winner');
+        if (buyBetter) {
+          winnerEl.textContent = 'Buying saves ' + fmt(result.netRent - result.netBuy);
+          winnerEl.className = 'text-xs mt-1 font-semibold text-green-600';
+        } else {
+          winnerEl.textContent = 'Renting saves ' + fmt(result.netBuy - result.netRent);
+          winnerEl.className = 'text-xs mt-1 font-semibold text-orange-600';
+        }
+      });
+
+      const result10 = netCost(10);
+      const verdict = result10.netBuy < result10.netRent ? 'Buying is the better long-term investment!' : 'Renting may be more cost-effective for now.';
+      document.getElementById('rvb-verdict-text').textContent = verdict;
+
+      document.getElementById('rvb-results').classList.remove('hidden');
+    }
+
+    // VA Purchase Calculator
+    function calculateVAPurchase() {
+      const price = parseFloat(document.getElementById('va-price').value) || 0;
+      const down = parseFloat(document.getElementById('va-down').value) || 0;
+      const rate = parseFloat(document.getElementById('va-rate').value) / 100 / 12;
+      const term = parseFloat(document.getElementById('va-term').value);
+      const feeStatus = document.getElementById('va-fee-status').value;
+      const taxAnnual = parseFloat(document.getElementById('va-tax').value) || 0;
+      const insAnnual = parseFloat(document.getElementById('va-insurance').value) || 0;
+      const hoa = parseFloat(document.getElementById('va-hoa').value) || 0;
+
+      const baseLoan = price - down;
+      const downPct = (down / price) * 100;
+
+      let fundingFeePct = 0;
+      if (feeStatus === 'exempt') {
+        fundingFeePct = 0;
+      } else if (feeStatus === 'first') {
+        if (downPct >= 10) fundingFeePct = 1.25;
+        else if (downPct >= 5) fundingFeePct = 1.5;
+        else fundingFeePct = 2.15;
+      } else {
+        if (downPct >= 10) fundingFeePct = 1.25;
+        else if (downPct >= 5) fundingFeePct = 1.5;
+        else fundingFeePct = 3.3;
+      }
+
+      const fundingFee = baseLoan * (fundingFeePct / 100);
+      const loanAmount = baseLoan + fundingFee;
+      const n = term * 12;
+      const pi = rate === 0 ? loanAmount / n : loanAmount * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+      const taxMo = taxAnnual / 12;
+      const insMo = insAnnual / 12;
+      const total = pi + taxMo + insMo + hoa;
+
+      const fmt = v => '$' + v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      document.getElementById('va-total').textContent = fmt(total);
+      document.getElementById('va-pi').textContent = fmt(pi);
+      document.getElementById('va-tax-mo').textContent = fmt(taxMo);
+      document.getElementById('va-ins-mo').textContent = fmt(insMo);
+      document.getElementById('va-hoa-mo').textContent = fmt(hoa);
+      document.getElementById('va-funding-fee').textContent = fmt(fundingFee) + ' (' + fundingFeePct + '%)';
+
+      if (vaChart) vaChart.destroy();
+      const ctx = document.getElementById('va-chart').getContext('2d');
+      vaChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Principal & Interest', 'Property Tax', 'Insurance', 'HOA'],
+          datasets: [{
+            data: [pi, taxMo, insMo, hoa],
+            backgroundColor: ['#001f3f', '#ffb700', '#3b82f6', '#6b7280']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11 } } }
+          }
+        }
+      });
+
+      document.getElementById('va-results').classList.remove('hidden');
+    }
+
+    // VA Refinance Calculator
+    function calculateVARefinance() {
+      const balance = parseFloat(document.getElementById('varefi-balance').value) || 0;
+      const currentRate = parseFloat(document.getElementById('varefi-current-rate').value) / 100 / 12;
+      const yearsLeft = parseFloat(document.getElementById('varefi-years-left').value);
+      const newRateAnnual = parseFloat(document.getElementById('varefi-new-rate').value);
+      const newRate = newRateAnnual / 100 / 12;
+      const newTerm = parseFloat(document.getElementById('varefi-new-term').value);
+      const purpose = document.getElementById('varefi-purpose').value;
+      const cashOut = purpose === 'cashout' ? (parseFloat(document.getElementById('varefi-cashout').value) || 0) : 0;
+      const feeStatus = document.getElementById('varefi-fee-status').value;
+      const closingCosts = parseFloat(document.getElementById('varefi-closing').value) || 0;
+
+      let fundingFeePct = 0;
+      if (feeStatus === 'exempt') {
+        fundingFeePct = 0;
+      } else if (purpose === 'irrrl') {
+        fundingFeePct = 0.5;
+      } else {
+        fundingFeePct = feeStatus === 'first' ? 2.15 : 3.3;
+      }
+
+      const baseLoan = balance + cashOut + closingCosts;
+      const fundingFee = baseLoan * (fundingFeePct / 100);
+      const newLoanAmount = baseLoan + fundingFee;
+
+      const remainingMonths = yearsLeft * 12;
+      const currentPayment = currentRate === 0 ? balance / remainingMonths : balance * (currentRate * Math.pow(1 + currentRate, remainingMonths)) / (Math.pow(1 + currentRate, remainingMonths) - 1);
+
+      const nNew = newTerm * 12;
+      const newPayment = newRate === 0 ? newLoanAmount / nNew : newLoanAmount * (newRate * Math.pow(1 + newRate, nNew)) / (Math.pow(1 + newRate, nNew) - 1);
+
+      const monthlySavings = currentPayment - newPayment;
+      const totalClosing = closingCosts + fundingFee;
+      const breakEvenMonths = monthlySavings > 0 ? Math.ceil(totalClosing / monthlySavings) : 0;
+
+      const currentTotalInterest = (currentPayment * remainingMonths) - balance;
+      const newTotalInterest = (newPayment * nNew) - newLoanAmount;
+      const interestSavings = currentTotalInterest - newTotalInterest;
+
+      const fmt = v => '$' + Math.abs(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      document.getElementById('varefi-old-payment').textContent = fmt(currentPayment);
+      document.getElementById('varefi-new-payment').textContent = fmt(newPayment);
+      document.getElementById('varefi-monthly-savings').textContent = (monthlySavings >= 0 ? '' : '-') + fmt(monthlySavings);
+      document.getElementById('varefi-breakeven').textContent = breakEvenMonths;
+      document.getElementById('varefi-interest-savings').textContent = fmt(interestSavings);
+      document.getElementById('varefi-new-loan').textContent = fmt(newLoanAmount);
+      document.getElementById('varefi-funding-fee').textContent = fmt(fundingFee) + ' (' + fundingFeePct + '%)';
+
+      document.getElementById('varefi-results').classList.remove('hidden');
+    }
+
+    // DSCR Calculator
+    function calculateDSCR() {
+      const price = parseFloat(document.getElementById('dscr-price').value) || 0;
+      const downPct = parseFloat(document.getElementById('dscr-down').value) || 0;
+      const rate = parseFloat(document.getElementById('dscr-rate').value) / 100 / 12;
+      const term = parseFloat(document.getElementById('dscr-term').value);
+      const rental = parseFloat(document.getElementById('dscr-rental').value) || 0;
+      const taxAnnual = parseFloat(document.getElementById('dscr-tax').value) || 0;
+      const insAnnual = parseFloat(document.getElementById('dscr-insurance').value) || 0;
+      const hoa = parseFloat(document.getElementById('dscr-hoa').value) || 0;
+      const mgmtPct = parseFloat(document.getElementById('dscr-mgmt').value) / 100;
+      const vacancyPct = parseFloat(document.getElementById('dscr-vacancy').value) / 100;
+
+      const downAmount = price * (downPct / 100);
+      const loanAmount = price - downAmount;
+      const n = term * 12;
+      const pi = rate === 0 ? loanAmount / n : loanAmount * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+
+      const effectiveRental = rental * (1 - vacancyPct);
+      const mgmtFee = rental * mgmtPct;
+      const taxMo = taxAnnual / 12;
+      const insMo = insAnnual / 12;
+      const totalExpenses = taxMo + insMo + hoa + mgmtFee;
+      const noi = effectiveRental - totalExpenses;
+      const debtService = pi;
+      const dscr = debtService > 0 ? noi / debtService : 0;
+      const monthlyCashFlow = noi - debtService;
+      const totalMonthlyCost = pi + totalExpenses;
+
+      const annualNOI = noi * 12;
+      const capRate = price > 0 ? (annualNOI / price) * 100 : 0;
+
+      const fmt = v => '$' + Math.abs(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      const ratioCard = document.getElementById('dscr-ratio-card');
+      const ratioLabel = document.getElementById('dscr-ratio-label');
+      document.getElementById('dscr-ratio').textContent = dscr.toFixed(2);
+      if (dscr >= 1.25) {
+        ratioCard.className = 'bg-green-100 border border-green-300 p-4 rounded-lg text-center';
+        ratioLabel.textContent = 'Strong — Qualifies easily';
+        ratioLabel.className = 'text-sm mt-1 font-semibold text-green-700';
+      } else if (dscr >= 1.0) {
+        ratioCard.className = 'bg-yellow-100 border border-yellow-300 p-4 rounded-lg text-center';
+        ratioLabel.textContent = 'Marginal — May qualify';
+        ratioLabel.className = 'text-sm mt-1 font-semibold text-yellow-700';
+      } else {
+        ratioCard.className = 'bg-red-100 border border-red-300 p-4 rounded-lg text-center';
+        ratioLabel.textContent = 'Below threshold — Does not qualify';
+        ratioLabel.className = 'text-sm mt-1 font-semibold text-red-700';
+      }
+
+      document.getElementById('dscr-pi').textContent = fmt(pi);
+      document.getElementById('dscr-cashflow').textContent = (monthlyCashFlow >= 0 ? '' : '-') + fmt(monthlyCashFlow);
+      document.getElementById('dscr-caprate').textContent = capRate.toFixed(1) + '%';
+      document.getElementById('dscr-total-cost').textContent = fmt(totalMonthlyCost);
+
+      if (dscrChart) dscrChart.destroy();
+      const ctx = document.getElementById('dscr-chart').getContext('2d');
+      dscrChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Principal & Interest', 'Property Tax', 'Insurance', 'HOA', 'Management'],
+          datasets: [{
+            data: [pi, taxMo, insMo, hoa, mgmtFee],
+            backgroundColor: ['#001f3f', '#ffb700', '#3b82f6', '#6b7280', '#10b981']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11 } } }
+          }
+        }
+      });
+
+      document.getElementById('dscr-results').classList.remove('hidden');
+    }
+
+    // Fix & Flip Calculator
+    function calculateFixFlip() {
+      const purchase = parseFloat(document.getElementById('flip-purchase').value) || 0;
+      const reno = parseFloat(document.getElementById('flip-reno').value) || 0;
+      const arv = parseFloat(document.getElementById('flip-arv').value) || 0;
+      const ltvPct = parseFloat(document.getElementById('flip-ltv').value) / 100;
+      const rateAnnual = parseFloat(document.getElementById('flip-rate').value) / 100;
+      const termMonths = parseFloat(document.getElementById('flip-term').value) || 12;
+      const holdingPerMonth = parseFloat(document.getElementById('flip-holding').value) || 0;
+      const sellingPct = parseFloat(document.getElementById('flip-selling').value) / 100;
+
+      const loanAmount = purchase * ltvPct;
+      const downPayment = purchase - loanAmount;
+      const totalInterest = loanAmount * rateAnnual * (termMonths / 12);
+      const totalHolding = holdingPerMonth * termMonths;
+      const sellingCosts = arv * sellingPct;
+      const totalProjectCost = purchase + reno + totalInterest + totalHolding + sellingCosts;
+      const totalCashInvested = downPayment + reno + totalInterest + totalHolding + sellingCosts;
+      const profit = arv - totalProjectCost;
+      const roi = totalCashInvested > 0 ? (profit / totalCashInvested) * 100 : 0;
+
+      const fmt = v => '$' + Math.abs(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      document.getElementById('flip-profit').textContent = (profit >= 0 ? '' : '-') + fmt(profit);
+      document.getElementById('flip-profit').className = 'text-3xl font-bold ' + (profit >= 0 ? 'text-gold' : 'text-red-400');
+      document.getElementById('flip-roi').textContent = roi.toFixed(1) + '%';
+      document.getElementById('flip-roi').className = 'text-3xl font-bold ' + (roi >= 0 ? 'text-gold' : 'text-red-400');
+      document.getElementById('flip-total-cost').textContent = fmt(totalProjectCost);
+      document.getElementById('flip-loan-cost').textContent = fmt(totalInterest);
+      document.getElementById('flip-holding-total').textContent = fmt(totalHolding);
+      document.getElementById('flip-selling-total').textContent = fmt(sellingCosts);
+
+      document.getElementById('flip-results').classList.remove('hidden');
+    }
+
     // Initialize with purchase calculator on load
     document.addEventListener('DOMContentLoaded', function() {
       calculatePurchase();

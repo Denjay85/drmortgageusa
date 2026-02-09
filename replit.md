@@ -20,7 +20,7 @@ Preferred communication style: Simple, everyday language.
 - **Lead Capture**: Dual storage - PostgreSQL database for internal management AND Zapier webhook forwarding for automation.
 - **Admin Dashboard**: Password-protected dashboard at `/admin` to view and manage quiz lead submissions with search and filter functionality.
 - **Social Proof**: Embedded video testimonials and client stories.
-- **Mortgage Calculator**: Native multi-tab calculator (Purchase, Affordability, Refinance) with Chart.js donut chart visualization.
+- **Mortgage Calculator**: Comprehensive 8-tab calculator suite (Purchase, Affordability, Refinance, Rent vs Buy, VA Purchase, VA Refinance, DSCR, Fix & Flip) with Chart.js donut chart visualization. VA calculators include automatic funding fee calculation. DSCR calculator includes color-coded ratio indicator.
 - **SEO Optimization**: Extensive meta tags, Open Graph, Twitter Cards, and multiple schema markups (FinancialService, LocalBusiness, FAQPage, BreadcrumbList) for improved search visibility. Includes `robots.txt` and `sitemap.xml`.
 - **Compliance**: NMLS #2018381, Florida-only licensing, DOD disclaimer.
 - **Deployment**: Flask-based server (app.py) with PostgreSQL database integration, session-based authentication, and robust error handling.
