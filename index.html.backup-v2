@@ -785,8 +785,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
-                <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2" title="Call Dennis Ross">
-                    <span id="nav-phone-text" class="hidden md:inline text-sm font-medium text-gold">(850) 346-8514</span>
+                <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
                     <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/30 transition-shadow">
                 </a>
             </div>
@@ -894,7 +893,7 @@
             
             <!-- Hero lifestyle photo - centered below on larger screens -->
             <div class="mt-12 hidden lg:block" data-aos="fade-up" data-aos-delay="200">
-                <img src="assets/family-photo.png" loading="lazy" alt="Dennis Ross and family in Florida"
+                <img src="assets/family-photo.png" loading="lazy"
                      alt="Happy family in front of new home"
                      class="mx-auto rounded-2xl shadow-xl w-full max-w-4xl">
             </div>
@@ -938,16 +937,6 @@
             </div>
             
             <form id="quizForm" onsubmit="return false;">
-                <!-- Quiz Progress Bar -->
-                <div id="quiz-progress" class="mb-6 px-4">
-                    <div class="flex justify-between mb-1">
-                        <span id="progress-text" class="text-xs font-medium text-gold">Step 1 of 5</span>
-                        <span id="progress-percent" class="text-xs font-medium text-gray-400">20%</span>
-                    </div>
-                    <div class="w-full bg-gray-700 rounded-full h-2">
-                        <div id="progress-bar" class="bg-gradient-to-r from-gold to-yellow-500 h-2 rounded-full transition-all duration-500 ease-out" style="width: 20%"></div>
-                    </div>
-                </div>
             <!-- Step 1 - Price Range & Location (Better Qualification) -->
             <div data-step="1" class="quiz-step">
                 <h2 class="text-2xl font-bold mb-2 text-navy">What's your target home price?</h2>
@@ -1443,37 +1432,37 @@
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
                 <!-- FHA Loans -->
-                <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="100">
                     <h3 class="font-bold text-xl text-white mb-3">FHA Loans</h3>
                     <p class="text-gray-300">Minimum 3.5 percent down. Strong option for buyers building or rebuilding credit.</p>
                 </div>
                 
                 <!-- VA Loans -->
-                <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="200">
                     <h3 class="font-bold text-xl text-white mb-3">VA Loans</h3>
                     <p class="text-gray-300">Zero down. No PMI. The strongest financing available for eligible veterans and active duty.</p>
                 </div>
                 
                 <!-- Conventional Loans -->
-                <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="300">
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="300">
                     <h3 class="font-bold text-xl text-white mb-3">Conventional Loans</h3>
                     <p class="text-gray-300">Starting at 3 percent down. Best rates and lowest costs for strong credit.</p>
                 </div>
                 
                 <!-- USDA Loans -->
-                <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="400">
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="400">
                     <h3 class="font-bold text-xl text-white mb-3">USDA Loans</h3>
                     <p class="text-gray-300">Zero down in qualifying rural areas. Lower monthly cost for buyers outside metro zones.</p>
                 </div>
                 
                 <!-- Bank Statement Loans -->
-                <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="500">
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="500">
                     <h3 class="font-bold text-xl text-white mb-3">Bank Statement Loans</h3>
                     <p class="text-gray-300">Twelve to twenty four months of business deposits used as income. Ideal for self employed buyers who do not show high taxable income.</p>
                 </div>
                 
                 <!-- DSCR Investor Loans -->
-                <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="600">
+                <div class="bg-white/10 backdrop-blur rounded-xl p-6 border border-gold/30 hover:border-gold transition-colors" data-aos="fade-up" data-aos-delay="600">
                     <h3 class="font-bold text-xl text-white mb-3">DSCR Investor Loans</h3>
                     <p class="text-gray-300">Approval based on rental income, not personal income. Clean solution for investors expanding their portfolio.</p>
                 </div>
@@ -2290,14 +2279,6 @@
           </div>
           
           <!-- Call to Action below calculator -->
-                <div class="mt-8 p-6 bg-gradient-to-r from-navy to-navy-dark rounded-xl border border-gold/30 text-center">
-                    <h3 class="text-xl font-bold text-white mb-2">Like what you see?</h3>
-                    <p class="text-gray-300 mb-4">Get your personalized rate in under 5 minutes. No credit check required to start.</p>
-                    <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="inline-block bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-8 rounded-lg shadow-xl transition-all duration-300 hover:scale-105">
-                        Get Your Free Quote
-                    </a>
-                    <p class="text-xs text-gray-400 mt-3">NMLS #2018381 | No obligation</p>
-                </div>
           <div class="bg-white rounded-lg shadow-xl p-6 mt-6 text-center">
             <p class="text-lg text-gray-700 mb-4">Get personalized rates and expert guidance!</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -2946,7 +2927,7 @@
                     </div>
                     
                     <div class="bg-gray-100 rounded-lg shadow-lg p-8" data-aos="fade-up" data-aos-delay="200">
-                        <h3 class="font-poppins font-bold text-2xl text-white mb-6 text-center">What sets me apart:</h3>
+                        <h3 class="font-poppins font-bold text-2xl text-gold mb-6 text-center">What sets me apart:</h3>
                         
                         <div class="space-y-6">
                             <div class="border-l-4 border-gold pl-6">
@@ -3234,19 +3215,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let quizAnswers = {};
   let startTime = null;
   
-  function updateQuizProgress(step) {
-        const pb = document.getElementById('progress-bar');
-        const pt = document.getElementById('progress-text');
-        const pp = document.getElementById('progress-percent');
-        if (pb && pt && pp) {
-            const pct = Math.round((step / 5) * 100);
-            pb.style.width = pct + '%';
-            pt.textContent = 'Step ' + step + ' of 5';
-            pp.textContent = pct + '%';
-        }
-    }
-    const showStep = i => {
-        updateQuizProgress(i + 1);
+  const showStep = i => {
     steps.forEach((s, idx) => s.classList.toggle("hidden", idx !== i));
     // Update progress bar
     const progress = ((i + 1) / steps.length) * 100;
