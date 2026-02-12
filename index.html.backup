@@ -26,7 +26,7 @@
     <meta property="og:description" content="Get approved for your Florida mortgage in 60 seconds. Navy veteran Dennis Ross helps with FHA, VA & conventional loans. 79+ lenders. NMLS #2018381">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://drmortgageusa.com/">
-    <meta property="og:image" content="https://drmortgageusa.com/dennis-ross.png">
+    <meta property="og:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="1200">
     <meta property="og:image:alt" content="Dennis Ross - Dr.MortgageUSA Florida Mortgage Expert">
@@ -37,7 +37,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dr.MortgageUSA - Florida Mortgage Expert">
     <meta name="twitter:description" content="Get approved in 60 seconds. Navy veteran Dennis Ross helps you secure the best Florida mortgage rates. NMLS #2018381">
-    <meta name="twitter:image" content="https://drmortgageusa.com/dennis-ross.png">
+    <meta name="twitter:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">
     <meta name="twitter:image:alt" content="Dennis Ross - Dr.MortgageUSA Florida Mortgage Expert">
     
     <!-- Additional SEO Meta Tags -->
@@ -115,7 +115,14 @@
                 "serviceType": "Conventional Mortgage",
                 "description": "Traditional home loans with competitive rates"
             }
-        ]
+        ],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "127",
+            "bestRating": "5",
+            "worstRating": "1"
+        }
     }
     </script>
     
@@ -226,6 +233,18 @@
             {
                 "@type": "ListItem",
                 "position": 2,
+                "name": "60-Second Quiz",
+                "item": "https://drmortgageusa.com/#quiz"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Mortgage Calculator",
+                "item": "https://drmortgageusa.com/#calculator"
+            },
+            {
+                "@type": "ListItem",
+                "position": 4,
                 "name": "Apply Now",
                 "item": "https://home1st.my1003app.com/2018381/register"
             }
@@ -965,9 +984,24 @@
                 </div>
             </div>
             
-            <!-- Step 2 - Buyer Type Selection -->
+            <!-- Step 2 - Email Capture (Early Lead Recovery) -->
             <div data-step="2" class="quiz-step hidden">
-                <h2 class="text-2xl font-bold mb-2 text-navy">Which best describes you?</h2>
+                <h2 class="text-2xl font-bold mb-2 text-navy">Great! What's your first name?</h2>
+                <p class="text-sm text-gray-600 mb-4">So I can personalize your results</p>
+                <input type="text" id="firstName" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg mb-3" placeholder="First name" required maxlength="30">
+                
+                <p class="text-sm text-gray-600 mb-2">Email (to save your results)</p>
+                <input type="email" id="quizEmail" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg mb-4" placeholder="your@email.com" required>
+                
+                <button type="button" class="nextBtn bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg w-full transition-all duration-300 transform hover:scale-105">
+                    Continue - Almost Done!
+                </button>
+                <p class="text-xs text-gray-500 mt-2">🔒 Your info is 100% secure & never sold</p>
+            </div>
+            
+            <!-- Step 3 - Buyer Type with Credit Check -->
+            <div data-step="3" class="quiz-step hidden">
+                <h2 id="step3-greeting" class="text-2xl font-bold mb-2 text-navy">Which best describes you?</h2>
                 <p class="text-sm text-gray-600 mb-4">This unlocks specialized programs</p>
                 <div class="grid gap-2">
                     <button class="buyerBtn quizBtn text-left" data-buyer="first-time" data-segment="first-time">
@@ -993,8 +1027,8 @@
                 </div>
             </div>
             
-            <!-- Step 3 - Down Payment Reality Check -->
-            <div data-step="3" class="quiz-step hidden">
+            <!-- Step 4 - Down Payment Reality Check -->
+            <div data-step="4" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-2 text-navy">How much can you put down?</h2>
                 <p class="text-sm text-gray-600 mb-4">Many programs require less than you think!</p>
                 <div class="grid gap-2">
@@ -1021,24 +1055,9 @@
                 </div>
             </div>
             
-            <!-- Step 4 - Name & Email Capture -->
-            <div data-step="4" class="quiz-step hidden">
-                <h2 class="text-2xl font-bold mb-2 text-navy">Almost there! What's your first name?</h2>
-                <p class="text-sm text-gray-600 mb-4">So I can personalize your results</p>
-                <input type="text" id="firstName" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg mb-3" placeholder="First name" required maxlength="30">
-                
-                <p class="text-sm text-gray-600 mb-2">Email (to save your results)</p>
-                <input type="email" id="quizEmail" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg mb-4" placeholder="your@email.com" required>
-                
-                <button type="button" class="nextBtn bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-3 px-6 rounded-lg w-full transition-all duration-300 transform hover:scale-105">
-                    See My Results!
-                </button>
-                <p class="text-xs text-gray-500 mt-2">🔒 Your info is 100% secure & never sold</p>
-            </div>
-            
             <!-- Step 5 - Urgency & Timeline -->
             <div data-step="5" class="quiz-step hidden">
-                <h2 id="step5-greeting" class="text-2xl font-bold mb-2 text-navy">When do you want to move?</h2>
+                <h2 class="text-2xl font-bold mb-2 text-navy">When do you want to move?</h2>
                 <div class="bg-yellow-50 border-l-4 border-gold p-3 mb-4">
                     <p class="text-sm font-semibold text-navy mb-2">🎯 Current Market Rates</p>
                     <div id="quiz-rates-display" class="grid grid-cols-2 gap-2 text-xs mb-2">
@@ -3356,10 +3375,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Step 4: Name and Email Capture
-  const step4Btn = document.querySelector("div[data-step='4'] .nextBtn");
-  if (step4Btn) {
-    step4Btn.addEventListener("click", () => {
+  // Step 2: Name and Email Capture
+  const step2Btn = document.querySelector("div[data-step='2'] .nextBtn");
+  if (step2Btn) {
+    step2Btn.addEventListener("click", () => {
       const nameInput = document.getElementById("firstName");
       const emailInput = document.getElementById("quizEmail");
       
@@ -3379,32 +3398,32 @@ document.addEventListener("DOMContentLoaded", () => {
       nameInput.style.borderColor = "";
       emailInput.style.borderColor = "";
       
-      // Personalize Step 5 greeting
-      const step5Greeting = document.getElementById("step5-greeting");
-      if (step5Greeting && quizAnswers.firstName) {
-        step5Greeting.textContent = "Almost done " + quizAnswers.firstName + "! When do you want to move?";
+      // Personalize Step 3 greeting
+      const step3Greeting = document.getElementById("step3-greeting");
+      if (step3Greeting) {
+        step3Greeting.textContent = `Thanks ${quizAnswers.firstName}! Which best describes you?`;
       }
       
-      current = 4;
+      current = 2;
       showStep(current);
     });
   }
 
-  // Step 2: Buyer Type Selection
+  // Step 3: Buyer Type Selection
   document.querySelectorAll(".buyerBtn").forEach(btn => {
     btn.addEventListener("click", () => {
       segment = btn.dataset.segment;
       quizAnswers.buyerType = btn.dataset.buyer;
-      current = 2;
+      current = 3;
       showStep(current);
     });
   });
 
-  // Step 3: Down Payment Selection
+  // Step 4: Down Payment Selection
   document.querySelectorAll(".downBtn").forEach(btn => {
     btn.addEventListener("click", () => {
       quizAnswers.downPayment = btn.dataset.down;
-      current = 3;
+      current = 4;
       showStep(current);
     });
   });
