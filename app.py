@@ -520,5 +520,22 @@ _rate_thread = threading.Thread(target=_rate_update_scheduler, daemon=True)
 _rate_thread.start()
 print("[Auto-Updater] Started - 2hr weekdays, 6hr weekends, market hours only")
 
+
+
+# --- Performance: Caching Headers ---
+@app.after_request
+def add_cache_headers(response):
+    # Static assets: cache for 1 week
+    if response.content_type and any(t in response.content_type for t in ['image/', 'font/', 'text/css', 'javascript']):
+        response.headers['Cache-Control'] = 'public, max-age=604800, immutable'
+    # HTML: cache for 5 minutes (allows rate updates to propagate)
+    elif response.content_type and 'text/html' in response.content_type:
+        response.headers['Cache-Control'] = 'public, max-age=300, must-revalidate'
+    # Add security headers
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    return response
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

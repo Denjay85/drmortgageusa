@@ -25,23 +25,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Florida Mortgage Broker | Dr.MortgageUSA - Dennis Ross NMLS #2018381</title>
     
-    <!-- Favicon -->
+    
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/favicon.png">
     
-    <!-- Preload Critical Assets -->
+    
     <link rel="preload" href="logo.png" as="image">
     <link rel="preload" href="dennis-ross.png" as="image">
     <link rel="dns-prefetch" href="https://maps.googleapis.com">
     
-    <!-- SEO Meta Tags -->
-    
-    
-    
-    
-    
-    
-    <!-- Open Graph Meta Tags for Social Media -->
     
     
     
@@ -53,32 +45,40 @@
     
     
     
-    <!-- Twitter Card Meta Tags -->
     
     
     
     
     
     
-    <!-- Additional SEO Meta Tags -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
     <meta name="ICBM" content="27.664827, -81.515754">
     
-    <!-- TailwindCSS CDN -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- AOS Library -->
+    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- Schema.org Structured Data for SEO -->
+    
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -139,7 +139,7 @@
     }
     </script>
     
-    <!-- LocalBusiness Schema for Local SEO -->
+    
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -165,7 +165,7 @@
     }
     </script>
     
-    <!-- FAQPage Schema for Featured Snippets -->
+    
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -231,7 +231,7 @@
     }
     </script>
     
-    <!-- BreadcrumbList Schema for Navigation -->
+    
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -253,7 +253,7 @@
     }
     </script>
     
-    <!-- MortgageBroker Schema for SEO Disambiguation -->
+    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -293,408 +293,10 @@
     }
     </script>
     
-    <!-- Custom Styles -->
-    <style>
-        :root {
-            --navy: #001f3f;
-            --navy-dark: #00152b;
-            --gold: #ffb700;
-            --gold-light: #ffc733;
-            --white: #ffffff;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        
-        .bg-navy {
-            background-color: var(--navy);
-        }
-        
-        .bg-gold {
-            background-color: var(--gold);
-        }
-        
-        .text-navy {
-            color: var(--navy);
-        }
-        
-        .text-gold {
-            color: var(--gold);
-        }
-        
-        /* Gradient Text Effect */
-        .text-gradient {
-            background: linear-gradient(to right, var(--gold), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        /* Glass Card Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .glass-card:hover {
-            border-color: rgba(255, 183, 0, 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4);
-        }
-        
-        /* Enhanced Gold Button */
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold) 0%, #e6a500 100%);
-            color: var(--navy);
-            padding: 16px 32px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 18px;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 0 20px rgba(255, 183, 0, 0.2);
-        }
-        
-        .btn-gold:hover {
-            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 0 35px rgba(255, 183, 0, 0.4);
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--navy-dark);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e3a5f;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gold);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quizBtn {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            margin: 8px 0;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #001f3f;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .quizBtn:hover {
-            border-color: #ffb700;
-            background-color: #fffbf0;
-            transform: translateY(-2px);
-        }
-        
-        .step2-option {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            margin: 8px 0;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #001f3f;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-        }
-        
-        .step2-option:hover {
-            border-color: #ffb700;
-            background-color: #fffbf0;
-            transform: translateY(-2px);
-        }
-        
-        .step2-option.selected {
-            background: #2563eb;
-            color: white;
-            border-color: #2563eb;
-        }
-        
-        .step2-simple {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            margin: 8px 0;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #001f3f;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-        }
-        
-        .step2-simple:hover {
-            border-color: #ffb700;
-            background-color: #fffbf0;
-            transform: translateY(-2px);
-        }
-        
-        .step2-simple.selected {
-            background: #2563eb;
-            color: white;
-            border-color: #2563eb;
-        }
-        
-        .nextBtn:disabled {
-            background-color: #9ca3af !important;
-            color: #6b7280 !important;
-            cursor: not-allowed !important;
-            opacity: 0.5;
-            transform: none !important;
-        }
-        
-        .nextBtn:disabled:hover {
-            background-color: #9ca3af !important;
-            transform: none !important;
-        }
-        
-        .segment-panel {
-            display: none;
-        }
-        
-        .segment-panel.active {
-            display: block;
-        }
-        
-        .gradient-overlay {
-            background: linear-gradient(135deg, var(--navy) 0%, #003366 100%);
-        }
-        
-        .text-shadow {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--gold);
-        }
-        
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-                line-height: 1.2;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.25rem;
-            }
-        }
-        
-        /* Enhanced Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Glow Effect for Important Elements */
-        .glow-gold {
-            box-shadow: 0 0 20px rgba(255, 183, 0, 0.2);
-        }
-        
-        .glow-gold:hover {
-            box-shadow: 0 0 35px rgba(255, 183, 0, 0.4);
-        }
-        
-        /* Smooth fade animations */
-        .fade-in {
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Rate card enhancements */
-        .rate-card {
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(0, 31, 63, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .rate-card:hover {
-            border-color: rgba(255, 183, 0, 0.5);
-            box-shadow: 0 10px 30px -10px rgba(0, 31, 63, 0.2);
-            transform: translateY(-2px);
-        }
-        
-        /* Enhanced selection */
-        ::selection {
-            background: var(--gold);
-            color: var(--navy);
-        }
-        
-        /* Premium Section Dividers */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, rgba(255, 183, 0, 0.3), transparent);
-        }
-        
-        /* Premium Input Styling */
-        .premium-input {
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(0, 31, 63, 0.15);
-            border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-        
-        .premium-input:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(255, 183, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-        
-        /* Premium Card White */
-        .premium-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 31, 63, 0.08);
-            border: 1px solid rgba(0, 31, 63, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .premium-card:hover {
-            box-shadow: 0 12px 40px rgba(0, 31, 63, 0.12);
-            transform: translateY(-2px);
-        }
-        
-        /* Subtle Gold Accent Line */
-        .gold-accent {
-            position: relative;
-        }
-        
-        .gold-accent::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(to right, var(--gold), var(--gold-light));
-            border-radius: 2px;
-        }
-        
-        /* Premium Badge Styling */
-        .premium-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: linear-gradient(135deg, rgba(255, 183, 0, 0.1) 0%, rgba(255, 183, 0, 0.05) 100%);
-            border: 1px solid rgba(255, 183, 0, 0.3);
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        /* Smooth hover transitions for all interactive elements */
-        a, button {
-            transition: all 0.3s ease;
-        }
-        
-        /* Premium shadow for images */
-        .img-shadow {
-            box-shadow: 0 20px 60px -15px rgba(0, 31, 63, 0.25);
-        }
-        
-        /* Glass Panel for Reviews */
-        .glass-panel {
-            background: rgba(0, 31, 63, 0.8);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        
-        .glass-panel:hover {
-            background: rgba(0, 31, 63, 0.9);
-            transform: translateY(-2px);
-        }
-    </style>
     
-    <!-- TailwindCSS Config -->
+    <style>:root{--navy:#001f3f;--navy-dark:#00152b;--gold:#ffb700;--gold-light:#ffc733;--white:#ffffff}html{scroll-behavior:smooth}body{font-family:'Inter', sans-serif}.font-poppins{font-family:'Poppins', sans-serif}.font-display{font-family:'Space Grotesk', sans-serif}.bg-navy{background-color:var(--navy)}.bg-gold{background-color:var(--gold)}.text-navy{color:var(--navy)}.text-gold{color:var(--gold)}.text-gradient{background:linear-gradient(to right, var(--gold), var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.glass-card{background:rgba(255, 255, 255, 0.03);backdrop-filter:blur(10px);border:1px solid rgba(255, 255, 255, 0.1);transition:all 0.3s ease}.glass-card:hover{border-color:rgba(255, 183, 0, 0.4);transform:translateY(-2px);box-shadow:0 20px 40px -15px rgba(0, 0, 0, 0.4)}.btn-gold{background:linear-gradient(135deg, var(--gold) 0%, #e6a500 100%);color:var(--navy);padding:16px 32px;border-radius:8px;font-weight:600;transition:all 0.3s ease;text-decoration:none;display:inline-block;font-size:18px;cursor:pointer;border:none;box-shadow:0 0 20px rgba(255, 183, 0, 0.2)}.btn-gold:hover{background:linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);transform:translateY(-2px);box-shadow:0 0 35px rgba(255, 183, 0, 0.4)}::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--navy-dark)}::-webkit-scrollbar-thumb{background:#1e3a5f;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:var(--gold)}.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0, 0, 0, 0.8)}.modal.active{display:flex;align-items:center;justify-content:center}.quizBtn{display:block;width:100%;padding:12px 16px;margin:8px 0;background:white;border:2px solid #e5e7eb;border-radius:8px;font-weight:600;color:#001f3f;cursor:pointer;transition:all 0.3s ease}.quizBtn:hover{border-color:#ffb700;background-color:#fffbf0;transform:translateY(-2px)}.step2-option{display:block;width:100%;padding:12px 16px;margin:8px 0;background:white;border:2px solid #e5e7eb;border-radius:8px;font-weight:600;color:#001f3f;cursor:pointer;transition:all 0.3s ease;font-size:16px}.step2-option:hover{border-color:#ffb700;background-color:#fffbf0;transform:translateY(-2px)}.step2-option.selected{background:#2563eb;color:white;border-color:#2563eb}.step2-simple{display:block;width:100%;padding:12px 16px;margin:8px 0;background:white;border:2px solid #e5e7eb;border-radius:8px;font-weight:600;color:#001f3f;cursor:pointer;transition:all 0.3s ease;font-size:16px}.step2-simple:hover{border-color:#ffb700;background-color:#fffbf0;transform:translateY(-2px)}.step2-simple.selected{background:#2563eb;color:white;border-color:#2563eb}.nextBtn:disabled{background-color:#9ca3af !important;color:#6b7280 !important;cursor:not-allowed !important;opacity:0.5;transform:none !important}.nextBtn:disabled:hover{background-color:#9ca3af !important;transform:none !important}.segment-panel{display:none}.segment-panel.active{display:block}.gradient-overlay{background:linear-gradient(135deg, var(--navy) 0%, #003366 100%)}.text-shadow{text-shadow:2px 2px 4px rgba(0, 0, 0, 0.5)}.form-input{width:100%;padding:12px 16px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;transition:border-color 0.3s ease}.form-input:focus{outline:none;border-color:var(--gold)}.video-container{position:relative;width:100%;height:0;padding-bottom:56.25%}.video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%}@media (max-width:768px){.hero-title{font-size:2.5rem;line-height:1.2}.hero-subtitle{font-size:1.25rem}}.card-hover{transition:all 0.3s ease}.card-hover:hover{transform:translateY(-4px);box-shadow:0 20px 40px -15px rgba(0, 0, 0, 0.3)}.glow-gold{box-shadow:0 0 20px rgba(255, 183, 0, 0.2)}.glow-gold:hover{box-shadow:0 0 35px rgba(255, 183, 0, 0.4)}.fade-in{animation:fadeIn 0.5s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.rate-card{background:rgba(255, 255, 255, 0.95);border:1px solid rgba(0, 31, 63, 0.1);transition:all 0.3s ease}.rate-card:hover{border-color:rgba(255, 183, 0, 0.5);box-shadow:0 10px 30px -10px rgba(0, 31, 63, 0.2);transform:translateY(-2px)}::selection{background:var(--gold);color:var(--navy)}.section-divider{height:1px;background:linear-gradient(to right, transparent, rgba(255, 183, 0, 0.3), transparent)}.premium-input{background:rgba(255, 255, 255, 0.95);border:1px solid rgba(0, 31, 63, 0.15);border-radius:12px;padding:16px 20px;font-size:16px;transition:all 0.3s ease;box-shadow:0 2px 8px rgba(0, 0, 0, 0.04)}.premium-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255, 183, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08)}.premium-card{background:white;border-radius:16px;box-shadow:0 4px 20px rgba(0, 31, 63, 0.08);border:1px solid rgba(0, 31, 63, 0.05);transition:all 0.3s ease}.premium-card:hover{box-shadow:0 12px 40px rgba(0, 31, 63, 0.12);transform:translateY(-2px)}.gold-accent{position:relative}.gold-accent::after{content:'';position:absolute;bottom:-8px;left:0;width:60px;height:3px;background:linear-gradient(to right, var(--gold), var(--gold-light));border-radius:2px}.premium-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:linear-gradient(135deg, rgba(255, 183, 0, 0.1) 0%, rgba(255, 183, 0, 0.05) 100%);border:1px solid rgba(255, 183, 0, 0.3);border-radius:50px;font-size:12px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px}a, button{transition:all 0.3s ease}.img-shadow{box-shadow:0 20px 60px -15px rgba(0, 31, 63, 0.25)}.glass-panel{background:rgba(0, 31, 63, 0.8);backdrop-filter:blur(10px);transition:all 0.3s ease}.glass-panel:hover{background:rgba(0, 31, 63, 0.9);transform:translateY(-2px)}</style>
+    
+    
     <script>
         tailwind.config = {
             theme: {
@@ -721,7 +323,7 @@
         }
     </script>
     
-    <!-- Analytics Placeholders -->
+    
     <script>
         // GA4 Placeholder
         // gtag('config', 'GA_MEASUREMENT_ID');
@@ -735,44 +337,8 @@
         // ttq.load('PIXEL_ID');
     </script>
     
-    <!-- flag overlay injected -->
-    <style id="flag-css">
-        #hero {
-            position: relative;
-            background: linear-gradient(135deg, var(--navy) 0%, #003366 100%);
-        }
-        #hero::before {
-            content:"";
-            position:absolute;
-            inset:0;
-            background:url(assets/vintage-flag.jpg) center/cover no-repeat;
-            opacity:0.25;          /* adjust translucency here */
-            z-index:1;
-            pointer-events:none;
-        }
-        #hero > * {
-            position: relative;
-            z-index: 2;
-        }
-        
-        /* About section with collage background */
-        #about {
-            position: relative;
-            background-color: #9ca3af;
-        }
-        #about::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: url(assets/client-collage.jpg) center/cover no-repeat;
-            opacity: 0.15;
-            z-index: 0;
-        }
-        #about > * {
-            position: relative;
-            z-index: 1;
-        }
-    </style>
+    
+    <style>#hero{position:relative;background:linear-gradient(135deg, var(--navy) 0%, #003366 100%)}#hero::before{content:"";position:absolute;inset:0;background:url(assets/vintage-flag.jpg) center/cover no-repeat;opacity:0.25;z-index:1;pointer-events:none}#hero > *{position:relative;z-index:2}#about{position:relative;background-color:#9ca3af}#about::before{content:"";position:absolute;inset:0;background:url(assets/client-collage.jpg) center/cover no-repeat;opacity:0.15;z-index:0}#about > *{position:relative;z-index:1}</style>
 
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"FinancialService","name":"Dr.MortgageUSA - Dennis Ross","description":"Florida mortgage broker specializing in Conventional, FHA, VA, USDA, and Jumbo home loans. Navy veteran. 600+ families served.","url":"https://drmortgageusa.com","telephone":"+1-850-346-8514","image":"https://drmortgageusa.com/dennis-ross-headshot.png","logo":"https://drmortgageusa.com/logo.png","priceRange":"$$","areaServed":{"@type":"State","name":"Florida"},"serviceType":["Mortgage Broker","FHA Loans","VA Loans","Conventional Loans","Jumbo Loans","USDA Loans"],"founder":{"@type":"Person","name":"Dennis Ross","jobTitle":"Mortgage Broker"},"sameAs":["https://www.instagram.com/dr.mortgageusa/"]}
@@ -798,17 +364,17 @@
 
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation -->
+    
     <nav class="bg-navy/90 backdrop-blur-md text-white py-3 md:py-4 fixed w-full top-0 z-50 border-b border-white/5">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <img src="logo.png" alt="Dr.MortgageUSA Florida Mortgage Broker Logo" class="h-12 md:h-16 lg:h-20 w-auto object-contain">
+                <img fetchpriority="high" src="logo.png" alt="Dr.MortgageUSA Florida Mortgage Broker Logo" class="h-12 md:h-16 lg:h-20 w-auto object-contain" width="180" height="60" decoding="async">
                 <div class="font-poppins font-bold text-lg md:text-xl text-gold whitespace-nowrap">
                     Dr.MortgageUSA
                 </div>
             </div>
             
-            <!-- Desktop Navigation Links -->
+            
             <div class="hidden lg:flex items-center space-x-6">
                 <a href="#hero" class="text-white hover:text-gold transition-colors font-medium">Home</a>
                 <a href="#stories" class="text-white hover:text-gold transition-colors font-medium">Client Stories</a>
@@ -819,7 +385,7 @@
             </div>
             
             <div class="flex items-center space-x-3">
-                <!-- Mobile Hamburger Button -->
+                
                 <button id="mobile-menu-btn" class="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
                     <svg id="menu-icon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -830,12 +396,12 @@
                 </button>
                 <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2" title="Call Dennis Ross">
                     <span id="nav-phone-text" class="hidden md:inline text-sm font-medium text-gold">(850) 346-8514</span>
-                    <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/30 transition-shadow">
+                    <img fetchpriority="high" src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/30 transition-shadow" width="400" height="400" decoding="async">
                 </a>
             </div>
         </div>
         
-        <!-- Mobile Menu Dropdown -->
+        
         <div id="mobile-menu" class="hidden lg:hidden bg-navy/95 backdrop-blur-sm border-t border-white/10">
             <div class="container mx-auto px-4 py-4 space-y-3">
                 <a href="#hero" onclick="closeMobileMenu()" class="block py-3 px-4 text-white hover:bg-gold hover:text-navy rounded-lg transition-colors font-medium text-center">
@@ -860,12 +426,12 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    
     <section id="hero" class="text-white min-h-screen flex items-center pt-24 pb-12 relative overflow-hidden">
 
         <div class="container mx-auto px-4">
             <div class="grid lg:grid-cols-2 gap-8 items-center">
-                <!-- Left Column - Content -->
+                
                 <div class="text-center lg:text-left">
                     <h1 class="hero-title font-display font-bold text-4xl md:text-5xl lg:text-6xl mb-4 text-shadow leading-tight">
                         Your Dream Home Is <span class="text-gradient">Closer Than You Think</span>
@@ -874,7 +440,7 @@
                         Navy veteran helping Florida buyers get clear numbers and smart approval options.
                     </p>
                     
-                    <!-- Gold Stats Row -->
+                    
                     <div class="grid grid-cols-3 gap-4 mb-6">
                         <div class="text-center lg:text-left">
                             <div class="text-4xl md:text-5xl font-bold text-gradient">600+</div>
@@ -890,7 +456,7 @@
                         </div>
                     </div>
                     
-                    <!-- CTA Badge -->
+                    
                     <div class="bg-white/95 backdrop-blur-sm rounded-xl p-4 mb-6 shadow-lg">
                         <p class="text-gray-700 text-center mb-3 font-medium">Get personalized numbers and expert guidance!</p>
                         <div class="flex flex-col sm:flex-row gap-3 justify-center">
@@ -906,12 +472,21 @@
                     <button id="hero-cta" class="btn-gold text-lg md:text-xl px-10 py-5 mb-6 rounded-xl shadow-[0_0_30px_rgba(255,183,0,0.4)]">
                         Start My 60-Second Home Qualifier
                     </button>
-                    <p class="text-sm text-gray-300">Takes less than a minute. No credit check required.</p>
+                    <p class="text-sm text-gray-300">Takes less than a minute. No credit check required.
+<div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-4 text-xs text-gray-300 opacity-80">
+                        <span>NMLS #2018381</span>
+                        <span>|</span>
+                        <span>Licensed in Florida</span>
+                        <span>|</span>
+                        <span>Equal Housing Lender &#8962;</span>
+                        <span>|</span>
+                        <span>Powered by Home1st Lending</span>
+                    </div></p>
                 </div>
                 
-                <!-- Right Column - Video & Rates -->
+                
                 <div class="space-y-6">
-                    <!-- Intro Video -->
+                    
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 shadow-2xl max-w-sm mx-auto border border-white/20">
                         <video src="intro-video.mp4" 
                                autoplay 
@@ -923,7 +498,7 @@
                         </video>
                     </div>
                     
-                    <!-- Current Rates Card -->
+                    
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-gold/30 shadow-[0_0_20px_rgba(255,183,0,0.15)]">
                         <h3 class="text-lg font-semibold text-gold mb-3 text-center">Today's Mortgage Rates</h3>
                         <div id="rates-display" class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
@@ -935,19 +510,19 @@
                 </div>
             </div>
             
-            <!-- Hero lifestyle photo - centered below on larger screens -->
+            
             <div class="mt-12 hidden lg:block" data-aos="fade-up" data-aos-delay="200">
                 <img src="assets/family-photo.png" loading="lazy" alt="Dennis Ross and family in Florida"
                      alt="Happy family in front of new home"
-                     class="mx-auto rounded-2xl shadow-xl w-full max-w-4xl">
+                     class="mx-auto rounded-2xl shadow-xl w-full max-w-4xl" width="600" height="400" decoding="async">
             </div>
         </div>
         
-        <!-- Floating Dennis Photo -->
+        
         <div class="absolute bottom-10 right-10 hidden xl:block" data-aos="zoom-in" data-aos-delay="800">
             <div class="relative">
                 <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                    <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl hover:shadow-gold/40 transition-all" loading="lazy">
+                    <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl hover:shadow-gold/40 transition-all" loading="lazy" width="400" height="400" decoding="async">
                 </a>
                 <div class="absolute -bottom-2 -right-2 bg-gold text-navy rounded-full p-2">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -962,10 +537,10 @@
         </div>
     </section>
 
-    <!-- PATH-FINDER QUIZ (hidden by default, revealed on CTA click) -->
+    
     <section id="path-finder" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
         <div class="bg-white w-11/12 max-w-lg p-6 rounded-2xl shadow-2xl" id="quizCard">
-            <!-- Progress Bar -->
+            
             <div class="mb-6">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm font-semibold text-navy">Your Path to Homeownership in 60 seconds</span>
@@ -981,7 +556,7 @@
             </div>
             
             <form id="quizForm" onsubmit="return false;">
-                <!-- Quiz Progress Bar -->
+                
                 <div id="quiz-progress" class="mb-6 px-4">
                     <div class="flex justify-between mb-1">
                         <span id="progress-text" class="text-xs font-medium text-gold">Step 1 of 5</span>
@@ -991,7 +566,7 @@
                         <div id="progress-bar" class="bg-gradient-to-r from-gold to-yellow-500 h-2 rounded-full transition-all duration-500 ease-out" style="width: 20%"></div>
                     </div>
                 </div>
-            <!-- Step 1 - Price Range & Location (Better Qualification) -->
+            
             <div data-step="1" class="quiz-step">
                 <h2 class="text-2xl font-bold mb-2 text-navy">What's your target home price?</h2>
                 <p class="text-sm text-gray-600 mb-4">This helps us find the right loan programs for you</p>
@@ -1019,7 +594,7 @@
                 </div>
             </div>
             
-            <!-- Step 2 - Buyer Type Selection -->
+            
             <div data-step="2" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-2 text-navy">Which best describes you?</h2>
                 <p class="text-sm text-gray-600 mb-4">This unlocks specialized programs</p>
@@ -1047,7 +622,7 @@
                 </div>
             </div>
             
-            <!-- Step 3 - Down Payment Reality Check -->
+            
             <div data-step="3" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-2 text-navy">How much can you put down?</h2>
                 <p class="text-sm text-gray-600 mb-4">Many programs require less than you think!</p>
@@ -1075,7 +650,7 @@
                 </div>
             </div>
             
-            <!-- Step 4 - Name & Email Capture -->
+            
             <div data-step="4" class="quiz-step hidden">
                 <h2 class="text-2xl font-bold mb-2 text-navy">Almost there! What's your first name?</h2>
                 <p class="text-sm text-gray-600 mb-4">So I can personalize your results</p>
@@ -1090,18 +665,18 @@
                 <p class="text-xs text-gray-500 mt-2">🔒 Your info is 100% secure & never sold</p>
             </div>
             
-            <!-- Step 5 - Urgency & Timeline -->
+            
             <div data-step="5" class="quiz-step hidden">
                 <h2 id="step5-greeting" class="text-2xl font-bold mb-2 text-navy">When do you want to move?</h2>
                 <div class="bg-yellow-50 border-l-4 border-gold p-3 mb-4">
                     <p class="text-sm font-semibold text-navy mb-2">🎯 Current Market Rates</p>
                     <div id="quiz-rates-display" class="grid grid-cols-2 gap-2 text-xs mb-2">
-                        <!-- Rates will be inserted here by JavaScript -->
+                        
                     </div>
                     <p class="text-xs text-gray-600 border-t pt-2">Rates change daily - lock in your pre-approval!</p>
                     <p class="text-xs text-gray-500">Updated: <span id="quiz-rate-date">November 24, 2025</span></p>
                     <p id="quiz-rate-disclaimer" class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-                        <!-- Disclaimer will be inserted by JavaScript -->
+                        
                     </p>
                 </div>
                 <div class="grid gap-2">
@@ -1129,7 +704,7 @@
             </div>
             </form>
             
-            <!-- Close button -->
+            
             <button onclick="closeQuiz()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -1138,20 +713,20 @@
         </div>
     </section>
 
-    <!-- Segment Panels -->
+    
     <section id="segment-results" class="py-16 bg-gray-50 hidden">
         <div class="container mx-auto px-4">
-            <!-- First-Time Buyer Panel -->
+            
             <div id="first-time" class="segment-panel" data-aos="fade-up">
                 <div class="bg-navy rounded-lg shadow-xl p-8 max-w-4xl mx-auto relative border-2 border-gold">
-                    <!-- Dennis Photo Corner -->
+                    
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy" width="180" height="60" decoding="async">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             First-Time Homebuyer Programs
                         </h2>
@@ -1194,17 +769,17 @@
                 </div>
             </div>
 
-            <!-- Veteran Panel -->
+            
             <div id="veteran" class="segment-panel" data-aos="fade-up">
                 <div class="bg-navy rounded-lg shadow-xl p-8 max-w-4xl mx-auto relative border-2 border-gold">
-                    <!-- Dennis Photo Corner -->
+                    
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy" width="180" height="60" decoding="async">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             VA Loan Benefits for Veterans
                         </h2>
@@ -1247,17 +822,17 @@
                 </div>
             </div>
 
-            <!-- Credit Improvement Panel -->
+            
             <div id="credit" class="segment-panel" data-aos="fade-up">
                 <div class="bg-navy rounded-lg shadow-xl p-8 max-w-4xl mx-auto relative border-2 border-gold">
-                    <!-- Dennis Photo Corner -->
+                    
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy" width="180" height="60" decoding="async">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             Credit Improvement Solutions
                         </h2>
@@ -1299,17 +874,17 @@
                     </div>
                 </div>
             </div>
-            <!-- Repeat-Buyer Panel -->
+            
             <div id="repeatBuyer" class="segment-panel" data-aos="fade-up">
                 <div class="bg-navy rounded-lg shadow-xl p-8 max-w-4xl mx-auto relative border-2 border-gold">
-                <!-- Dennis Photo Corner -->
+                
                 <div class="absolute -top-8 -right-8 hidden md:block">
                     <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                        <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
+                        <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                     </a>
                 </div>
                 <div class="text-center mb-6">
-                    <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
+                    <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy" width="180" height="60" decoding="async">
                     <h2 class="font-poppins font-bold text-3xl text-white">
                         Smart Strategies for Repeat Buyers
                     </h2>
@@ -1351,17 +926,17 @@
                 </div>
             </div>
         </div>
-            <!-- Investor Panel -->
+            
             <div id="investor" class="segment-panel" data-aos="fade-up">
                 <div class="bg-navy rounded-lg shadow-xl p-8 max-w-4xl mx-auto relative border-2 border-gold">
-                    <!-- Dennis Photo Corner -->
+                    
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
-                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy">
+                        <img src="logo.png" alt="Dr.MortgageUSA Florida Home Loans" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-3" loading="lazy" width="180" height="60" decoding="async">
                         <h2 class="font-poppins font-bold text-3xl text-white">
                             Investor Financing Solutions
                         </h2>
@@ -1431,7 +1006,7 @@
             </div>
     </section>
 
-    <!-- How It Works Section -->
+    
     <section id="how-it-works" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12" data-aos="fade-up">
@@ -1440,7 +1015,7 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <!-- Step 1 -->
+                
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center" data-aos="fade-up" data-aos-delay="100">
                     <div class="w-16 h-16 bg-gradient-to-br from-gold to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
                         <span class="text-navy text-2xl font-bold">1</span>
@@ -1449,7 +1024,7 @@
                     <p class="text-gray-600">Answer a few quick questions about your goals. No credit check.</p>
                 </div>
                 
-                <!-- Step 2 -->
+                
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center" data-aos="fade-up" data-aos-delay="200">
                     <div class="w-16 h-16 bg-gradient-to-br from-gold to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
                         <span class="text-navy text-2xl font-bold">2</span>
@@ -1458,7 +1033,7 @@
                     <p class="text-gray-600">I match you with smart loan options and show you a clear payment.</p>
                 </div>
                 
-                <!-- Step 3 -->
+                
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center" data-aos="fade-up" data-aos-delay="300">
                     <div class="w-16 h-16 bg-gradient-to-br from-gold to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
                         <span class="text-navy text-2xl font-bold">3</span>
@@ -1476,7 +1051,7 @@
         </div>
     </section>
 
-    <!-- Loan Options Section -->
+    
     <section id="loan-options" class="py-20 bg-navy">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12" data-aos="fade-up">
@@ -1485,44 +1060,44 @@
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                <!-- FHA Loans -->
+                
                 <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="100">
                     <h3 class="font-bold text-xl text-white mb-3">FHA Loans</h3>
                     <p class="text-gray-300">Minimum 3.5 percent down. Strong option for buyers building or rebuilding credit.</p>
                 </div>
                 
-                <!-- VA Loans -->
+                
                 <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="200">
                     <h3 class="font-bold text-xl text-white mb-3">VA Loans</h3>
                     <p class="text-gray-300">Zero down. No PMI. The strongest financing available for eligible veterans and active duty.</p>
                 </div>
                 
-                <!-- Conventional Loans -->
+                
                 <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="300">
                     <h3 class="font-bold text-xl text-white mb-3">Conventional Loans</h3>
                     <p class="text-gray-300">Starting at 3 percent down. Best rates and lowest costs for strong credit.</p>
                 </div>
                 
-                <!-- USDA Loans -->
+                
                 <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="400">
                     <h3 class="font-bold text-xl text-white mb-3">USDA Loans</h3>
                     <p class="text-gray-300">Zero down in qualifying rural areas. Lower monthly cost for buyers outside metro zones.</p>
                 </div>
                 
-                <!-- Bank Statement Loans -->
+                
                 <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="500">
                     <h3 class="font-bold text-xl text-white mb-3">Bank Statement Loans</h3>
                     <p class="text-gray-300">Twelve to twenty four months of business deposits used as income. Ideal for self employed buyers who do not show high taxable income.</p>
                 </div>
                 
-                <!-- DSCR Investor Loans -->
+                
                 <div class="bg-white/15 backdrop-blur rounded-xl p-6 border border-gold/50 hover:border-gold hover:bg-white/20 transition-all duration-300 shadow-lg shadow-gold/5" data-aos="fade-up" data-aos-delay="600">
                     <h3 class="font-bold text-xl text-white mb-3">DSCR Investor Loans</h3>
                     <p class="text-gray-300">Approval based on rental income, not personal income. Clean solution for investors expanding their portfolio.</p>
                 </div>
             </div>
             
-            <!-- CTA -->
+            
             <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="700">
                 <p class="text-gray-300 text-lg mb-4">Not sure which option fits you?</p>
                 <button onclick="openQuiz()" class="btn-gold text-lg px-8 py-4">
@@ -1532,7 +1107,7 @@
         </div>
     </section>
 
-    <!-- Google Reviews Section - Live from Google Places API -->
+    
     <section id="stories" class="py-24 relative overflow-hidden bg-gray-50">
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -1545,12 +1120,12 @@
             </div>
 
             <div class="relative max-w-3xl mx-auto">
-                <!-- Left Arrow -->
+                
                 <button id="review-prev" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200">
                     <svg class="w-5 h-5 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </button>
                 
-                <!-- Reviews Container -->
+                
                 <div id="google-reviews-container" class="min-h-[250px] flex items-center justify-center">
                     <div class="flex flex-col items-center justify-center text-gray-500 space-y-4">
                         <svg class="animate-spin h-8 w-8 text-gold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -1561,12 +1136,12 @@
                     </div>
                 </div>
                 
-                <!-- Right Arrow -->
+                
                 <button id="review-next" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200">
                     <svg class="w-5 h-5 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 
-                <!-- Dots -->
+                
                 <div id="review-dots" class="flex justify-center gap-2 mt-6"></div>
             </div>
 
@@ -1585,13 +1160,13 @@
         </div>
     </section>
 
-    <!-- ───────── START: Comprehensive Mortgage Calculator ───────── -->
+    
     <section id="calculator" class="py-16 bg-gray-100">
       <div class="container mx-auto px-4">
         <div class="max-w-5xl mx-auto">
           <h2 class="font-poppins font-bold text-4xl text-navy text-center mb-4">Mortgage Payment Calculator</h2>
           
-          <!-- Phone Number Banner -->
+          
           <div class="bg-gradient-to-r from-navy to-blue-900 text-white rounded-lg p-4 mb-6 text-center shadow-xl">
             <p class="text-lg font-semibold mb-2">Have Questions? Call Dennis Ross Today!</p>
             <a href="tel:8503468514" class="text-3xl font-bold text-gold hover:text-yellow-400 transition-colors">
@@ -1600,9 +1175,9 @@
             <p class="text-sm mt-2">NMLS #2018381 | Powered by Home1st Lending, LLC</p>
           </div>
           
-          <!-- Calculator Tabs -->
+          
           <div class="bg-white rounded-lg shadow-xl p-6">
-            <!-- Tab Navigation -->
+            
             <div class="flex overflow-x-auto whitespace-nowrap gap-2 mb-6 border-b border-gray-200 pb-1">
               <button onclick="switchTab('purchase')" id="tab-purchase" class="tab-btn flex-shrink-0 active px-6 py-3 font-semibold text-navy border-b-4 border-gold transition-colors">
                 Purchase
@@ -1630,7 +1205,7 @@
               </button>
             </div>
             
-            <!-- Purchase Calculator Tab -->
+            
             <div id="calc-purchase" class="calc-tab">
               <div class="grid md:grid-cols-2 gap-4 mb-6">
                 <div>
@@ -1690,7 +1265,7 @@
                 Calculate Monthly Payment
               </button>
               
-              <!-- Results -->
+              
               <div id="purchase-results" class="mt-6 hidden">
                 <div class="grid md:grid-cols-2 gap-6">
                   <div>
@@ -1736,7 +1311,7 @@
               </div>
             </div>
             
-            <!-- Affordability Calculator Tab -->
+            
             <div id="calc-affordability" class="calc-tab hidden">
               <div class="grid md:grid-cols-2 gap-4 mb-6">
                 <div>
@@ -1778,7 +1353,7 @@
                 Calculate What I Can Afford
               </button>
               
-              <!-- Results -->
+              
               <div id="afford-results" class="mt-6 hidden">
                 <div class="bg-gradient-to-r from-navy to-blue-900 text-white p-6 rounded-lg text-center mb-4">
                   <p class="text-lg mb-2">Maximum Home Price You Can Afford</p>
@@ -1801,7 +1376,7 @@
               </div>
             </div>
             
-            <!-- Refinance Calculator Tab -->
+            
             <div id="calc-refinance" class="calc-tab hidden">
               <div class="bg-blue-50 p-4 rounded-lg mb-6">
                 <p class="text-sm text-navy font-semibold">Current Loan Information</p>
@@ -1855,7 +1430,7 @@
                 Calculate Refinance Savings
               </button>
               
-              <!-- Results -->
+              
               <div id="refi-results" class="mt-6 hidden">
                 <div class="grid md:grid-cols-2 gap-4 mb-4">
                   <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
@@ -1885,7 +1460,7 @@
               </div>
             </div>
 
-            <!-- Rent vs Buy Calculator Tab -->
+            
             <div id="calc-rentbuy" class="calc-tab hidden">
               <div class="grid md:grid-cols-2 gap-4 mb-6">
                 <div>
@@ -1971,7 +1546,7 @@
               </div>
             </div>
 
-            <!-- VA Purchase Calculator Tab -->
+            
             <div id="calc-vapurchase" class="calc-tab hidden">
               <div class="bg-blue-50 p-4 rounded-lg mb-6">
                 <p class="text-sm text-navy font-semibold">VA Loan — No Monthly Mortgage Insurance Required</p>
@@ -2067,7 +1642,7 @@
               </div>
             </div>
 
-            <!-- VA Refinance Calculator Tab -->
+            
             <div id="calc-varefinance" class="calc-tab hidden">
               <div class="bg-blue-50 p-4 rounded-lg mb-6">
                 <p class="text-sm text-navy font-semibold">Current Loan Information</p>
@@ -2162,7 +1737,7 @@
               </div>
             </div>
 
-            <!-- DSCR Calculator Tab -->
+            
             <div id="calc-dscr" class="calc-tab hidden">
               <div class="bg-blue-50 p-4 rounded-lg mb-6">
                 <p class="text-sm text-navy font-semibold">Investment Property — Debt-Service Coverage Ratio Loan</p>
@@ -2256,7 +1831,7 @@
               </div>
             </div>
 
-            <!-- Fix & Flip Calculator Tab -->
+            
             <div id="calc-fixflip" class="calc-tab hidden">
               <div class="bg-blue-50 p-4 rounded-lg mb-6">
                 <p class="text-sm text-navy font-semibold">Short-Term Rehab Loan — Fix & Flip Analysis</p>
@@ -2332,7 +1907,7 @@
 
           </div>
           
-          <!-- Call to Action below calculator -->
+          
                 <div class="mt-8 p-6 bg-gradient-to-r from-navy to-navy-dark rounded-xl border border-gold/30 text-center">
                     <h3 class="text-xl font-bold text-white mb-2">Like what you see?</h3>
                     <p class="text-gray-300 mb-4">Get your personalized rate in under 5 minutes. No credit check required to start.</p>
@@ -2356,10 +1931,10 @@
       </div>
     </section>
     
-    <!-- Chart.js CDN -->
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Calculator JavaScript -->
+    
     <script>
     let purchaseChart = null;
     let vaChart = null;
@@ -2913,9 +2488,9 @@
       <p class="text-gray-600 text-xs leading-relaxed mb-3">Results received from this calculator are designed for comparative purposes only, and accuracy is not guaranteed. We do not guarantee the accuracy of any information or inputs by users of the software.</p>
       <p class="text-gray-600 text-xs leading-relaxed">This calculator does not have the ability to pre-qualify you for any loan program which should be verified independently with one of our Loan Consultants. Qualification for loan programs may require additional information such as credit scores and cash reserves which is not gathered in this calculator. Information such as interest rates and pricing are subject to change at any time and without notice. Additional fees such as HOA dues are not included in calculations. All information such as interest rates, taxes, insurance, PMI payments, etc. are estimates and should be used for comparison only. We do not guarantee any of the information obtained by this calculator.</p>
     </div>
-    <!-- ───────── END: Comprehensive Mortgage Calculator ───────── -->
+    
 
-    <!-- Apply Now Section -->
+    
     <section id="apply-now" class="py-16 gradient-overlay text-white">
         <div class="container mx-auto px-4 text-center" data-aos="fade-up">
             <div class="max-w-3xl mx-auto">
@@ -2949,12 +2524,12 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    
     <section id="about" class="bg-gray-400 text-gray-900">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-12" data-aos="fade-up">
-                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4" loading="lazy">
+                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4" loading="lazy" width="180" height="60" decoding="async">
                     <h2 class="font-poppins font-bold text-4xl text-navy">
                         About Dr. MortgageUSA
                     </h2>
@@ -2962,7 +2537,7 @@
                 <div class="max-w-4xl mx-auto">
                     <div class="flex flex-col md:flex-row items-center gap-8 mb-8" data-aos="fade-up">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-48 w-48 rounded-full border-4 border-navy shadow-xl object-cover" loading="lazy">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-48 w-48 rounded-full border-4 border-navy shadow-xl object-cover" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                         <div class="text-center md:text-left">
                             <p class="text-lg text-gray-700 leading-relaxed mb-4">
@@ -3020,14 +2595,14 @@
                             </p>
                         </div>
                         
-                        <!-- Apply Now Button -->
+                        
                         <div class="mt-6 text-center">
                             <a href="https://home1st.my1003app.com/2018381/register" target="_blank" class="inline-block bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-600 hover:to-gold text-navy font-bold py-4 px-8 rounded-lg shadow-xl transition-all duration-300 transform hover:scale-105">
                                 Apply Now - Secure Application
                             </a>
                         </div>
                         
-                        <!-- Getting to the Money Video -->
+                        
                         <div class="mt-8 max-w-sm mx-auto">
                             <video src="reviews/getting-to-the-money.mp4" autoplay muted loop playsinline controls class="w-full rounded-xl shadow-lg"></video>
                         </div>
@@ -3037,7 +2612,7 @@
         </div>
     </section>
 
-    <!-- Today's Rates Section - Rates + Instagram Side by Side -->
+    
     <section id="rates" class="py-20 bg-gray-100">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12" data-aos="fade-up">
@@ -3046,7 +2621,7 @@
             </div>
             
             <div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Today's Rates Card -->
+                
                 <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="100">
                     <div class="bg-gradient-to-r from-navy to-blue-900 p-6">
                         <h3 class="font-poppins font-bold text-2xl text-white mb-2">Today's Mortgage Rates</h3>
@@ -3066,7 +2641,7 @@
                     </div>
                 </div>
                 
-                <!-- Instagram Follow Card -->
+                
                 <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="200">
                     <div class="bg-gradient-to-r from-navy to-navy-dark p-6">
                         <h3 class="font-poppins font-bold text-2xl text-white mb-2">Follow @dr.mortgageusa</h3>
@@ -3092,7 +2667,7 @@
         </div>
     </section>
 
-    <!-- Gradient CTA Band -->
+    
     <section class="py-16 bg-gradient-to-r from-navy via-blue-900 to-navy">
         <div class="container mx-auto px-4 text-center" data-aos="fade-up">
             <h2 class="font-poppins font-bold text-3xl md:text-4xl text-white mb-4">Ready to Make Your Move?</h2>
@@ -3109,18 +2684,18 @@
         </div>
     </section>
 
-    <!-- Compliance Footer -->
+    
     <footer class="bg-navy text-white py-12">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <div class="mb-8">
-                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4" loading="lazy">
+                    <img src="logo.png" alt="Dr.MortgageUSA Mortgage Services Florida" class="w-40 md:w-48 lg:w-56 xl:w-64 h-auto mx-auto mb-4" loading="lazy" width="180" height="60" decoding="async">
                     <div class="font-poppins font-bold text-2xl text-gold mb-4">
                         Dr.MortgageUSA
                     </div>
                     <div class="flex justify-center items-center gap-4 mb-4">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-16 w-16 rounded-full border-2 border-gold" loading="lazy">
+                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-16 w-16 rounded-full border-2 border-gold" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                         <div class="text-left">
                             <p class="text-gold font-semibold">Dennis Ross</p>
@@ -3659,7 +3234,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
     </script>
     
-    <!-- Google Maps Places API for Reviews -->
+    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGS_FJMCNUodWv7zlg6YAbOsCo1q1dtYM&libraries=places"></script>
     <script>
     function initReviews() {
@@ -3693,7 +3268,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 transition-opacity duration-300">
                             <div class="flex items-center gap-4 mb-4">
                                 <div class="w-14 h-14 rounded-full bg-navy flex items-center justify-center text-white font-bold text-lg">
-                                    ${review.profile_photo_url ? `<img src="${review.profile_photo_url}" class="w-14 h-14 rounded-full object-cover" alt="${review.author_name}" referrerpolicy="no-referrer">` : getInitials(review.author_name)}
+                                    ${review.profile_photo_url ? `<img loading="lazy" src="${review.profile_photo_url}" class="w-14 h-14 rounded-full object-cover" alt="${review.author_name}" referrerpolicy="no-referrer" decoding="async">` : getInitials(review.author_name)}
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-navy text-lg">${review.author_name}</h4>
@@ -3765,7 +3340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('load', initReviews);
     </script>
 
-    <!-- Back to Top Button -->
+    
     <button id="back-to-top" onclick="window.scrollTo({top:0})" class="fixed bottom-6 right-6 z-50 bg-gold text-navy w-12 h-12 rounded-full shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-gold-light hover:scale-110" aria-label="Back to top">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
     </button>
@@ -3781,5 +3356,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     })();
     </script>
+
+<!-- Floating Schedule Button -->
+<a href="tel:+18503468514" id="floatingCTA" class="fixed bottom-6 right-6 z-40 flex items-center gap-2 text-white font-bold py-3 px-6 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl" style="background: linear-gradient(135deg, #D4AF37, #b8962e); font-size:15px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+    Call Dennis Now
+</a>
+<style>
+#floatingCTA{animation:floatPulse 3s ease-in-out infinite}
+@keyframes floatPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media(max-width:768px){#floatingCTA{bottom:16px;right:16px;padding:12px 20px;font-size:14px}}
+</style>
+
 </body>
 </html>
