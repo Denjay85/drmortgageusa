@@ -522,6 +522,22 @@ print("[Auto-Updater] Started - 2hr weekdays, 6hr weekends, market hours only")
 
 
 
+
+
+# --- Blog Routes ---
+@app.route('/blog')
+@app.route('/blog/')
+def blog_index():
+    return send_from_directory('blog_posts', 'index.html')
+
+@app.route('/blog/<slug>')
+def blog_post(slug):
+    filename = f"{slug}.html"
+    filepath = os.path.join('blog_posts', filename)
+    if os.path.exists(filepath):
+        return send_from_directory('blog_posts', filename)
+    return send_from_directory('.', 'index.html'), 404
+
 # --- Performance: Caching Headers ---
 @app.after_request
 def add_cache_headers(response):

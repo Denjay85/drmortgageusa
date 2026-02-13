@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title} | Dr.MortgageUSA Blog</title>
+    <meta name="description" content="{description}">
+    <meta name="author" content="Dennis Ross">
+    <link rel="canonical" href="https://drmortgageusa.com/blog/{slug}">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{title}">
+    <meta property="og:description" content="{description}">
+    <meta property="og:url" content="https://drmortgageusa.com/blog/{slug}">
+    <meta property="og:site_name" content="Dr.MortgageUSA">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-navy {{ background-color: #1a1a2e; }}
+        .text-gold {{ color: #D4AF37; }}
+        .bg-gold {{ background-color: #D4AF37; }}
+        .prose h2 {{ font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #1a1a2e; }}
+        .prose h3 {{ font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #1a1a2e; }}
+        .prose p {{ margin-bottom: 1rem; line-height: 1.8; color: #374151; }}
+        .prose ul {{ list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }}
+        .prose li {{ margin-bottom: 0.5rem; color: #374151; }}
+        .prose strong {{ color: #1a1a2e; }}
+    </style>
+    <script type="application/ld+json">
+    {{
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "{title}",
+        "description": "{description}",
+        "author": {{
+            "@type": "Person",
+            "name": "Dennis Ross",
+            "jobTitle": "Mortgage Broker",
+            "url": "https://drmortgageusa.com"
+        }},
+        "publisher": {{
+            "@type": "Organization",
+            "name": "Dr.MortgageUSA"
+        }},
+        "datePublished": "{date}",
+        "dateModified": "{date}",
+        "url": "https://drmortgageusa.com/blog/{slug}"
+    }}
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Nav -->
+    <nav class="bg-navy text-white py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <a href="/" class="text-xl font-bold">Dr.MortgageUSA</a>
+            <div class="flex items-center gap-6">
+                <a href="/blog" class="text-gray-300 hover:text-white transition-colors">Blog</a>
+                <a href="/#rates" class="text-gray-300 hover:text-white transition-colors">Rates</a>
+                <a href="/#faq" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
+                <a href="tel:+18503468514" class="bg-gold text-navy font-bold py-2 px-5 rounded-full text-sm hover:scale-105 transition-transform">Call Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="py-12">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <div class="mb-8">
+                <a href="/blog" class="text-gold hover:underline text-sm font-semibold">&larr; Back to Blog</a>
+            </div>
+            <h1 class="font-bold text-3xl md:text-4xl text-gray-900 mb-4 leading-tight">{title}</h1>
+            <div class="flex items-center gap-3 text-sm text-gray-500 mb-8">
+                <span>By Dennis Ross, NMLS #2018381</span>
+                <span>|</span>
+                <time datetime="{date}">{date_display}</time>
+            </div>
+            <div class="prose max-w-none">
+                {content}
+            </div>
+
+            <!-- CTA Box -->
+            <div class="mt-12 bg-navy text-white rounded-2xl p-8 text-center">
+                <h3 class="text-2xl font-bold mb-3">Ready to Get Started?</h3>
+                <p class="text-gray-300 mb-6">Get personalized numbers and expert guidance from a Navy veteran who has helped 600+ Florida families.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="tel:+18503468514" class="bg-gold text-navy font-bold py-3 px-8 rounded-full hover:scale-105 transition-transform">Call 850-346-8514</a>
+                    <a href="/" class="border-2 border-gold text-gold font-bold py-3 px-8 rounded-full hover:bg-gold hover:text-navy transition-all">Apply Online</a>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="bg-navy text-gray-400 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Dennis Ross | NMLS #2018381 | Powered by Home1st Lending, LLC NMLS #1418</p>
+            <p class="mt-2">Licensed in Florida | Equal Housing Lender</p>
+        </div>
+    </footer>
+</body>
+</html>
