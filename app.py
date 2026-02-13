@@ -475,5 +475,45 @@ ADMIN_DASHBOARD_TEMPLATE = '''
 
 init_database()
 
+
+# ============================================
+# AUTO-REFRESH RATE UPDATER (Background Thread)
+# Fetches rates from MortgageNewsDaily every 2 hours
+# during market hours and updates index.html on disk
+# ============================================
+import threading
+import time as _time
+
+def _rate_update_scheduler():
+    from update_rates import fetch_mnd_rates, update_html_rates
+    import pytz
+    from datetime import datetime as dt
+    _time.sleep(30)
+    while True:
+        try:
+            est = pytz.timezone('US/Eastern')
+            now = dt.now(est)
+            hour = now.hour
+            weekday = now.weekday()
+            if 6 <= hour <= 21:
+                print(f"[Auto-Updater] Fetching rates at {now.strftime('%I:%M %p ET')}")
+                rates = fetch_mnd_rates()
+                if rates:
+                    success = update_html_rates(rates)
+                    print(f"[Auto-Updater] Rates {'updated' if success else 'unchanged'}")
+                else:
+                    print("[Auto-Updater] Could not fetch rates from MND")
+            else:
+                print(f"[Auto-Updater] Outside market hours ({hour}:00 ET), skipping")
+            interval = 21600 if weekday >= 5 else 7200
+            _time.sleep(interval)
+        except Exception as e:
+            print(f"[Auto-Updater] Error: {e}")
+            _time.sleep(300)
+
+_rate_thread = threading.Thread(target=_rate_update_scheduler, daemon=True)
+_rate_thread.start()
+print("[Auto-Updater] Started - 2hr weekdays, 6hr weekends, market hours only")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
