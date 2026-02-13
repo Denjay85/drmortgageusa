@@ -16,7 +16,7 @@ from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string
 import mimetypes
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+app = Flask(__name__, static_folder=None)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
@@ -85,7 +85,8 @@ def health_check():
 
 @app.route('/')
 def serve_index():
-    return send_from_directory('.', 'index.html')
+    return send_file(os.path.join(os.getcwd(), 'index.html'),
+                     mimetype='text/html')
 
 
 @app.route('/<path:path>')
@@ -96,12 +97,13 @@ def serve_static(path):
         abs_path = os.path.join(os.getcwd(), path)
         if os.path.isfile(abs_path):
             mimetype, _ = mimetypes.guess_type(abs_path)
-            if mimetype and mimetype.startswith('video/'):
-                return send_file(abs_path, mimetype=mimetype, conditional=True)
-            return send_from_directory('.', path)
-    except Exception:
-        pass
-    return send_from_directory('.', 'index.html')
+            if not mimetype:
+                mimetype = 'application/octet-stream'
+            return send_file(abs_path, mimetype=mimetype, conditional=True)
+    except Exception as e:
+        app.logger.error(f'Error serving {path}: {e}')
+    return send_file(os.path.join(os.getcwd(), 'index.html'),
+                     mimetype='text/html')
 
 
 @app.route('/api/quiz-submit', methods=['POST'])
@@ -579,28 +581,33 @@ def blog_post(slug):
 # --- Performance: Caching Headers ---
 @app.after_request
 def add_cache_headers(response):
-    # Static assets: cache for 1 week
-    if response.content_type and any(
-            t in response.content_type
-            for t in ['image/', 'font/', 'text/css', 'javascript', 'video/']):
-        response.headers['Cache-Control'] = 'public, max-age=604800, immutable'
-    # HTML: cache for 5 minutes (allows rate updates to propagate)
-    elif response.content_type and 'text/html' in response.content_type:
-        response.headers[
-            'Cache-Control'] = 'public, max-age=300, must-revalidate'
+    try:
+        # Static assets: cache for 1 week
+        if response.content_type and any(
+                t in response.content_type for t in
+            ['image/', 'font/', 'text/css', 'javascript', 'video/']):
+            response.headers[
+                'Cache-Control'] = 'public, max-age=604800, immutable'
+        # HTML: cache for 5 minutes (allows rate updates to propagate)
+        elif response.content_type and 'text/html' in response.content_type:
+            response.headers[
+                'Cache-Control'] = 'public, max-age=300, must-revalidate'
         # Add security headers
         response.headers['X-Content-Type-Options'] = 'nosniff'
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
         response.headers[
             'Permissions-Policy'] = 'camera=(), microphone=(), geolocation=(self), payment=()'
-        return response
+    except Exception as e:
+        app.logger.error(f'Error in after_request: {e}')
+    return response
 
 
 @app.errorhandler(404)
 def page_not_found(e):
     try:
-        return send_from_directory('.', '404.html'), 404
+        return send_file(os.path.join(os.getcwd(), '404.html'),
+                         mimetype='text/html'), 404
     except Exception:
         return '<h1>404 - Page Not Found</h1>', 404
 
@@ -608,7 +615,8 @@ def page_not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     try:
-        return send_from_directory('.', '404.html'), 500
+        return send_file(os.path.join(os.getcwd(), '404.html'),
+                         mimetype='text/html'), 500
     except Exception:
         return '<h1>500 - Server Error</h1>', 500
 
@@ -616,4 +624,4 @@ def server_error(e):
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
-# deploy v2 indent fix csp-removed video-fix
+# deploy v3 static-folder-fix all-sendfile
