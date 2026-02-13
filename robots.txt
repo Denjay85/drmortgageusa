@@ -2,6 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://drmortgageusa.com/sitemap.xml
-
-# Dr.MortgageUSA - Florida Mortgage Broker
-# Dennis Ross NMLS #2018381

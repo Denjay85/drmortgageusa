@@ -70,6 +70,11 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
+@app.route('/health')
+def health_check():
+    return jsonify({'status': 'ok', 'service': 'drmortgageusa'}), 200
+
 @app.route('/')
 def serve_index():
     return send_from_directory('.', 'index.html')
