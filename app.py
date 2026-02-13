@@ -20,6 +20,7 @@ app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
 
+
 def get_admin_password():
     """Get admin password from environment - required for security"""
     password = os.environ.get('ADMIN_PASSWORD')
@@ -27,9 +28,11 @@ def get_admin_password():
         raise RuntimeError("ADMIN_PASSWORD environment variable must be set")
     return password
 
+
 def get_db_connection():
     """Get database connection using environment variables"""
     return psycopg2.connect(os.environ['DATABASE_URL'])
+
 
 def init_database():
     """Create leads table if it doesn't exist"""
@@ -61,13 +64,16 @@ def init_database():
     except Exception as e:
         print(f"Database initialization error: {e}")
 
+
 def login_required(f):
     """Decorator to require admin login"""
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('admin_logged_in'):
             return redirect(url_for('admin_login'))
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -75,9 +81,11 @@ def login_required(f):
 def health_check():
     return jsonify({'status': 'ok', 'service': 'drmortgageusa'}), 200
 
+
 @app.route('/')
 def serve_index():
     return send_from_directory('.', 'index.html')
+
 
 @app.route('/<path:path>')
 def serve_static(path):
@@ -87,12 +95,13 @@ def serve_static(path):
         return send_from_directory('.', path)
     return send_from_directory('.', 'index.html')
 
+
 @app.route('/api/quiz-submit', methods=['POST'])
 def quiz_submit():
     """Receive quiz submission, store in DB, forward to Zapier"""
     try:
         data = request.get_json() or request.form.to_dict()
-        
+
         first_name = data.get('firstName', data.get('first_name', ''))
         email = data.get('email', '')
         phone = data.get('phone', '')
@@ -101,72 +110,85 @@ def quiz_submit():
         down_payment = data.get('downPayment', data.get('down_payment', ''))
         timeline = data.get('timeline', '')
         credit_score = data.get('creditScore', data.get('credit_score', ''))
-        military_status = data.get('militaryStatus', data.get('military_status', ''))
+        military_status = data.get('militaryStatus',
+                                   data.get('military_status', ''))
         property_type = data.get('propertyType', data.get('property_type', ''))
-        investor_loan_type = data.get('investorLoanType', data.get('investor_loan_type', ''))
-        
+        investor_loan_type = data.get('investorLoanType',
+                                      data.get('investor_loan_type', ''))
+
         conn = get_db_connection()
         cur = conn.cursor()
-        
-        cur.execute("""
+
+        cur.execute(
+            """
             INSERT INTO leads (first_name, email, phone, segment, price_range, down_payment, 
                              timeline, credit_score, military_status, property_type, investor_loan_type)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
-        """, (first_name, email, phone, segment, price_range, down_payment, 
-              timeline, credit_score, military_status, property_type, investor_loan_type))
-        
+        """, (first_name, email, phone, segment, price_range, down_payment,
+              timeline, credit_score, military_status, property_type,
+              investor_loan_type))
+
         result = cur.fetchone()
         lead_id = result[0] if result else None
-        
+
         zapier_forwarded = False
         try:
-            zapier_response = requests.post(ZAPIER_WEBHOOK_URL, json=data, timeout=10)
+            zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
+                                            json=data,
+                                            timeout=10)
             if zapier_response.status_code == 200:
                 zapier_forwarded = True
         except Exception as e:
             print(f"Zapier forward failed: {e}")
-        
-        cur.execute("UPDATE leads SET zapier_forwarded = %s WHERE id = %s", (zapier_forwarded, lead_id))
+
+        cur.execute("UPDATE leads SET zapier_forwarded = %s WHERE id = %s",
+                    (zapier_forwarded, lead_id))
         conn.commit()
         cur.close()
         conn.close()
-        
+
         return jsonify({"success": True, "lead_id": lead_id})
-        
+
     except Exception as e:
         print(f"Quiz submission error: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
+
 
 @app.route('/admin')
 def admin_login():
     """Admin login page"""
     if session.get('admin_logged_in'):
         return redirect(url_for('admin_dashboard'))
-    
+
     return render_template_string(ADMIN_LOGIN_TEMPLATE)
+
 
 @app.route('/admin/login', methods=['POST'])
 def admin_login_post():
     """Handle admin login"""
     password = request.form.get('password', '')
-    
+
     try:
         admin_pw = get_admin_password()
     except RuntimeError:
-        return render_template_string(ADMIN_LOGIN_TEMPLATE, error="Admin not configured")
-    
+        return render_template_string(ADMIN_LOGIN_TEMPLATE,
+                                      error="Admin not configured")
+
     if secrets.compare_digest(password, admin_pw):
         session['admin_logged_in'] = True
         return redirect(url_for('admin_dashboard'))
-    
-    return render_template_string(ADMIN_LOGIN_TEMPLATE, error="Invalid password")
+
+    return render_template_string(ADMIN_LOGIN_TEMPLATE,
+                                  error="Invalid password")
+
 
 @app.route('/admin/logout')
 def admin_logout():
     """Logout admin"""
     session.pop('admin_logged_in', None)
     return redirect(url_for('admin_login'))
+
 
 @app.route('/admin/delete/<int:lead_id>', methods=['POST'])
 @login_required
@@ -175,13 +197,14 @@ def delete_lead(lead_id):
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("DELETE FROM leads WHERE id = %s", (lead_id,))
+        cur.execute("DELETE FROM leads WHERE id = %s", (lead_id, ))
         conn.commit()
         cur.close()
         conn.close()
     except Exception as e:
         print(f"Error deleting lead: {e}")
     return redirect(url_for('admin_dashboard'))
+
 
 @app.route('/admin/dashboard')
 @login_required
@@ -190,7 +213,7 @@ def admin_dashboard():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS leads (
                 id SERIAL PRIMARY KEY,
@@ -210,46 +233,45 @@ def admin_dashboard():
             )
         """)
         conn.commit()
-        
+
         segment_filter = request.args.get('segment', '')
         search = request.args.get('search', '')
-        
+
         query = "SELECT * FROM leads WHERE 1=1"
         params = []
-        
+
         if segment_filter:
             query += " AND segment = %s"
             params.append(segment_filter)
-        
+
         if search:
             query += " AND (first_name ILIKE %s OR email ILIKE %s OR phone ILIKE %s)"
             search_param = f"%{search}%"
             params.extend([search_param, search_param, search_param])
-        
+
         query += " ORDER BY created_at DESC"
-        
+
         cur.execute(query, params)
-        columns = [desc[0] for desc in cur.description] if cur.description else []
+        columns = [desc[0]
+                   for desc in cur.description] if cur.description else []
         leads = [dict(zip(columns, row)) for row in cur.fetchall()]
-        
+
         cur.execute("SELECT COUNT(*) FROM leads")
         count_result = cur.fetchone()
         total_leads = count_result[0] if count_result else 0
-        
+
         cur.execute("SELECT segment, COUNT(*) FROM leads GROUP BY segment")
         segment_counts = dict(cur.fetchall())
-        
+
         cur.close()
         conn.close()
-        
-        return render_template_string(
-            ADMIN_DASHBOARD_TEMPLATE, 
-            leads=leads, 
-            total_leads=total_leads,
-            segment_counts=segment_counts,
-            current_segment=segment_filter,
-            search_query=search
-        )
+
+        return render_template_string(ADMIN_DASHBOARD_TEMPLATE,
+                                      leads=leads,
+                                      total_leads=total_leads,
+                                      segment_counts=segment_counts,
+                                      current_segment=segment_filter,
+                                      search_query=search)
     except Exception as e:
         error_msg = f"Database error: {str(e)}"
         print(error_msg)
@@ -268,7 +290,9 @@ def admin_dashboard():
                 </div>
             </body>
             </html>
-        ''', error=error_msg)
+        ''',
+                                      error=error_msg)
+
 
 ADMIN_LOGIN_TEMPLATE = '''
 <!DOCTYPE html>
@@ -480,7 +504,6 @@ ADMIN_DASHBOARD_TEMPLATE = '''
 
 init_database()
 
-
 # ============================================
 # AUTO-REFRESH RATE UPDATER (Background Thread)
 # Fetches rates from MortgageNewsDaily every 2 hours
@@ -488,6 +511,7 @@ init_database()
 # ============================================
 import threading
 import time as _time
+
 
 def _rate_update_scheduler():
     from update_rates import fetch_mnd_rates, update_html_rates
@@ -501,27 +525,31 @@ def _rate_update_scheduler():
             hour = now.hour
             weekday = now.weekday()
             if 6 <= hour <= 21:
-                print(f"[Auto-Updater] Fetching rates at {now.strftime('%I:%M %p ET')}")
+                print(
+                    f"[Auto-Updater] Fetching rates at {now.strftime('%I:%M %p ET')}"
+                )
                 rates = fetch_mnd_rates()
                 if rates:
                     success = update_html_rates(rates)
-                    print(f"[Auto-Updater] Rates {'updated' if success else 'unchanged'}")
+                    print(
+                        f"[Auto-Updater] Rates {'updated' if success else 'unchanged'}"
+                    )
                 else:
                     print("[Auto-Updater] Could not fetch rates from MND")
             else:
-                print(f"[Auto-Updater] Outside market hours ({hour}:00 ET), skipping")
+                print(
+                    f"[Auto-Updater] Outside market hours ({hour}:00 ET), skipping"
+                )
             interval = 21600 if weekday >= 5 else 7200
             _time.sleep(interval)
         except Exception as e:
             print(f"[Auto-Updater] Error: {e}")
             _time.sleep(300)
 
+
 _rate_thread = threading.Thread(target=_rate_update_scheduler, daemon=True)
 _rate_thread.start()
 print("[Auto-Updater] Started - 2hr weekdays, 6hr weekends, market hours only")
-
-
-
 
 
 # --- Blog Routes ---
@@ -529,6 +557,7 @@ print("[Auto-Updater] Started - 2hr weekdays, 6hr weekends, market hours only")
 @app.route('/blog/')
 def blog_index():
     return send_from_directory('blog_posts', 'index.html')
+
 
 @app.route('/blog/<slug>')
 def blog_post(slug):
@@ -538,20 +567,41 @@ def blog_post(slug):
         return send_from_directory('blog_posts', filename)
     return send_from_directory('.', 'index.html'), 404
 
+
 # --- Performance: Caching Headers ---
 @app.after_request
 def add_cache_headers(response):
     # Static assets: cache for 1 week
-    if response.content_type and any(t in response.content_type for t in ['image/', 'font/', 'text/css', 'javascript']):
+    if response.content_type and any(
+            t in response.content_type
+            for t in ['image/', 'font/', 'text/css', 'javascript']):
         response.headers['Cache-Control'] = 'public, max-age=604800, immutable'
     # HTML: cache for 5 minutes (allows rate updates to propagate)
     elif response.content_type and 'text/html' in response.content_type:
-        response.headers['Cache-Control'] = 'public, max-age=300, must-revalidate'
-    # Add security headers
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-    return response
+        response.headers[
+            'Cache-Control'] = 'public, max-age=300, must-revalidate'
+        # Add security headers
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        response.headers[
+            'Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://maps.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://hooks.zapier.com https://maps.googleapis.com https://api.example.com; frame-src https://www.google.com https://www.youtube.com; media-src 'self' https:"
+        response.headers[
+            'Permissions-Policy'] = 'camera=(), microphone=(), geolocation=(self), payment=()'
+        return response
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return send_from_directory('.', '404.html'), 404
+
+
+@app.errorhandler(500)
+def server_error(e):
+    return send_from_directory('.', '404.html'), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+# deploy v2 indent fix
