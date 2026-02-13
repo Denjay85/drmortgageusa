@@ -13,7 +13,8 @@ import requests
 import psycopg2
 from datetime import datetime
 from functools import wraps
-from flask import Flask, request, jsonify, send_from_directory, session, redirect, url_for, render_template_string
+from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string
+import mimetypes
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
@@ -91,8 +92,15 @@ def serve_index():
 def serve_static(path):
     if path.startswith('admin'):
         return redirect(url_for('admin_login'))
-    if os.path.exists(path):
-        return send_from_directory('.', path)
+    try:
+        abs_path = os.path.join(os.getcwd(), path)
+        if os.path.isfile(abs_path):
+            mimetype, _ = mimetypes.guess_type(abs_path)
+            if mimetype and mimetype.startswith('video/'):
+                return send_file(abs_path, mimetype=mimetype, conditional=True)
+            return send_from_directory('.', path)
+    except Exception:
+        pass
     return send_from_directory('.', 'index.html')
 
 
@@ -574,7 +582,7 @@ def add_cache_headers(response):
     # Static assets: cache for 1 week
     if response.content_type and any(
             t in response.content_type
-            for t in ['image/', 'font/', 'text/css', 'javascript']):
+            for t in ['image/', 'font/', 'text/css', 'javascript', 'video/']):
         response.headers['Cache-Control'] = 'public, max-age=604800, immutable'
     # HTML: cache for 5 minutes (allows rate updates to propagate)
     elif response.content_type and 'text/html' in response.content_type:
@@ -591,15 +599,21 @@ def add_cache_headers(response):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return send_from_directory('.', '404.html'), 404
+    try:
+        return send_from_directory('.', '404.html'), 404
+    except Exception:
+        return '<h1>404 - Page Not Found</h1>', 404
 
 
 @app.errorhandler(500)
 def server_error(e):
-    return send_from_directory('.', '404.html'), 500
+    try:
+        return send_from_directory('.', '404.html'), 500
+    except Exception:
+        return '<h1>500 - Server Error</h1>', 500
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
-# deploy v2 indent fix csp-removed
+# deploy v2 indent fix csp-removed video-fix
