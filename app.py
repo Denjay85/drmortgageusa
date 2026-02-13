@@ -585,8 +585,6 @@ def add_cache_headers(response):
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
         response.headers[
-            'Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://maps.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://hooks.zapier.com https://maps.googleapis.com https://api.example.com; frame-src https://www.google.com https://www.youtube.com; media-src 'self' https:"
-        response.headers[
             'Permissions-Policy'] = 'camera=(), microphone=(), geolocation=(self), payment=()'
         return response
 
@@ -604,4 +602,4 @@ def server_error(e):
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
-# deploy v2 indent fix
+# deploy v2 indent fix csp-removed
