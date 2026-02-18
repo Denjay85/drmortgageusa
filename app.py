@@ -14,9 +14,16 @@ import psycopg2
 from datetime import datetime
 from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string
+from flask_compress import Compress
 import mimetypes
 
 app = Flask(__name__, static_folder=None)
+
+# Enable gzip compression for all responses
+Compress(app)
+app.config['COMPRESS_MIMETYPES'] = ['text/html', 'text/css', 'application/javascript', 'application/json']
+app.config['COMPRESS_LEVEL'] = 6
+app.config['COMPRESS_MIN_SIZE'] = 500
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
