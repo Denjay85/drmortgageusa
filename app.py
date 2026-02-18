@@ -89,6 +89,15 @@ def serve_index():
                      mimetype='text/html')
 
 
+
+@app.route('/robots.txt')
+def serve_robots():
+    return send_file(os.path.join(os.getcwd(), 'robots.txt'), mimetype='text/plain')
+
+@app.route('/sitemap.xml')
+def serve_sitemap():
+    return send_file(os.path.join(os.getcwd(), 'sitemap.xml'), mimetype='application/xml')
+
 @app.route('/<path:path>')
 def serve_static(path):
     if path.startswith('admin'):
