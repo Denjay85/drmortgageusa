@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELOC Calculator | Dr.MortgageUSA - 5-Day Close Available</title>
+    <meta name="description" content="Calculate your home equity line of credit (HELOC) with Dr.MortgageUSA. 5-day close available through Home 1st Lending. Dennis Ross NMLS #2018381.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { DEFAULT: '#001f3f', dark: '#00152b', light: '#003366' },
+                        gold: { DEFAULT: '#ffb700', light: '#ffc733', dark: '#e6a500' }
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root { --navy: #001f3f; --gold: #ffb700; --gold-light: #ffc733; }
+        body { font-family: 'Inter', sans-serif; background: #001f3f; color: #fff; }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, #e6a500 100%);
+            color: var(--navy);
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(255,183,0,0.4); }
+        .glass-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+        }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.2); outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); cursor: pointer; }
+        input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--gold); cursor: pointer; border: none; }
+        .result-card { background: rgba(255,183,0,0.08); border: 1px solid rgba(255,183,0,0.25); border-radius: 12px; padding: 20px; }
+        .badge-glow { animation: glow 2s ease-in-out infinite alternate; }
+        @keyframes glow { from { box-shadow: 0 0 10px rgba(255,183,0,0.3); } to { box-shadow: 0 0 25px rgba(255,183,0,0.5); } }
+        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23001f3f' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+    </style>
+</head>
+<body>
+    <!-- Nav -->
+    <nav class="bg-navy/90 backdrop-blur-md text-white py-3 md:py-4 fixed w-full top-0 z-50 border-b border-white/5">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="/" class="flex items-center space-x-3">
+                <img src="/logo.png" alt="Dr.MortgageUSA Logo" class="h-12 md:h-16 lg:h-20 w-auto object-contain" width="180" height="60">
+                <div class="font-poppins font-bold text-lg md:text-xl text-gold whitespace-nowrap">Dr.MortgageUSA</div>
+            </a>
+            <div class="hidden lg:flex items-center space-x-6">
+                <a href="/" class="text-white hover:text-gold transition-colors font-medium">Home</a>
+                <a href="/#calculator" class="text-white hover:text-gold transition-colors font-medium">Calculators</a>
+                <a href="/heloc-calculator" class="text-gold font-medium">HELOC Calculator</a>
+                <a href="/blog" class="text-gray-300 hover:text-gold transition-colors">Blog</a>
+                <a href="https://home1st.my1003app.com/2018381/register" target="_blank" rel="noopener noreferrer" class="btn-gold">Apply Now</a>
+            </div>
+            <a href="tel:8503468514" class="flex items-center gap-2" title="Call Dennis Ross">
+                <span class="hidden md:inline text-sm font-medium text-gold">(850) 346-8514</span>
+                <img src="/dennis-ross.png" alt="Dennis Ross" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold" width="400" height="400">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-16 px-4">
+        <div class="container mx-auto max-w-3xl">
+
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <h1 class="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl mb-3">
+                    HELOC <span class="text-gold">Calculator</span>
+                </h1>
+                <p class="text-gray-300 text-lg max-w-xl mx-auto">See how much equity you can access from your home.</p>
+            </div>
+
+            <!-- Calculator -->
+            <div class="glass-card p-6 md:p-8 mb-8">
+
+                <!-- Home Value -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">Home Value</label>
+                    <div class="flex items-center gap-4">
+                        <input type="range" id="homeValue" min="100000" max="1500000" step="5000" value="400000" oninput="syncInput('homeValue','homeValueInput'); calculate();">
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-navy font-semibold">$</span>
+                            <input type="number" id="homeValueInput" value="400000" min="100000" max="1500000" step="5000"
+                                   class="w-36 pl-7 pr-3 py-2 rounded-lg text-navy font-semibold text-right"
+                                   oninput="syncSlider('homeValueInput','homeValue'); calculate();">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mortgage Balance -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">Current Mortgage Balance</label>
+                    <div class="flex items-center gap-4">
+                        <input type="range" id="mortgageBalance" min="0" max="1500000" step="5000" value="250000" oninput="syncInput('mortgageBalance','mortgageBalanceInput'); calculate();">
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-navy font-semibold">$</span>
+                            <input type="number" id="mortgageBalanceInput" value="250000" min="0" max="1500000" step="5000"
+                                   class="w-36 pl-7 pr-3 py-2 rounded-lg text-navy font-semibold text-right"
+                                   oninput="syncSlider('mortgageBalanceInput','mortgageBalance'); calculate();">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credit Score -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">Credit Score Range</label>
+                    <select id="creditScore" class="w-full md:w-64 px-4 py-2 rounded-lg text-navy font-semibold appearance-none pr-8" onchange="calculate();">
+                        <option value="620-679">620 - 679</option>
+                        <option value="680-719">680 - 719</option>
+                        <option value="720-759" selected>720 - 759</option>
+                        <option value="760+">760+</option>
+                    </select>
+                </div>
+
+                <div class="border-t border-white/10 pt-6">
+
+                    <!-- Results -->
+                    <div class="grid sm:grid-cols-2 gap-4 mb-6">
+                        <div class="result-card">
+                            <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Available Equity</p>
+                            <p id="availableEquity" class="text-2xl font-bold text-white">$150,000</p>
+                        </div>
+                        <div class="result-card">
+                            <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Estimated HELOC Amount</p>
+                            <p id="helocAmount" class="text-2xl font-bold text-gold">$70,000</p>
+                        </div>
+                    </div>
+
+                    <div class="result-card mb-6">
+                        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Estimated Monthly Payment (Interest Only)</p>
+                        <p id="monthlyPayment" class="text-3xl font-bold text-gold">$496</p>
+                        <p class="text-xs text-gray-400 mt-1">Based on <span id="rateDisplay">8.50</span>% avg HELOC rate</p>
+                    </div>
+
+                    <!-- Badge -->
+                    <div class="badge-glow bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-xl p-4 text-center">
+                        <p class="text-gold font-poppins font-bold text-lg">5-Day Close Available</p>
+                        <p class="text-gray-300 text-sm">Through Home 1st Lending</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What is a HELOC -->
+            <div class="glass-card p-6 md:p-8 mb-6">
+                <h2 class="font-poppins font-bold text-xl text-gold mb-3">What is a HELOC?</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    A Home Equity Line of Credit (HELOC) lets you borrow against the equity in your home, similar to a credit card with your house as collateral. You only pay interest on what you use, and you can draw funds as needed during the draw period. It is one of the most flexible ways to access cash for renovations, debt consolidation, or major expenses.
+                </p>
+            </div>
+
+            <!-- How is this different -->
+            <div class="glass-card p-6 md:p-8 mb-8">
+                <h2 class="font-poppins font-bold text-xl text-gold mb-3">How is this different?</h2>
+                <p class="text-gray-300 leading-relaxed mb-4">
+                    Most HELOCs take 30 to 45 days to close. Through Home 1st Lending, qualified borrowers can close in as few as 5 days. That means faster access to your equity with less waiting and fewer surprises.
+                </p>
+                <ul class="space-y-2 text-gray-300">
+                    <li class="flex items-start gap-2"><span class="text-gold">&#10003;</span> Close in as few as 5 business days</li>
+                    <li class="flex items-start gap-2"><span class="text-gold">&#10003;</span> Simple, streamlined process</li>
+                    <li class="flex items-start gap-2"><span class="text-gold">&#10003;</span> Personalized guidance from a real person, not a call center</li>
+                </ul>
+            </div>
+
+            <!-- CTA -->
+            <div class="text-center mb-8">
+                <a href="/#path-finder" class="btn-gold text-lg px-10 py-4 rounded-xl shadow-lg" onclick="window.location.href='/'; setTimeout(function(){ if(typeof openQuiz==='function') openQuiz(); },500); return false;">
+                    See Your Full Options
+                </a>
+            </div>
+
+            <!-- Footer info -->
+            <div class="text-center text-gray-400 text-sm">
+                <p>Dennis Ross | NMLS 2018381 | Home 1st Lending</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy border-t border-white/10 text-white py-10">
+        <div class="container mx-auto px-4 text-center">
+            <img src="/logo.png" alt="Dr.MortgageUSA" class="w-40 h-auto mx-auto mb-3" loading="lazy" width="180" height="60">
+            <p class="font-poppins font-bold text-xl text-gold mb-2">Dr.MortgageUSA</p>
+            <p class="text-gray-300 text-sm mb-1">NMLS #2018381 | Licensed in Florida Only</p>
+            <p class="text-gray-300 text-sm mb-4">Powered by Home 1st Lending, LLC NMLS #1418</p>
+            <div class="flex justify-center gap-6 text-sm text-gray-400 mb-4">
+                <a href="/" class="hover:text-gold transition-colors">Home</a>
+                <a href="tel:8503468514" class="hover:text-gold transition-colors">850-346-8514</a>
+                <a href="/blog" class="hover:text-gold transition-colors">Blog</a>
+            </div>
+            <p class="text-gray-500 text-xs">&copy; 2026 Dr.MortgageUSA. All rights reserved. Equal Housing Lender &#8962;</p>
+        </div>
+    </footer>
+
+    <script>
+        function syncInput(sliderId, inputId) {
+            document.getElementById(inputId).value = document.getElementById(sliderId).value;
+        }
+        function syncSlider(inputId, sliderId) {
+            document.getElementById(sliderId).value = document.getElementById(inputId).value;
+        }
+
+        function getRate(creditScore) {
+            switch(creditScore) {
+                case '760+': return 7.90;
+                case '720-759': return 8.25;
+                case '680-719': return 8.75;
+                case '620-679': return 9.50;
+                default: return 8.50;
+            }
+        }
+
+        function calculate() {
+            var homeValue = parseFloat(document.getElementById('homeValue').value) || 0;
+            var mortgageBalance = parseFloat(document.getElementById('mortgageBalance').value) || 0;
+            var creditScore = document.getElementById('creditScore').value;
+
+            var equity = homeValue - mortgageBalance;
+            if (equity < 0) equity = 0;
+
+            var helocAmount = (homeValue * 0.80) - mortgageBalance;
+            if (helocAmount < 0) helocAmount = 0;
+
+            var rate = getRate(creditScore);
+            var monthlyPayment = (helocAmount * (rate / 100)) / 12;
+
+            var fmt = function(v) { return '$' + Math.round(v).toLocaleString('en-US'); };
+
+            document.getElementById('availableEquity').textContent = fmt(equity);
+            document.getElementById('helocAmount').textContent = fmt(helocAmount);
+            document.getElementById('monthlyPayment').textContent = fmt(monthlyPayment);
+            document.getElementById('rateDisplay').textContent = rate.toFixed(2);
+        }
+
+        calculate();
+    </script>
+</body>
+</html>

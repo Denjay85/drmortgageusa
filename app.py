@@ -96,6 +96,12 @@ def serve_index():
                      mimetype='text/html')
 
 
+@app.route('/heloc-calculator')
+def heloc_calculator():
+    return send_file(os.path.join(os.getcwd(), 'heloc-calculator.html'),
+                     mimetype='text/html')
+
+
 
 @app.route('/robots.txt')
 def serve_robots():
