@@ -394,10 +394,23 @@
         // GA4 Placeholder
         // gtag('config', 'GA_MEASUREMENT_ID');
     </script>
+    <!-- Meta Pixel Code -->
     <script>
-        // Meta Pixel Placeholder
-        // fbq('init', 'PIXEL_ID'); fbq('track', 'PageView');
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '444762220810129');
+        fbq('track', 'PageView');
     </script>
+    <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=444762220810129&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <script>
         // TikTok Pixel Placeholder
         // ttq.load('PIXEL_ID');
@@ -3393,6 +3406,9 @@ document.addEventListener("DOMContentLoaded", () => {
         source: "60-second-quiz"
       };
       
+      // Meta Pixel: Lead event
+      if(typeof fbq==='function') fbq('track','Lead',{content_name:segment,content_category:'60-second-quiz'});
+      
       // Send to our API (stores lead + forwards to Zapier)
       fetch("/api/quiz-submit", {
         method: "POST",
@@ -3665,6 +3681,23 @@ document.addEventListener("DOMContentLoaded", () => {
 @media(max-width:768px){#floatingCTA{bottom:16px;right:16px;padding:12px 20px;font-size:14px}}
 </style>
 
+<!-- Meta Pixel Conversion Events -->
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  // Track Apply Now clicks
+  document.querySelectorAll('a[href*="my1003app.com"]').forEach(function(el){
+    el.addEventListener('click',function(){
+      if(typeof fbq==='function') fbq('track','CompleteRegistration',{content_name:'Apply Now'});
+    });
+  });
+  // Track phone call clicks
+  document.querySelectorAll('a[href^="tel:"]').forEach(function(el){
+    el.addEventListener('click',function(){
+      if(typeof fbq==='function') fbq('track','Contact',{content_name:'Phone Call'});
+    });
+  });
+});
+</script>
 </body>
 </html>
 <!-- deploy v2 v3 hero-fix -->
