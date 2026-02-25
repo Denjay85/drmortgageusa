@@ -2,31 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://drmortgageusa.com/</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://drmortgageusa.com/blog</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://drmortgageusa.com/blog/orlando-housing-market-outlook-2026</loc>
+    <lastmod>2026-02-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://drmortgageusa.com/blog/va-loan-after-bankruptcy-foreclosure-florida</loc>
+    <lastmod>2026-02-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://drmortgageusa.com/blog/how-to-read-loan-estimate-florida</loc>
+    <lastmod>2026-02-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://drmortgageusa.com/blog/irrrl-va-streamline-refinance-florida-2026</loc>
+    <lastmod>2026-02-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://drmortgageusa.com/blog/va-loan-surviving-spouses-florida</loc>
+    <lastmod>2026-02-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://drmortgageusa.com/blog/va-loan-entitlement-more-than-once-florida</loc>
+    <lastmod>2026-02-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://drmortgageusa.com/blog/va-loan-vs-conventional-orlando-2026</loc>
+    <lastmod>2026-02-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://drmortgageusa.com/blog/buy-home-orlando-no-down-payment-2026</loc>
+    <lastmod>2026-02-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://drmortgageusa.com/blog/va-loan-guide-florida-veterans-2026</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://drmortgageusa.com/blog/first-time-homebuyer-florida-2026</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://drmortgageusa.com/blog/fha-vs-conventional-loan-florida</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
