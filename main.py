@@ -17,6 +17,13 @@ class HTTPHandler(http.server.SimpleHTTPRequestHandler):
         # Serve index.html for root path
         if self.path == '/':
             self.path = '/index.html'
+        # Clean URL routes for static pages
+        elif self.path == '/dpa' or self.path == '/dpa/':
+            self.path = '/dpa.html'
+        elif self.path.startswith('/blog/') and not self.path.endswith('.html'):
+            # Map /blog/slug to /blog_posts/slug.html
+            slug = self.path.replace('/blog/', '').rstrip('/')
+            self.path = f'/blog_posts/{slug}.html'
         return super().do_GET()
     
     def end_headers(self):
