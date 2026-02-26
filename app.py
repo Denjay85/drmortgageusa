@@ -103,6 +103,19 @@ def heloc_calculator():
 
 
 
+@app.route('/dpa')
+def serve_dpa():
+    return send_file(os.path.join(os.getcwd(), 'dpa.html'),
+                     mimetype='text/html')
+
+@app.route('/blog/<path:slug>')
+def serve_blog_post(slug):
+    blog_path = os.path.join(os.getcwd(), 'blog_posts', f'{slug}.html')
+    if os.path.isfile(blog_path):
+        return send_file(blog_path, mimetype='text/html')
+    return send_file(os.path.join(os.getcwd(), 'index.html'),
+                     mimetype='text/html'), 404
+
 @app.route('/robots.txt')
 def serve_robots():
     return send_file(os.path.join(os.getcwd(), 'robots.txt'), mimetype='text/plain')
