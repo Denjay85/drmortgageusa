@@ -36,6 +36,13 @@
         .decision-node.active { background-color: rgba(255,183,0,0.2); border-color: var(--gold); }
         .expand-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
         .expand-content.open { max-height: 2000px; }
+        /* Mobile table: horizontal scroll hint + minimum column widths */
+        @media (max-width: 768px) {
+            .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+            .overflow-x-auto table { min-width: 700px; }
+            .overflow-x-auto table th, .overflow-x-auto table td { padding: 10px 8px; font-size: 13px; white-space: nowrap; }
+            .overflow-x-auto table td:first-child, .overflow-x-auto table th:first-child { position: sticky; left: 0; background: #001f3f; z-index: 2; }
+        }
     </style>
     <script type="application/ld+json">
     {
@@ -67,8 +74,21 @@
                 <a href="/#about" class="text-white hover:text-gold transition-colors font-medium">About</a>
                 <a href="https://home1st.my1003app.com/2018381/register" target="_blank" rel="noopener" class="btn-gold text-sm py-2 px-5 rounded-lg">Apply Now</a>
             </div>
-            <div class="lg:hidden">
+            <div class="lg:hidden flex items-center gap-4">
                 <a href="tel:8503468514" class="text-gold font-medium text-sm">(850) 346-8514</a>
+                <button id="mobile-menu-btn" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')" class="text-white text-2xl" aria-label="Menu">☰</button>
+            </div>
+        </div>
+        <div id="mobile-nav" class="hidden lg:hidden bg-navy border-t border-white/10 px-4 py-4">
+            <div class="flex flex-col gap-4 text-base">
+                <a href="/" class="text-white hover:text-gold transition-colors font-medium py-2">Home</a>
+                <a href="/#stories" class="text-white hover:text-gold transition-colors font-medium py-2">Client Stories</a>
+                <a href="/#calculator" class="text-white hover:text-gold transition-colors font-medium py-2">Calculators</a>
+                <a href="/dpa" class="text-gold font-bold py-2">DPA Programs</a>
+                <a href="/#rates" class="text-white hover:text-gold transition-colors font-medium py-2">Today's Rates</a>
+                <a href="/blog" class="text-white hover:text-gold transition-colors font-medium py-2">Blog</a>
+                <a href="/#about" class="text-white hover:text-gold transition-colors font-medium py-2">About</a>
+                <a href="https://home1st.my1003app.com/2018381/register" target="_blank" rel="noopener" class="btn-gold text-center text-sm py-3 px-5 rounded-lg mt-2">Apply Now</a>
             </div>
         </div>
     </nav>
