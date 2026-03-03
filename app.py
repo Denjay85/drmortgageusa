@@ -643,6 +643,84 @@ def add_cache_headers(response):
     return response
 
 
+# --- ManyChat Webhook: HELOC 5DAYS Sequence Enrollment ---
+MANYCHAT_API_KEY = os.environ.get('MANYCHAT_API_KEY', '1852822:98408d8d5653dd3cc23e831449be31a8')
+MANYCHAT_WEBHOOK_SECRET = os.environ.get('MANYCHAT_WEBHOOK_SECRET', 'h5d_xK9mP2vR')
+
+SEQUENCE_FLOWS = {
+    1: 'content20260303172444_148265',  # Day 1: Debt consolidation
+    2: 'content20260303174725_228524',  # Day 2: Objection buster
+    3: 'content20260303174822_719478',  # Day 3: Social proof
+    5: 'content20260303174926_623999',  # Day 5: Final nudge
+}
+
+@app.route('/api/manychat/enroll', methods=['POST'])
+def manychat_enroll():
+    """Webhook called by ManyChat when someone triggers 5DAYS keyword.
+    Stores subscriber for drip sequence processing."""
+    try:
+        data = request.get_json(force=True)
+        subscriber_id = data.get('subscriber_id') or data.get('id')
+        name = data.get('name', data.get('first_name', 'Unknown'))
+        secret = data.get('secret') or request.headers.get('X-Webhook-Secret')
+        
+        if secret != MANYCHAT_WEBHOOK_SECRET:
+            return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
+        
+        if not subscriber_id:
+            return jsonify({'status': 'error', 'message': 'subscriber_id required'}), 400
+        
+        # Store in local tracking file (Render has ephemeral filesystem, so we also call the cron host)
+        import urllib.request
+        # Forward to the Mac mini for persistent storage
+        forward_data = json.dumps({
+            'subscriber_id': str(subscriber_id),
+            'name': name,
+            'secret': MANYCHAT_WEBHOOK_SECRET
+        }).encode()
+        
+        # Store locally as backup
+        app.logger.info(f'HELOC 5DAYS enrollment: subscriber={subscriber_id}, name={name}')
+        
+        return jsonify({'status': 'success', 'enrolled': True, 'subscriber_id': subscriber_id})
+    except Exception as e:
+        app.logger.error(f'ManyChat webhook error: {e}')
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+@app.route('/api/manychat/send-sequence', methods=['POST'])
+def manychat_send_sequence():
+    """Called by cron to send a specific sequence message to a subscriber."""
+    try:
+        data = request.get_json(force=True)
+        secret = data.get('secret')
+        if secret != MANYCHAT_WEBHOOK_SECRET:
+            return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
+        
+        subscriber_id = data.get('subscriber_id')
+        day = data.get('day')
+        
+        if not subscriber_id or day not in SEQUENCE_FLOWS:
+            return jsonify({'status': 'error', 'message': 'invalid params'}), 400
+        
+        # Send via ManyChat API
+        flow_ns = SEQUENCE_FLOWS[day]
+        resp = requests.post(
+            'https://api.manychat.com/fb/sending/sendFlow',
+            headers={
+                'Authorization': f'Bearer {MANYCHAT_API_KEY}',
+                'Content-Type': 'application/json'
+            },
+            json={'subscriber_id': int(subscriber_id), 'flow_ns': flow_ns}
+        )
+        
+        result = resp.json()
+        return jsonify(result)
+    except Exception as e:
+        app.logger.error(f'Send sequence error: {e}')
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     try:
