@@ -108,6 +108,11 @@ def serve_dpa():
     return send_file(os.path.join(os.getcwd(), 'dpa.html'),
                      mimetype='text/html')
 
+@app.route('/privacy')
+def privacy():
+    return send_file(os.path.join(os.getcwd(), 'privacy.html'),
+                     mimetype='text/html')
+
 @app.route('/blog/<path:slug>')
 def serve_blog_post(slug):
     blog_path = os.path.join(os.getcwd(), 'blog_posts', f'{slug}.html')
