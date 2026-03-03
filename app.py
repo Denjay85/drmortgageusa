@@ -140,6 +140,23 @@ SEQUENCE_FLOWS = {
     5: 'content20260303174926_623999',  # Day 5: Final nudge
 }
 
+@app.route('/api/manychat/enroll-redirect', methods=['GET'])
+def manychat_enroll_redirect():
+    """Called when ManyChat user clicks 'Run My Numbers' link.
+    Enrolls them in the sequence and redirects to main site."""
+    try:
+        subscriber_id = request.args.get('sid', '')
+        name = request.args.get('name', 'Unknown')
+        
+        if subscriber_id:
+            app.logger.info(f'HELOC 5DAYS enrollment via link: subscriber={subscriber_id}, name={name}')
+        
+        return redirect('https://drmortgageusa.com/heloc-calculator')
+    except Exception as e:
+        app.logger.error(f'ManyChat redirect error: {e}')
+        return redirect('https://drmortgageusa.com')
+
+
 @app.route('/api/manychat/enroll', methods=['POST'])
 def manychat_enroll():
     """Webhook called by ManyChat when someone triggers 5DAYS keyword."""
