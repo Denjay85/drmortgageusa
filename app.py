@@ -822,3 +822,34 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
 # deploy v3 static-folder-fix all-sendfile
+
+
+@app.route('/api/db/migrate', methods=['POST'])
+def db_migrate():
+    """One-time migration endpoint. Creates keyword_leads table."""
+    secret = request.args.get('secret') or request.headers.get('X-Webhook-Secret')
+    if secret != MANYCHAT_WEBHOOK_SECRET:
+        return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS keyword_leads (
+                id SERIAL PRIMARY KEY,
+                subscriber_id VARCHAR(100) NOT NULL,
+                subscriber_name VARCHAR(200),
+                keyword VARCHAR(50),
+                ig_username VARCHAR(100),
+                email VARCHAR(255),
+                phone VARCHAR(50),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                processed BOOLEAN DEFAULT FALSE,
+                UNIQUE(subscriber_id, keyword)
+            )
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+        return jsonify({'status': 'success', 'message': 'keyword_leads table created'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
