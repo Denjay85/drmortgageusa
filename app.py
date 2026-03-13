@@ -68,6 +68,23 @@ def init_database():
         conn.commit()
         cur.close()
         conn.close()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS keyword_leads (
+                id SERIAL PRIMARY KEY,
+                subscriber_id VARCHAR(100) NOT NULL,
+                subscriber_name VARCHAR(200),
+                keyword VARCHAR(50),
+                ig_username VARCHAR(100),
+                email VARCHAR(255),
+                phone VARCHAR(50),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                processed BOOLEAN DEFAULT FALSE,
+                UNIQUE(subscriber_id, keyword)
+            )
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
         print("Database initialized successfully")
     except Exception as e:
         print(f"Database initialization error: {e}")
@@ -159,11 +176,16 @@ def manychat_enroll_redirect():
 
 @app.route('/api/manychat/enroll', methods=['POST'])
 def manychat_enroll():
-    """Webhook called by ManyChat when someone triggers 5DAYS keyword."""
+    """Webhook called by ManyChat when someone triggers ANY keyword.
+    Stores lead in Postgres DB with keyword, subscriber info, and timestamp."""
     try:
         data = request.get_json(force=True)
         subscriber_id = data.get('subscriber_id') or data.get('id')
         name = data.get('name', data.get('first_name', 'Unknown'))
+        keyword = data.get('keyword', '5DAYS')
+        ig_username = data.get('ig_username', '')
+        email = data.get('email', '')
+        phone = data.get('phone', '')
         secret = data.get('secret') or request.headers.get('X-Webhook-Secret')
         
         if secret != MANYCHAT_WEBHOOK_SECRET:
@@ -172,10 +194,63 @@ def manychat_enroll():
         if not subscriber_id:
             return jsonify({'status': 'error', 'message': 'subscriber_id required'}), 400
         
-        app.logger.info(f'HELOC 5DAYS enrollment: subscriber={subscriber_id}, name={name}')
-        return jsonify({'status': 'success', 'enrolled': True, 'subscriber_id': subscriber_id})
+        # Store in Postgres
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("""
+                INSERT INTO keyword_leads (subscriber_id, subscriber_name, keyword, ig_username, email, phone)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (subscriber_id, keyword) DO UPDATE SET
+                    subscriber_name = EXCLUDED.subscriber_name,
+                    ig_username = EXCLUDED.ig_username,
+                    email = EXCLUDED.email,
+                    phone = EXCLUDED.phone
+            """, (str(subscriber_id), name, keyword.upper(), ig_username, email, phone))
+            conn.commit()
+            cur.close()
+            conn.close()
+        except Exception as db_err:
+            app.logger.error(f'DB insert error: {db_err}')
+        
+        app.logger.info(f'ManyChat keyword lead: subscriber={subscriber_id}, name={name}, keyword={keyword}, ig=@{ig_username}')
+        return jsonify({'status': 'success', 'enrolled': True, 'subscriber_id': subscriber_id, 'keyword': keyword})
     except Exception as e:
         app.logger.error(f'ManyChat webhook error: {e}')
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+@app.route('/api/manychat/leads', methods=['GET'])
+def manychat_leads():
+    """API endpoint for Closer agent to pull new leads."""
+    secret = request.args.get('secret') or request.headers.get('X-Webhook-Secret')
+    if secret != MANYCHAT_WEBHOOK_SECRET:
+        return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
+    
+    try:
+        since = request.args.get('since', '2026-01-01')
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT subscriber_id, subscriber_name, keyword, ig_username, email, phone, created_at, processed
+            FROM keyword_leads
+            WHERE created_at >= %s
+            ORDER BY created_at DESC
+            LIMIT 50
+        """, (since,))
+        rows = cur.fetchall()
+        leads = []
+        for r in rows:
+            leads.append({
+                'subscriber_id': r[0], 'name': r[1], 'keyword': r[2],
+                'ig_username': r[3], 'email': r[4], 'phone': r[5],
+                'created_at': r[6].isoformat() if r[6] else None, 'processed': r[7]
+            })
+        cur.close()
+        conn.close()
+        return jsonify({'status': 'success', 'leads': leads, 'count': len(leads)})
+    except Exception as e:
+        app.logger.error(f'Leads fetch error: {e}')
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
