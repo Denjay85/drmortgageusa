@@ -818,12 +818,6 @@ def server_error(e):
         return '<h1>500 - Server Error</h1>', 500
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
-
-# deploy v3 static-folder-fix all-sendfile
-
-
 @app.route('/api/db/migrate', methods=['POST'])
 def db_migrate():
     """One-time migration endpoint. Creates keyword_leads table."""
@@ -853,3 +847,9 @@ def db_migrate():
         return jsonify({'status': 'success', 'message': 'keyword_leads table created'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
+# deploy v3 static-folder-fix all-sendfile
