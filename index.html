@@ -406,6 +406,45 @@
         'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '444762220810129');
         fbq('track', 'PageView');
+
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+          return '';
+        }
+
+        function setCookie(name, value, days) {
+          const expires = new Date(Date.now() + (days * 86400000)).toUTCString();
+          document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
+        }
+
+        function getOrCreateFbp() {
+          let fbp = getCookie('_fbp');
+          if (!fbp) {
+            fbp = `fb.1.${Date.now()}.${Math.floor(Math.random() * 1000000000)}`;
+            setCookie('_fbp', fbp, 90);
+          }
+          return fbp;
+        }
+
+        function getOrCreateFbc() {
+          let fbc = getCookie('_fbc');
+          const params = new URLSearchParams(window.location.search);
+          const fbclid = params.get('fbclid');
+          if (fbclid) {
+            fbc = `fb.1.${Date.now()}.${fbclid}`;
+            setCookie('_fbc', fbc, 90);
+          }
+          return fbc || '';
+        }
+
+        function createEventId(prefix) {
+          return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+        }
+
+        getOrCreateFbp();
+        getOrCreateFbc();
     </script>
     <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=444762220810129&ev=PageView&noscript=1"
@@ -3397,6 +3436,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       
       // Send data to our API (which stores in DB and forwards to Zapier)
+      const leadEventId = createEventId('quiz_lead');
       const webhookData = {
         firstName: quizAnswers.firstName,
         email: quizAnswers.email,
@@ -3407,11 +3447,14 @@ document.addEventListener("DOMContentLoaded", () => {
         segment: segment,
         completionSeconds: quizAnswers.completionSeconds || 0,
         timestamp: new Date().toISOString(),
-        source: "60-second-quiz"
+        source: "60-second-quiz",
+        eventId: leadEventId,
+        fbp: getOrCreateFbp(),
+        fbc: getOrCreateFbc()
       };
       
       // Meta Pixel: Lead event
-      if(typeof fbq==='function') fbq('track','Lead',{content_name:segment,content_category:'60-second-quiz'});
+      if(typeof fbq==='function') fbq('track','Lead',{content_name:segment,content_category:'60-second-quiz'},{eventID: leadEventId});
       
       // Send to our API (stores lead + forwards to Zapier)
       fetch("/api/quiz-submit", {
@@ -3482,6 +3525,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const originalText = submitBtn.textContent;
       
       // Build form data object
+      const leadEventId = createEventId('segment_form');
       const data = {
         firstName: firstName,
         email: formData.get('email') || '',
@@ -3491,8 +3535,18 @@ document.addEventListener("DOMContentLoaded", () => {
         priceRange: quizAnswers.priceRange || '',
         downPayment: quizAnswers.downPayment || '',
         investorLoanType: formData.get('investorLoanType') || document.querySelector('input[name="investorLoanType"]:checked')?.value || '',
-        source: 'segment-form'
+        source: 'segment-form',
+        eventId: leadEventId,
+        fbp: getOrCreateFbp(),
+        fbc: getOrCreateFbc()
       };
+
+      if(typeof fbq==='function') {
+        fbq('track','Lead',{
+          content_name: data.segment || 'segment-form',
+          content_category: 'segment-form'
+        },{eventID: leadEventId});
+      }
       
       // Show loading state
       submitBtn.textContent = 'Submitting...';
@@ -3691,13 +3745,15 @@ document.addEventListener('DOMContentLoaded',function(){
   // Track Apply Now clicks
   document.querySelectorAll('a[href*="my1003app.com"]').forEach(function(el){
     el.addEventListener('click',function(){
-      if(typeof fbq==='function') fbq('track','CompleteRegistration',{content_name:'Apply Now'});
+      const eventId = createEventId('apply_now');
+      if(typeof fbq==='function') fbq('track','CompleteRegistration',{content_name:'Apply Now'},{eventID: eventId});
     });
   });
   // Track phone call clicks
   document.querySelectorAll('a[href^="tel:"]').forEach(function(el){
     el.addEventListener('click',function(){
-      if(typeof fbq==='function') fbq('track','Contact',{content_name:'Phone Call'});
+      const eventId = createEventId('phone_call');
+      if(typeof fbq==='function') fbq('track','Contact',{content_name:'Phone Call'},{eventID: eventId});
     });
   });
 });

@@ -9,9 +9,11 @@ Dr.MortgageUSA Backend API
 import os
 import json
 import secrets
+import hashlib
 import requests
 import psycopg2
 from datetime import datetime
+from urllib.parse import quote
 from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string
 from flask_compress import Compress
@@ -27,6 +29,90 @@ app.config['COMPRESS_MIN_SIZE'] = 500
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
+META_PIXEL_ID = os.environ.get('META_PIXEL_ID', '444762220810129')
+META_ACCESS_TOKEN = os.environ.get('META_CONVERSIONS_API_TOKEN', '')
+META_TEST_EVENT_CODE = os.environ.get('META_TEST_EVENT_CODE', '')
+
+
+def normalize_email(value):
+    return (value or '').strip().lower()
+
+
+def normalize_phone(value):
+    return ''.join(ch for ch in (value or '') if ch.isdigit())
+
+
+def sha256_or_none(value):
+    cleaned = (value or '').strip()
+    if not cleaned:
+        return None
+    return hashlib.sha256(cleaned.encode('utf-8')).hexdigest()
+
+
+def get_cookie_value(name):
+    return request.cookies.get(name, '') or ''
+
+
+def build_fbc():
+    existing_fbc = get_cookie_value('_fbc')
+    if existing_fbc:
+        return existing_fbc
+    fbclid = request.args.get('fbclid', '') or request.headers.get('X-FB-CLID', '')
+    if not fbclid:
+        return ''
+    return f"fb.1.{int(datetime.utcnow().timestamp())}.{fbclid}"
+
+
+def track_meta_server_event(event_name, event_id, data, custom_data=None):
+    if not META_ACCESS_TOKEN or not META_PIXEL_ID:
+        return {'sent': False, 'reason': 'missing_meta_config'}
+
+    email = normalize_email(data.get('email', ''))
+    phone = normalize_phone(data.get('phone', ''))
+    first_name = (data.get('firstName') or data.get('first_name') or '').strip().lower()
+
+    user_data = {
+        'client_ip_address': request.headers.get('X-Forwarded-For', request.remote_addr or '').split(',')[0].strip(),
+        'client_user_agent': request.headers.get('User-Agent', ''),
+        'fbp': get_cookie_value('_fbp'),
+        'fbc': build_fbc(),
+    }
+
+    if email:
+        user_data['em'] = [sha256_or_none(email)]
+    if phone:
+        user_data['ph'] = [sha256_or_none(phone)]
+    if first_name:
+        user_data['fn'] = [sha256_or_none(first_name)]
+
+    user_data = {k: v for k, v in user_data.items() if v}
+
+    payload = {
+        'data': [{
+            'event_name': event_name,
+            'event_time': int(datetime.utcnow().timestamp()),
+            'event_id': event_id,
+            'action_source': 'website',
+            'event_source_url': request.url,
+            'user_data': user_data,
+            'custom_data': custom_data or {}
+        }]
+    }
+
+    if META_TEST_EVENT_CODE:
+        payload['test_event_code'] = META_TEST_EVENT_CODE
+
+    response = requests.post(
+        f'https://graph.facebook.com/v19.0/{quote(META_PIXEL_ID)}/events',
+        params={'access_token': META_ACCESS_TOKEN},
+        json=payload,
+        timeout=10,
+    )
+    return {
+        'sent': response.ok,
+        'status_code': response.status_code,
+        'body': response.text[:500],
+    }
 
 
 def get_admin_password():
@@ -322,6 +408,8 @@ def quiz_submit():
         property_type = data.get('propertyType', data.get('property_type', ''))
         investor_loan_type = data.get('investorLoanType',
                                       data.get('investor_loan_type', ''))
+        event_id = data.get('eventId', '') or data.get('event_id', '') or secrets.token_hex(16)
+        source = data.get('source', 'website')
 
         conn = get_db_connection()
         cur = conn.cursor()
@@ -349,13 +437,35 @@ def quiz_submit():
         except Exception as e:
             print(f"Zapier forward failed: {e}")
 
+        meta_result = {'sent': False, 'reason': 'not_attempted'}
+        try:
+            meta_result = track_meta_server_event(
+                'Lead',
+                event_id,
+                data,
+                custom_data={
+                    'content_name': segment or 'lead',
+                    'content_category': source,
+                    'value': 1,
+                    'currency': 'USD'
+                }
+            )
+        except Exception as e:
+            meta_result = {'sent': False, 'reason': str(e)}
+            print(f"Meta CAPI forward failed: {e}")
+
         cur.execute("UPDATE leads SET zapier_forwarded = %s WHERE id = %s",
                     (zapier_forwarded, lead_id))
         conn.commit()
         cur.close()
         conn.close()
 
-        return jsonify({"success": True, "lead_id": lead_id})
+        return jsonify({
+            "success": True,
+            "lead_id": lead_id,
+            "event_id": event_id,
+            "meta_capi": meta_result,
+        })
 
     except Exception as e:
         print(f"Quiz submission error: {e}")
