@@ -58,6 +58,18 @@ class RefiWatchPreviewTests(unittest.TestCase):
         body = response.get_data(as_text=True)
         self.assertIn("Dr.MortgageUSA", body)
 
+    def test_forwarded_refiwatch_host_serves_owned_funnel_index(self):
+        response = self.client.get(
+            "/",
+            headers={
+                "Host": "internal.render.local",
+                "X-Forwarded-Host": "refi.watch",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        body = response.get_data(as_text=True)
+        self.assertIn("RefiWatch | DrMortgageUSA", body)
+
     def test_refiwatch_lead_validation_blocks_invalid_payload(self):
         response = self.client.post(
             "/api/refiwatch/lead",

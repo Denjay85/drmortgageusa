@@ -44,7 +44,12 @@ REFIWATCH_BUILD_DIR = os.path.join(REFIWATCH_FUNNEL_DIR, 'dist', 'public')
 
 
 def current_host():
-    return request.host.split(':')[0].lower()
+    forwarded_host = (
+        request.headers.get('X-Forwarded-Host', '')
+        or request.headers.get('X-Original-Host', '')
+    )
+    raw_host = forwarded_host.split(',')[0].strip() if forwarded_host else request.host
+    return raw_host.split(':')[0].lower()
 
 
 def is_refiwatch_request():
