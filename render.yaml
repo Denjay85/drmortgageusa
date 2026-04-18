@@ -22,6 +22,8 @@ services:
         generateValue: true
       - key: META_PIXEL_ID
         value: 444762220810129
+      - key: REFIWATCH_HOSTS
+        value: refi.watch,www.refi.watch
       - key: META_CONVERSIONS_API_TOKEN
         sync: false
       - key: META_TEST_EVENT_CODE
