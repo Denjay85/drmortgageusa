@@ -23,6 +23,15 @@ BLOG_DIR = BASE_DIR / "blog_posts"
 SITEMAP_PATH = BASE_DIR / "sitemap.xml"
 INDEX_PATH = BLOG_DIR / "index.html"
 BASE_URL = "https://drmortgageusa.com"
+STATIC_PAGES = [
+    ("/dpa", "monthly", "0.9"),
+    ("/heloc-calculator", "monthly", "0.7"),
+    ("/va-loans-orlando", "weekly", "0.95"),
+    ("/orlando-mortgage-broker", "weekly", "0.95"),
+    ("/first-time-homebuyer-orlando", "weekly", "0.95"),
+    ("/refinance-florida", "weekly", "0.95"),
+    ("/heloc-orlando", "weekly", "0.95"),
+]
 
 DRY_RUN = "--dry-run" in sys.argv
 
@@ -47,6 +56,14 @@ def extract_meta(filepath):
     m = re.search(r'<meta\s+(?:name|property)=["\'](?:article:published_time|date)["\']\s+content=["\']([\d-]+)', content, re.IGNORECASE)
     if m:
         date = m.group(1)[:10]
+    if not date:
+        m = re.search(r'"datePublished"\s*:\s*"([\d-]+)', content, re.IGNORECASE)
+        if m:
+            date = m.group(1)[:10]
+    if not date:
+        m = re.search(r'"dateModified"\s*:\s*"([\d-]+)', content, re.IGNORECASE)
+        if m:
+            date = m.group(1)[:10]
     if not date:
         m = re.search(r'<time[^>]*datetime=["\']([\d-]+)["\']', content, re.IGNORECASE)
         if m:
@@ -113,13 +130,14 @@ def build_index(posts):
     <meta name="description" content="Florida mortgage tips, guides, and advice from Dennis Ross, Navy veteran and licensed mortgage broker. Learn about VA loans, FHA, conventional, and more.">
     <link rel="canonical" href="https://drmortgageusa.com/blog">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/site-tracking.js" defer></script>
     <style>
         .bg-navy {{ background-color: #1a1a2e; }}
         .text-gold {{ color: #D4AF37; }}
         .bg-gold {{ background-color: #D4AF37; }}
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50" data-page-category="blog" data-page-intent="education">
     <nav class="bg-navy text-white py-4 sticky top-0 z-50">
         <div class="container mx-auto px-4 flex items-center justify-between">
             <a href="/" class="text-xl font-bold">Dr.MortgageUSA</a>
@@ -167,6 +185,15 @@ def build_sitemap(posts):
     <lastmod>{today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>"""
+
+    for path, changefreq, priority in STATIC_PAGES:
+        urls += f"""
+  <url>
+    <loc>{BASE_URL}{path}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>{changefreq}</changefreq>
+    <priority>{priority}</priority>
   </url>"""
 
     for p in posts:

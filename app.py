@@ -15,12 +15,19 @@ import psycopg2
 from datetime import datetime, timezone
 from urllib.parse import quote
 from functools import wraps
-from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string
+from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string, Response
 from flask_compress import Compress
 import mimetypes
 
 app = Flask(__name__, static_folder=None)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SERVICE_PAGE_MAP = {
+    'va-loans-orlando': 'va-loans-orlando.html',
+    'orlando-mortgage-broker': 'orlando-mortgage-broker.html',
+    'first-time-homebuyer-orlando': 'first-time-homebuyer-orlando.html',
+    'refinance-florida': 'refinance-florida.html',
+    'heloc-orlando': 'heloc-orlando.html',
+}
 
 # Enable gzip compression for all responses
 Compress(app)
@@ -271,6 +278,249 @@ def serve_index():
                      mimetype='text/html')
 
 
+@app.route('/site-tracking.js')
+def site_tracking():
+    ga_measurement_id = os.environ.get('GA_MEASUREMENT_ID', '').strip()
+    gtm_container_id = os.environ.get('GTM_CONTAINER_ID', '').strip()
+    js = f"""
+(function() {{
+  if (window.__drSiteTrackingLoaded) return;
+  window.__drSiteTrackingLoaded = true;
+
+  var pixelId = {json.dumps(META_PIXEL_ID)};
+  var gaMeasurementId = {json.dumps(ga_measurement_id)};
+  var gtmContainerId = {json.dumps(gtm_container_id)};
+  var options = window.DR_TRACKING_OPTIONS || {{}};
+
+  function loadScript(src, onload) {{
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = src;
+    if (onload) script.onload = onload;
+    document.head.appendChild(script);
+  }}
+
+  function getCookie(name) {{
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    return parts.length === 2 ? parts.pop().split(';').shift() : '';
+  }}
+
+  function setCookie(name, value, days) {{
+    var expires = new Date(Date.now() + (days * 86400000)).toUTCString();
+    document.cookie = name + "=" + value + "; expires=" + expires + "; path=/; SameSite=Lax";
+  }}
+
+  function getOrCreateFbp() {{
+    var fbp = getCookie('_fbp');
+    if (!fbp) {{
+      fbp = "fb.1." + Date.now() + "." + Math.floor(Math.random() * 1000000000);
+      setCookie('_fbp', fbp, 90);
+    }}
+    return fbp;
+  }}
+
+  function getOrCreateFbc() {{
+    var fbc = getCookie('_fbc');
+    var params = new URLSearchParams(window.location.search);
+    var fbclid = params.get('fbclid');
+    if (fbclid) {{
+      fbc = "fb.1." + Date.now() + "." + fbclid;
+      setCookie('_fbc', fbc, 90);
+    }}
+    return fbc || '';
+  }}
+
+  function createEventId(prefix) {{
+    return prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2, 10);
+  }}
+
+  function initGoogle() {{
+    if (gtmContainerId && !window.google_tag_manager) {{
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({{ 'gtm.start': Date.now(), event: 'gtm.js' }});
+      loadScript("https://www.googletagmanager.com/gtm.js?id=" + encodeURIComponent(gtmContainerId));
+      return;
+    }}
+
+    if (gaMeasurementId && !window.gtag) {{
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() {{ window.dataLayer.push(arguments); }};
+      window.gtag('js', new Date());
+      window.gtag('config', gaMeasurementId, {{
+        page_path: window.location.pathname,
+        send_page_view: true
+      }});
+      loadScript("https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaMeasurementId));
+    }}
+  }}
+
+  function initMeta() {{
+    if (options.disableMetaInit || !pixelId || typeof window.fbq === 'function') return;
+    !function(f,b,e,v,n,t,s)
+    {{if(f.fbq)return;n=f.fbq=function(){{n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)}};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', pixelId);
+    window.fbq('track', 'PageView');
+  }}
+
+  function fireIntentView() {{
+    if (options.disableIntentViewTracking || typeof window.fbq !== 'function') return;
+    var pageIntent = document.body && document.body.dataset ? document.body.dataset.pageIntent : '';
+    var pageCategory = document.body && document.body.dataset ? document.body.dataset.pageCategory : '';
+    if (!pageIntent && !pageCategory) return;
+    window.fbq('trackCustom', 'IntentPageView', {{
+      content_name: document.title,
+      content_category: pageCategory || 'page',
+      content_type: pageIntent || 'general'
+    }}, {{ eventID: createEventId('intent_view') }});
+  }}
+
+  function bindClickTracking() {{
+    if (options.disableAutoClickTracking) return;
+
+    document.querySelectorAll('a[href*="my1003app.com"], a[data-track="apply"]').forEach(function(el) {{
+      if (el.dataset.drTrackBoundApply) return;
+      el.dataset.drTrackBoundApply = '1';
+      el.addEventListener('click', function() {{
+        if (typeof window.fbq === 'function') {{
+          window.fbq('track', 'CompleteRegistration', {{
+            content_name: el.dataset.contentName || document.title,
+            content_category: el.dataset.contentCategory || 'apply-click'
+          }}, {{ eventID: createEventId('apply_now') }});
+        }}
+        if (window.gtag && gaMeasurementId) {{
+          window.gtag('event', 'generate_lead', {{
+            event_category: 'conversion',
+            event_label: el.href
+          }});
+        }}
+      }});
+    }});
+
+    document.querySelectorAll('a[href^="tel:"], a[data-track="call"]').forEach(function(el) {{
+      if (el.dataset.drTrackBoundCall) return;
+      el.dataset.drTrackBoundCall = '1';
+      el.addEventListener('click', function() {{
+        if (typeof window.fbq === 'function') {{
+          window.fbq('track', 'Contact', {{
+            content_name: el.dataset.contentName || document.title,
+            content_category: el.dataset.contentCategory || 'phone-click'
+          }}, {{ eventID: createEventId('phone_call') }});
+        }}
+        if (window.gtag && gaMeasurementId) {{
+          window.gtag('event', 'contact', {{
+            event_category: 'conversion',
+            event_label: el.getAttribute('href')
+          }});
+        }}
+      }});
+    }});
+  }}
+
+  function bindLeadForms() {{
+    document.querySelectorAll('form[data-lead-form]').forEach(function(form) {{
+      if (form.dataset.drLeadBound) return;
+      form.dataset.drLeadBound = '1';
+      form.addEventListener('submit', function(event) {{
+        event.preventDefault();
+
+        var formData = new FormData(form);
+        var submitButton = form.querySelector('button[type="submit"]');
+        var message = form.querySelector('[data-form-message]');
+        var originalText = submitButton ? submitButton.textContent : '';
+        var eventId = createEventId(form.dataset.eventPrefix || 'service_lead');
+        var payload = {{
+          firstName: formData.get('firstName') || formData.get('first_name') || '',
+          email: formData.get('email') || '',
+          phone: formData.get('phone') || '',
+          segment: formData.get('segment') || form.dataset.segment || '',
+          timeline: formData.get('timeline') || '',
+          priceRange: formData.get('priceRange') || '',
+          downPayment: formData.get('downPayment') || '',
+          source: formData.get('source') || form.dataset.source || 'service-page',
+          eventId: eventId,
+          fbp: getOrCreateFbp(),
+          fbc: getOrCreateFbc()
+        }};
+
+        if (typeof window.fbq === 'function') {{
+          window.fbq('track', 'Lead', {{
+            content_name: payload.segment || document.title,
+            content_category: payload.source
+          }}, {{ eventID: eventId }});
+        }}
+
+        if (window.gtag && gaMeasurementId) {{
+          window.gtag('event', 'generate_lead', {{
+            event_category: 'form',
+            event_label: payload.source
+          }});
+        }}
+
+        if (submitButton) {{
+          submitButton.disabled = true;
+          submitButton.textContent = 'Submitting...';
+        }}
+        if (message) {{
+          message.textContent = '';
+          message.classList.remove('is-success');
+        }}
+
+        fetch('/api/quiz-submit', {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify(payload)
+        }}).then(function(response) {{
+          if (!response.ok) throw new Error('Lead submission failed');
+          if (message) {{
+            message.textContent = form.dataset.successMessage || 'Thanks. Dennis will reach out shortly.';
+            message.classList.add('is-success');
+          }}
+          form.reset();
+        }}).catch(function() {{
+          if (message) {{
+            message.textContent = 'Something went wrong. Please call 850-346-8514.';
+            message.classList.remove('is-success');
+          }}
+        }}).finally(function() {{
+          if (submitButton) {{
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+          }}
+        }});
+      }});
+    }});
+  }}
+
+  window.DrMortgageTracking = {{
+    createEventId: createEventId,
+    getOrCreateFbp: getOrCreateFbp,
+    getOrCreateFbc: getOrCreateFbc
+  }};
+
+  getOrCreateFbp();
+  getOrCreateFbc();
+  initGoogle();
+  initMeta();
+  bindClickTracking();
+  bindLeadForms();
+
+  if (document.readyState === 'loading') {{
+    document.addEventListener('DOMContentLoaded', fireIntentView, {{ once: true }});
+  }} else {{
+    fireIntentView();
+  }}
+}})();
+"""
+    return Response(js, mimetype='application/javascript')
+
+
 @app.route('/heloc-calculator')
 def heloc_calculator():
     return send_file(os.path.join(BASE_DIR, 'heloc-calculator.html'),
@@ -282,6 +532,18 @@ def heloc_calculator():
 def serve_dpa():
     return send_file(os.path.join(BASE_DIR, 'dpa.html'),
                      mimetype='text/html')
+
+
+@app.route('/va-loans-orlando')
+@app.route('/orlando-mortgage-broker')
+@app.route('/first-time-homebuyer-orlando')
+@app.route('/refinance-florida')
+@app.route('/heloc-orlando')
+def serve_service_page():
+    page_slug = request.path.lstrip('/')
+    return send_file(os.path.join(BASE_DIR, SERVICE_PAGE_MAP[page_slug]),
+                     mimetype='text/html')
+
 
 @app.route('/privacy')
 def privacy():
