@@ -394,6 +394,14 @@
         // GA4 Placeholder
         // gtag('config', 'GA_MEASUREMENT_ID');
     </script>
+    <script>
+        window.DR_TRACKING_OPTIONS = {
+          disableMetaInit: true,
+          disableAutoClickTracking: true,
+          disableIntentViewTracking: true
+        };
+    </script>
+    <script src="/site-tracking.js" defer></script>
     <!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
@@ -518,7 +526,7 @@
                 </button>
                 <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2" title="Call Dennis Ross">
                     <span id="nav-phone-text" class="hidden md:inline text-sm font-medium text-gold">(850) 346-8514</span>
-                    <img fetchpriority="high" src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/30 transition-shadow" width="400" height="400" decoding="async">
+                    <img fetchpriority="high" src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Loan Officer NMLS 2018381" class="h-12 w-12 md:h-14 md:w-14 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/30 transition-shadow" width="400" height="400" decoding="async">
                 </a>
             </div>
         </div>
@@ -627,6 +635,7 @@
                                muted 
                                loop 
                                playsinline 
+                               preload="metadata"
                                controls 
                                class="w-full rounded-xl">
                         </video>
@@ -637,7 +646,7 @@
                         <h3 class="text-lg font-semibold text-gold mb-3 text-center">Today's Mortgage Rates</h3>
                         <div id="rates-display" class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
                         </div>
-                        <p class="text-xs text-gray-300 mt-3 text-center">Updated: <span id="rate-date">November 25, 2025</span></p>
+                        <p class="text-xs text-gray-300 mt-3 text-center">Updated: <span id="rate-date">Call for today's live pricing</span></p>
                         <p id="rate-disclaimer" class="text-xs text-gray-400 mt-2 leading-relaxed text-center">
                         </p>
                     </div>
@@ -646,7 +655,7 @@
             
             
             <div class="mt-12 hidden lg:block" data-aos="fade-up" data-aos-delay="200">
-                <img src="assets/family-photo.png" loading="lazy" alt="Dennis Ross and family in Florida"
+                <img src="assets/family-photo.jpg" loading="lazy" alt="Dennis Ross and family in Florida"
                      alt="Happy family in front of new home"
                      class="mx-auto rounded-2xl shadow-xl w-full max-w-4xl" width="600" height="400" decoding="async">
             </div>
@@ -656,7 +665,7 @@
         <div class="absolute bottom-10 right-10 hidden xl:block" data-aos="zoom-in" data-aos-delay="800">
             <div class="relative">
                 <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                    <img src="dennis-ross.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl hover:shadow-gold/40 transition-all" loading="lazy" width="400" height="400" decoding="async">
+                    <img src="dennis-ross-600.png" alt="Dennis Ross Navy Veteran Florida Mortgage Expert" class="h-32 w-32 rounded-full border-4 border-gold shadow-2xl hover:shadow-gold/40 transition-all" loading="lazy" width="400" height="400" decoding="async">
                 </a>
                 <div class="absolute -bottom-2 -right-2 bg-gold text-navy rounded-full p-2">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -667,6 +676,21 @@
             <div class="text-center mt-3 bg-navy/80 rounded-lg p-2 backdrop-blur">
                 <p class="text-sm font-bold">Dennis Ross</p>
                 <p class="text-xs text-gold">Ready to Help!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-10 bg-white border-b border-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <p class="text-sm uppercase tracking-[0.2em] text-gray-500 text-center mb-4">Popular Orlando Mortgage Pages</p>
+                <div class="grid md:grid-cols-5 gap-3">
+                    <a href="/va-loans-orlando" class="rounded-2xl border border-gray-200 px-4 py-4 text-center font-semibold text-navy hover:border-gold hover:text-gold transition-colors">VA Loans Orlando</a>
+                    <a href="/orlando-mortgage-broker" class="rounded-2xl border border-gray-200 px-4 py-4 text-center font-semibold text-navy hover:border-gold hover:text-gold transition-colors">Orlando Mortgage Broker</a>
+                    <a href="/first-time-homebuyer-orlando" class="rounded-2xl border border-gray-200 px-4 py-4 text-center font-semibold text-navy hover:border-gold hover:text-gold transition-colors">First-Time Buyer Orlando</a>
+                    <a href="/refinance-florida" class="rounded-2xl border border-gray-200 px-4 py-4 text-center font-semibold text-navy hover:border-gold hover:text-gold transition-colors">Refinance Florida</a>
+                    <a href="/heloc-orlando" class="rounded-2xl border border-gray-200 px-4 py-4 text-center font-semibold text-navy hover:border-gold hover:text-gold transition-colors">HELOC Orlando</a>
+                </div>
             </div>
         </div>
     </section>
@@ -808,7 +832,7 @@
                         
                     </div>
                     <p class="text-xs text-gray-600 border-t pt-2">Rates change daily - lock in your pre-approval!</p>
-                    <p class="text-xs text-gray-500">Updated: <span id="quiz-rate-date">November 24, 2025</span></p>
+                    <p class="text-xs text-gray-500">Updated: <span id="quiz-rate-date">Call for today's live pricing</span></p>
                     <p id="quiz-rate-disclaimer" class="text-xs text-gray-500 mt-2 italic leading-relaxed">
                         
                     </p>
@@ -856,7 +880,7 @@
                     
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
+                            <img src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
@@ -909,7 +933,7 @@
                     
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
+                            <img src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
@@ -962,7 +986,7 @@
                     
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
+                            <img src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
@@ -1014,7 +1038,7 @@
                 
                 <div class="absolute -top-8 -right-8 hidden md:block">
                     <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                        <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
+                        <img src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                     </a>
                 </div>
                 <div class="text-center mb-6">
@@ -1066,7 +1090,7 @@
                     
                     <div class="absolute -top-8 -right-8 hidden md:block">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
+                            <img src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-20 w-20 rounded-full border-3 border-gold shadow-lg" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                     </div>
                     <div class="text-center mb-6">
@@ -2671,7 +2695,7 @@
                 <div class="max-w-4xl mx-auto">
                     <div class="flex flex-col md:flex-row items-center gap-8 mb-8" data-aos="fade-up">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-48 w-48 rounded-full border-4 border-navy shadow-xl object-cover" loading="lazy" width="400" height="400" decoding="async">
+                            <img src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-48 w-48 rounded-full border-4 border-navy shadow-xl object-cover" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                         <div class="text-center md:text-left">
                             <p class="text-lg text-gray-700 leading-relaxed mb-4">
@@ -2738,7 +2762,7 @@
                         
                         
                         <div class="mt-8 max-w-sm mx-auto">
-                            <video src="reviews/getting-to-the-money.mp4" autoplay muted loop playsinline controls class="w-full rounded-xl shadow-lg"></video>
+                            <video src="reviews/getting-to-the-money.mp4" autoplay muted loop playsinline preload="none" controls class="w-full rounded-xl shadow-lg"></video>
                         </div>
                     </div>
                 </div>
@@ -2764,7 +2788,7 @@
                     <div class="p-6">
                         <div id="rates-display-2" class="space-y-4">
                         </div>
-                        <p class="text-xs text-gray-500 mt-4 italic">Rates as of <span id="rate-date-2">November 25, 2025</span>. Your actual rate depends on your credit score, loan type, and other factors.</p>
+                        <p class="text-xs text-gray-500 mt-4 italic">Rates as of <span id="rate-date-2">Call for today's live pricing</span>. Your actual rate depends on your credit score, loan type, and other factors.</p>
                         
                         <div class="mt-6 pt-6 border-t">
                             <p class="text-center text-navy font-semibold mb-3">Ready to lock in your rate?</p>
@@ -3047,7 +3071,7 @@
                     </div>
                     <div class="flex justify-center items-center gap-4 mb-4">
                         <a href="tel:8503468514" class="cursor-pointer hover:opacity-80 transition-opacity" title="Call Dennis Ross">
-                            <img src="dennis-ross.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-16 w-16 rounded-full border-2 border-gold" loading="lazy" width="400" height="400" decoding="async">
+                            <img src="dennis-ross-600.png" alt="Dennis Ross Florida Mortgage Specialist" class="h-16 w-16 rounded-full border-2 border-gold" loading="lazy" width="400" height="400" decoding="async">
                         </a>
                         <div class="text-left">
                             <p class="text-gold font-semibold">Dennis Ross</p>
@@ -3127,7 +3151,7 @@ const MORTGAGE_RATES = {
   "Jumbo 30-Year": "6.28%"
 };
 
-const RATE_UPDATE_DATE = "February 20, 2026"; // Update this date
+const RATE_UPDATE_DATE = "Call for today's live pricing";
 
 // Rate disclaimer for legal compliance
 const RATE_DISCLAIMER = "Rates shown are general market ranges. Your actual rate depends on your credit score, debt to income ratio, loan to value ratio, loan program, and current market pricing. You may not qualify for the ranges shown. All rates are subject to change without notice until locked with a lender.";
@@ -3603,9 +3627,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
     </script>
-    
-    
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGS_FJMCNUodWv7zlg6YAbOsCo1q1dtYM&libraries=places"></script>
     <script>
     function initReviews() {
         const myPlaceId = 'ChIJC64FQcdz54gRP0pbWW3OJDU'; 
@@ -3708,7 +3729,29 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    window.addEventListener('load', initReviews);
+    function loadReviewsWhenNeeded() {
+        if (window.__drReviewsScriptRequested) return;
+        window.__drReviewsScriptRequested = true;
+        const script = document.createElement('script');
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCGS_FJMCNUodWv7zlg6YAbOsCo1q1dtYM&libraries=places';
+        script.async = true;
+        script.defer = true;
+        script.onload = initReviews;
+        document.head.appendChild(script);
+    }
+
+    const reviewSection = document.getElementById('stories') || document.getElementById('google-reviews-container');
+    if ('IntersectionObserver' in window && reviewSection) {
+        const reviewObserver = new IntersectionObserver((entries, observer) => {
+            if (entries.some(entry => entry.isIntersecting)) {
+                loadReviewsWhenNeeded();
+                observer.disconnect();
+            }
+        }, { rootMargin: '200px 0px' });
+        reviewObserver.observe(reviewSection);
+    } else {
+        window.addEventListener('load', loadReviewsWhenNeeded, { once: true });
+    }
     </script>
 
     

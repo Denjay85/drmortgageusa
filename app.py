@@ -12,14 +12,22 @@ import secrets
 import hashlib
 import requests
 import psycopg2
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import quote
 from functools import wraps
-from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string
+from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string, Response
 from flask_compress import Compress
 import mimetypes
 
 app = Flask(__name__, static_folder=None)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SERVICE_PAGE_MAP = {
+    'va-loans-orlando': 'va-loans-orlando.html',
+    'orlando-mortgage-broker': 'orlando-mortgage-broker.html',
+    'first-time-homebuyer-orlando': 'first-time-homebuyer-orlando.html',
+    'refinance-florida': 'refinance-florida.html',
+    'heloc-orlando': 'heloc-orlando.html',
+}
 
 # Enable gzip compression for all responses
 Compress(app)
@@ -32,6 +40,52 @@ ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
 META_PIXEL_ID = os.environ.get('META_PIXEL_ID', '444762220810129')
 META_ACCESS_TOKEN = os.environ.get('META_CONVERSIONS_API_TOKEN', '')
 META_TEST_EVENT_CODE = os.environ.get('META_TEST_EVENT_CODE', '')
+REFIWATCH_HOSTS = {
+    host.strip().lower()
+    for host in os.environ.get('REFIWATCH_HOSTS',
+                               'refi.watch,www.refi.watch').split(',')
+    if host.strip()
+}
+REFIWATCH_FUNNEL_DIR = os.path.join(BASE_DIR, 'funnels', 'refiwatch')
+REFIWATCH_BUILD_DIR = os.path.join(REFIWATCH_FUNNEL_DIR, 'dist', 'public')
+
+
+def current_host():
+    return request.host.split(':')[0].lower()
+
+
+def is_refiwatch_request():
+    return current_host() in REFIWATCH_HOSTS
+
+
+def refiwatch_build_ready():
+    return os.path.isfile(os.path.join(REFIWATCH_BUILD_DIR, 'index.html'))
+
+
+def send_refiwatch_index():
+    return send_file(os.path.join(REFIWATCH_BUILD_DIR, 'index.html'),
+                     mimetype='text/html')
+
+
+def send_refiwatch_asset(path):
+    if not refiwatch_build_ready():
+        return None
+
+    for base_dir in (REFIWATCH_BUILD_DIR, REFIWATCH_FUNNEL_DIR):
+        abs_base = os.path.abspath(base_dir)
+        abs_path = os.path.abspath(os.path.join(base_dir, path))
+
+        if not abs_path.startswith(abs_base + os.sep):
+            continue
+
+        if os.path.isfile(abs_path):
+            mimetype, _ = mimetypes.guess_type(abs_path)
+            return send_file(abs_path,
+                             mimetype=mimetype
+                             or 'application/octet-stream',
+                             conditional=True)
+
+    return None
 
 
 def normalize_email(value):
@@ -60,7 +114,7 @@ def build_fbc():
     fbclid = request.args.get('fbclid', '') or request.headers.get('X-FB-CLID', '')
     if not fbclid:
         return ''
-    return f"fb.1.{int(datetime.utcnow().timestamp())}.{fbclid}"
+    return f"fb.1.{int(datetime.now(timezone.utc).timestamp())}.{fbclid}"
 
 
 def track_meta_server_event(event_name, event_id, data, custom_data=None):
@@ -90,7 +144,7 @@ def track_meta_server_event(event_name, event_id, data, custom_data=None):
     payload = {
         'data': [{
             'event_name': event_name,
-            'event_time': int(datetime.utcnow().timestamp()),
+            'event_time': int(datetime.now(timezone.utc).timestamp()),
             'event_id': event_id,
             'action_source': 'website',
             'event_source_url': request.url,
@@ -129,7 +183,7 @@ def get_db_connection():
 
 
 def init_database():
-    """Create leads table if it doesn't exist"""
+    """Create primary app tables if they don't exist."""
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -151,9 +205,7 @@ def init_database():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        conn.commit()
-        cur.close()
-        conn.close()
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS keyword_leads (
                 id SERIAL PRIMARY KEY,
@@ -168,6 +220,26 @@ def init_database():
                 UNIQUE(subscriber_id, keyword)
             )
         """)
+
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS refiwatch_leads (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(200) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                phone VARCHAR(50),
+                year_bought INTEGER,
+                savings_goal NUMERIC(10, 2),
+                current_rate VARCHAR(50) NOT NULL,
+                consent BOOLEAN NOT NULL DEFAULT FALSE,
+                source VARCHAR(100) DEFAULT 'refiwatch',
+                utm_data JSONB,
+                zapier_forwarded BOOLEAN DEFAULT FALSE,
+                meta_capi_sent BOOLEAN DEFAULT FALSE,
+                meta_event_id VARCHAR(100),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         conn.commit()
         cur.close()
         conn.close()
@@ -195,42 +267,299 @@ def health_check():
 
 @app.route('/')
 def serve_index():
-    return send_file(os.path.join(os.getcwd(), 'index.html'),
+    if is_refiwatch_request() and refiwatch_build_ready():
+        return send_refiwatch_index()
+    return send_file(os.path.join(BASE_DIR, 'index.html'),
                      mimetype='text/html')
+
+
+@app.route('/site-tracking.js')
+def site_tracking():
+    ga_measurement_id = os.environ.get('GA_MEASUREMENT_ID', '').strip()
+    gtm_container_id = os.environ.get('GTM_CONTAINER_ID', '').strip()
+    js = f"""
+(function() {{
+  if (window.__drSiteTrackingLoaded) return;
+  window.__drSiteTrackingLoaded = true;
+
+  var pixelId = {json.dumps(META_PIXEL_ID)};
+  var gaMeasurementId = {json.dumps(ga_measurement_id)};
+  var gtmContainerId = {json.dumps(gtm_container_id)};
+  var options = window.DR_TRACKING_OPTIONS || {{}};
+
+  function loadScript(src, onload) {{
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = src;
+    if (onload) script.onload = onload;
+    document.head.appendChild(script);
+  }}
+
+  function getCookie(name) {{
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    return parts.length === 2 ? parts.pop().split(';').shift() : '';
+  }}
+
+  function setCookie(name, value, days) {{
+    var expires = new Date(Date.now() + (days * 86400000)).toUTCString();
+    document.cookie = name + "=" + value + "; expires=" + expires + "; path=/; SameSite=Lax";
+  }}
+
+  function getOrCreateFbp() {{
+    var fbp = getCookie('_fbp');
+    if (!fbp) {{
+      fbp = "fb.1." + Date.now() + "." + Math.floor(Math.random() * 1000000000);
+      setCookie('_fbp', fbp, 90);
+    }}
+    return fbp;
+  }}
+
+  function getOrCreateFbc() {{
+    var fbc = getCookie('_fbc');
+    var params = new URLSearchParams(window.location.search);
+    var fbclid = params.get('fbclid');
+    if (fbclid) {{
+      fbc = "fb.1." + Date.now() + "." + fbclid;
+      setCookie('_fbc', fbc, 90);
+    }}
+    return fbc || '';
+  }}
+
+  function createEventId(prefix) {{
+    return prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2, 10);
+  }}
+
+  function initGoogle() {{
+    if (gtmContainerId && !window.google_tag_manager) {{
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({{ 'gtm.start': Date.now(), event: 'gtm.js' }});
+      loadScript("https://www.googletagmanager.com/gtm.js?id=" + encodeURIComponent(gtmContainerId));
+      return;
+    }}
+
+    if (gaMeasurementId && !window.gtag) {{
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() {{ window.dataLayer.push(arguments); }};
+      window.gtag('js', new Date());
+      window.gtag('config', gaMeasurementId, {{
+        page_path: window.location.pathname,
+        send_page_view: true
+      }});
+      loadScript("https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaMeasurementId));
+    }}
+  }}
+
+  function initMeta() {{
+    if (options.disableMetaInit || !pixelId || typeof window.fbq === 'function') return;
+    !function(f,b,e,v,n,t,s)
+    {{if(f.fbq)return;n=f.fbq=function(){{n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)}};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', pixelId);
+    window.fbq('track', 'PageView');
+  }}
+
+  function fireIntentView() {{
+    if (options.disableIntentViewTracking || typeof window.fbq !== 'function') return;
+    var pageIntent = document.body && document.body.dataset ? document.body.dataset.pageIntent : '';
+    var pageCategory = document.body && document.body.dataset ? document.body.dataset.pageCategory : '';
+    if (!pageIntent && !pageCategory) return;
+    window.fbq('trackCustom', 'IntentPageView', {{
+      content_name: document.title,
+      content_category: pageCategory || 'page',
+      content_type: pageIntent || 'general'
+    }}, {{ eventID: createEventId('intent_view') }});
+  }}
+
+  function bindClickTracking() {{
+    if (options.disableAutoClickTracking) return;
+
+    document.querySelectorAll('a[href*="my1003app.com"], a[data-track="apply"]').forEach(function(el) {{
+      if (el.dataset.drTrackBoundApply) return;
+      el.dataset.drTrackBoundApply = '1';
+      el.addEventListener('click', function() {{
+        if (typeof window.fbq === 'function') {{
+          window.fbq('track', 'CompleteRegistration', {{
+            content_name: el.dataset.contentName || document.title,
+            content_category: el.dataset.contentCategory || 'apply-click'
+          }}, {{ eventID: createEventId('apply_now') }});
+        }}
+        if (window.gtag && gaMeasurementId) {{
+          window.gtag('event', 'generate_lead', {{
+            event_category: 'conversion',
+            event_label: el.href
+          }});
+        }}
+      }});
+    }});
+
+    document.querySelectorAll('a[href^="tel:"], a[data-track="call"]').forEach(function(el) {{
+      if (el.dataset.drTrackBoundCall) return;
+      el.dataset.drTrackBoundCall = '1';
+      el.addEventListener('click', function() {{
+        if (typeof window.fbq === 'function') {{
+          window.fbq('track', 'Contact', {{
+            content_name: el.dataset.contentName || document.title,
+            content_category: el.dataset.contentCategory || 'phone-click'
+          }}, {{ eventID: createEventId('phone_call') }});
+        }}
+        if (window.gtag && gaMeasurementId) {{
+          window.gtag('event', 'contact', {{
+            event_category: 'conversion',
+            event_label: el.getAttribute('href')
+          }});
+        }}
+      }});
+    }});
+  }}
+
+  function bindLeadForms() {{
+    document.querySelectorAll('form[data-lead-form]').forEach(function(form) {{
+      if (form.dataset.drLeadBound) return;
+      form.dataset.drLeadBound = '1';
+      form.addEventListener('submit', function(event) {{
+        event.preventDefault();
+
+        var formData = new FormData(form);
+        var submitButton = form.querySelector('button[type="submit"]');
+        var message = form.querySelector('[data-form-message]');
+        var originalText = submitButton ? submitButton.textContent : '';
+        var eventId = createEventId(form.dataset.eventPrefix || 'service_lead');
+        var payload = {{
+          firstName: formData.get('firstName') || formData.get('first_name') || '',
+          email: formData.get('email') || '',
+          phone: formData.get('phone') || '',
+          segment: formData.get('segment') || form.dataset.segment || '',
+          timeline: formData.get('timeline') || '',
+          priceRange: formData.get('priceRange') || '',
+          downPayment: formData.get('downPayment') || '',
+          source: formData.get('source') || form.dataset.source || 'service-page',
+          eventId: eventId,
+          fbp: getOrCreateFbp(),
+          fbc: getOrCreateFbc()
+        }};
+
+        if (typeof window.fbq === 'function') {{
+          window.fbq('track', 'Lead', {{
+            content_name: payload.segment || document.title,
+            content_category: payload.source
+          }}, {{ eventID: eventId }});
+        }}
+
+        if (window.gtag && gaMeasurementId) {{
+          window.gtag('event', 'generate_lead', {{
+            event_category: 'form',
+            event_label: payload.source
+          }});
+        }}
+
+        if (submitButton) {{
+          submitButton.disabled = true;
+          submitButton.textContent = 'Submitting...';
+        }}
+        if (message) {{
+          message.textContent = '';
+          message.classList.remove('is-success');
+        }}
+
+        fetch('/api/quiz-submit', {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify(payload)
+        }}).then(function(response) {{
+          if (!response.ok) throw new Error('Lead submission failed');
+          if (message) {{
+            message.textContent = form.dataset.successMessage || 'Thanks. Dennis will reach out shortly.';
+            message.classList.add('is-success');
+          }}
+          form.reset();
+        }}).catch(function() {{
+          if (message) {{
+            message.textContent = 'Something went wrong. Please call 850-346-8514.';
+            message.classList.remove('is-success');
+          }}
+        }}).finally(function() {{
+          if (submitButton) {{
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+          }}
+        }});
+      }});
+    }});
+  }}
+
+  window.DrMortgageTracking = {{
+    createEventId: createEventId,
+    getOrCreateFbp: getOrCreateFbp,
+    getOrCreateFbc: getOrCreateFbc
+  }};
+
+  getOrCreateFbp();
+  getOrCreateFbc();
+  initGoogle();
+  initMeta();
+  bindClickTracking();
+  bindLeadForms();
+
+  if (document.readyState === 'loading') {{
+    document.addEventListener('DOMContentLoaded', fireIntentView, {{ once: true }});
+  }} else {{
+    fireIntentView();
+  }}
+}})();
+"""
+    return Response(js, mimetype='application/javascript')
 
 
 @app.route('/heloc-calculator')
 def heloc_calculator():
-    return send_file(os.path.join(os.getcwd(), 'heloc-calculator.html'),
+    return send_file(os.path.join(BASE_DIR, 'heloc-calculator.html'),
                      mimetype='text/html')
 
 
 
 @app.route('/dpa')
 def serve_dpa():
-    return send_file(os.path.join(os.getcwd(), 'dpa.html'),
+    return send_file(os.path.join(BASE_DIR, 'dpa.html'),
                      mimetype='text/html')
+
+
+@app.route('/va-loans-orlando')
+@app.route('/orlando-mortgage-broker')
+@app.route('/first-time-homebuyer-orlando')
+@app.route('/refinance-florida')
+@app.route('/heloc-orlando')
+def serve_service_page():
+    page_slug = request.path.lstrip('/')
+    return send_file(os.path.join(BASE_DIR, SERVICE_PAGE_MAP[page_slug]),
+                     mimetype='text/html')
+
 
 @app.route('/privacy')
 def privacy():
-    return send_file(os.path.join(os.getcwd(), 'privacy.html'),
+    return send_file(os.path.join(BASE_DIR, 'privacy.html'),
                      mimetype='text/html')
 
 @app.route('/blog/<path:slug>')
 def serve_blog_post(slug):
-    blog_path = os.path.join(os.getcwd(), 'blog_posts', f'{slug}.html')
+    blog_path = os.path.join(BASE_DIR, 'blog_posts', f'{slug}.html')
     if os.path.isfile(blog_path):
         return send_file(blog_path, mimetype='text/html')
-    return send_file(os.path.join(os.getcwd(), 'index.html'),
+    return send_file(os.path.join(BASE_DIR, 'index.html'),
                      mimetype='text/html'), 404
 
 @app.route('/robots.txt')
 def serve_robots():
-    return send_file(os.path.join(os.getcwd(), 'robots.txt'), mimetype='text/plain')
+    return send_file(os.path.join(BASE_DIR, 'robots.txt'), mimetype='text/plain')
 
 @app.route('/sitemap.xml')
 def serve_sitemap():
-    return send_file(os.path.join(os.getcwd(), 'sitemap.xml'), mimetype='application/xml')
+    return send_file(os.path.join(BASE_DIR, 'sitemap.xml'), mimetype='application/xml')
 
 # --- ManyChat Webhook: HELOC 5DAYS Sequence Enrollment ---
 MANYCHAT_API_KEY = os.environ.get('MANYCHAT_API_KEY', '1852822:98408d8d5653dd3cc23e831449be31a8')
@@ -372,12 +701,170 @@ def manychat_send_sequence():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
+@app.route('/api/refiwatch/lead', methods=['POST'])
+def refiwatch_lead_submit():
+    """Minimal owned lead endpoint for the RefiWatch funnel."""
+    try:
+        data = request.get_json(silent=True) or request.form.to_dict()
+
+        name = (data.get('name') or '').strip()
+        email = normalize_email(data.get('email', ''))
+        phone = (data.get('phone') or '').strip()
+        current_rate = (data.get('currentRate') or data.get('current_rate')
+                        or '').strip()
+        source = (data.get('source') or 'refiwatch').strip()
+        utm_data_raw = data.get('utmData') or data.get('utm_data') or '{}'
+        event_id = data.get('eventId') or data.get('event_id') or secrets.token_hex(16)
+
+        consent = data.get('consent', False)
+        if isinstance(consent, str):
+            consent = consent.strip().lower() in ('1', 'true', 'yes', 'on')
+
+        year_bought = data.get('yearBought') or data.get('year_bought')
+        if year_bought in ('', None):
+            year_bought = None
+        elif isinstance(year_bought, str):
+            year_bought = int(year_bought)
+
+        savings_goal = data.get('savingsGoal') or data.get('savings_goal')
+        if savings_goal in ('', None):
+            savings_goal = None
+        elif isinstance(savings_goal, str):
+            savings_goal = float(savings_goal)
+
+        utm_data = {}
+        if isinstance(utm_data_raw, str):
+            try:
+                utm_data = json.loads(utm_data_raw) if utm_data_raw else {}
+            except json.JSONDecodeError:
+                utm_data = {'raw': utm_data_raw}
+        elif isinstance(utm_data_raw, dict):
+            utm_data = utm_data_raw
+
+        errors = []
+        if not name:
+            errors.append('name is required')
+        if not email or '@' not in email:
+            errors.append('valid email is required')
+        if not current_rate:
+            errors.append('current rate is required')
+        if consent is not True:
+            errors.append('consent is required')
+
+        if errors:
+            return jsonify({'success': False, 'errors': errors}), 400
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO refiwatch_leads
+                (name, email, phone, year_bought, savings_goal, current_rate, consent, source, utm_data, meta_event_id)
+            VALUES
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s)
+            RETURNING id
+            """,
+            (
+                name,
+                email,
+                phone or None,
+                year_bought,
+                savings_goal,
+                current_rate,
+                consent,
+                source,
+                json.dumps(utm_data or {}),
+                event_id,
+            ),
+        )
+        result = cur.fetchone()
+        lead_id = result[0] if result else None
+
+        zapier_payload = {
+            'leadType': 'refiwatch',
+            'source': source,
+            'funnel': 'refiwatch',
+            'host': current_host(),
+            'name': name,
+            'firstName': name.split(' ')[0],
+            'email': email,
+            'phone': phone,
+            'yearBought': year_bought,
+            'savingsGoal': savings_goal,
+            'currentRate': current_rate,
+            'consent': consent,
+            'utmData': utm_data,
+            'eventId': event_id,
+            'submittedAt': datetime.now(timezone.utc).isoformat(),
+        }
+
+        zapier_forwarded = False
+        try:
+            zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
+                                            json=zapier_payload,
+                                            timeout=10)
+            if zapier_response.ok:
+                zapier_forwarded = True
+        except Exception as e:
+            app.logger.error(f'RefiWatch Zapier forward failed: {e}')
+
+        meta_result = {'sent': False, 'reason': 'not_attempted'}
+        try:
+            meta_result = track_meta_server_event(
+                'Lead',
+                event_id,
+                {
+                    'email': email,
+                    'phone': phone,
+                    'firstName': name.split(' ')[0],
+                },
+                custom_data={
+                    'content_name': 'refiwatch_lead',
+                    'content_category': 'refiwatch',
+                    'value': 1,
+                    'currency': 'USD',
+                },
+            )
+        except Exception as e:
+            meta_result = {'sent': False, 'reason': str(e)}
+            app.logger.error(f'RefiWatch Meta CAPI forward failed: {e}')
+
+        cur.execute(
+            """
+            UPDATE refiwatch_leads
+            SET zapier_forwarded = %s, meta_capi_sent = %s
+            WHERE id = %s
+            """,
+            (zapier_forwarded, bool(meta_result.get('sent')), lead_id),
+        )
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({
+            'success': True,
+            'lead_id': lead_id,
+            'event_id': event_id,
+            'meta_capi': meta_result,
+        })
+    except Exception as e:
+        app.logger.error(f'RefiWatch lead submission error: {e}')
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 @app.route('/<path:path>')
 def serve_static(path):
-    if path.startswith('admin'):
+    if path.startswith('admin') and not is_refiwatch_request():
         return redirect(url_for('admin_login'))
+
+    if is_refiwatch_request():
+        response = send_refiwatch_asset(path)
+        if response is not None:
+            return response
+
     try:
-        abs_path = os.path.join(os.getcwd(), path)
+        abs_path = os.path.join(BASE_DIR, path)
         if os.path.isfile(abs_path):
             mimetype, _ = mimetypes.guess_type(abs_path)
             if not mimetype:
@@ -385,7 +872,11 @@ def serve_static(path):
             return send_file(abs_path, mimetype=mimetype, conditional=True)
     except Exception as e:
         app.logger.error(f'Error serving {path}: {e}')
-    return send_file(os.path.join(os.getcwd(), 'index.html'),
+
+    if is_refiwatch_request() and refiwatch_build_ready():
+        return send_refiwatch_index()
+
+    return send_file(os.path.join(BASE_DIR, 'index.html'),
                      mimetype='text/html')
 
 
@@ -864,25 +1355,30 @@ def _rate_update_scheduler():
             _time.sleep(300)
 
 
-_rate_thread = threading.Thread(target=_rate_update_scheduler, daemon=True)
-_rate_thread.start()
-print("[Auto-Updater] Started - 2hr weekdays, 6hr weekends, market hours only")
+RATE_UPDATER_ENABLED = os.environ.get('ENABLE_RATE_UPDATER', '1').strip().lower() not in ('0', 'false', 'no')
+
+if RATE_UPDATER_ENABLED:
+    _rate_thread = threading.Thread(target=_rate_update_scheduler, daemon=True)
+    _rate_thread.start()
+    print("[Auto-Updater] Started - 2hr weekdays, 6hr weekends, market hours only")
+else:
+    print("[Auto-Updater] Disabled by environment")
 
 
 # --- Blog Routes ---
 @app.route('/blog')
 @app.route('/blog/')
 def blog_index():
-    return send_from_directory('blog_posts', 'index.html')
+    return send_from_directory(os.path.join(BASE_DIR, 'blog_posts'), 'index.html')
 
 
 @app.route('/blog/<slug>')
 def blog_post(slug):
     filename = f"{slug}.html"
-    filepath = os.path.join('blog_posts', filename)
+    filepath = os.path.join(BASE_DIR, 'blog_posts', filename)
     if os.path.exists(filepath):
-        return send_from_directory('blog_posts', filename)
-    return send_from_directory('.', 'index.html'), 404
+        return send_from_directory(os.path.join(BASE_DIR, 'blog_posts'), filename)
+    return send_from_directory(BASE_DIR, 'index.html'), 404
 
 
 # --- Performance: Caching Headers ---
@@ -913,7 +1409,7 @@ def add_cache_headers(response):
 @app.errorhandler(404)
 def page_not_found(e):
     try:
-        return send_file(os.path.join(os.getcwd(), '404.html'),
+        return send_file(os.path.join(BASE_DIR, '404.html'),
                          mimetype='text/html'), 404
     except Exception:
         return '<h1>404 - Page Not Found</h1>', 404
@@ -922,7 +1418,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     try:
-        return send_file(os.path.join(os.getcwd(), '404.html'),
+        return send_file(os.path.join(BASE_DIR, '404.html'),
                          mimetype='text/html'), 500
     except Exception:
         return '<h1>500 - Server Error</h1>', 500
