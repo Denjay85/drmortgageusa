@@ -1,0 +1,85 @@
+<main class="learn-page">
+  <section class="learn-hero">
+    <h1>What RefiWatch Does For You</h1>
+    <p>
+      RefiWatch is a free tracking service for your current mortgage. You tell me your basic loan details. I watch rates for you and email you when it may make sense to refinance.
+    </p>
+  </section>
+
+  <section class="learn-section">
+    <h2>The problem</h2>
+    <p>
+      Most homeowners guess about refinancing. They see a headline rate. They hear a friend talk about a refi. Then they wonder if they missed something.
+    </p>
+    <p>
+      Sometimes a refinance saves you real money. Sometimes it does not. You should not have to guess which one it is.
+    </p>
+  </section>
+
+  <section class="learn-section">
+    <h2>What RefiWatch is</h2>
+    <p>
+      RefiWatch tracks your exact mortgage in the background. You enter your loan details one time. I monitor rates and costs for you.
+    </p>
+    <p>
+      When the numbers may work in your favor, I send you a simple email. No credit pull. No spam. No pressure.
+    </p>
+  </section>
+
+  <section class="learn-section">
+    <h2>What you share</h2>
+    <p>To set up tracking, I ask for:</p>
+    <ul>
+      <li>Your name</li>
+      <li>Your email</li>
+      <li>Your current interest rate</li>
+      <li>A few basic details about your loan amount and term</li>
+    </ul>
+    <p>
+      Your best estimate is fine if you do not know every number.
+    </p>
+  </section>
+
+  <section class="learn-section">
+    <h2>What I do with it</h2>
+    <p>
+      I use your info to check how a future refinance may look. The model checks:
+    </p>
+    <ul>
+      <li>How much your payment may drop</li>
+      <li>How long it may take to recover closing costs</li>
+      <li>Whether a shorter term may make sense for you</li>
+    </ul>
+    <p>
+      If the math is weak, you will not get a refi alert from me. If the math looks good, you get a clear email that explains it in normal language.
+    </p>
+  </section>
+
+  <section class="learn-section">
+    <h2>When your refi window opens</h2>
+    <p>
+      When I see a strong opportunity, I email you details like:
+    </p>
+    <ul>
+      <li>Your estimated new payment</li>
+      <li>Rough costs to refinance</li>
+      <li>About how much you may save over time</li>
+    </ul>
+    <p>
+      You decide what to do. If you want to move forward, we talk and I walk you through full options as your loan officer. If you do not, you can stay on watch or unsubscribe with one click.
+    </p>
+  </section>
+
+  <section class="learn-section">
+    <h2>What this is not</h2>
+    <ul>
+      <li>Not a rate sheet blast</li>
+      <li>Not a high pressure sales funnel</li>
+      <li>Does not require a phone number to join</li>
+      <li>Does not require a hard credit pull to join</li>
+    </ul>
+    <p>
+      It is a simple way to stop guessing and know when a refinance may be worth your time.
+    </p>
+  </section>
+</main>

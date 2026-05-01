@@ -1,0 +1,94 @@
+<section id="faq" class="faq-section">
+  <h2>Refinance FAQs</h2>
+  <p class="faq-intro">
+    Short answers first. If you are unsure, start the 60 second refi check and I will run the numbers for you.
+  </p>
+
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        How does RefiWatch work?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>
+          You tell me your current loan details. I track the market for you and alert you when a refinance can save real money or shorten your term.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        Who is this for?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>
+          This is for homeowners who want to refinance at the right time without watching rates every day. If you pay a mortgage and plan to stay put, this fits you.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        Do you pull my credit to sign up?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>
+          No. You can join RefiWatch with no hard credit pull. If we see a strong savings opportunity and you want to move forward, we will talk about next steps then.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        When does it make sense to refinance?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>
+          It usually makes sense when your new loan drops your payment or shortens your term enough to beat the cost of the refi. I run that math for you and only flag it when it passes that test.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        What does RefiWatch cost?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>
+          There is no fee to be on watch. If you choose to refinance with me, I earn my pay as your loan officer through the lender, not a subscription.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        What happens when my refi window opens?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>
+          You get a clear update with what you could save, estimated payment, and your best options. You choose if you want to move forward. No pressure, no spam.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" type="button">
+        Can I leave RefiWatch if I change my mind?
+        <span class="faq-toggle">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>
+          Yes. You can unsubscribe any time with one click, and I stop tracking your loan.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
