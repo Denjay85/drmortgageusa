@@ -73,3 +73,11 @@ No commit was created because the local Flask sanity test could not run in this 
 - Revert local uncommitted sprint changes with `git restore <tracked-file>` for specific files, or switch back to the backup branch with `git switch backup/pre-conversion-20260503-142249`.
 - File-level backup snapshot is available at `/Users/gordbot/.openclaw/workspace/backups/drmortgageusa-pre-conversion-20260503-142249`.
 - Untracked files were left untouched.
+
+## Follow-up Polish Pass
+
+- Added mobile containment CSS to prevent hero overflow, shortened the hero CTA, tightened nav spacing, and reduced excessive desktop hero height.
+- Replaced remaining DPA blog hard-pricing language with qualified program-guideline language.
+- Re-ran `app.py` compile, blocked phrase scan, and `git diff --check`, all clean.
+- Created a second commit: `0582901 Polish mobile hero and compliance cleanup`.
+- Public temporary preview tunnel is active at `https://tired-kings-fry.loca.lt` while the local process is running.
