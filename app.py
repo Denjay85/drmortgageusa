@@ -10,6 +10,7 @@ import os
 import json
 import secrets
 import hashlib
+import re
 import requests
 import psycopg2
 from datetime import datetime, timezone
@@ -99,6 +100,13 @@ def normalize_email(value):
 
 def normalize_phone(value):
     return ''.join(ch for ch in (value or '') if ch.isdigit())
+
+
+def is_valid_email(value):
+    email = normalize_email(value)
+    if not email:
+        return False
+    return re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email) is not None
 
 
 def sha256_or_none(value):
@@ -448,6 +456,10 @@ def site_tracking():
           fbp: getOrCreateFbp(),
           fbc: getOrCreateFbc()
         }};
+
+        formData.forEach(function(value, key) {{
+          if (!(key in payload)) payload[key] = value;
+        }});
 
         if (typeof window.fbq === 'function') {{
           window.fbq('track', 'Lead', {{
@@ -889,23 +901,45 @@ def serve_static(path):
 def quiz_submit():
     """Receive quiz submission, store in DB, forward to Zapier"""
     try:
-        data = request.get_json() or request.form.to_dict()
+        data = request.get_json(silent=True) or request.form.to_dict()
 
-        first_name = data.get('firstName', data.get('first_name', ''))
-        email = data.get('email', '')
-        phone = data.get('phone', '')
-        segment = data.get('segment', '')
-        price_range = data.get('priceRange', data.get('price_range', ''))
-        down_payment = data.get('downPayment', data.get('down_payment', ''))
-        timeline = data.get('timeline', '')
-        credit_score = data.get('creditScore', data.get('credit_score', ''))
+        first_name = (data.get('firstName', data.get('first_name', '')) or '').strip()
+        email = normalize_email(data.get('email', ''))
+        phone = normalize_phone(data.get('phone', ''))
+        segment = (data.get('segment', '') or '').strip()
+        price_range = (data.get('priceRange', data.get('price_range', '')) or '').strip()
+        down_payment = (data.get('downPayment', data.get('down_payment', '')) or '').strip()
+        timeline = (data.get('timeline', '') or '').strip()
+        credit_score = (data.get('creditScore', data.get('credit_score', '')) or '').strip()
         military_status = data.get('militaryStatus',
-                                   data.get('military_status', ''))
-        property_type = data.get('propertyType', data.get('property_type', ''))
+                                   data.get('military_status', '')) or ''
+        property_type = data.get('propertyType', data.get('property_type', '')) or ''
         investor_loan_type = data.get('investorLoanType',
-                                      data.get('investor_loan_type', ''))
+                                      data.get('investor_loan_type', '')) or ''
         event_id = data.get('eventId', '') or data.get('event_id', '') or secrets.token_hex(16)
-        source = data.get('source', 'website')
+        source = (data.get('source', 'website') or 'website').strip()
+
+        errors = []
+        if email and not is_valid_email(email):
+            errors.append('valid email is required')
+        if phone and len(phone) < 10:
+            errors.append('valid phone is required')
+        if not email and not phone:
+            errors.append('email or phone is required')
+        if not first_name and not email and not phone:
+            errors.append('lead details are required')
+
+        if errors:
+            return jsonify({"success": False, "errors": errors}), 400
+
+        data['firstName'] = first_name
+        data['email'] = email
+        data['phone'] = phone
+        data['segment'] = segment
+        data['priceRange'] = price_range
+        data['downPayment'] = down_payment
+        data['timeline'] = timeline
+        data['source'] = source
 
         conn = get_db_connection()
         cur = conn.cursor()

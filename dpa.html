@@ -107,8 +107,90 @@
                 Up to $50,000 in assistance available for Orlando area buyers. State programs, county programs, and local grants. Find out what you qualify for.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="300">
-                <a href="#programs" class="btn-gold text-lg px-10 py-4 rounded-xl">See All Programs</a>
+                <a href="#dpa-check" class="btn-gold text-lg px-10 py-4 rounded-xl">Check Eligibility</a>
                 <a href="tel:8503468514" class="border-2 border-gold text-gold font-semibold px-10 py-4 rounded-xl hover:bg-gold hover:text-navy transition-all text-lg">(850) 346-8514</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DPA ELIGIBILITY LEAD FORM -->
+    <section id="dpa-check" class="py-16 md:py-24 border-t border-white/5" style="background-color: #00152b;">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
+                <div>
+                    <p class="text-gold font-semibold text-sm uppercase tracking-widest mb-3">Quick Eligibility Review</p>
+                    <h2 class="font-poppins text-3xl md:text-4xl font-bold mb-4">See which DPA paths may fit your file</h2>
+                    <p class="text-gray-300 text-lg mb-6">Send the basics and Dennis will review county, income, household size, first-time buyer status, and program fit before you spend time on the wrong option.</p>
+                    <div class="grid sm:grid-cols-3 gap-3 text-sm">
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                            <p class="font-semibold text-white">County fit</p>
+                            <p class="text-gray-400 mt-1">Local funds vary by area and availability.</p>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                            <p class="font-semibold text-white">Income check</p>
+                            <p class="text-gray-400 mt-1">Most programs use household and county limits.</p>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                            <p class="font-semibold text-white">Next step</p>
+                            <p class="text-gray-400 mt-1">You will know whether to keep going or pivot.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="bg-white text-navy rounded-xl p-6 md:p-8 shadow-2xl space-y-4" data-lead-form data-segment="dpa" data-source="dpa-eligibility-form" data-success-message="Thanks. Dennis will review your DPA fit and reach out.">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <label class="block">
+                            <span class="text-sm font-semibold">County</span>
+                            <input type="text" name="county" class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-3" placeholder="Orange, Osceola, etc." required>
+                        </label>
+                        <label class="block">
+                            <span class="text-sm font-semibold">First-time buyer?</span>
+                            <select name="firstTimeBuyer" class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-3" required>
+                                <option value="">Select one</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                                <option value="unsure">Unsure</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <label class="block">
+                            <span class="text-sm font-semibold">Household size</span>
+                            <input type="number" name="householdSize" min="1" max="12" class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-3" placeholder="3" required>
+                        </label>
+                        <label class="block">
+                            <span class="text-sm font-semibold">Rough income range</span>
+                            <select name="incomeRange" class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-3" required>
+                                <option value="">Select range</option>
+                                <option value="under-60k">Under $60k</option>
+                                <option value="60k-90k">$60k - $90k</option>
+                                <option value="90k-120k">$90k - $120k</option>
+                                <option value="120k-150k">$120k - $150k</option>
+                                <option value="150k-plus">$150k+</option>
+                                <option value="unsure">Unsure</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <label class="block">
+                            <span class="text-sm font-semibold">Name</span>
+                            <input type="text" name="firstName" class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-3" placeholder="First name" required>
+                        </label>
+                        <label class="block">
+                            <span class="text-sm font-semibold">Email</span>
+                            <input type="email" name="email" class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-3" placeholder="you@email.com" required>
+                        </label>
+                        <label class="block">
+                            <span class="text-sm font-semibold">Phone</span>
+                            <input type="tel" name="phone" class="mt-1 w-full border border-gray-300 rounded-lg px-4 py-3" placeholder="(555) 555-5555" required>
+                        </label>
+                    </div>
+                    <input type="hidden" name="segment" value="dpa">
+                    <input type="hidden" name="source" value="dpa-eligibility-form">
+                    <button type="submit" class="btn-gold w-full text-center">Check My DPA Fit</button>
+                    <p data-form-message class="text-sm font-semibold"></p>
+                    <p class="text-xs text-gray-500 leading-relaxed">By submitting, you agree Dennis Ross may call or text about your mortgage options. Message/data rates may apply. You can opt out anytime.</p>
+                </form>
             </div>
         </div>
     </section>
@@ -393,7 +475,7 @@
         const results = {
             heroes: {
                 title: "Hometown Heroes is your best option",
-                text: "Up to 5% of the loan amount (max $35,000) as a 0% deferred second mortgage. No first-time buyer requirement. Lowest rates available on any DPA program. Works with FHA, VA, USDA, and Conventional loans."
+                text: "Up to 5% of the loan amount (max $35,000) as a 0% deferred second mortgage for eligible borrowers. No first-time buyer requirement. Pricing and program fit depend on current guidelines and your full file."
             },
             military: {
                 title: "Compare Hometown Heroes vs Salute Our Soldiers",
