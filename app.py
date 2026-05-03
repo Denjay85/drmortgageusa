@@ -278,6 +278,36 @@ def health_check():
     return jsonify({'status': 'ok', 'service': 'drmortgageusa'}), 200
 
 
+DPA_PROGRAM_INTRO_RE = re.compile(
+    r'(<h2[^>]*>All Florida DPA Programs</h2>\s*)'
+    r'<p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto" '
+    r'data-aos="fade-up" data-aos-delay="100">.*?</p>',
+    re.DOTALL,
+)
+DPA_PROGRAM_DATE_RE = re.compile(
+    r'(?:Rates current as of|Program details and sample rate ranges shown as of) '
+    r'([A-Za-z]+ \d{1,2}, \d{4})'
+)
+DPA_PROGRAM_INTRO_CLASS = (
+    'class="text-gray-400 text-center mb-12 max-w-2xl mx-auto" '
+    'data-aos="fade-up" data-aos-delay="100"'
+)
+
+
+def normalize_dpa_program_intro(html):
+    """Keep the DPA source attribution idempotent after rate bot rewrites."""
+    date_match = DPA_PROGRAM_DATE_RE.search(html)
+    reviewed_date = date_match.group(1) if date_match else 'May 01, 2026'
+    intro_copy = (
+        'Compare Florida DPA options side by side. Program details and sample '
+        f'rate ranges shown as of {reviewed_date}; availability, income '
+        'limits, and pricing can change. Source: eHousingPlus and Florida '
+        'Housing Finance Corporation program highlights.'
+    )
+    replacement = rf'\1<p {DPA_PROGRAM_INTRO_CLASS}>{intro_copy}</p>'
+    return DPA_PROGRAM_INTRO_RE.sub(replacement, html, count=1)
+
+
 @app.route('/')
 def serve_index():
     if is_refiwatch_request() and refiwatch_build_ready():
@@ -542,8 +572,9 @@ def heloc_calculator():
 
 @app.route('/dpa')
 def serve_dpa():
-    return send_file(os.path.join(BASE_DIR, 'dpa.html'),
-                     mimetype='text/html')
+    with open(os.path.join(BASE_DIR, 'dpa.html'), encoding='utf-8') as f:
+        html = normalize_dpa_program_intro(f.read())
+    return Response(html, mimetype='text/html')
 
 
 @app.route('/va-loans-orlando')
