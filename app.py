@@ -320,6 +320,10 @@ def serve_index():
 def site_tracking():
     ga_measurement_id = os.environ.get('GA_MEASUREMENT_ID', '').strip()
     gtm_container_id = os.environ.get('GTM_CONTAINER_ID', '').strip()
+    google_ads_id = os.environ.get('GOOGLE_ADS_ID', '').strip()
+    google_ads_apply_label = os.environ.get('GOOGLE_ADS_APPLY_CONVERSION_LABEL', '').strip()
+    google_ads_phone_label = os.environ.get('GOOGLE_ADS_PHONE_CONVERSION_LABEL', '').strip()
+    google_ads_lead_form_label = os.environ.get('GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL', '').strip()
     js = f"""
 (function() {{
   if (window.__drSiteTrackingLoaded) return;
@@ -328,7 +332,12 @@ def site_tracking():
   var pixelId = {json.dumps(META_PIXEL_ID)};
   var gaMeasurementId = {json.dumps(ga_measurement_id)};
   var gtmContainerId = {json.dumps(gtm_container_id)};
+  var googleAdsId = {json.dumps(google_ads_id)};
+  var googleAdsApplyLabel = {json.dumps(google_ads_apply_label)};
+  var googleAdsPhoneLabel = {json.dumps(google_ads_phone_label)};
+  var googleAdsLeadFormLabel = {json.dumps(google_ads_lead_form_label)};
   var options = window.DR_TRACKING_OPTIONS || {{}};
+  var googleTagLoaded = false;
 
   function loadScript(src, onload) {{
     var script = document.createElement('script');
@@ -373,24 +382,160 @@ def site_tracking():
     return prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2, 10);
   }}
 
+  function pushDataLayerEvent(eventName, payload) {{
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({{ event: eventName }}, payload || {{}}));
+  }}
+
+  function ensureGoogleTag() {{
+    if (window.gtag) return true;
+    if (!gaMeasurementId && !googleAdsId) return false;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function() {{ window.dataLayer.push(arguments); }};
+    window.gtag('js', new Date());
+    if (!googleTagLoaded) {{
+      googleTagLoaded = true;
+      loadScript("https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaMeasurementId || googleAdsId));
+    }}
+    return true;
+  }}
+
+  function configGoogleTag(tagId, config) {{
+    if (!window.gtag || !tagId) return;
+    window.gtag('config', tagId, config || {{}});
+  }}
+
   function initGoogle() {{
     if (gtmContainerId && !window.google_tag_manager) {{
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({{ 'gtm.start': Date.now(), event: 'gtm.js' }});
+      pushDataLayerEvent('gtm.js', {{ 'gtm.start': Date.now() }});
       loadScript("https://www.googletagmanager.com/gtm.js?id=" + encodeURIComponent(gtmContainerId));
       return;
     }}
 
-    if (gaMeasurementId && !window.gtag) {{
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function() {{ window.dataLayer.push(arguments); }};
-      window.gtag('js', new Date());
-      window.gtag('config', gaMeasurementId, {{
-        page_path: window.location.pathname,
-        send_page_view: true
-      }});
-      loadScript("https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaMeasurementId));
+    if (ensureGoogleTag()) {{
+      if (gaMeasurementId) {{
+        configGoogleTag(gaMeasurementId, {{
+          page_path: window.location.pathname,
+          send_page_view: true
+        }});
+      }}
+      if (googleAdsId) {{
+        configGoogleTag(googleAdsId, {{
+          page_path: window.location.pathname
+        }});
+      }}
     }}
+  }}
+
+  function sendGoogleAdsConversion(label, eventId, extra) {{
+    if (!window.gtag || !googleAdsId || !label) return;
+    var payload = Object.assign({{
+      send_to: googleAdsId + '/' + label
+    }}, extra || {{}});
+    if (eventId) payload.transaction_id = eventId;
+    window.gtag('event', 'conversion', payload);
+  }}
+
+  function trackGoogleEvent(eventName, params) {{
+    if (!window.gtag) return;
+    var payload = Object.assign({{}}, params || {{}});
+    if (!gaMeasurementId && googleAdsId) {{
+      payload.send_to = googleAdsId;
+    }}
+    window.gtag('event', eventName, payload);
+  }}
+
+  function buildTrackingPayload(defaults, overrides) {{
+    return Object.assign({{
+      page_title: document.title,
+      page_path: window.location.pathname,
+      page_location: window.location.href
+    }}, defaults || {{}}, overrides || {{}});
+  }}
+
+  function trackApplyClick(details) {{
+    var eventId = (details && details.eventId) || createEventId('apply_now');
+    var payload = buildTrackingPayload({{
+      content_name: document.title,
+      content_category: 'apply-click'
+    }}, details);
+    pushDataLayerEvent('dr_apply_click', payload);
+
+    if (typeof window.fbq === 'function') {{
+      window.fbq('track', 'CompleteRegistration', {{
+        content_name: payload.content_name,
+        content_category: payload.content_category
+      }}, {{ eventID: eventId }});
+    }}
+
+    trackGoogleEvent('generate_lead', {{
+      event_category: 'conversion',
+      event_label: payload.href || payload.content_category,
+      page_path: payload.page_path
+    }});
+    sendGoogleAdsConversion(googleAdsApplyLabel, eventId);
+    return eventId;
+  }}
+
+  function trackPhoneClick(details) {{
+    var eventId = (details && details.eventId) || createEventId('phone_call');
+    var payload = buildTrackingPayload({{
+      content_name: document.title,
+      content_category: 'phone-click'
+    }}, details);
+    pushDataLayerEvent('dr_phone_click', payload);
+
+    if (typeof window.fbq === 'function') {{
+      window.fbq('track', 'Contact', {{
+        content_name: payload.content_name,
+        content_category: payload.content_category
+      }}, {{ eventID: eventId }});
+    }}
+
+    trackGoogleEvent('contact', {{
+      event_category: 'conversion',
+      event_label: payload.href || payload.content_category,
+      page_path: payload.page_path
+    }});
+    sendGoogleAdsConversion(googleAdsPhoneLabel, eventId);
+    return eventId;
+  }}
+
+  function trackLeadSubmit(details) {{
+    var eventId = (details && details.eventId) || createEventId('lead_submit');
+    var payload = buildTrackingPayload({{
+      content_name: document.title,
+      content_category: 'lead-form'
+    }}, details);
+    pushDataLayerEvent('dr_lead_form_submit', payload);
+
+    if (typeof window.fbq === 'function') {{
+      window.fbq('track', 'Lead', {{
+        content_name: payload.content_name,
+        content_category: payload.content_category
+      }}, {{ eventID: eventId }});
+    }}
+
+    trackGoogleEvent('generate_lead', {{
+      event_category: 'form',
+      event_label: payload.source || payload.content_category,
+      page_path: payload.page_path
+    }});
+    sendGoogleAdsConversion(googleAdsLeadFormLabel, eventId);
+    return eventId;
+  }}
+
+  function trackSecondaryLandingView(details) {{
+    var payload = buildTrackingPayload({{
+      content_name: document.title,
+      content_category: 'landing-page-view'
+    }}, details);
+    pushDataLayerEvent('dr_secondary_landing_view', payload);
+    trackGoogleEvent('view_item', {{
+      event_category: 'secondary',
+      event_label: payload.content_category,
+      page_path: payload.page_path
+    }});
   }}
 
   function initMeta() {{
@@ -417,6 +562,10 @@ def site_tracking():
       content_category: pageCategory || 'page',
       content_type: pageIntent || 'general'
     }}, {{ eventID: createEventId('intent_view') }});
+    trackSecondaryLandingView({{
+      content_category: pageCategory || 'page',
+      content_type: pageIntent || 'general'
+    }});
   }}
 
   function bindClickTracking() {{
@@ -426,18 +575,11 @@ def site_tracking():
       if (el.dataset.drTrackBoundApply) return;
       el.dataset.drTrackBoundApply = '1';
       el.addEventListener('click', function() {{
-        if (typeof window.fbq === 'function') {{
-          window.fbq('track', 'CompleteRegistration', {{
-            content_name: el.dataset.contentName || document.title,
-            content_category: el.dataset.contentCategory || 'apply-click'
-          }}, {{ eventID: createEventId('apply_now') }});
-        }}
-        if (window.gtag && gaMeasurementId) {{
-          window.gtag('event', 'generate_lead', {{
-            event_category: 'conversion',
-            event_label: el.href
-          }});
-        }}
+        trackApplyClick({{
+          href: el.href,
+          content_name: el.dataset.contentName || document.title,
+          content_category: el.dataset.contentCategory || 'apply-click'
+        }});
       }});
     }});
 
@@ -445,18 +587,11 @@ def site_tracking():
       if (el.dataset.drTrackBoundCall) return;
       el.dataset.drTrackBoundCall = '1';
       el.addEventListener('click', function() {{
-        if (typeof window.fbq === 'function') {{
-          window.fbq('track', 'Contact', {{
-            content_name: el.dataset.contentName || document.title,
-            content_category: el.dataset.contentCategory || 'phone-click'
-          }}, {{ eventID: createEventId('phone_call') }});
-        }}
-        if (window.gtag && gaMeasurementId) {{
-          window.gtag('event', 'contact', {{
-            event_category: 'conversion',
-            event_label: el.getAttribute('href')
-          }});
-        }}
+        trackPhoneClick({{
+          href: el.getAttribute('href'),
+          content_name: el.dataset.contentName || document.title,
+          content_category: el.dataset.contentCategory || 'phone-click'
+        }});
       }});
     }});
   }}
@@ -491,20 +626,6 @@ def site_tracking():
           if (!(key in payload)) payload[key] = value;
         }});
 
-        if (typeof window.fbq === 'function') {{
-          window.fbq('track', 'Lead', {{
-            content_name: payload.segment || document.title,
-            content_category: payload.source
-          }}, {{ eventID: eventId }});
-        }}
-
-        if (window.gtag && gaMeasurementId) {{
-          window.gtag('event', 'generate_lead', {{
-            event_category: 'form',
-            event_label: payload.source
-          }});
-        }}
-
         if (submitButton) {{
           submitButton.disabled = true;
           submitButton.textContent = 'Submitting...';
@@ -520,6 +641,12 @@ def site_tracking():
           body: JSON.stringify(payload)
         }}).then(function(response) {{
           if (!response.ok) throw new Error('Lead submission failed');
+          trackLeadSubmit({{
+            eventId: eventId,
+            content_name: payload.segment || document.title,
+            content_category: payload.source,
+            source: payload.source
+          }});
           if (message) {{
             message.textContent = form.dataset.successMessage || 'Thanks. Dennis will reach out shortly.';
             message.classList.add('is-success');
@@ -543,7 +670,12 @@ def site_tracking():
   window.DrMortgageTracking = {{
     createEventId: createEventId,
     getOrCreateFbp: getOrCreateFbp,
-    getOrCreateFbc: getOrCreateFbc
+    getOrCreateFbc: getOrCreateFbc,
+    pushDataLayerEvent: pushDataLayerEvent,
+    trackApplyClick: trackApplyClick,
+    trackPhoneClick: trackPhoneClick,
+    trackLeadSubmit: trackLeadSubmit,
+    trackSecondaryLandingView: trackSecondaryLandingView
   }};
 
   getOrCreateFbp();

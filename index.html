@@ -3494,14 +3494,21 @@ document.addEventListener("DOMContentLoaded", () => {
         fbc: getOrCreateFbc()
       };
       
-      // Meta Pixel: Lead event
-      if(typeof fbq==='function') fbq('track','Lead',{content_name:segment,content_category:'60-second-quiz'},{eventID: leadEventId});
-      
       // Send to our API (stores lead + forwards to Zapier)
       fetch("/api/quiz-submit", {
         method: "POST",
         body: JSON.stringify(webhookData),
         headers: { "Content-Type": "application/json" }
+      }).then(response => {
+        if (!response.ok) throw new Error("Quiz lead submission failed");
+        if (window.DrMortgageTracking && typeof window.DrMortgageTracking.trackLeadSubmit === 'function') {
+          window.DrMortgageTracking.trackLeadSubmit({
+            eventId: leadEventId,
+            content_name: segment,
+            content_category: '60-second-quiz',
+            source: '60-second-quiz'
+          });
+        }
       }).catch(err => console.log("API error:", err));
       
       // Show results
@@ -3585,13 +3592,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fbc: getOrCreateFbc()
       };
 
-      if(typeof fbq==='function') {
-        fbq('track','Lead',{
-          content_name: data.segment || 'segment-form',
-          content_category: 'segment-form'
-        },{eventID: leadEventId});
-      }
-      
       // Show loading state
       submitBtn.textContent = 'Submitting...';
       submitBtn.disabled = true;
@@ -3602,6 +3602,15 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
       }).then(response => {
+        if (!response.ok) throw new Error('Lead submission failed');
+        if (window.DrMortgageTracking && typeof window.DrMortgageTracking.trackLeadSubmit === 'function') {
+          window.DrMortgageTracking.trackLeadSubmit({
+            eventId: leadEventId,
+            content_name: data.segment || 'segment-form',
+            content_category: 'segment-form',
+            source: data.source || 'segment-form'
+          });
+        }
         const personalizedMessage = firstName ? 
           `✓ Thanks ${firstName}! We'll contact you soon.` : 
           '✓ Success! We\'ll contact you soon.';
@@ -3813,15 +3822,25 @@ document.addEventListener('DOMContentLoaded',function(){
   // Track Apply Now clicks
   document.querySelectorAll('a[href*="my1003app.com"]').forEach(function(el){
     el.addEventListener('click',function(){
-      const eventId = createEventId('apply_now');
-      if(typeof fbq==='function') fbq('track','CompleteRegistration',{content_name:'Apply Now'},{eventID: eventId});
+      if (window.DrMortgageTracking && typeof window.DrMortgageTracking.trackApplyClick === 'function') {
+        window.DrMortgageTracking.trackApplyClick({
+          href: el.href,
+          content_name: 'Apply Now',
+          content_category: 'homepage'
+        });
+      }
     });
   });
   // Track phone call clicks
   document.querySelectorAll('a[href^="tel:"]').forEach(function(el){
     el.addEventListener('click',function(){
-      const eventId = createEventId('phone_call');
-      if(typeof fbq==='function') fbq('track','Contact',{content_name:'Phone Call'},{eventID: eventId});
+      if (window.DrMortgageTracking && typeof window.DrMortgageTracking.trackPhoneClick === 'function') {
+        window.DrMortgageTracking.trackPhoneClick({
+          href: el.getAttribute('href'),
+          content_name: 'Phone Call',
+          content_category: 'homepage'
+        });
+      }
     });
   });
 });

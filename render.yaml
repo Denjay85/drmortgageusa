@@ -26,5 +26,13 @@ services:
         sync: false
       - key: META_TEST_EVENT_CODE
         sync: false
+      - key: GOOGLE_ADS_ID
+        value: AW-18055212874
+      - key: GOOGLE_ADS_APPLY_CONVERSION_LABEL
+        value: ZoE7CPuPg6kcEMresqFD
+      - key: GOOGLE_ADS_PHONE_CONVERSION_LABEL
+        value: pIxfCP6Pg6kcEMresqFD
+      - key: GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL
+        value: 90H9CJrk-agcEMresqFD
       - key: PYTHON_VERSION
         value: 3.11.0
