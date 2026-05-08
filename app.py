@@ -320,10 +320,22 @@ def serve_index():
 def site_tracking():
     ga_measurement_id = os.environ.get('GA_MEASUREMENT_ID', '').strip()
     gtm_container_id = os.environ.get('GTM_CONTAINER_ID', '').strip()
-    google_ads_id = os.environ.get('GOOGLE_ADS_ID', '').strip()
-    google_ads_apply_label = os.environ.get('GOOGLE_ADS_APPLY_CONVERSION_LABEL', '').strip()
-    google_ads_phone_label = os.environ.get('GOOGLE_ADS_PHONE_CONVERSION_LABEL', '').strip()
-    google_ads_lead_form_label = os.environ.get('GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL', '').strip()
+    # Render Blueprint env vars do not backfill existing services reliably.
+    # These browser-side Google Ads identifiers are public, so keep live
+    # tracking resilient if the service env is currently unset.
+    google_ads_id = os.environ.get('GOOGLE_ADS_ID', 'AW-18055212874').strip()
+    google_ads_apply_label = os.environ.get(
+        'GOOGLE_ADS_APPLY_CONVERSION_LABEL',
+        'ZoE7CPuPg6kcEMresqFD',
+    ).strip()
+    google_ads_phone_label = os.environ.get(
+        'GOOGLE_ADS_PHONE_CONVERSION_LABEL',
+        'pIxfCP6Pg6kcEMresqFD',
+    ).strip()
+    google_ads_lead_form_label = os.environ.get(
+        'GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL',
+        '90H9CJrk-agcEMresqFD',
+    ).strip()
     js = f"""
 (function() {{
   if (window.__drSiteTrackingLoaded) return;
