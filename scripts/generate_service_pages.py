@@ -425,7 +425,7 @@ def render_page(page: dict) -> str:
   <link rel="stylesheet" href="/assets/landing-pages.css">
   <script type="application/ld+json">{page_json(page)}</script>
   <script type="application/ld+json">{faq_json(page)}</script>
-  <script src="/site-tracking.js" defer></script>
+  <script src="/site-tracking.js?v=20260508-1" defer></script>
 </head>
 <body data-page-category="service" data-page-intent="{html.escape(page['segment'])}">
   <div class="shell">

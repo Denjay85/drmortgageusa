@@ -130,7 +130,7 @@ def build_index(posts):
     <meta name="description" content="Florida mortgage tips, guides, and advice from Dennis Ross, Navy veteran and licensed mortgage broker. Learn about VA loans, FHA, conventional, and more.">
     <link rel="canonical" href="https://drmortgageusa.com/blog">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/site-tracking.js" defer></script>
+    <script src="/site-tracking.js?v=20260508-1" defer></script>
     <style>
         .bg-navy {{ background-color: #1a1a2e; }}
         .text-gold {{ color: #D4AF37; }}

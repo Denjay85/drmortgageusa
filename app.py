@@ -704,7 +704,11 @@ def site_tracking():
   }}
 }})();
 """
-    return Response(js, mimetype='application/javascript')
+    response = Response(js, mimetype='application/javascript')
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 @app.route('/heloc-calculator')
@@ -1599,8 +1603,10 @@ def blog_post(slug):
 @app.after_request
 def add_cache_headers(response):
     try:
+        if response.headers.get('Cache-Control'):
+            pass
         # Static assets: cache for 1 week
-        if response.content_type and any(
+        elif response.content_type and any(
                 t in response.content_type for t in
             ['image/', 'font/', 'text/css', 'javascript', 'video/']):
             response.headers[
