@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-update_blog.py — Auto-update blog index and sitemap when new posts are added.
+update_blog.py - Auto-update blog index and sitemap when new posts are added.
 
 Run this any time a new blog post HTML file is added to blog_posts/.
 It reads the metadata from each post and rebuilds:
@@ -91,7 +91,7 @@ def get_posts():
         slug = f.stem
         title, desc, date = extract_meta(f)
         if not title:
-            print(f"  WARNING: No title found in {f.name} — skipping")
+            print(f"  WARNING: No title found in {f.name} - skipping")
             continue
         posts.append({
             "slug": slug,
@@ -163,7 +163,7 @@ def build_index(posts):
 
     <footer class="bg-navy text-gray-400 py-8 mt-12">
         <div class="container mx-auto px-4 text-center text-sm">
-            <p>Dennis Ross | NMLS #2018381 | Powered by Home1st Lending, LLC NMLS #1418</p>
+            <p>Dennis Ross | NMLS #2018381 | Powered by Home 1st Lending, LLC NMLS #1418</p>
             <p class="mt-2">Licensed in Florida | Equal Housing Lender</p>
         </div>
     </footer>
