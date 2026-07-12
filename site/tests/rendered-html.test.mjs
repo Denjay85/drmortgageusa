@@ -76,6 +76,12 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
     assert.match(html, /name="robots" content="noindex, nofollow"/);
   }
   assert.match(html, /rel="canonical" href="https:\/\/drmortgageusa\.com\/"/);
+  const organizationMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
+  assert.ok(organizationMatch, "homepage organization structured data should render");
+  const organization = JSON.parse(organizationMatch[1]);
+  assert.equal(organization["@type"], "Organization");
+  assert.equal(organization.name, "DR. Mortgage USA");
+  assert.equal(organization.telephone, "+1-850-346-8514");
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
@@ -146,6 +152,12 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /class="about-portrait-caption"/);
   assert.doesNotMatch(html, /class="flag-wave-sheen"/);
   assert.match(html, /Dennis Ross, DR\. Mortgage USA/);
+  const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
+  assert.ok(personMatch, "about page person structured data should render");
+  const person = JSON.parse(personMatch[1]);
+  assert.equal(person["@type"], "Person");
+  assert.equal(person.name, "Dennis Ross");
+  assert.equal(person.identifier.value, "2018381");
 });
 
 test("keeps purchase-only questions out of refinance and equity quiz branches", async () => {
@@ -176,6 +188,11 @@ test("renders a searchable, categorized mortgage FAQ", async () => {
 
 test("renders every public route without em dashes", async () => {
   const forbiddenCharacter = String.fromCodePoint(0x2014);
+  const forbiddenEntities = [
+    "&" + "mdash;",
+    "&" + "#8212;",
+    "&" + "#x2014;",
+  ];
   const routes = [
     "/",
     "/about",
@@ -197,6 +214,8 @@ test("renders every public route without em dashes", async () => {
     assert.equal(response.status, 200, path);
     const html = await response.text();
     assert.ok(!html.includes(forbiddenCharacter), path);
-    assert.doesNotMatch(html, /&mdash;|&#8212;|&#x2014;/i, path);
+    for (const entity of forbiddenEntities) {
+      assert.ok(!html.toLowerCase().includes(entity.toLowerCase()), path);
+    }
   }
 });

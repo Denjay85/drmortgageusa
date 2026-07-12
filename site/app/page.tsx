@@ -23,9 +23,41 @@ export const metadata: Metadata = {
     "Compare Florida mortgage paths, understand your payment, and get a clear next step with Navy veteran and mortgage broker Dennis Ross.",
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://drmortgageusa.com/#organization",
+  name: "DR. Mortgage USA",
+  alternateName: "Dennis Ross Mortgage Broker",
+  url: "https://drmortgageusa.com/",
+  description:
+    "Florida mortgage guidance for buyers, homeowners, veterans, self-employed borrowers, and investors.",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://drmortgageusa.com/media/logo.webp",
+    contentUrl: "https://drmortgageusa.com/media/logo.webp",
+    width: 192,
+    height: 158,
+  },
+  image: "https://drmortgageusa.com/media/dennis.webp",
+  telephone: "+1-850-346-8514",
+  sameAs: ["https://www.instagram.com/dr.mortgageusa"],
+  areaServed: {
+    "@type": "State",
+    name: "Florida",
+  },
+  founder: {
+    "@id": "https://drmortgageusa.com/about#dennis-ross",
+  },
+};
+
 export default function Home() {
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
       <section className="home-hero">
         <div className="shell home-hero-grid">
           <div className="home-hero-copy">
