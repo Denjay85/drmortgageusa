@@ -49,9 +49,9 @@ These values must remain in Render. They must not be committed to GitHub.
 ## Staging checklist
 
 - Deploy `migration/2026-redesign` as a separate Render preview service.
-- Copy the production database connection only if the preview must test persistence.
-- Use a Zapier test hook or a clearly labeled migration test record.
-- Use Meta Test Events for browser and CAPI validation.
+- Render sets `IS_PULL_REQUEST=true` on the temporary preview instance.
+- Preview mode blocks database access, Zapier delivery, Meta CAPI, Meta Pixel, and Google Ads.
+- Preview form submissions return a test success response without persisting or forwarding contact information.
 - Keep staging pages set to `noindex, nofollow`.
 - Confirm all calculator inputs work on desktop and mobile.
 - Confirm all 49 current blog cards load from `/api/blog`.
@@ -59,9 +59,9 @@ These values must remain in Render. They must not be committed to GitHub.
 - Confirm the DPA tracker reads the official source or the verified fallback.
 - Confirm Build My Plan keeps purchase questions out of refinance and home equity flows.
 - Confirm the application shortcut opens the secure 1003 URL.
-- Confirm application, phone, and lead events reach Google Ads or GTM.
-- Confirm one lead appears once in Bonzo with the correct source and consent fields.
-- Confirm Meta Test Events shows browser and server Lead events deduplicated by event ID.
+- Confirm the preview tracking script does not load Meta or Google advertising scripts.
+
+Production-like delivery tests happen only after the preview interface is approved. Use a dedicated Zapier test hook and Meta Test Events before the final production cutover. Confirm one labeled lead reaches Bonzo, Google Ads or GTM receives the expected conversion, and Meta shows deduplicated browser and server Lead events.
 
 ## SEO checklist
 
