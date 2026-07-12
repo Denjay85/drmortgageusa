@@ -22,6 +22,7 @@ jobs:
     timeout-minutes: 15
     env:
       ENABLE_RATE_UPDATER: "0"
+      NEXT_PUBLIC_INDEXABLE: "true"
       ZAPIER_WEBHOOK_URL: "https://example.invalid/migration-test"
 
     steps:
