@@ -20,7 +20,7 @@ export function Header() {
         <div className="shell header-inner">
           <Link href="/" className="brand" aria-label="DR. Mortgage USA home">
             <span className="brand-mark" aria-hidden="true">
-              <Image src="/media/logo.webp" alt="" width={48} height={48} unoptimized />
+              <Image src="/media/logo.webp" alt="" width={48} height={48} priority unoptimized />
             </span>
             <span>
               <strong>DR. Mortgage USA</strong>
