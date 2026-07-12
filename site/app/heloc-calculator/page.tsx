@@ -5,6 +5,7 @@ import HelocCalculator from "../tools/HelocCalculator";
 
 export const metadata: Metadata = {
   title: "HELOC Calculator",
+  alternates: { canonical: "/heloc-calculator" },
   description: "Estimate available home equity and model an illustrative HELOC line, draw, variable-rate payment, and repayment scenario.",
 };
 

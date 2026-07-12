@@ -4,6 +4,7 @@ import { FinalCTA, PageHero, PageShell } from "../site-components";
 
 export const metadata: Metadata = {
   title: "Mortgage Options",
+  alternates: { canonical: "/mortgage-options" },
   description: "Compare home purchase, move-up buyer, VA, self-employed, investor, refinance, and home-equity mortgage paths in Florida.",
 };
 

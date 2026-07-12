@@ -4,6 +4,7 @@ import { PageHero, PageShell } from "../site-components";
 
 export const metadata: Metadata = {
   title: "Policies and Disclosures",
+  alternates: { canonical: "/legal" },
   description: "Privacy, terms, communications, accessibility, licensing, and mortgage disclosures for DR. Mortgage USA.",
 };
 

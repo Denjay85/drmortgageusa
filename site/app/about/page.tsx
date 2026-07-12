@@ -4,6 +4,7 @@ import { FinalCTA, PageHero, PageShell, SectionHeading } from "../site-component
 
 export const metadata: Metadata = {
   title: "Meet Dennis Ross",
+  alternates: { canonical: "/about" },
   description: "Meet Dennis Ross, Navy veteran, Florida mortgage broker, and the person behind DR. Mortgage USA.",
 };
 

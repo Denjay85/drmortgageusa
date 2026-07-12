@@ -5,6 +5,7 @@ import MortgageStudio from "./MortgageStudio";
 
 export const metadata: Metadata = {
   title: "Mortgage Calculators & Payment Studio",
+  alternates: { canonical: "/tools" },
   description: "Use ten interactive Florida mortgage calculators for purchase, affordability, FHA, refinance, rent vs. buy, VA, DSCR, fix and flip, and HELOC scenarios.",
 };
 

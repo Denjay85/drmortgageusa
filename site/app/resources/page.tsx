@@ -5,6 +5,7 @@ import { blogPosts } from "../blog/posts";
 
 export const metadata: Metadata = {
   title: "Florida Mortgage Resources",
+  alternates: { canonical: "/resources" },
   description: "Practical Florida mortgage guides, checklists, and market explanations from Dennis Ross.",
 };
 

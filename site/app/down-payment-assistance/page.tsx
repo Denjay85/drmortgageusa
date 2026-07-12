@@ -6,6 +6,7 @@ import DpaRateTracker from "./DpaRateTracker";
 
 export const metadata: Metadata = {
   title: "Florida Down Payment Assistance",
+  alternates: { canonical: "/dpa" },
   description: "Understand the questions that shape Florida down payment assistance eligibility and prepare for a current program review.",
 };
 

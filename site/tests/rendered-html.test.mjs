@@ -70,7 +70,12 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.doesNotMatch(html, /Closing\s+\d+/i);
   assert.match(html, /Three decisions\. One clear path/);
   assert.match(html, /class="premium-process"/);
-  assert.match(html, /name="robots" content="noindex, nofollow"/);
+  if (process.env.NEXT_PUBLIC_INDEXABLE === "true") {
+    assert.match(html, /name="robots" content="index, follow"/);
+  } else {
+    assert.match(html, /name="robots" content="noindex, nofollow"/);
+  }
+  assert.match(html, /rel="canonical" href="https:\/\/drmortgageusa\.com\/"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
@@ -87,6 +92,12 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
     const html = await response.text();
     assert.match(html, heading, path);
     assert.match(html, capability, path);
+    const canonicalPath = path === "/dpa" ? "/dpa" : path;
+    assert.match(
+      html,
+      new RegExp(`rel="canonical" href="https://drmortgageusa\\.com${canonicalPath}"`),
+      path,
+    );
   }
 
   const blogResponse = await render("/blog");

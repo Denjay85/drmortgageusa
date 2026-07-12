@@ -4,6 +4,7 @@ import PathFinder from "./PathFinder";
 
 export const metadata: Metadata = {
   title: "Build My Mortgage Plan",
+  alternates: { canonical: "/get-started" },
   description: "Answer a few simple questions and see the likely Florida mortgage conversation to have next.",
 };
 

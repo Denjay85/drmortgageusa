@@ -18,6 +18,7 @@ import MortgagePathwaySection from "./MortgagePathwaySection";
 
 export const metadata: Metadata = {
   title: "Florida Mortgage Guidance",
+  alternates: { canonical: "/" },
   description:
     "Compare Florida mortgage paths, understand your payment, and get a clear next step with Navy veteran and mortgage broker Dennis Ross.",
 };

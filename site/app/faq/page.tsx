@@ -5,6 +5,7 @@ import FaqLibrary from "./FaqLibrary";
 
 export const metadata: Metadata = {
   title: "Florida Mortgage FAQ",
+  alternates: { canonical: "/faq" },
   description:
     "Search clear Florida mortgage answers about payments, cash to close, credit, VA, FHA, USDA, self-employment, closing, HELOCs, and investing.",
 };

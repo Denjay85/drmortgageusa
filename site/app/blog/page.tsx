@@ -6,6 +6,7 @@ import { blogPosts } from "./posts";
 
 export const metadata: Metadata = {
   title: "Florida Mortgage Blog",
+  alternates: { canonical: "/blog" },
   description: "Search recent Florida mortgage answers from Dennis Ross, including VA, FHA, self-employed, homebuying, and homeowner guidance.",
 };
 

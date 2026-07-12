@@ -5,6 +5,7 @@ import ContactForm from "./ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact Dennis Ross",
+  alternates: { canonical: "/contact" },
   description: "Request a mortgage conversation with Dennis Ross or continue to the secure application.",
 };
 
