@@ -43,6 +43,10 @@ ZAPIER_WEBHOOK_URL = os.environ.get('ZAPIER_WEBHOOK_URL', '').strip()
 META_PIXEL_ID = os.environ.get('META_PIXEL_ID', '444762220810129')
 META_ACCESS_TOKEN = os.environ.get('META_CONVERSIONS_API_TOKEN', '')
 META_TEST_EVENT_CODE = os.environ.get('META_TEST_EVENT_CODE', '')
+PREVIEW_MODE = (
+    os.environ.get('IS_PULL_REQUEST', '').strip().lower() == 'true'
+    or os.environ.get('PREVIEW_MODE', '').strip().lower() == 'true'
+)
 REFIWATCH_HOSTS = {
     host.strip().lower()
     for host in os.environ.get('REFIWATCH_HOSTS',
@@ -227,11 +231,16 @@ def get_admin_password():
 
 def get_db_connection():
     """Get database connection using environment variables"""
+    if PREVIEW_MODE:
+        raise RuntimeError('Database access is disabled in preview mode')
     return psycopg2.connect(os.environ['DATABASE_URL'])
 
 
 def init_database():
     """Create primary app tables if they don't exist."""
+    if PREVIEW_MODE:
+        print("Database initialization skipped in preview mode")
+        return
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -363,6 +372,33 @@ def serve_index():
 
 @app.route('/site-tracking.js')
 def site_tracking():
+    if PREVIEW_MODE:
+        preview_js = """
+(function() {
+  if (window.__drSiteTrackingLoaded) return;
+  window.__drSiteTrackingLoaded = true;
+  function createEventId(prefix) {
+    return prefix + "_preview_" + Date.now() + "_" + Math.random().toString(36).slice(2, 10);
+  }
+  function emptyValue() { return ""; }
+  function noOp() {}
+  window.DrMortgageTracking = {
+    createEventId: createEventId,
+    getOrCreateFbp: emptyValue,
+    getOrCreateFbc: emptyValue,
+    pushDataLayerEvent: noOp,
+    trackApplyClick: createEventId,
+    trackPhoneClick: createEventId,
+    trackLeadSubmit: createEventId,
+    trackSecondaryLandingView: noOp
+  };
+  window.__drPreviewMode = true;
+})();
+"""
+        response = Response(preview_js, mimetype='application/javascript')
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        return response
+
     ga_measurement_id = os.environ.get('GA_MEASUREMENT_ID', '').strip()
     gtm_container_id = os.environ.get('GTM_CONTAINER_ID', '').strip()
     # Render Blueprint env vars do not backfill existing services reliably.
@@ -1403,6 +1439,18 @@ def quiz_submit():
         data['emailConsent'] = email_consent
         data['callConsent'] = call_consent
         data['smsConsent'] = sms_consent
+
+        if PREVIEW_MODE:
+            return jsonify({
+                "success": True,
+                "preview": True,
+                "lead_id": None,
+                "event_id": event_id,
+                "meta_capi": {
+                    "sent": False,
+                    "reason": "preview_mode"
+                },
+            })
 
         conn = get_db_connection()
         cur = conn.cursor()

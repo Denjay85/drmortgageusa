@@ -54,7 +54,7 @@ class RedesignIntegrationTests(unittest.TestCase):
             response = self.client.get(route)
             self.assertEqual(response.status_code, 200, route)
             if response.content_type.startswith('text/html'):
-                self.assertNotIn('—', response.get_data(as_text=True), route)
+                self.assertNotIn(chr(8212), response.get_data(as_text=True), route)
             response.close()
 
     def test_live_data_endpoints_feed_the_redesign(self):
@@ -102,6 +102,41 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertEqual(insert_params[12], 'lead_test_123')
         self.assertEqual(insert_params[13:16], (True, False, True))
         self.assertIn('pathAnswers', insert_params[16])
+
+    def test_preview_lead_submission_never_reaches_live_integrations(self):
+        payload = {
+            'firstName': 'Preview Test',
+            'email': 'preview@example.com',
+            'phone': '8503468514',
+            'segment': 'Purchase mortgage plan',
+            'source': 'redesign-build-my-plan',
+            'eventId': 'preview_lead_123',
+            'emailConsent': True,
+            'callConsent': False,
+            'smsConsent': True,
+        }
+
+        with patch.object(production_app, 'PREVIEW_MODE', True), \
+             patch.object(production_app, 'get_db_connection') as database, \
+             patch.object(production_app.requests, 'post') as external_post:
+            response = self.client.post('/api/quiz-submit', json=payload)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.get_json()['success'])
+        self.assertTrue(response.get_json()['preview'])
+        self.assertEqual(response.get_json()['event_id'], 'preview_lead_123')
+        database.assert_not_called()
+        external_post.assert_not_called()
+
+    def test_preview_tracking_script_does_not_load_ad_networks(self):
+        with patch.object(production_app, 'PREVIEW_MODE', True):
+            response = self.client.get('/site-tracking.js')
+
+        script = response.get_data(as_text=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('__drPreviewMode', script)
+        self.assertNotIn('connect.facebook.net', script)
+        self.assertNotIn('googletagmanager.com', script)
 
 
 if __name__ == '__main__':
