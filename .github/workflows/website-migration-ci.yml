@@ -1,0 +1,66 @@
+name: Website migration checks
+
+on:
+  pull_request:
+    paths:
+      - "app.py"
+      - "render.yaml"
+      - "sitemap.xml"
+      - "update_blog.py"
+      - "blog_posts/**"
+      - "site/**"
+      - "tests/**"
+      - ".github/workflows/website-migration-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ENABLE_RATE_UPDATER: "0"
+      ZAPIER_WEBHOOK_URL: "https://example.invalid/migration-test"
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate Flask integration
+        run: python -m unittest tests.test_2026_redesign -v
+
+      - name: Compile Flask application
+        run: python -m py_compile app.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install front-end dependencies
+        working-directory: site
+        run: npm ci
+
+      - name: Lint front end
+        working-directory: site
+        run: npm run lint
+
+      - name: Build and test front end
+        working-directory: site
+        run: npm test
+
+      - name: Confirm committed export is current
+        run: git diff --exit-code -- site/dist/client
