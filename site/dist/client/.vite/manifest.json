@@ -1,12 +1,12 @@
 {
-  "_ScenarioDock-CesXNn3b.js": {
-    "file": "assets/ScenarioDock-CesXNn3b.js",
+  "_ScenarioDock-CmiIZ5qv.js": {
+    "file": "assets/ScenarioDock-CmiIZ5qv.js",
     "name": "ScenarioDock",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_scenario-store-D5LOitte.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "_SiteAtmosphere-DNDJOBIr.js": {
@@ -24,12 +24,20 @@
       "_rolldown-runtime-S-ySWqyJ.js"
     ]
   },
+  "_image--zK1PoAw.js": {
+    "file": "assets/image--zK1PoAw.js",
+    "name": "image",
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ]
+  },
   "_lead-client-DreYHPQU.js": {
     "file": "assets/lead-client-DreYHPQU.js",
     "name": "lead-client"
   },
-  "_link-DztTrwwQ.js": {
-    "file": "assets/link-DztTrwwQ.js",
+  "_link-6xox7OpB.js": {
+    "file": "assets/link-6xox7OpB.js",
     "name": "link",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
@@ -49,7 +57,7 @@
     "name": "scenario-store"
   },
   "app/LiveRatesPanel.tsx": {
-    "file": "assets/LiveRatesPanel-DkEk8PBW.js",
+    "file": "assets/LiveRatesPanel-DPOPLb8_.js",
     "name": "LiveRatesPanel",
     "src": "app/LiveRatesPanel.tsx",
     "isDynamicEntry": true,
@@ -57,11 +65,11 @@
       "_rolldown-runtime-S-ySWqyJ.js",
       "_lead-client-DreYHPQU.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "app/MortgageFlightDeck.tsx": {
-    "file": "assets/MortgageFlightDeck-B077P1tt.js",
+    "file": "assets/MortgageFlightDeck-yxD3mChO.js",
     "name": "MortgageFlightDeck",
     "src": "app/MortgageFlightDeck.tsx",
     "isDynamicEntry": true,
@@ -69,29 +77,29 @@
       "_rolldown-runtime-S-ySWqyJ.js",
       "_scenario-store-D5LOitte.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "app/MortgagePathwaySection.tsx": {
-    "file": "assets/MortgagePathwaySection-CFxOh2H4.js",
+    "file": "assets/MortgagePathwaySection-DZWvitQ6.js",
     "name": "MortgagePathwaySection",
     "src": "app/MortgagePathwaySection.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "app/PremiumProcess.tsx": {
-    "file": "assets/PremiumProcess-DxmLYsMy.js",
+    "file": "assets/PremiumProcess-DF_XKNLn.js",
     "name": "PremiumProcess",
     "src": "app/PremiumProcess.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "app/blog/BlogLibrary.tsx": {
@@ -137,43 +145,44 @@
     ]
   },
   "app/down-payment-assistance/DpaRateTracker.tsx": {
-    "file": "assets/DpaRateTracker-BJ3HNlgv.js",
+    "file": "assets/DpaRateTracker-Cq8ohEtA.js",
     "name": "DpaRateTracker",
     "src": "app/down-payment-assistance/DpaRateTracker.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "app/faq/FaqLibrary.tsx": {
-    "file": "assets/FaqLibrary-C7kE5LVE.js",
+    "file": "assets/FaqLibrary-fU8YL2KG.js",
     "name": "FaqLibrary",
     "src": "app/faq/FaqLibrary.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "app/get-started/PathFinder.tsx": {
-    "file": "assets/PathFinder-CuPOYq77.js",
+    "file": "assets/PathFinder-DeCRgkG9.js",
     "name": "PathFinder",
     "src": "app/get-started/PathFinder.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
-      "_ScenarioDock-CesXNn3b.js",
+      "_ScenarioDock-CmiIZ5qv.js",
       "_SiteAtmosphere-DNDJOBIr.js",
       "_lead-client-DreYHPQU.js",
+      "_image--zK1PoAw.js",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ]
   },
   "app/tools/HelocCalculator.tsx": {
-    "file": "assets/HelocCalculator-YwDrDP_b.js",
+    "file": "assets/HelocCalculator-Dg1Nzmds.js",
     "name": "HelocCalculator",
     "src": "app/tools/HelocCalculator.tsx",
     "isDynamicEntry": true,
@@ -184,7 +193,7 @@
     ]
   },
   "app/tools/MortgageStudio.tsx": {
-    "file": "assets/MortgageStudio-lR_KkCMU.js",
+    "file": "assets/MortgageStudio-wF-ksch5.js",
     "name": "MortgageStudio",
     "src": "app/tools/MortgageStudio.tsx",
     "isDynamicEntry": true,
@@ -197,7 +206,7 @@
     ]
   },
   "node_modules/vinext/dist/shims/layout-segment-context.js": {
-    "file": "assets/layout-segment-context-R1Yo6yZd.js",
+    "file": "assets/layout-segment-context-MSa1wdOO.js",
     "name": "layout-segment-context",
     "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
     "isDynamicEntry": true,
@@ -208,7 +217,7 @@
     ]
   },
   "node_modules/vinext/dist/shims/router.js": {
-    "file": "assets/router-B2HJwl-W.js",
+    "file": "assets/router-z6EIHERb.js",
     "name": "router",
     "src": "node_modules/vinext/dist/shims/router.js",
     "isDynamicEntry": true,
@@ -216,14 +225,14 @@
       "_rolldown-runtime-S-ySWqyJ.js",
       "virtual:vinext-app-browser-entry",
       "_framework-CXnKph_e.js",
-      "_link-DztTrwwQ.js"
+      "_link-6xox7OpB.js"
     ],
     "dynamicImports": [
       "_framework-CXnKph_e.js"
     ]
   },
   "node_modules/vinext/dist/shims/script.js": {
-    "file": "assets/script-vizdm_XS.js",
+    "file": "assets/script-DJWMTuxy.js",
     "name": "script",
     "src": "node_modules/vinext/dist/shims/script.js",
     "isDynamicEntry": true,
@@ -233,7 +242,7 @@
     ]
   },
   "virtual:vinext-app-browser-entry": {
-    "file": "assets/index-B2u4imSX.js",
+    "file": "assets/index-DRynKRZh.js",
     "name": "index",
     "src": "virtual:vinext-app-browser-entry",
     "isEntry": true,
@@ -256,10 +265,11 @@
       "app/tools/HelocCalculator.tsx",
       "app/contact/ContactForm.tsx",
       "app/MortgageFlightDeck.tsx",
+      "_image--zK1PoAw.js",
       "app/down-payment-assistance/DpaRateTracker.tsx",
-      "_link-DztTrwwQ.js",
+      "_link-6xox7OpB.js",
       "app/blog/LatestBlogPosts.tsx",
-      "_ScenarioDock-CesXNn3b.js",
+      "_ScenarioDock-CmiIZ5qv.js",
       "_SiteAtmosphere-DNDJOBIr.js"
     ]
   }

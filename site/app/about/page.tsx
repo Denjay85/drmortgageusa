@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { FinalCTA, PageHero, PageShell, SectionHeading } from "../site-components";
 
@@ -60,7 +61,13 @@ export default function AboutPage() {
         <div className="shell about-intro-grid">
           <div className="about-portrait">
             <div className="about-photo-frame">
-              <img src="/media/dennis.webp" alt="Dennis Ross, DR. Mortgage USA" width="900" height="900" />
+              <Image
+                src="/media/dennis.webp"
+                alt="Dennis Ross, DR. Mortgage USA"
+                width={900}
+                height={900}
+                unoptimized
+              />
             </div>
             <div className="about-portrait-caption">
               <strong>Dennis Ross</strong>

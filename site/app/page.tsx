@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Eyebrow,
@@ -101,11 +102,13 @@ export default function Home() {
           </div>
 
           <div className="hero-portrait" aria-label="Dennis Ross, DR. Mortgage USA">
-            <img
+            <Image
               src="/media/dennis.webp"
               alt="Dennis Ross, Florida mortgage broker and Navy veteran"
-              width="720"
-              height="720"
+              width={720}
+              height={720}
+              priority
+              unoptimized
             />
             <div className="portrait-card portrait-card-top">
               <strong>Hundreds</strong>
