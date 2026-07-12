@@ -217,6 +217,61 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('Leads waiting for Bonzo', dashboard)
         self.assertIn('Waiting for credentials', dashboard)
 
+    def test_production_tracking_script_contains_configured_ad_destinations(self):
+        environment = {
+            'GOOGLE_ADS_ID': 'AW-123456789',
+            'GOOGLE_ADS_APPLY_CONVERSION_LABEL': 'apply-label',
+            'GOOGLE_ADS_PHONE_CONVERSION_LABEL': 'phone-label',
+            'GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL': 'lead-label',
+            'GA_MEASUREMENT_ID': 'G-TEST123',
+        }
+        with patch.object(production_app, 'PREVIEW_MODE', False), \
+             patch.object(production_app, 'META_PIXEL_ID', '987654321'), \
+             patch.dict(production_app.os.environ, environment, clear=False):
+            response = self.client.get('/site-tracking.js')
+
+        script = response.get_data(as_text=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('connect.facebook.net', script)
+        self.assertIn('987654321', script)
+        self.assertIn('AW-123456789', script)
+        self.assertIn('apply-label', script)
+        self.assertIn('phone-label', script)
+        self.assertIn('lead-label', script)
+        self.assertIn('G-TEST123', script)
+
+    def test_meta_capi_uses_matching_event_id_and_hashed_contact_data(self):
+        graph_response = Mock(ok=True, status_code=200, text='ok')
+        with production_app.app.test_request_context(
+            '/api/quiz-submit',
+            headers={'User-Agent': 'Migration QA'},
+        ), patch.object(production_app, 'META_PIXEL_ID', '987654321'), \
+             patch.object(production_app, 'META_ACCESS_TOKEN', 'private-token'), \
+             patch.object(production_app, 'META_TEST_EVENT_CODE', 'TEST123'), \
+             patch.object(production_app.requests, 'post', return_value=graph_response) as graph_post:
+            result = production_app.track_meta_server_event(
+                'Lead',
+                'matching_event_123',
+                {
+                    'firstName': 'Dennis',
+                    'email': 'dennis@example.com',
+                    'phone': '8503468514',
+                },
+                custom_data={'content_name': 'migration_test'},
+            )
+
+        self.assertTrue(result['sent'])
+        call = graph_post.call_args
+        self.assertIn('/987654321/events', call.args[0])
+        self.assertEqual(call.kwargs['params']['access_token'], 'private-token')
+        event = call.kwargs['json']['data'][0]
+        self.assertEqual(event['event_id'], 'matching_event_123')
+        self.assertEqual(call.kwargs['json']['test_event_code'], 'TEST123')
+        self.assertEqual(
+            event['user_data']['em'][0],
+            production_app.sha256_or_none('dennis@example.com'),
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
