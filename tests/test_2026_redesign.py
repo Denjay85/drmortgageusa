@@ -138,6 +138,60 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertNotIn('connect.facebook.net', script)
         self.assertNotIn('googletagmanager.com', script)
 
+    def test_missing_zapier_configuration_queues_the_lead(self):
+        connection = FakeConnection()
+        payload = {
+            'firstName': 'Queue Test',
+            'email': 'queue@example.com',
+            'phone': '8503468514',
+            'segment': 'Purchase mortgage plan',
+            'source': 'redesign-build-my-plan',
+            'eventId': 'queued_lead_123',
+            'emailConsent': True,
+            'callConsent': False,
+            'smsConsent': False,
+        }
+
+        with patch.object(production_app, 'get_db_connection', return_value=connection), \
+             patch.object(production_app, 'ZAPIER_WEBHOOK_URL', ''), \
+             patch.object(production_app, 'track_meta_server_event', return_value={'sent': False}):
+            response = self.client.post('/api/quiz-submit', json=payload)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.get_json()['success'])
+        update_params = connection.cursor_instance.executions[1][1]
+        self.assertFalse(update_params[0])
+        self.assertEqual(update_params[2], 'not_configured')
+
+    def test_zapier_delivery_helper_does_not_send_without_configuration(self):
+        with patch.object(production_app, 'ZAPIER_WEBHOOK_URL', ''), \
+             patch.object(production_app.requests, 'post') as external_post:
+            result = production_app.forward_to_zapier({'eventId': 'queue_test'})
+
+        self.assertFalse(result['sent'])
+        self.assertEqual(result['reason'], 'not_configured')
+        external_post.assert_not_called()
+
+    def test_integration_status_is_admin_only_and_redacts_secrets(self):
+        unauthenticated = self.client.get('/admin/integrations')
+        self.assertEqual(unauthenticated.status_code, 302)
+
+        connection = FakeConnection()
+        with self.client.session_transaction() as session:
+            session['admin_logged_in'] = True
+
+        with patch.object(production_app, 'get_db_connection', return_value=connection), \
+             patch.object(production_app, 'ZAPIER_WEBHOOK_URL', ''), \
+             patch.object(production_app, 'META_ACCESS_TOKEN', 'configured'):
+            authenticated = self.client.get('/admin/integrations')
+
+        self.assertEqual(authenticated.status_code, 200)
+        status = authenticated.get_json()
+        self.assertFalse(status['zapier_bonzo'])
+        self.assertTrue(status['meta_capi'])
+        self.assertEqual(status['queued_leads'], 101)
+        self.assertNotIn('configured', authenticated.get_data(as_text=True))
+
 
 if __name__ == '__main__':
     unittest.main()

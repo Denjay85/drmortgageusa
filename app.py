@@ -148,6 +148,47 @@ def as_bool(value):
     return str(value or '').strip().lower() in ('1', 'true', 'yes', 'on')
 
 
+def forward_to_zapier(payload):
+    """Deliver a lead to Zapier without making lead capture depend on Zapier."""
+    if PREVIEW_MODE:
+        return {'sent': False, 'reason': 'preview_mode'}
+    if not ZAPIER_WEBHOOK_URL:
+        return {'sent': False, 'reason': 'not_configured'}
+
+    try:
+        response = requests.post(
+            ZAPIER_WEBHOOK_URL,
+            json=payload,
+            timeout=10,
+        )
+        return {
+            'sent': bool(response.ok),
+            'reason': 'delivered' if response.ok else 'http_error',
+            'status_code': response.status_code,
+        }
+    except Exception as error:
+        app.logger.error(f'Zapier delivery failed: {error}')
+        return {
+            'sent': False,
+            'reason': 'request_error',
+            'error': str(error)[:300],
+        }
+
+
+def integration_readiness():
+    """Return configuration state without exposing credential values."""
+    return {
+        'zapier_bonzo': bool(ZAPIER_WEBHOOK_URL),
+        'meta_pixel': bool(META_PIXEL_ID),
+        'meta_capi': bool(META_ACCESS_TOKEN),
+        'manychat': bool(MANYCHAT_API_KEY and MANYCHAT_WEBHOOK_SECRET),
+        'google_ads': bool(os.environ.get('GOOGLE_ADS_ID', 'AW-18055212874').strip()),
+        'ga4': bool(os.environ.get('GA_MEASUREMENT_ID', '').strip()),
+        'google_tag_manager': bool(os.environ.get('GTM_CONTAINER_ID', '').strip()),
+        'preview_mode': PREVIEW_MODE,
+    }
+
+
 def sha256_or_none(value):
     cleaned = (value or '').strip()
     if not cleaned:
@@ -269,6 +310,9 @@ def init_database():
         cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS sms_consent BOOLEAN DEFAULT FALSE")
         cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS payload JSONB DEFAULT '{}'::jsonb")
         cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS meta_capi_sent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS zapier_attempts INTEGER DEFAULT 0")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS zapier_last_error TEXT")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS zapier_last_attempt_at TIMESTAMPTZ")
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS keyword_leads (
@@ -1081,17 +1125,8 @@ def refiwatch_lead_submit():
             'submittedAt': datetime.now(timezone.utc).isoformat(),
         }
 
-        zapier_forwarded = False
-        try:
-            if not ZAPIER_WEBHOOK_URL:
-                raise RuntimeError('ZAPIER_WEBHOOK_URL is not configured')
-            zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
-                                            json=zapier_payload,
-                                            timeout=10)
-            if zapier_response.ok:
-                zapier_forwarded = True
-        except Exception as e:
-            app.logger.error(f'RefiWatch Zapier forward failed: {e}')
+        zapier_result = forward_to_zapier(zapier_payload)
+        zapier_forwarded = bool(zapier_result.get('sent'))
 
         meta_result = {'sent': False, 'reason': 'not_attempted'}
         try:
@@ -1470,17 +1505,8 @@ def quiz_submit():
         result = cur.fetchone()
         lead_id = result[0] if result else None
 
-        zapier_forwarded = False
-        try:
-            if not ZAPIER_WEBHOOK_URL:
-                raise RuntimeError('ZAPIER_WEBHOOK_URL is not configured')
-            zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
-                                            json=data,
-                                            timeout=10)
-            if zapier_response.status_code == 200:
-                zapier_forwarded = True
-        except Exception as e:
-            print(f"Zapier forward failed: {e}")
+        zapier_result = forward_to_zapier(data)
+        zapier_forwarded = bool(zapier_result.get('sent'))
 
         meta_result = {'sent': False, 'reason': 'not_attempted'}
         try:
@@ -1499,9 +1525,23 @@ def quiz_submit():
             meta_result = {'sent': False, 'reason': str(e)}
             print(f"Meta CAPI forward failed: {e}")
 
+        zapier_error = None if zapier_forwarded else zapier_result.get('reason')
         cur.execute(
-            "UPDATE leads SET zapier_forwarded = %s, meta_capi_sent = %s WHERE id = %s",
-            (zapier_forwarded, bool(meta_result.get('sent')), lead_id),
+            """
+            UPDATE leads
+            SET zapier_forwarded = %s,
+                meta_capi_sent = %s,
+                zapier_attempts = COALESCE(zapier_attempts, 0) + 1,
+                zapier_last_error = %s,
+                zapier_last_attempt_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+            """,
+            (
+                zapier_forwarded,
+                bool(meta_result.get('sent')),
+                zapier_error,
+                lead_id,
+            ),
         )
         conn.commit()
         cur.close()
@@ -1552,6 +1592,97 @@ def admin_logout():
     """Logout admin"""
     session.pop('admin_logged_in', None)
     return redirect(url_for('admin_login'))
+
+
+@app.route('/admin/integrations')
+@login_required
+def admin_integrations():
+    """Report integration readiness and queued lead counts without secrets."""
+    status = integration_readiness()
+    status['queued_leads'] = None
+    status['queue_error'] = None
+
+    if not PREVIEW_MODE:
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT COUNT(*) FROM leads WHERE zapier_forwarded IS NOT TRUE"
+            )
+            result = cur.fetchone()
+            status['queued_leads'] = result[0] if result else 0
+            cur.close()
+            conn.close()
+        except Exception as error:
+            status['queue_error'] = str(error)[:200]
+
+    return jsonify(status)
+
+
+@app.route('/admin/retry-zapier', methods=['POST'])
+@login_required
+def admin_retry_zapier():
+    """Replay queued website leads after a valid Zapier hook is configured."""
+    if PREVIEW_MODE:
+        return jsonify({'success': False, 'error': 'disabled_in_preview'}), 409
+    if not ZAPIER_WEBHOOK_URL:
+        return jsonify({'success': False, 'error': 'zapier_not_configured'}), 503
+
+    limit = min(max(int(request.args.get('limit', 100)), 1), 500)
+    delivered = 0
+    failed = 0
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT id, payload
+            FROM leads
+            WHERE zapier_forwarded IS NOT TRUE
+              AND payload IS NOT NULL
+            ORDER BY created_at ASC
+            LIMIT %s
+            """,
+            (limit,),
+        )
+        queued = cur.fetchall()
+
+        for lead_id, payload in queued:
+            if isinstance(payload, str):
+                payload = json.loads(payload)
+            result = forward_to_zapier(payload or {})
+            sent = bool(result.get('sent'))
+            delivered += int(sent)
+            failed += int(not sent)
+            cur.execute(
+                """
+                UPDATE leads
+                SET zapier_forwarded = %s,
+                    zapier_attempts = COALESCE(zapier_attempts, 0) + 1,
+                    zapier_last_error = %s,
+                    zapier_last_attempt_at = CURRENT_TIMESTAMP
+                WHERE id = %s
+                """,
+                (
+                    sent,
+                    None if sent else result.get('reason'),
+                    lead_id,
+                ),
+            )
+            conn.commit()
+
+        cur.close()
+        conn.close()
+        return jsonify({
+            'success': failed == 0,
+            'processed': len(queued),
+            'delivered': delivered,
+            'failed': failed,
+        })
+    except Exception as error:
+        app.logger.error(f'Zapier queue replay failed: {error}')
+        return jsonify({'success': False, 'error': 'queue_replay_failed'}), 500
 
 
 @app.route('/admin/delete/<int:lead_id>', methods=['POST'])

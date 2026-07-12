@@ -31,6 +31,8 @@ This preserves the current operational systems:
 8. Flask sends the matching Meta CAPI Lead event with the same event ID.
 9. Meta can deduplicate the browser and server events.
 
+If Zapier is temporarily unavailable, PostgreSQL still stores the lead and marks it for delivery. `/admin/integrations` reports readiness and the queued lead count without exposing credentials. After `ZAPIER_WEBHOOK_URL` is configured, an authenticated `POST` to `/admin/retry-zapier` replays queued website leads and records each delivery attempt.
+
 ## Required Render secrets
 
 Set or rotate these values in the Render service before staging a production-like form test:
@@ -45,6 +47,8 @@ Set or rotate these values in the Render service before staging a production-lik
 - `GTM_CONTAINER_ID` if Google Tag Manager is used
 
 These values must remain in Render. They must not be committed to GitHub.
+
+The website can operate while `ZAPIER_WEBHOOK_URL` is missing. Leads remain visible in the protected admin dashboard and can be replayed after the Bonzo workflow is restored. ManyChat endpoints remain unavailable until both ManyChat values are rotated and configured.
 
 ## Staging checklist
 
