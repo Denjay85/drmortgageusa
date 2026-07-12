@@ -11,6 +11,7 @@ import json
 import secrets
 import hashlib
 import re
+import html as html_lib
 import requests
 import psycopg2
 from datetime import datetime, timezone
@@ -22,6 +23,7 @@ import mimetypes
 
 app = Flask(__name__, static_folder=None)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REDESIGN_OUT_DIR = os.path.join(BASE_DIR, 'site', 'dist', 'client')
 SERVICE_PAGE_MAP = {
     'va-loans-orlando': 'va-loans-orlando.html',
     'orlando-mortgage-broker': 'orlando-mortgage-broker.html',
@@ -37,7 +39,7 @@ app.config['COMPRESS_LEVEL'] = 6
 app.config['COMPRESS_MIN_SIZE'] = 500
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
-ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
+ZAPIER_WEBHOOK_URL = os.environ.get('ZAPIER_WEBHOOK_URL', '').strip()
 META_PIXEL_ID = os.environ.get('META_PIXEL_ID', '444762220810129')
 META_ACCESS_TOKEN = os.environ.get('META_CONVERSIONS_API_TOKEN', '')
 META_TEST_EVENT_CODE = os.environ.get('META_TEST_EVENT_CODE', '')
@@ -94,6 +96,33 @@ def send_refiwatch_asset(path):
     return None
 
 
+def send_redesign_page(path=''):
+    """Serve a statically exported redesign page when the build is present."""
+    cleaned = (path or '').strip('/')
+    if not cleaned:
+        candidates = [os.path.join(REDESIGN_OUT_DIR, 'index.html')]
+    else:
+        candidates = [
+            os.path.join(REDESIGN_OUT_DIR, cleaned, 'index.html'),
+            os.path.join(REDESIGN_OUT_DIR, f'{cleaned}.html'),
+            os.path.join(REDESIGN_OUT_DIR, cleaned),
+        ]
+
+    redesign_root = os.path.abspath(REDESIGN_OUT_DIR)
+    for candidate in candidates:
+        absolute = os.path.abspath(candidate)
+        if not absolute.startswith(redesign_root + os.sep):
+            continue
+        if os.path.isfile(absolute):
+            mimetype, _ = mimetypes.guess_type(absolute)
+            return send_file(
+                absolute,
+                mimetype=mimetype or 'text/html',
+                conditional=True,
+            )
+    return None
+
+
 def normalize_email(value):
     return (value or '').strip().lower()
 
@@ -107,6 +136,12 @@ def is_valid_email(value):
     if not email:
         return False
     return re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email) is not None
+
+
+def as_bool(value):
+    if isinstance(value, bool):
+        return value
+    return str(value or '').strip().lower() in ('1', 'true', 'yes', 'on')
 
 
 def sha256_or_none(value):
@@ -218,6 +253,13 @@ def init_database():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS source VARCHAR(150)")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS event_id VARCHAR(150)")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS email_consent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS call_consent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS sms_consent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS payload JSONB DEFAULT '{}'::jsonb")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS meta_capi_sent BOOLEAN DEFAULT FALSE")
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS keyword_leads (
@@ -312,6 +354,9 @@ def normalize_dpa_program_intro(html):
 def serve_index():
     if is_refiwatch_request() and refiwatch_build_ready():
         return send_refiwatch_index()
+    redesign = send_redesign_page()
+    if redesign is not None:
+        return redesign
     return send_file(os.path.join(BASE_DIR, 'index.html'),
                      mimetype='text/html')
 
@@ -713,6 +758,9 @@ def site_tracking():
 
 @app.route('/heloc-calculator')
 def heloc_calculator():
+    redesign = send_redesign_page('heloc-calculator')
+    if redesign is not None:
+        return redesign
     return send_file(os.path.join(BASE_DIR, 'heloc-calculator.html'),
                      mimetype='text/html')
 
@@ -720,6 +768,9 @@ def heloc_calculator():
 
 @app.route('/dpa')
 def serve_dpa():
+    redesign = send_redesign_page('down-payment-assistance')
+    if redesign is not None:
+        return redesign
     with open(os.path.join(BASE_DIR, 'dpa.html'), encoding='utf-8') as f:
         html = normalize_dpa_program_intro(f.read())
     return Response(html, mimetype='text/html')
@@ -758,8 +809,8 @@ def serve_sitemap():
     return send_file(os.path.join(BASE_DIR, 'sitemap.xml'), mimetype='application/xml')
 
 # --- ManyChat Webhook: HELOC 5DAYS Sequence Enrollment ---
-MANYCHAT_API_KEY = os.environ.get('MANYCHAT_API_KEY', '1852822:98408d8d5653dd3cc23e831449be31a8')
-MANYCHAT_WEBHOOK_SECRET = os.environ.get('MANYCHAT_WEBHOOK_SECRET', 'h5d_xK9mP2vR')
+MANYCHAT_API_KEY = os.environ.get('MANYCHAT_API_KEY', '')
+MANYCHAT_WEBHOOK_SECRET = os.environ.get('MANYCHAT_WEBHOOK_SECRET', '')
 
 SEQUENCE_FLOWS = {
     1: 'content20260303172444_148265',  # Day 1: Debt consolidation
@@ -799,7 +850,7 @@ def manychat_enroll():
         phone = data.get('phone', '')
         secret = data.get('secret') or request.headers.get('X-Webhook-Secret')
         
-        if secret != MANYCHAT_WEBHOOK_SECRET:
+        if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
             return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
         
         if not subscriber_id:
@@ -835,7 +886,7 @@ def manychat_enroll():
 def manychat_leads():
     """API endpoint for Closer agent to pull new leads."""
     secret = request.args.get('secret') or request.headers.get('X-Webhook-Secret')
-    if secret != MANYCHAT_WEBHOOK_SECRET:
+    if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
         return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
     
     try:
@@ -871,7 +922,7 @@ def manychat_send_sequence():
     try:
         data = request.get_json(force=True)
         secret = data.get('secret')
-        if secret != MANYCHAT_WEBHOOK_SECRET:
+        if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
             return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
         
         subscriber_id = data.get('subscriber_id')
@@ -996,6 +1047,8 @@ def refiwatch_lead_submit():
 
         zapier_forwarded = False
         try:
+            if not ZAPIER_WEBHOOK_URL:
+                raise RuntimeError('ZAPIER_WEBHOOK_URL is not configured')
             zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
                                             json=zapier_payload,
                                             timeout=10)
@@ -1049,6 +1102,226 @@ def refiwatch_lead_submit():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+def _meta_content(document, key):
+    escaped = re.escape(key)
+    patterns = [
+        rf'<meta[^>]+(?:name|property)=["\']{escaped}["\'][^>]+content=["\']([^"\']*)["\']',
+        rf'<meta[^>]+content=["\']([^"\']*)["\'][^>]+(?:name|property)=["\']{escaped}["\']',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, document, re.IGNORECASE)
+        if match:
+            return html_lib.unescape(match.group(1)).strip()
+    return ''
+
+
+def _blog_category(title, description):
+    haystack = f'{title} {description}'.lower()
+    if any(word in haystack for word in ('va loan', 'veteran', 'irrrl', 'entitlement')):
+        return 'VA loans'
+    if any(word in haystack for word in ('self-employed', '1099', 'bank statement', 'investor')):
+        return 'Self-employed'
+    if any(word in haystack for word in ('market', 'rate buydown', 'builder incentive', 'price reduction')):
+        return 'Market strategy'
+    if any(word in haystack for word in ('homeowner', 'escrow', 'homestead', 'home equity', 'heloc', 'refinanc')):
+        return 'Homeownership'
+    return 'Buying'
+
+
+@app.route('/api/rates', methods=['GET'])
+def mortgage_rates_api():
+    """Expose the existing updater's current market ranges to the redesign."""
+    rates_path = os.path.join(BASE_DIR, 'index.html')
+    rates = {}
+    reviewed = ''
+    try:
+        with open(rates_path, encoding='utf-8') as rates_file:
+            document = rates_file.read()
+        block_match = re.search(
+            r'const\s+MORTGAGE_RATES\s*=\s*\{(.*?)\};',
+            document,
+            re.DOTALL,
+        )
+        if block_match:
+            raw_rates = dict(re.findall(r'["\']([^"\']+)["\']\s*:\s*["\']([^"\']+)["\']', block_match.group(1)))
+            key_map = {
+                'Conventional 30-Year': 'Conventional 30-year',
+                'Conventional 15-Year': 'Conventional 15-year',
+                'FHA 30-Year': 'FHA 30-year',
+                'VA 30-Year': 'VA 30-year',
+                'USDA 30-Year': 'USDA 30-year',
+                'Jumbo 30-Year': 'Jumbo 30-year',
+            }
+            rates = {target: raw_rates[source] for source, target in key_map.items() if source in raw_rates}
+
+        reviewed_match = re.search(r'const\s+RATE_UPDATE_DATE\s*=\s*["\']([^"\']+)["\']', document)
+        reviewed = reviewed_match.group(1).strip() if reviewed_match else ''
+        if not re.search(r'\b20\d{2}\b', reviewed):
+            reviewed = datetime.fromtimestamp(
+                os.path.getmtime(rates_path),
+                tz=timezone.utc,
+            ).strftime('%B %-d, %Y')
+    except Exception as error:
+        app.logger.error(f'Mortgage rate API failed: {error}')
+
+    response = jsonify({'rates': rates, 'reviewed': reviewed})
+    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    return response
+
+
+@app.route('/api/blog', methods=['GET'])
+def blog_archive_api():
+    """Return current article metadata generated by the existing blog workflow."""
+    posts = []
+    sitemap_dates = {}
+    try:
+        sitemap_path = os.path.join(BASE_DIR, 'sitemap.xml')
+        if os.path.isfile(sitemap_path):
+            with open(sitemap_path, encoding='utf-8') as sitemap_file:
+                sitemap_document = sitemap_file.read()
+            for block in re.findall(r'<url>(.*?)</url>', sitemap_document, re.DOTALL):
+                loc_match = re.search(r'<loc>(.*?)</loc>', block, re.DOTALL)
+                date_match = re.search(r'<lastmod>(.*?)</lastmod>', block, re.DOTALL)
+                if loc_match and date_match:
+                    sitemap_dates[loc_match.group(1).strip()] = date_match.group(1).strip()
+
+        blog_dir = os.path.join(BASE_DIR, 'blog_posts')
+        for filename in os.listdir(blog_dir):
+            if not filename.endswith('.html') or filename == 'index.html':
+                continue
+            slug = filename[:-5]
+            path = os.path.join(blog_dir, filename)
+            with open(path, encoding='utf-8') as post_file:
+                document = post_file.read()
+
+            title = _meta_content(document, 'og:title')
+            if not title:
+                title_match = re.search(r'<title>(.*?)</title>', document, re.IGNORECASE | re.DOTALL)
+                title = html_lib.unescape(title_match.group(1)).strip() if title_match else slug.replace('-', ' ').title()
+                title = title.split('|')[0].strip()
+            description = _meta_content(document, 'description')
+            published = _meta_content(document, 'article:published_time')
+            url = f'/blog/{slug}'
+            canonical = f'https://drmortgageusa.com{url}'
+            published = published[:10] or sitemap_dates.get(canonical, '')
+
+            posts.append({
+                'title': title,
+                'description': description,
+                'date': published,
+                'category': _blog_category(title, description),
+                'url': url,
+            })
+    except Exception as error:
+        app.logger.error(f'Blog archive API failed: {error}')
+        return jsonify({'posts': [], 'syncedAt': None, 'source': '/blog'}), 503
+
+    posts.sort(key=lambda post: post.get('date') or '', reverse=True)
+    response = jsonify({
+        'posts': posts,
+        'syncedAt': datetime.now(timezone.utc).isoformat(),
+        'source': '/blog',
+    })
+    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    return response
+
+
+def _dpa_fallback_snapshot():
+    return {
+        'asOf': 'July 10, 2026',
+        'notice': 'Hometown Heroes 2026 is anticipated to become available July 13, 2026.',
+        'source': 'https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/',
+        'groups': [
+            {'id': 'standard-bond', 'label': 'Standard Bond', 'assistance': 'FL Assist $10,000 or FL HLP $12,500', 'fico': '640 minimum program score', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.750%'},
+                {'label': 'Fannie Mae HFA Preferred', 'rate': '7.500%'},
+                {'label': 'Freddie Mac HFA Advantage', 'rate': '7.250%'},
+            ]},
+            {'id': 'standard-tba', 'label': 'Standard TBA', 'assistance': 'FL Assist $10,000 or FL HLP $12,500', 'fico': '640 minimum program score', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '7.125%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'At or below 80% AMI', 'rate': '7.375%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'Over 80% AMI', 'rate': '7.500%'},
+            ]},
+            {'id': 'plus-tba', 'label': 'PLUS TBA', 'assistance': 'Forgivable assistance based on total loan amount', 'fico': '640 minimum program score', 'entries': [
+                {'label': '3% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.250%'},
+                {'label': '4% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.500%'},
+                {'label': '5% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.875%'},
+                {'label': '3% DPA', 'detail': 'Over 80% AMI', 'rate': '7.375%'},
+                {'label': '4% DPA', 'detail': 'Over 80% AMI', 'rate': '7.625%'},
+                {'label': '5% DPA', 'detail': 'Over 80% AMI', 'rate': 'N/A'},
+            ]},
+            {'id': 'heroes-bond', 'label': 'Hometown Heroes Bond', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Expected to open July 13', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.000%'},
+                {'label': 'Fannie Mae HFA Preferred', 'rate': '7.000%'},
+                {'label': 'Freddie Mac HFA Advantage', 'rate': '6.500%'},
+            ]},
+            {'id': 'heroes-tba', 'label': 'Hometown Heroes TBA', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Expected to open July 13', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.375%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'At or below 80% AMI', 'rate': '6.625%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'Over 80% AMI', 'rate': '6.750%'},
+            ]},
+        ],
+    }
+
+
+def _dpa_cell(document, cell_id):
+    match = re.search(
+        rf'data-cell-id=["\']{re.escape(cell_id)}["\'][^>]*>(.*?)</t[dh]>',
+        document,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if not match:
+        return ''
+    value = re.sub(r'<br\s*/?\s*>', ' ', match.group(1), flags=re.IGNORECASE)
+    value = re.sub(r'<[^>]+>', ' ', value)
+    return re.sub(r'\s+', ' ', html_lib.unescape(value)).strip()
+
+
+@app.route('/api/dpa-rates', methods=['GET'])
+def dpa_rates_api():
+    source = 'https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/'
+    snapshot = _dpa_fallback_snapshot()
+    live = False
+    try:
+        source_response = requests.get(source, timeout=12, headers={'User-Agent': 'DRMortgageUSA/2026'})
+        source_response.raise_for_status()
+        document = source_response.text
+        date_match = re.search(
+            r'(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}',
+            _dpa_cell(document, 'A1'),
+        )
+        if not date_match or not _dpa_cell(document, 'G5'):
+            raise ValueError('Official DPA table could not be parsed')
+
+        def cell_rate(cell_id, fallback):
+            rate_match = re.search(r'(?:\d+\.\d+%|n/a)', _dpa_cell(document, cell_id), re.IGNORECASE)
+            return rate_match.group(0) if rate_match else fallback
+
+        cell_groups = [
+            ['G5', 'G6', 'G7'],
+            ['G10', 'G11', 'G12'],
+            ['G15', 'G16', 'G17', 'G18', 'G19', 'G20'],
+            ['G23', 'G24', 'G25'],
+            ['G28', 'G29', 'G30'],
+        ]
+        snapshot['asOf'] = date_match.group(0)
+        snapshot['notice'] = _dpa_cell(document, 'A2') or snapshot['notice']
+        for group, cell_ids in zip(snapshot['groups'], cell_groups):
+            for entry, cell_id in zip(group['entries'], cell_ids):
+                entry['rate'] = cell_rate(cell_id, entry['rate'])
+        live = True
+    except Exception as error:
+        app.logger.warning(f'DPA rate API is using the verified fallback: {error}')
+
+    response = jsonify({
+        'snapshot': snapshot,
+        'live': live,
+        'syncedAt': datetime.now(timezone.utc).isoformat() if live else None,
+    })
+    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    return response
+
+
 @app.route('/<path:path>')
 def serve_static(path):
     if path.startswith('admin') and not is_refiwatch_request():
@@ -1058,6 +1331,10 @@ def serve_static(path):
         response = send_refiwatch_asset(path)
         if response is not None:
             return response
+
+    redesign = send_redesign_page(path)
+    if redesign is not None:
+        return redesign
 
     try:
         abs_path = os.path.join(BASE_DIR, path)
@@ -1097,6 +1374,9 @@ def quiz_submit():
                                       data.get('investor_loan_type', '')) or ''
         event_id = data.get('eventId', '') or data.get('event_id', '') or secrets.token_hex(16)
         source = (data.get('source', 'website') or 'website').strip()
+        email_consent = as_bool(data.get('emailConsent', data.get('email_consent')))
+        call_consent = as_bool(data.get('callConsent', data.get('call_consent')))
+        sms_consent = as_bool(data.get('smsConsent', data.get('sms_consent')))
 
         errors = []
         if email and not is_valid_email(email):
@@ -1119,25 +1399,33 @@ def quiz_submit():
         data['downPayment'] = down_payment
         data['timeline'] = timeline
         data['source'] = source
+        data['eventId'] = event_id
+        data['emailConsent'] = email_consent
+        data['callConsent'] = call_consent
+        data['smsConsent'] = sms_consent
 
         conn = get_db_connection()
         cur = conn.cursor()
 
         cur.execute(
             """
-            INSERT INTO leads (first_name, email, phone, segment, price_range, down_payment, 
-                             timeline, credit_score, military_status, property_type, investor_loan_type)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO leads (first_name, email, phone, segment, price_range, down_payment,
+                             timeline, credit_score, military_status, property_type, investor_loan_type,
+                             source, event_id, email_consent, call_consent, sms_consent, payload)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)
             RETURNING id
         """, (first_name, email, phone, segment, price_range, down_payment,
               timeline, credit_score, military_status, property_type,
-              investor_loan_type))
+              investor_loan_type, source, event_id, email_consent,
+              call_consent, sms_consent, json.dumps(data)))
 
         result = cur.fetchone()
         lead_id = result[0] if result else None
 
         zapier_forwarded = False
         try:
+            if not ZAPIER_WEBHOOK_URL:
+                raise RuntimeError('ZAPIER_WEBHOOK_URL is not configured')
             zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
                                             json=data,
                                             timeout=10)
@@ -1163,8 +1451,10 @@ def quiz_submit():
             meta_result = {'sent': False, 'reason': str(e)}
             print(f"Meta CAPI forward failed: {e}")
 
-        cur.execute("UPDATE leads SET zapier_forwarded = %s WHERE id = %s",
-                    (zapier_forwarded, lead_id))
+        cur.execute(
+            "UPDATE leads SET zapier_forwarded = %s, meta_capi_sent = %s WHERE id = %s",
+            (zapier_forwarded, bool(meta_result.get('sent')), lead_id),
+        )
         conn.commit()
         cur.close()
         conn.close()
@@ -1587,6 +1877,9 @@ else:
 @app.route('/blog')
 @app.route('/blog/')
 def blog_index():
+    redesign = send_redesign_page('blog')
+    if redesign is not None:
+        return redesign
     return send_from_directory(os.path.join(BASE_DIR, 'blog_posts'), 'index.html')
 
 
@@ -1648,7 +1941,7 @@ def server_error(e):
 def db_migrate():
     """One-time migration endpoint. Creates keyword_leads table."""
     secret = request.args.get('secret') or request.headers.get('X-Webhook-Secret')
-    if secret != MANYCHAT_WEBHOOK_SECRET:
+    if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
         return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
     try:
         conn = get_db_connection()

@@ -25,7 +25,7 @@
 | Loan Type | Bond Rate | TBA Rate |
 |-----------|-----------|----------|
 | FHA / VA / USDA | 5.750% | 5.875% |
-| Fannie HFA Preferred | 6.375% | — |
+| Fannie HFA Preferred | 6.375% |  -  |
 | Freddie HFA Advantage ≤80% AMI | 6.000% | 6.000% |
 | Freddie HFA Advantage >80% AMI | 6.000% | 6.125% |
 
@@ -33,7 +33,7 @@
 | Loan Type | Bond Rate | TBA Rate |
 |-----------|-----------|----------|
 | FHA / VA / USDA | 6.500% | 6.625% |
-| Fannie HFA Preferred | 7.125% | — |
+| Fannie HFA Preferred | 7.125% |  -  |
 | Freddie HFA Advantage ≤80% AMI | 6.625% | 6.750% |
 | Freddie HFA Advantage >80% AMI | 6.625% | 6.875% |
 
@@ -52,7 +52,7 @@
 - **Who:** Any FL worker in 50+ eligible occupations (teachers, nurses, law enforcement, firefighters, childcare workers, military, many more)
 - **Why:** Lowest rates + highest DPA (5%/$35k) + no first-time buyer requirement
 - **Check first:** Is borrower's occupation eligible? If yes, always start here.
-- **Funding note:** $7M available as of Feb 2026 — funds do run out
+- **Funding note:** $7M available as of Feb 2026  -  funds do run out
 
 ### 💰 Need Max Flat DPA (non-Heroes): **FL HLP ($12,500)**
 - **Who:** First-time buyer who needs every dollar and can handle ~$86/mo second mortgage payment
@@ -73,9 +73,9 @@
 - **Caution:** Verify stacking is allowed; funding is limited; longer process
 
 ### 🔄 Repeat Buyers:
-- **Hometown Heroes** (if occupation qualifies) — no first-time requirement
-- **Salute Our Soldiers** (if military) — no first-time requirement
-- **VA loan exception** — FL Assist/HLP available to VA borrowers regardless of first-time status
+- **Hometown Heroes** (if occupation qualifies)  -  no first-time requirement
+- **Salute Our Soldiers** (if military)  -  no first-time requirement
+- **VA loan exception**  -  FL Assist/HLP available to VA borrowers regardless of first-time status
 
 ---
 
@@ -83,9 +83,9 @@
 
 | Combination | Allowed? |
 |-------------|----------|
-| FL Assist + FL HLP | ❌ No — choose one |
-| Hometown Heroes DPA + FL Assist/HLP | ❌ No — separate programs |
-| FL Housing program + Orange/Osceola County DPA | ✅ Possibly — verify with lender and county program |
+| FL Assist + FL HLP | ❌ No  -  choose one |
+| Hometown Heroes DPA + FL Assist/HLP | ❌ No  -  separate programs |
+| FL Housing program + Orange/Osceola County DPA | ✅ Possibly  -  verify with lender and county program |
 | FL Housing + employer assistance | ✅ Generally yes |
 | FL Housing + gift funds | ✅ Yes, per loan product guidelines |
 | Two state DPA programs | ❌ One FL Housing DPA per loan |
@@ -94,17 +94,17 @@
 
 ## Common Pitfalls & Disqualifiers
 
-1. **Must have fully executed purchase contract BEFORE locking** — Lakeview will NOT purchase without it
-2. **60-day delivery timeline** — From reservation to loan purchase. Don't miss it.
-3. **First-time buyer = no ownership in prior 3 years** — Check ALL borrowers on the loan
-4. **Income limits are HOUSEHOLD income** — Include all adults in the home, not just borrowers (for some programs)
-5. **Purchase price limits vary by county** — Always check current limits before going under contract
-6. **Homebuyer education is MANDATORY** — Framework or eHome America online course. Must be completed before closing.
-7. **Primary residence only** — No investment properties, no second homes
-8. **Occupation verification for Hometown Heroes** — Must provide employer verification; job must be in Florida
-9. **HLP adds to DTI** — The $86/mo payment on HLP counts against debt-to-income ratio
-10. **Recapture tax** — FL Housing bond loans may have IRS recapture tax if home is sold within 9 years at a gain AND income increases significantly. Rare but disclose.
-11. **County DPA funds run out** — Orange/Osceola programs have limited funding cycles; don't count on availability
+1. **Must have fully executed purchase contract BEFORE locking**  -  Lakeview will NOT purchase without it
+2. **60-day delivery timeline**  -  From reservation to loan purchase. Don't miss it.
+3. **First-time buyer = no ownership in prior 3 years**  -  Check ALL borrowers on the loan
+4. **Income limits are HOUSEHOLD income**  -  Include all adults in the home, not just borrowers (for some programs)
+5. **Purchase price limits vary by county**  -  Always check current limits before going under contract
+6. **Homebuyer education is MANDATORY**  -  Framework or eHome America online course. Must be completed before closing.
+7. **Primary residence only**  -  No investment properties, no second homes
+8. **Occupation verification for Hometown Heroes**  -  Must provide employer verification; job must be in Florida
+9. **HLP adds to DTI**  -  The $86/mo payment on HLP counts against debt-to-income ratio
+10. **Recapture tax**  -  FL Housing bond loans may have IRS recapture tax if home is sold within 9 years at a gain AND income increases significantly. Rare but disclose.
+11. **County DPA funds run out**  -  Orange/Osceola programs have limited funding cycles; don't count on availability
 
 ---
 

@@ -17,9 +17,15 @@ services:
           name: drmortgageusa-db
           property: connectionString
       - key: ADMIN_PASSWORD
-        value: DrMortgage2026!
+        sync: false
       - key: FLASK_SECRET_KEY
         generateValue: true
+      - key: ZAPIER_WEBHOOK_URL
+        sync: false
+      - key: MANYCHAT_API_KEY
+        sync: false
+      - key: MANYCHAT_WEBHOOK_SECRET
+        sync: false
       - key: META_PIXEL_ID
         value: 444762220810129
       - key: META_CONVERSIONS_API_TOKEN
@@ -34,5 +40,9 @@ services:
         value: pIxfCP6Pg6kcEMresqFD
       - key: GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL
         value: 90H9CJrk-agcEMresqFD
+      - key: GA_MEASUREMENT_ID
+        sync: false
+      - key: GTM_CONTAINER_ID
+        sync: false
       - key: PYTHON_VERSION
         value: 3.11.0

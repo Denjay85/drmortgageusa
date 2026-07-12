@@ -257,7 +257,7 @@ export function LeadsTable() {
                       </TableCell>
                       <TableCell>{lead.yearBought}</TableCell>
                       <TableCell className="font-medium">${lead.savingsGoal}/mo</TableCell>
-                      <TableCell>{lead.currentRate || "—"}</TableCell>
+                      <TableCell>{lead.currentRate || " - "}</TableCell>
                       <TableCell>
                         <Badge variant={getStatusBadgeVariant(lead.status || "active")}>
                           {lead.status || "active"}

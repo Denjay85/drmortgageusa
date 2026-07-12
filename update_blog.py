@@ -25,7 +25,16 @@ INDEX_PATH = BLOG_DIR / "index.html"
 BASE_URL = "https://drmortgageusa.com"
 STATIC_PAGES = [
     ("/dpa", "monthly", "0.9"),
+    ("/down-payment-assistance", "monthly", "0.9"),
     ("/heloc-calculator", "monthly", "0.7"),
+    ("/mortgage-options", "monthly", "0.8"),
+    ("/tools", "monthly", "0.8"),
+    ("/resources", "weekly", "0.8"),
+    ("/faq", "monthly", "0.8"),
+    ("/about", "monthly", "0.7"),
+    ("/contact", "monthly", "0.7"),
+    ("/get-started", "monthly", "0.8"),
+    ("/legal", "yearly", "0.3"),
     ("/va-loans-orlando", "weekly", "0.95"),
     ("/orlando-mortgage-broker", "weekly", "0.95"),
     ("/first-time-homebuyer-orlando", "weekly", "0.95"),
