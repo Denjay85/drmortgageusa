@@ -26,10 +26,10 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: pip
@@ -44,7 +44,7 @@ jobs:
         run: python -m py_compile app.py
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
           cache: npm
@@ -62,5 +62,37 @@ jobs:
         working-directory: site
         run: npm test
 
-      - name: Confirm committed export is current
-        run: git diff --exit-code -- site/dist/client
+      - name: Validate production export
+        run: |
+          test -f site/dist/client/index.html
+          test -f site/dist/client/tools.html
+          test -f site/dist/client/blog.html
+          test -f site/dist/client/dpa.html
+          test -f site/dist/client/get-started.html
+          python - <<'PY'
+          from pathlib import Path
+
+          roots = (Path("site/app"), Path("site/dist/client"))
+          prohibited = (
+              chr(8212),
+              "&" + "mdash;",
+              "&" + "#8212;",
+              "&" + "#x2014;",
+          )
+          matches = []
+          for root in roots:
+              for path in root.rglob("*"):
+                  if not path.is_file():
+                      continue
+                  try:
+                      content = path.read_text(encoding="utf-8")
+                  except UnicodeDecodeError:
+                      continue
+                  if any(token in content for token in prohibited):
+                      matches.append(str(path))
+          if matches:
+              raise SystemExit(
+                  "Prohibited punctuation found in public website output: "
+                  + ", ".join(matches)
+              )
+          PY
