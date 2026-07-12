@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dr.MortgageUSA Backend API
+DR. Mortgage USA Backend API
 - Serves static files
 - Handles quiz submissions (stores in DB + forwards to Zapier)
 - Admin dashboard for viewing leads
@@ -1674,12 +1674,18 @@ def admin_retry_zapier():
 
         cur.close()
         conn.close()
-        return jsonify({
+        result = {
             'success': failed == 0,
             'processed': len(queued),
             'delivered': delivered,
             'failed': failed,
-        })
+        }
+        if request.form.get('return') == 'dashboard':
+            return redirect(url_for(
+                'admin_dashboard',
+                delivery=f'{delivered}-delivered-{failed}-failed',
+            ))
+        return jsonify(result)
     except Exception as error:
         app.logger.error(f'Zapier queue replay failed: {error}')
         return jsonify({'success': False, 'error': 'queue_replay_failed'}), 500
@@ -1755,6 +1761,12 @@ def admin_dashboard():
         count_result = cur.fetchone()
         total_leads = count_result[0] if count_result else 0
 
+        cur.execute(
+            "SELECT COUNT(*) FROM leads WHERE zapier_forwarded IS NOT TRUE"
+        )
+        queued_result = cur.fetchone()
+        queued_leads = queued_result[0] if queued_result else 0
+
         cur.execute("SELECT segment, COUNT(*) FROM leads GROUP BY segment")
         segment_counts = dict(cur.fetchall())
 
@@ -1764,6 +1776,9 @@ def admin_dashboard():
         return render_template_string(ADMIN_DASHBOARD_TEMPLATE,
                                       leads=leads,
                                       total_leads=total_leads,
+                                      queued_leads=queued_leads,
+                                      integration_status=integration_readiness(),
+                                      delivery_result=request.args.get('delivery', ''),
                                       segment_counts=segment_counts,
                                       current_segment=segment_filter,
                                       search_query=search)
@@ -1795,7 +1810,7 @@ ADMIN_LOGIN_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Dr.MortgageUSA</title>
+    <title>Admin Login | DR. Mortgage USA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -1814,7 +1829,7 @@ ADMIN_LOGIN_TEMPLATE = '''
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-navy">Admin Login</h1>
-            <p class="text-gray-600 mt-2">Dr.MortgageUSA Lead Dashboard</p>
+            <p class="text-gray-600 mt-2">DR. Mortgage USA Lead Dashboard</p>
         </div>
         
         {% if error %}
@@ -1850,7 +1865,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Dashboard - Dr.MortgageUSA</title>
+    <title>Lead Dashboard | DR. Mortgage USA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -1868,7 +1883,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
 <body class="bg-gray-100 min-h-screen">
     <nav class="bg-navy text-white p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Dr.MortgageUSA <span class="text-gold">Lead Dashboard</span></h1>
+            <h1 class="text-2xl font-bold">DR. Mortgage USA <span class="text-gold">Lead Dashboard</span></h1>
             <div class="flex items-center gap-4">
                 <a href="/" class="hover:text-gold">View Site</a>
                 <a href="/admin/logout" class="bg-gold text-navy px-4 py-2 rounded-lg hover:bg-yellow-500">Logout</a>
@@ -1895,6 +1910,67 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                 <div class="text-gray-600">Investors</div>
             </div>
         </div>
+
+        <section class="bg-white rounded-xl shadow mb-6 p-6">
+            <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
+                <div>
+                    <h2 class="text-xl font-bold text-navy">Integration readiness</h2>
+                    <p class="text-gray-600 text-sm mt-1">Credential values remain hidden. This panel reports configuration state only.</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold {% if queued_leads %}text-amber-600{% else %}text-green-600{% endif %}">{{ queued_leads }}</div>
+                    <div class="text-sm text-gray-600">Leads waiting for Bonzo</div>
+                </div>
+            </div>
+
+            {% if delivery_result %}
+            <div class="bg-blue-50 border border-blue-200 text-blue-900 rounded-lg px-4 py-3 mb-5">
+                Queue replay result: {{ delivery_result.replace('-', ' ') }}
+            </div>
+            {% endif %}
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-5">
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Zapier to Bonzo</div>
+                    <div class="text-sm mt-1 {% if integration_status.zapier_bonzo %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.zapier_bonzo %}Ready{% else %}Waiting for credentials{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Meta Pixel</div>
+                    <div class="text-sm mt-1 {% if integration_status.meta_pixel %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.meta_pixel %}Ready{% else %}Not configured{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Meta CAPI</div>
+                    <div class="text-sm mt-1 {% if integration_status.meta_capi %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.meta_capi %}Ready{% else %}Not configured{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Google Ads</div>
+                    <div class="text-sm mt-1 {% if integration_status.google_ads %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.google_ads %}Ready{% else %}Not configured{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">ManyChat</div>
+                    <div class="text-sm mt-1 {% if integration_status.manychat %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.manychat %}Ready{% else %}Waiting for credentials{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="/admin/retry-zapier?limit=100">
+                <input type="hidden" name="return" value="dashboard">
+                <button type="submit"
+                        class="bg-navy text-white font-bold px-5 py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        {% if not integration_status.zapier_bonzo or not queued_leads %}disabled{% endif %}>
+                    Send queued leads to Bonzo
+                </button>
+            </form>
+        </section>
         
         <div class="bg-white rounded-xl shadow mb-6 p-4">
             <form class="flex flex-wrap gap-4 items-end">

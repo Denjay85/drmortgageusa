@@ -192,6 +192,31 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertEqual(status['queued_leads'], 101)
         self.assertNotIn('configured', authenticated.get_data(as_text=True))
 
+    def test_admin_dashboard_renders_integration_readiness_panel(self):
+        with production_app.app.test_request_context('/admin/dashboard'):
+            dashboard = production_app.render_template_string(
+                production_app.ADMIN_DASHBOARD_TEMPLATE,
+                leads=[],
+                total_leads=4,
+                queued_leads=2,
+                integration_status={
+                    'zapier_bonzo': False,
+                    'meta_pixel': True,
+                    'meta_capi': True,
+                    'google_ads': True,
+                    'manychat': False,
+                },
+                delivery_result='',
+                segment_counts={},
+                current_segment='',
+                search_query='',
+            )
+
+        self.assertIn('DR. Mortgage USA', dashboard)
+        self.assertIn('Integration readiness', dashboard)
+        self.assertIn('Leads waiting for Bonzo', dashboard)
+        self.assertIn('Waiting for credentials', dashboard)
+
 
 if __name__ == '__main__':
     unittest.main()
