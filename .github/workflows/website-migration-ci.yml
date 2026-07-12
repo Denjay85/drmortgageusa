@@ -72,7 +72,8 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          roots = (Path("site/app"), Path("site/dist/client"))
+          source_root = Path("site/app")
+          export_root = Path("site/dist/client")
           prohibited = (
               chr(8212),
               "&" + "mdash;",
@@ -80,16 +81,16 @@ jobs:
               "&" + "#x2014;",
           )
           matches = []
-          for root in roots:
-              for path in root.rglob("*"):
-                  if not path.is_file():
-                      continue
-                  try:
-                      content = path.read_text(encoding="utf-8")
-                  except UnicodeDecodeError:
-                      continue
-                  if any(token in content for token in prohibited):
-                      matches.append(str(path))
+          paths = [path for path in source_root.rglob("*") if path.is_file()]
+          paths.extend(export_root.rglob("*.html"))
+          paths.extend(export_root.rglob("*.rsc"))
+          for path in paths:
+              try:
+                  content = path.read_text(encoding="utf-8")
+              except UnicodeDecodeError:
+                  continue
+              if any(token in content for token in prohibited):
+                  matches.append(str(path))
           if matches:
               raise SystemExit(
                   "Prohibited punctuation found in public website output: "
