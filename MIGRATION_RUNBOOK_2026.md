@@ -50,6 +50,23 @@ These values must remain in Render. They must not be committed to GitHub.
 
 The website can operate while `ZAPIER_WEBHOOK_URL` is missing. Leads remain visible in the protected admin dashboard and can be replayed after the Bonzo workflow is restored. ManyChat endpoints remain unavailable until both ManyChat values are rotated and configured.
 
+## Bonzo integration validation
+
+On July 13, 2026, the replacement Zapier catch hook accepted a labeled synthetic website lead and returned HTTP 200 with a Zapier success receipt. The payload included the same contact, mortgage scenario, source, event ID, and channel consent fields sent by the redesigned forms. No real borrower information was used.
+
+The hook is stored as the masked `ZAPIER_WEBHOOK_URL` secret on the production Render service using Save only. It will become active when the migration branch is deployed. Saving the secret did not restart the current production service.
+
+Before launch, Gabi or another Bonzo administrator must confirm that the labeled test record is visible in Zapier and finish the Zapier to Bonzo field mapping. Then run one end-to-end synthetic submission and verify these exact outcomes:
+
+- Zapier receives the website payload.
+- Bonzo creates or updates the expected test contact.
+- The source and mortgage scenario fields remain attached.
+- Email, call, and SMS consent remain separate.
+- A duplicate submission with the same test contact follows the intended Bonzo update rule.
+- Failed Zapier delivery leaves the lead queued in PostgreSQL for authenticated replay.
+
+Do not replay queued production leads until the Bonzo workflow is active and a Bonzo administrator confirms the destination and duplicate-handling rules.
+
 ## Staging checklist
 
 - Deploy `migration/2026-redesign` as a separate Render preview service.
