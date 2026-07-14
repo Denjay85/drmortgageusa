@@ -76,6 +76,12 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
     assert.match(html, /name="robots" content="noindex, nofollow"/);
   }
   assert.match(html, /rel="canonical" href="https:\/\/drmortgageusa\.com\/"/);
+  assert.match(html, /property="og:title" content="DR\. Mortgage USA"/);
+  assert.match(html, /property="og:url" content="https:\/\/drmortgageusa\.com"/);
+  assert.match(html, /property="og:image" content="https:\/\/drmortgageusa\.com\/dennis-ross-headshot\.png"/);
+  assert.match(html, /property="og:image:width" content="1000"/);
+  assert.match(html, /property="og:image:height" content="1000"/);
+  assert.match(html, /name="twitter:image" content="https:\/\/drmortgageusa\.com\/dennis-ross-headshot\.png"/);
   const organizationMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(organizationMatch, "homepage organization structured data should render");
   const organization = JSON.parse(organizationMatch[1]);

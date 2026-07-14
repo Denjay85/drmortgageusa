@@ -21,14 +21,22 @@ export const metadata: Metadata = {
     openGraph: {
       title: "DR. Mortgage USA",
       description: "Understand the numbers before you make the move.",
+      url: origin,
+      siteName: "DR. Mortgage USA",
       type: "website",
-      images: [{ url: `${origin}/og.png`, width: 1200, height: 675, alt: "DR. Mortgage USA: Understand the numbers before you make the move." }],
+      images: [{
+        url: `${origin}/dennis-ross-headshot.png`,
+        width: 1000,
+        height: 1000,
+        type: "image/png",
+        alt: "Dennis Ross, DR. Mortgage USA Florida mortgage broker and Navy veteran",
+      }],
     },
     twitter: {
       card: "summary_large_image",
       title: "DR. Mortgage USA",
       description: "Understand the numbers before you make the move.",
-      images: [`${origin}/og.png`],
+      images: [`${origin}/dennis-ross-headshot.png`],
     },
     robots: { index: indexable, follow: indexable },
 };
