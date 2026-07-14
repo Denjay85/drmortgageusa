@@ -1,0 +1,277 @@
+import os
+import re
+import unittest
+from unittest.mock import Mock, patch
+
+os.environ['ENABLE_RATE_UPDATER'] = '0'
+
+import app as production_app
+
+
+class FakeCursor:
+    def __init__(self):
+        self.executions = []
+
+    def execute(self, query, params=None):
+        self.executions.append((query, params))
+
+    def fetchone(self):
+        return (101,)
+
+    def close(self):
+        return None
+
+
+class FakeConnection:
+    def __init__(self):
+        self.cursor_instance = FakeCursor()
+
+    def cursor(self):
+        return self.cursor_instance
+
+    def commit(self):
+        return None
+
+    def close(self):
+        return None
+
+
+class RedesignIntegrationTests(unittest.TestCase):
+    def setUp(self):
+        production_app.app.config.update(TESTING=True)
+        self.client = production_app.app.test_client()
+
+    def test_redesign_and_legacy_seo_routes_are_available(self):
+        sitemap_response = self.client.get('/sitemap.xml')
+        sitemap = sitemap_response.get_data(as_text=True)
+        sitemap_response.close()
+        routes = [
+            re.sub(r'^https://drmortgageusa\.com', '', value) or '/'
+            for value in re.findall(r'<loc>(.*?)</loc>', sitemap)
+        ]
+        self.assertGreaterEqual(len(routes), 60)
+        for route in routes:
+            response = self.client.get(route)
+            self.assertEqual(response.status_code, 200, route)
+            if response.content_type.startswith('text/html'):
+                self.assertNotIn(chr(8212), response.get_data(as_text=True), route)
+            response.close()
+
+    def test_live_data_endpoints_feed_the_redesign(self):
+        rates = self.client.get('/api/rates')
+        self.assertEqual(rates.status_code, 200)
+        self.assertIn('Conventional 30-year', rates.get_json()['rates'])
+
+        blog = self.client.get('/api/blog')
+        self.assertEqual(blog.status_code, 200)
+        self.assertGreaterEqual(len(blog.get_json()['posts']), 40)
+
+        with patch.object(production_app.requests, 'get', side_effect=RuntimeError('offline test')):
+            dpa = self.client.get('/api/dpa-rates')
+        self.assertEqual(dpa.status_code, 200)
+        self.assertFalse(dpa.get_json()['live'])
+        self.assertEqual(len(dpa.get_json()['snapshot']['groups']), 5)
+
+    def test_lead_submission_preserves_consent_and_tracking_context(self):
+        connection = FakeConnection()
+        zapier_response = Mock(ok=True, status_code=200, text='ok')
+        payload = {
+            'firstName': 'Migration Test',
+            'email': 'migration@example.com',
+            'phone': '8503468514',
+            'segment': 'Purchase mortgage plan',
+            'timeline': 'Within 90 days',
+            'source': 'redesign-build-my-plan',
+            'eventId': 'lead_test_123',
+            'emailConsent': True,
+            'callConsent': False,
+            'smsConsent': True,
+            'pathAnswers': '{"goal":"purchase"}',
+        }
+
+        with patch.object(production_app, 'get_db_connection', return_value=connection), \
+             patch.object(production_app, 'ZAPIER_WEBHOOK_URL', 'https://example.test/hook'), \
+             patch.object(production_app.requests, 'post', return_value=zapier_response), \
+             patch.object(production_app, 'track_meta_server_event', return_value={'sent': True}):
+            response = self.client.post('/api/quiz-submit', json=payload)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.get_json()['success'])
+        insert_params = connection.cursor_instance.executions[0][1]
+        self.assertEqual(insert_params[11], 'redesign-build-my-plan')
+        self.assertEqual(insert_params[12], 'lead_test_123')
+        self.assertEqual(insert_params[13:16], (True, False, True))
+        self.assertIn('pathAnswers', insert_params[16])
+
+    def test_preview_lead_submission_never_reaches_live_integrations(self):
+        payload = {
+            'firstName': 'Preview Test',
+            'email': 'preview@example.com',
+            'phone': '8503468514',
+            'segment': 'Purchase mortgage plan',
+            'source': 'redesign-build-my-plan',
+            'eventId': 'preview_lead_123',
+            'emailConsent': True,
+            'callConsent': False,
+            'smsConsent': True,
+        }
+
+        with patch.object(production_app, 'PREVIEW_MODE', True), \
+             patch.object(production_app, 'get_db_connection') as database, \
+             patch.object(production_app.requests, 'post') as external_post:
+            response = self.client.post('/api/quiz-submit', json=payload)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.get_json()['success'])
+        self.assertTrue(response.get_json()['preview'])
+        self.assertEqual(response.get_json()['event_id'], 'preview_lead_123')
+        database.assert_not_called()
+        external_post.assert_not_called()
+
+    def test_preview_tracking_script_does_not_load_ad_networks(self):
+        with patch.object(production_app, 'PREVIEW_MODE', True):
+            response = self.client.get('/site-tracking.js')
+
+        script = response.get_data(as_text=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('__drPreviewMode', script)
+        self.assertNotIn('connect.facebook.net', script)
+        self.assertNotIn('googletagmanager.com', script)
+
+    def test_missing_zapier_configuration_queues_the_lead(self):
+        connection = FakeConnection()
+        payload = {
+            'firstName': 'Queue Test',
+            'email': 'queue@example.com',
+            'phone': '8503468514',
+            'segment': 'Purchase mortgage plan',
+            'source': 'redesign-build-my-plan',
+            'eventId': 'queued_lead_123',
+            'emailConsent': True,
+            'callConsent': False,
+            'smsConsent': False,
+        }
+
+        with patch.object(production_app, 'get_db_connection', return_value=connection), \
+             patch.object(production_app, 'ZAPIER_WEBHOOK_URL', ''), \
+             patch.object(production_app, 'track_meta_server_event', return_value={'sent': False}):
+            response = self.client.post('/api/quiz-submit', json=payload)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.get_json()['success'])
+        update_params = connection.cursor_instance.executions[1][1]
+        self.assertFalse(update_params[0])
+        self.assertEqual(update_params[2], 'not_configured')
+
+    def test_zapier_delivery_helper_does_not_send_without_configuration(self):
+        with patch.object(production_app, 'ZAPIER_WEBHOOK_URL', ''), \
+             patch.object(production_app.requests, 'post') as external_post:
+            result = production_app.forward_to_zapier({'eventId': 'queue_test'})
+
+        self.assertFalse(result['sent'])
+        self.assertEqual(result['reason'], 'not_configured')
+        external_post.assert_not_called()
+
+    def test_integration_status_is_admin_only_and_redacts_secrets(self):
+        unauthenticated = self.client.get('/admin/integrations')
+        self.assertEqual(unauthenticated.status_code, 302)
+
+        connection = FakeConnection()
+        with self.client.session_transaction() as session:
+            session['admin_logged_in'] = True
+
+        with patch.object(production_app, 'get_db_connection', return_value=connection), \
+             patch.object(production_app, 'ZAPIER_WEBHOOK_URL', ''), \
+             patch.object(production_app, 'META_ACCESS_TOKEN', 'configured'):
+            authenticated = self.client.get('/admin/integrations')
+
+        self.assertEqual(authenticated.status_code, 200)
+        status = authenticated.get_json()
+        self.assertFalse(status['zapier_bonzo'])
+        self.assertTrue(status['meta_capi'])
+        self.assertEqual(status['queued_leads'], 101)
+        self.assertNotIn('configured', authenticated.get_data(as_text=True))
+
+    def test_admin_dashboard_renders_integration_readiness_panel(self):
+        with production_app.app.test_request_context('/admin/dashboard'):
+            dashboard = production_app.render_template_string(
+                production_app.ADMIN_DASHBOARD_TEMPLATE,
+                leads=[],
+                total_leads=4,
+                queued_leads=2,
+                integration_status={
+                    'zapier_bonzo': False,
+                    'meta_pixel': True,
+                    'meta_capi': True,
+                    'google_ads': True,
+                    'manychat': False,
+                },
+                delivery_result='',
+                segment_counts={},
+                current_segment='',
+                search_query='',
+            )
+
+        self.assertIn('DR. Mortgage USA', dashboard)
+        self.assertIn('Integration readiness', dashboard)
+        self.assertIn('Leads waiting for Bonzo', dashboard)
+        self.assertIn('Waiting for credentials', dashboard)
+
+    def test_production_tracking_script_contains_configured_ad_destinations(self):
+        environment = {
+            'GOOGLE_ADS_ID': 'AW-123456789',
+            'GOOGLE_ADS_APPLY_CONVERSION_LABEL': 'apply-label',
+            'GOOGLE_ADS_PHONE_CONVERSION_LABEL': 'phone-label',
+            'GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL': 'lead-label',
+            'GA_MEASUREMENT_ID': 'G-TEST123',
+        }
+        with patch.object(production_app, 'PREVIEW_MODE', False), \
+             patch.object(production_app, 'META_PIXEL_ID', '987654321'), \
+             patch.dict(production_app.os.environ, environment, clear=False):
+            response = self.client.get('/site-tracking.js')
+
+        script = response.get_data(as_text=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('connect.facebook.net', script)
+        self.assertIn('987654321', script)
+        self.assertIn('AW-123456789', script)
+        self.assertIn('apply-label', script)
+        self.assertIn('phone-label', script)
+        self.assertIn('lead-label', script)
+        self.assertIn('G-TEST123', script)
+
+    def test_meta_capi_uses_matching_event_id_and_hashed_contact_data(self):
+        graph_response = Mock(ok=True, status_code=200, text='ok')
+        with production_app.app.test_request_context(
+            '/api/quiz-submit',
+            headers={'User-Agent': 'Migration QA'},
+        ), patch.object(production_app, 'META_PIXEL_ID', '987654321'), \
+             patch.object(production_app, 'META_ACCESS_TOKEN', 'private-token'), \
+             patch.object(production_app, 'META_TEST_EVENT_CODE', 'TEST123'), \
+             patch.object(production_app.requests, 'post', return_value=graph_response) as graph_post:
+            result = production_app.track_meta_server_event(
+                'Lead',
+                'matching_event_123',
+                {
+                    'firstName': 'Dennis',
+                    'email': 'dennis@example.com',
+                    'phone': '8503468514',
+                },
+                custom_data={'content_name': 'migration_test'},
+            )
+
+        self.assertTrue(result['sent'])
+        call = graph_post.call_args
+        self.assertIn('/987654321/events', call.args[0])
+        self.assertEqual(call.kwargs['params']['access_token'], 'private-token')
+        event = call.kwargs['json']['data'][0]
+        self.assertEqual(event['event_id'], 'matching_event_123')
+        self.assertEqual(call.kwargs['json']['test_event_code'], 'TEST123')
+        self.assertEqual(
+            event['user_data']['em'][0],
+            production_app.sha256_or_none('dennis@example.com'),
+        )
+
+
+if __name__ == '__main__':
+    unittest.main()

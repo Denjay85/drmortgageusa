@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dr.MortgageUSA Backend API
+DR. Mortgage USA Backend API
 - Serves static files
 - Handles quiz submissions (stores in DB + forwards to Zapier)
 - Admin dashboard for viewing leads
@@ -11,6 +11,7 @@ import json
 import secrets
 import hashlib
 import re
+import html as html_lib
 import requests
 import psycopg2
 from datetime import datetime, timezone
@@ -22,6 +23,7 @@ import mimetypes
 
 app = Flask(__name__, static_folder=None)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REDESIGN_OUT_DIR = os.path.join(BASE_DIR, 'site', 'dist', 'client')
 SERVICE_PAGE_MAP = {
     'va-loans-orlando': 'va-loans-orlando.html',
     'orlando-mortgage-broker': 'orlando-mortgage-broker.html',
@@ -37,10 +39,14 @@ app.config['COMPRESS_LEVEL'] = 6
 app.config['COMPRESS_MIN_SIZE'] = 500
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
-ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/6074472/uu7c1t0/"
+ZAPIER_WEBHOOK_URL = os.environ.get('ZAPIER_WEBHOOK_URL', '').strip()
 META_PIXEL_ID = os.environ.get('META_PIXEL_ID', '444762220810129')
 META_ACCESS_TOKEN = os.environ.get('META_CONVERSIONS_API_TOKEN', '')
 META_TEST_EVENT_CODE = os.environ.get('META_TEST_EVENT_CODE', '')
+PREVIEW_MODE = (
+    os.environ.get('IS_PULL_REQUEST', '').strip().lower() == 'true'
+    or os.environ.get('PREVIEW_MODE', '').strip().lower() == 'true'
+)
 REFIWATCH_HOSTS = {
     host.strip().lower()
     for host in os.environ.get('REFIWATCH_HOSTS',
@@ -94,6 +100,33 @@ def send_refiwatch_asset(path):
     return None
 
 
+def send_redesign_page(path=''):
+    """Serve a statically exported redesign page when the build is present."""
+    cleaned = (path or '').strip('/')
+    if not cleaned:
+        candidates = [os.path.join(REDESIGN_OUT_DIR, 'index.html')]
+    else:
+        candidates = [
+            os.path.join(REDESIGN_OUT_DIR, cleaned, 'index.html'),
+            os.path.join(REDESIGN_OUT_DIR, f'{cleaned}.html'),
+            os.path.join(REDESIGN_OUT_DIR, cleaned),
+        ]
+
+    redesign_root = os.path.abspath(REDESIGN_OUT_DIR)
+    for candidate in candidates:
+        absolute = os.path.abspath(candidate)
+        if not absolute.startswith(redesign_root + os.sep):
+            continue
+        if os.path.isfile(absolute):
+            mimetype, _ = mimetypes.guess_type(absolute)
+            return send_file(
+                absolute,
+                mimetype=mimetype or 'text/html',
+                conditional=True,
+            )
+    return None
+
+
 def normalize_email(value):
     return (value or '').strip().lower()
 
@@ -107,6 +140,53 @@ def is_valid_email(value):
     if not email:
         return False
     return re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email) is not None
+
+
+def as_bool(value):
+    if isinstance(value, bool):
+        return value
+    return str(value or '').strip().lower() in ('1', 'true', 'yes', 'on')
+
+
+def forward_to_zapier(payload):
+    """Deliver a lead to Zapier without making lead capture depend on Zapier."""
+    if PREVIEW_MODE:
+        return {'sent': False, 'reason': 'preview_mode'}
+    if not ZAPIER_WEBHOOK_URL:
+        return {'sent': False, 'reason': 'not_configured'}
+
+    try:
+        response = requests.post(
+            ZAPIER_WEBHOOK_URL,
+            json=payload,
+            timeout=10,
+        )
+        return {
+            'sent': bool(response.ok),
+            'reason': 'delivered' if response.ok else 'http_error',
+            'status_code': response.status_code,
+        }
+    except Exception as error:
+        app.logger.error(f'Zapier delivery failed: {error}')
+        return {
+            'sent': False,
+            'reason': 'request_error',
+            'error': str(error)[:300],
+        }
+
+
+def integration_readiness():
+    """Return configuration state without exposing credential values."""
+    return {
+        'zapier_bonzo': bool(ZAPIER_WEBHOOK_URL),
+        'meta_pixel': bool(META_PIXEL_ID),
+        'meta_capi': bool(META_ACCESS_TOKEN),
+        'manychat': bool(MANYCHAT_API_KEY and MANYCHAT_WEBHOOK_SECRET),
+        'google_ads': bool(os.environ.get('GOOGLE_ADS_ID', 'AW-18055212874').strip()),
+        'ga4': bool(os.environ.get('GA_MEASUREMENT_ID', '').strip()),
+        'google_tag_manager': bool(os.environ.get('GTM_CONTAINER_ID', '').strip()),
+        'preview_mode': PREVIEW_MODE,
+    }
 
 
 def sha256_or_none(value):
@@ -192,11 +272,16 @@ def get_admin_password():
 
 def get_db_connection():
     """Get database connection using environment variables"""
+    if PREVIEW_MODE:
+        raise RuntimeError('Database access is disabled in preview mode')
     return psycopg2.connect(os.environ['DATABASE_URL'])
 
 
 def init_database():
     """Create primary app tables if they don't exist."""
+    if PREVIEW_MODE:
+        print("Database initialization skipped in preview mode")
+        return
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -218,6 +303,16 @@ def init_database():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS source VARCHAR(150)")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS event_id VARCHAR(150)")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS email_consent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS call_consent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS sms_consent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS payload JSONB DEFAULT '{}'::jsonb")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS meta_capi_sent BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS zapier_attempts INTEGER DEFAULT 0")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS zapier_last_error TEXT")
+        cur.execute("ALTER TABLE leads ADD COLUMN IF NOT EXISTS zapier_last_attempt_at TIMESTAMPTZ")
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS keyword_leads (
@@ -312,12 +407,42 @@ def normalize_dpa_program_intro(html):
 def serve_index():
     if is_refiwatch_request() and refiwatch_build_ready():
         return send_refiwatch_index()
+    redesign = send_redesign_page()
+    if redesign is not None:
+        return redesign
     return send_file(os.path.join(BASE_DIR, 'index.html'),
                      mimetype='text/html')
 
 
 @app.route('/site-tracking.js')
 def site_tracking():
+    if PREVIEW_MODE:
+        preview_js = """
+(function() {
+  if (window.__drSiteTrackingLoaded) return;
+  window.__drSiteTrackingLoaded = true;
+  function createEventId(prefix) {
+    return prefix + "_preview_" + Date.now() + "_" + Math.random().toString(36).slice(2, 10);
+  }
+  function emptyValue() { return ""; }
+  function noOp() {}
+  window.DrMortgageTracking = {
+    createEventId: createEventId,
+    getOrCreateFbp: emptyValue,
+    getOrCreateFbc: emptyValue,
+    pushDataLayerEvent: noOp,
+    trackApplyClick: createEventId,
+    trackPhoneClick: createEventId,
+    trackLeadSubmit: createEventId,
+    trackSecondaryLandingView: noOp
+  };
+  window.__drPreviewMode = true;
+})();
+"""
+        response = Response(preview_js, mimetype='application/javascript')
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        return response
+
     ga_measurement_id = os.environ.get('GA_MEASUREMENT_ID', '').strip()
     gtm_container_id = os.environ.get('GTM_CONTAINER_ID', '').strip()
     # Render Blueprint env vars do not backfill existing services reliably.
@@ -713,6 +838,9 @@ def site_tracking():
 
 @app.route('/heloc-calculator')
 def heloc_calculator():
+    redesign = send_redesign_page('heloc-calculator')
+    if redesign is not None:
+        return redesign
     return send_file(os.path.join(BASE_DIR, 'heloc-calculator.html'),
                      mimetype='text/html')
 
@@ -720,6 +848,9 @@ def heloc_calculator():
 
 @app.route('/dpa')
 def serve_dpa():
+    redesign = send_redesign_page('down-payment-assistance')
+    if redesign is not None:
+        return redesign
     with open(os.path.join(BASE_DIR, 'dpa.html'), encoding='utf-8') as f:
         html = normalize_dpa_program_intro(f.read())
     return Response(html, mimetype='text/html')
@@ -758,8 +889,8 @@ def serve_sitemap():
     return send_file(os.path.join(BASE_DIR, 'sitemap.xml'), mimetype='application/xml')
 
 # --- ManyChat Webhook: HELOC 5DAYS Sequence Enrollment ---
-MANYCHAT_API_KEY = os.environ.get('MANYCHAT_API_KEY', '1852822:98408d8d5653dd3cc23e831449be31a8')
-MANYCHAT_WEBHOOK_SECRET = os.environ.get('MANYCHAT_WEBHOOK_SECRET', 'h5d_xK9mP2vR')
+MANYCHAT_API_KEY = os.environ.get('MANYCHAT_API_KEY', '')
+MANYCHAT_WEBHOOK_SECRET = os.environ.get('MANYCHAT_WEBHOOK_SECRET', '')
 
 SEQUENCE_FLOWS = {
     1: 'content20260303172444_148265',  # Day 1: Debt consolidation
@@ -799,7 +930,7 @@ def manychat_enroll():
         phone = data.get('phone', '')
         secret = data.get('secret') or request.headers.get('X-Webhook-Secret')
         
-        if secret != MANYCHAT_WEBHOOK_SECRET:
+        if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
             return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
         
         if not subscriber_id:
@@ -835,7 +966,7 @@ def manychat_enroll():
 def manychat_leads():
     """API endpoint for Closer agent to pull new leads."""
     secret = request.args.get('secret') or request.headers.get('X-Webhook-Secret')
-    if secret != MANYCHAT_WEBHOOK_SECRET:
+    if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
         return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
     
     try:
@@ -871,7 +1002,7 @@ def manychat_send_sequence():
     try:
         data = request.get_json(force=True)
         secret = data.get('secret')
-        if secret != MANYCHAT_WEBHOOK_SECRET:
+        if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
             return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
         
         subscriber_id = data.get('subscriber_id')
@@ -994,15 +1125,8 @@ def refiwatch_lead_submit():
             'submittedAt': datetime.now(timezone.utc).isoformat(),
         }
 
-        zapier_forwarded = False
-        try:
-            zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
-                                            json=zapier_payload,
-                                            timeout=10)
-            if zapier_response.ok:
-                zapier_forwarded = True
-        except Exception as e:
-            app.logger.error(f'RefiWatch Zapier forward failed: {e}')
+        zapier_result = forward_to_zapier(zapier_payload)
+        zapier_forwarded = bool(zapier_result.get('sent'))
 
         meta_result = {'sent': False, 'reason': 'not_attempted'}
         try:
@@ -1049,6 +1173,226 @@ def refiwatch_lead_submit():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+def _meta_content(document, key):
+    escaped = re.escape(key)
+    patterns = [
+        rf'<meta[^>]+(?:name|property)=["\']{escaped}["\'][^>]+content=["\']([^"\']*)["\']',
+        rf'<meta[^>]+content=["\']([^"\']*)["\'][^>]+(?:name|property)=["\']{escaped}["\']',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, document, re.IGNORECASE)
+        if match:
+            return html_lib.unescape(match.group(1)).strip()
+    return ''
+
+
+def _blog_category(title, description):
+    haystack = f'{title} {description}'.lower()
+    if any(word in haystack for word in ('va loan', 'veteran', 'irrrl', 'entitlement')):
+        return 'VA loans'
+    if any(word in haystack for word in ('self-employed', '1099', 'bank statement', 'investor')):
+        return 'Self-employed'
+    if any(word in haystack for word in ('market', 'rate buydown', 'builder incentive', 'price reduction')):
+        return 'Market strategy'
+    if any(word in haystack for word in ('homeowner', 'escrow', 'homestead', 'home equity', 'heloc', 'refinanc')):
+        return 'Homeownership'
+    return 'Buying'
+
+
+@app.route('/api/rates', methods=['GET'])
+def mortgage_rates_api():
+    """Expose the existing updater's current market ranges to the redesign."""
+    rates_path = os.path.join(BASE_DIR, 'index.html')
+    rates = {}
+    reviewed = ''
+    try:
+        with open(rates_path, encoding='utf-8') as rates_file:
+            document = rates_file.read()
+        block_match = re.search(
+            r'const\s+MORTGAGE_RATES\s*=\s*\{(.*?)\};',
+            document,
+            re.DOTALL,
+        )
+        if block_match:
+            raw_rates = dict(re.findall(r'["\']([^"\']+)["\']\s*:\s*["\']([^"\']+)["\']', block_match.group(1)))
+            key_map = {
+                'Conventional 30-Year': 'Conventional 30-year',
+                'Conventional 15-Year': 'Conventional 15-year',
+                'FHA 30-Year': 'FHA 30-year',
+                'VA 30-Year': 'VA 30-year',
+                'USDA 30-Year': 'USDA 30-year',
+                'Jumbo 30-Year': 'Jumbo 30-year',
+            }
+            rates = {target: raw_rates[source] for source, target in key_map.items() if source in raw_rates}
+
+        reviewed_match = re.search(r'const\s+RATE_UPDATE_DATE\s*=\s*["\']([^"\']+)["\']', document)
+        reviewed = reviewed_match.group(1).strip() if reviewed_match else ''
+        if not re.search(r'\b20\d{2}\b', reviewed):
+            reviewed = datetime.fromtimestamp(
+                os.path.getmtime(rates_path),
+                tz=timezone.utc,
+            ).strftime('%B %-d, %Y')
+    except Exception as error:
+        app.logger.error(f'Mortgage rate API failed: {error}')
+
+    response = jsonify({'rates': rates, 'reviewed': reviewed})
+    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    return response
+
+
+@app.route('/api/blog', methods=['GET'])
+def blog_archive_api():
+    """Return current article metadata generated by the existing blog workflow."""
+    posts = []
+    sitemap_dates = {}
+    try:
+        sitemap_path = os.path.join(BASE_DIR, 'sitemap.xml')
+        if os.path.isfile(sitemap_path):
+            with open(sitemap_path, encoding='utf-8') as sitemap_file:
+                sitemap_document = sitemap_file.read()
+            for block in re.findall(r'<url>(.*?)</url>', sitemap_document, re.DOTALL):
+                loc_match = re.search(r'<loc>(.*?)</loc>', block, re.DOTALL)
+                date_match = re.search(r'<lastmod>(.*?)</lastmod>', block, re.DOTALL)
+                if loc_match and date_match:
+                    sitemap_dates[loc_match.group(1).strip()] = date_match.group(1).strip()
+
+        blog_dir = os.path.join(BASE_DIR, 'blog_posts')
+        for filename in os.listdir(blog_dir):
+            if not filename.endswith('.html') or filename == 'index.html':
+                continue
+            slug = filename[:-5]
+            path = os.path.join(blog_dir, filename)
+            with open(path, encoding='utf-8') as post_file:
+                document = post_file.read()
+
+            title = _meta_content(document, 'og:title')
+            if not title:
+                title_match = re.search(r'<title>(.*?)</title>', document, re.IGNORECASE | re.DOTALL)
+                title = html_lib.unescape(title_match.group(1)).strip() if title_match else slug.replace('-', ' ').title()
+                title = title.split('|')[0].strip()
+            description = _meta_content(document, 'description')
+            published = _meta_content(document, 'article:published_time')
+            url = f'/blog/{slug}'
+            canonical = f'https://drmortgageusa.com{url}'
+            published = published[:10] or sitemap_dates.get(canonical, '')
+
+            posts.append({
+                'title': title,
+                'description': description,
+                'date': published,
+                'category': _blog_category(title, description),
+                'url': url,
+            })
+    except Exception as error:
+        app.logger.error(f'Blog archive API failed: {error}')
+        return jsonify({'posts': [], 'syncedAt': None, 'source': '/blog'}), 503
+
+    posts.sort(key=lambda post: post.get('date') or '', reverse=True)
+    response = jsonify({
+        'posts': posts,
+        'syncedAt': datetime.now(timezone.utc).isoformat(),
+        'source': '/blog',
+    })
+    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    return response
+
+
+def _dpa_fallback_snapshot():
+    return {
+        'asOf': 'July 10, 2026',
+        'notice': 'Hometown Heroes 2026 is anticipated to become available July 13, 2026.',
+        'source': 'https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/',
+        'groups': [
+            {'id': 'standard-bond', 'label': 'Standard Bond', 'assistance': 'FL Assist $10,000 or FL HLP $12,500', 'fico': '640 minimum program score', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.750%'},
+                {'label': 'Fannie Mae HFA Preferred', 'rate': '7.500%'},
+                {'label': 'Freddie Mac HFA Advantage', 'rate': '7.250%'},
+            ]},
+            {'id': 'standard-tba', 'label': 'Standard TBA', 'assistance': 'FL Assist $10,000 or FL HLP $12,500', 'fico': '640 minimum program score', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '7.125%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'At or below 80% AMI', 'rate': '7.375%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'Over 80% AMI', 'rate': '7.500%'},
+            ]},
+            {'id': 'plus-tba', 'label': 'PLUS TBA', 'assistance': 'Forgivable assistance based on total loan amount', 'fico': '640 minimum program score', 'entries': [
+                {'label': '3% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.250%'},
+                {'label': '4% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.500%'},
+                {'label': '5% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.875%'},
+                {'label': '3% DPA', 'detail': 'Over 80% AMI', 'rate': '7.375%'},
+                {'label': '4% DPA', 'detail': 'Over 80% AMI', 'rate': '7.625%'},
+                {'label': '5% DPA', 'detail': 'Over 80% AMI', 'rate': 'N/A'},
+            ]},
+            {'id': 'heroes-bond', 'label': 'Hometown Heroes Bond', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Expected to open July 13', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.000%'},
+                {'label': 'Fannie Mae HFA Preferred', 'rate': '7.000%'},
+                {'label': 'Freddie Mac HFA Advantage', 'rate': '6.500%'},
+            ]},
+            {'id': 'heroes-tba', 'label': 'Hometown Heroes TBA', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Expected to open July 13', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.375%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'At or below 80% AMI', 'rate': '6.625%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'Over 80% AMI', 'rate': '6.750%'},
+            ]},
+        ],
+    }
+
+
+def _dpa_cell(document, cell_id):
+    match = re.search(
+        rf'data-cell-id=["\']{re.escape(cell_id)}["\'][^>]*>(.*?)</t[dh]>',
+        document,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if not match:
+        return ''
+    value = re.sub(r'<br\s*/?\s*>', ' ', match.group(1), flags=re.IGNORECASE)
+    value = re.sub(r'<[^>]+>', ' ', value)
+    return re.sub(r'\s+', ' ', html_lib.unescape(value)).strip()
+
+
+@app.route('/api/dpa-rates', methods=['GET'])
+def dpa_rates_api():
+    source = 'https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/'
+    snapshot = _dpa_fallback_snapshot()
+    live = False
+    try:
+        source_response = requests.get(source, timeout=12, headers={'User-Agent': 'DRMortgageUSA/2026'})
+        source_response.raise_for_status()
+        document = source_response.text
+        date_match = re.search(
+            r'(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}',
+            _dpa_cell(document, 'A1'),
+        )
+        if not date_match or not _dpa_cell(document, 'G5'):
+            raise ValueError('Official DPA table could not be parsed')
+
+        def cell_rate(cell_id, fallback):
+            rate_match = re.search(r'(?:\d+\.\d+%|n/a)', _dpa_cell(document, cell_id), re.IGNORECASE)
+            return rate_match.group(0) if rate_match else fallback
+
+        cell_groups = [
+            ['G5', 'G6', 'G7'],
+            ['G10', 'G11', 'G12'],
+            ['G15', 'G16', 'G17', 'G18', 'G19', 'G20'],
+            ['G23', 'G24', 'G25'],
+            ['G28', 'G29', 'G30'],
+        ]
+        snapshot['asOf'] = date_match.group(0)
+        snapshot['notice'] = _dpa_cell(document, 'A2') or snapshot['notice']
+        for group, cell_ids in zip(snapshot['groups'], cell_groups):
+            for entry, cell_id in zip(group['entries'], cell_ids):
+                entry['rate'] = cell_rate(cell_id, entry['rate'])
+        live = True
+    except Exception as error:
+        app.logger.warning(f'DPA rate API is using the verified fallback: {error}')
+
+    response = jsonify({
+        'snapshot': snapshot,
+        'live': live,
+        'syncedAt': datetime.now(timezone.utc).isoformat() if live else None,
+    })
+    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    return response
+
+
 @app.route('/<path:path>')
 def serve_static(path):
     if path.startswith('admin') and not is_refiwatch_request():
@@ -1058,6 +1402,10 @@ def serve_static(path):
         response = send_refiwatch_asset(path)
         if response is not None:
             return response
+
+    redesign = send_redesign_page(path)
+    if redesign is not None:
+        return redesign
 
     try:
         abs_path = os.path.join(BASE_DIR, path)
@@ -1097,6 +1445,9 @@ def quiz_submit():
                                       data.get('investor_loan_type', '')) or ''
         event_id = data.get('eventId', '') or data.get('event_id', '') or secrets.token_hex(16)
         source = (data.get('source', 'website') or 'website').strip()
+        email_consent = as_bool(data.get('emailConsent', data.get('email_consent')))
+        call_consent = as_bool(data.get('callConsent', data.get('call_consent')))
+        sms_consent = as_bool(data.get('smsConsent', data.get('sms_consent')))
 
         errors = []
         if email and not is_valid_email(email):
@@ -1119,32 +1470,43 @@ def quiz_submit():
         data['downPayment'] = down_payment
         data['timeline'] = timeline
         data['source'] = source
+        data['eventId'] = event_id
+        data['emailConsent'] = email_consent
+        data['callConsent'] = call_consent
+        data['smsConsent'] = sms_consent
+
+        if PREVIEW_MODE:
+            return jsonify({
+                "success": True,
+                "preview": True,
+                "lead_id": None,
+                "event_id": event_id,
+                "meta_capi": {
+                    "sent": False,
+                    "reason": "preview_mode"
+                },
+            })
 
         conn = get_db_connection()
         cur = conn.cursor()
 
         cur.execute(
             """
-            INSERT INTO leads (first_name, email, phone, segment, price_range, down_payment, 
-                             timeline, credit_score, military_status, property_type, investor_loan_type)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO leads (first_name, email, phone, segment, price_range, down_payment,
+                             timeline, credit_score, military_status, property_type, investor_loan_type,
+                             source, event_id, email_consent, call_consent, sms_consent, payload)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)
             RETURNING id
         """, (first_name, email, phone, segment, price_range, down_payment,
               timeline, credit_score, military_status, property_type,
-              investor_loan_type))
+              investor_loan_type, source, event_id, email_consent,
+              call_consent, sms_consent, json.dumps(data)))
 
         result = cur.fetchone()
         lead_id = result[0] if result else None
 
-        zapier_forwarded = False
-        try:
-            zapier_response = requests.post(ZAPIER_WEBHOOK_URL,
-                                            json=data,
-                                            timeout=10)
-            if zapier_response.status_code == 200:
-                zapier_forwarded = True
-        except Exception as e:
-            print(f"Zapier forward failed: {e}")
+        zapier_result = forward_to_zapier(data)
+        zapier_forwarded = bool(zapier_result.get('sent'))
 
         meta_result = {'sent': False, 'reason': 'not_attempted'}
         try:
@@ -1163,8 +1525,24 @@ def quiz_submit():
             meta_result = {'sent': False, 'reason': str(e)}
             print(f"Meta CAPI forward failed: {e}")
 
-        cur.execute("UPDATE leads SET zapier_forwarded = %s WHERE id = %s",
-                    (zapier_forwarded, lead_id))
+        zapier_error = None if zapier_forwarded else zapier_result.get('reason')
+        cur.execute(
+            """
+            UPDATE leads
+            SET zapier_forwarded = %s,
+                meta_capi_sent = %s,
+                zapier_attempts = COALESCE(zapier_attempts, 0) + 1,
+                zapier_last_error = %s,
+                zapier_last_attempt_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+            """,
+            (
+                zapier_forwarded,
+                bool(meta_result.get('sent')),
+                zapier_error,
+                lead_id,
+            ),
+        )
         conn.commit()
         cur.close()
         conn.close()
@@ -1214,6 +1592,103 @@ def admin_logout():
     """Logout admin"""
     session.pop('admin_logged_in', None)
     return redirect(url_for('admin_login'))
+
+
+@app.route('/admin/integrations')
+@login_required
+def admin_integrations():
+    """Report integration readiness and queued lead counts without secrets."""
+    status = integration_readiness()
+    status['queued_leads'] = None
+    status['queue_error'] = None
+
+    if not PREVIEW_MODE:
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT COUNT(*) FROM leads WHERE zapier_forwarded IS NOT TRUE"
+            )
+            result = cur.fetchone()
+            status['queued_leads'] = result[0] if result else 0
+            cur.close()
+            conn.close()
+        except Exception as error:
+            status['queue_error'] = str(error)[:200]
+
+    return jsonify(status)
+
+
+@app.route('/admin/retry-zapier', methods=['POST'])
+@login_required
+def admin_retry_zapier():
+    """Replay queued website leads after a valid Zapier hook is configured."""
+    if PREVIEW_MODE:
+        return jsonify({'success': False, 'error': 'disabled_in_preview'}), 409
+    if not ZAPIER_WEBHOOK_URL:
+        return jsonify({'success': False, 'error': 'zapier_not_configured'}), 503
+
+    limit = min(max(int(request.args.get('limit', 100)), 1), 500)
+    delivered = 0
+    failed = 0
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT id, payload
+            FROM leads
+            WHERE zapier_forwarded IS NOT TRUE
+              AND payload IS NOT NULL
+            ORDER BY created_at ASC
+            LIMIT %s
+            """,
+            (limit,),
+        )
+        queued = cur.fetchall()
+
+        for lead_id, payload in queued:
+            if isinstance(payload, str):
+                payload = json.loads(payload)
+            result = forward_to_zapier(payload or {})
+            sent = bool(result.get('sent'))
+            delivered += int(sent)
+            failed += int(not sent)
+            cur.execute(
+                """
+                UPDATE leads
+                SET zapier_forwarded = %s,
+                    zapier_attempts = COALESCE(zapier_attempts, 0) + 1,
+                    zapier_last_error = %s,
+                    zapier_last_attempt_at = CURRENT_TIMESTAMP
+                WHERE id = %s
+                """,
+                (
+                    sent,
+                    None if sent else result.get('reason'),
+                    lead_id,
+                ),
+            )
+            conn.commit()
+
+        cur.close()
+        conn.close()
+        result = {
+            'success': failed == 0,
+            'processed': len(queued),
+            'delivered': delivered,
+            'failed': failed,
+        }
+        if request.form.get('return') == 'dashboard':
+            return redirect(url_for(
+                'admin_dashboard',
+                delivery=f'{delivered}-delivered-{failed}-failed',
+            ))
+        return jsonify(result)
+    except Exception as error:
+        app.logger.error(f'Zapier queue replay failed: {error}')
+        return jsonify({'success': False, 'error': 'queue_replay_failed'}), 500
 
 
 @app.route('/admin/delete/<int:lead_id>', methods=['POST'])
@@ -1286,6 +1761,12 @@ def admin_dashboard():
         count_result = cur.fetchone()
         total_leads = count_result[0] if count_result else 0
 
+        cur.execute(
+            "SELECT COUNT(*) FROM leads WHERE zapier_forwarded IS NOT TRUE"
+        )
+        queued_result = cur.fetchone()
+        queued_leads = queued_result[0] if queued_result else 0
+
         cur.execute("SELECT segment, COUNT(*) FROM leads GROUP BY segment")
         segment_counts = dict(cur.fetchall())
 
@@ -1295,6 +1776,9 @@ def admin_dashboard():
         return render_template_string(ADMIN_DASHBOARD_TEMPLATE,
                                       leads=leads,
                                       total_leads=total_leads,
+                                      queued_leads=queued_leads,
+                                      integration_status=integration_readiness(),
+                                      delivery_result=request.args.get('delivery', ''),
                                       segment_counts=segment_counts,
                                       current_segment=segment_filter,
                                       search_query=search)
@@ -1326,7 +1810,7 @@ ADMIN_LOGIN_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Dr.MortgageUSA</title>
+    <title>Admin Login | DR. Mortgage USA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -1345,7 +1829,7 @@ ADMIN_LOGIN_TEMPLATE = '''
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-navy">Admin Login</h1>
-            <p class="text-gray-600 mt-2">Dr.MortgageUSA Lead Dashboard</p>
+            <p class="text-gray-600 mt-2">DR. Mortgage USA Lead Dashboard</p>
         </div>
         
         {% if error %}
@@ -1381,7 +1865,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Dashboard - Dr.MortgageUSA</title>
+    <title>Lead Dashboard | DR. Mortgage USA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -1399,7 +1883,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
 <body class="bg-gray-100 min-h-screen">
     <nav class="bg-navy text-white p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Dr.MortgageUSA <span class="text-gold">Lead Dashboard</span></h1>
+            <h1 class="text-2xl font-bold">DR. Mortgage USA <span class="text-gold">Lead Dashboard</span></h1>
             <div class="flex items-center gap-4">
                 <a href="/" class="hover:text-gold">View Site</a>
                 <a href="/admin/logout" class="bg-gold text-navy px-4 py-2 rounded-lg hover:bg-yellow-500">Logout</a>
@@ -1426,6 +1910,67 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                 <div class="text-gray-600">Investors</div>
             </div>
         </div>
+
+        <section class="bg-white rounded-xl shadow mb-6 p-6">
+            <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
+                <div>
+                    <h2 class="text-xl font-bold text-navy">Integration readiness</h2>
+                    <p class="text-gray-600 text-sm mt-1">Credential values remain hidden. This panel reports configuration state only.</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold {% if queued_leads %}text-amber-600{% else %}text-green-600{% endif %}">{{ queued_leads }}</div>
+                    <div class="text-sm text-gray-600">Leads waiting for Bonzo</div>
+                </div>
+            </div>
+
+            {% if delivery_result %}
+            <div class="bg-blue-50 border border-blue-200 text-blue-900 rounded-lg px-4 py-3 mb-5">
+                Queue replay result: {{ delivery_result.replace('-', ' ') }}
+            </div>
+            {% endif %}
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-5">
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Zapier to Bonzo</div>
+                    <div class="text-sm mt-1 {% if integration_status.zapier_bonzo %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.zapier_bonzo %}Ready{% else %}Waiting for credentials{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Meta Pixel</div>
+                    <div class="text-sm mt-1 {% if integration_status.meta_pixel %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.meta_pixel %}Ready{% else %}Not configured{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Meta CAPI</div>
+                    <div class="text-sm mt-1 {% if integration_status.meta_capi %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.meta_capi %}Ready{% else %}Not configured{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">Google Ads</div>
+                    <div class="text-sm mt-1 {% if integration_status.google_ads %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.google_ads %}Ready{% else %}Not configured{% endif %}
+                    </div>
+                </div>
+                <div class="rounded-lg border p-4">
+                    <div class="font-semibold text-navy">ManyChat</div>
+                    <div class="text-sm mt-1 {% if integration_status.manychat %}text-green-700{% else %}text-amber-700{% endif %}">
+                        {% if integration_status.manychat %}Ready{% else %}Waiting for credentials{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="/admin/retry-zapier?limit=100">
+                <input type="hidden" name="return" value="dashboard">
+                <button type="submit"
+                        class="bg-navy text-white font-bold px-5 py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        {% if not integration_status.zapier_bonzo or not queued_leads %}disabled{% endif %}>
+                    Send queued leads to Bonzo
+                </button>
+            </form>
+        </section>
         
         <div class="bg-white rounded-xl shadow mb-6 p-4">
             <form class="flex flex-wrap gap-4 items-end">
@@ -1587,6 +2132,9 @@ else:
 @app.route('/blog')
 @app.route('/blog/')
 def blog_index():
+    redesign = send_redesign_page('blog')
+    if redesign is not None:
+        return redesign
     return send_from_directory(os.path.join(BASE_DIR, 'blog_posts'), 'index.html')
 
 
@@ -1648,7 +2196,7 @@ def server_error(e):
 def db_migrate():
     """One-time migration endpoint. Creates keyword_leads table."""
     secret = request.args.get('secret') or request.headers.get('X-Webhook-Secret')
-    if secret != MANYCHAT_WEBHOOK_SECRET:
+    if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
         return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
     try:
         conn = get_db_connection()
