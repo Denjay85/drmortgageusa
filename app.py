@@ -1297,37 +1297,48 @@ def blog_archive_api():
     return response
 
 
+DPA_RATE_SOURCE = 'https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/'
+DPA_SECTION_SPECS = (
+    ('heroes-bond', '2026 HOMETOWN HEROES PROGRAM - BOND', (2, 3, 4)),
+    ('heroes-tba', '2026 HOMETOWN HEROES PROGRAM - TBA', (2, 3, 4)),
+    ('standard-bond', 'STANDARD BOND', (2, 3, 4)),
+    ('standard-tba', 'STANDARD TBA', (2, 3, 4)),
+    ('plus-tba', 'PLUS TBA', (2, 3, 4, 5, 6, 7)),
+)
+
+
 def _dpa_fallback_snapshot():
     return {
-        'asOf': 'July 10, 2026',
-        'notice': 'Hometown Heroes 2026 is anticipated to become available July 13, 2026.',
-        'source': 'https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/',
+        'asOf': 'July 15, 2026',
+        'notice': 'Over $45 Million Available in Hometown Heroes 2026 DPA. You may not switch an existing reservation to HTH.',
+        'heroesFunding': 'Over $45 Million Available in Hometown Heroes 2026 DPA',
+        'source': DPA_RATE_SOURCE,
         'groups': [
             {'id': 'standard-bond', 'label': 'Standard Bond', 'assistance': 'FL Assist $10,000 or FL HLP $12,500', 'fico': '640 minimum program score', 'entries': [
-                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.750%'},
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '7.000%'},
                 {'label': 'Fannie Mae HFA Preferred', 'rate': '7.500%'},
                 {'label': 'Freddie Mac HFA Advantage', 'rate': '7.250%'},
             ]},
             {'id': 'standard-tba', 'label': 'Standard TBA', 'assistance': 'FL Assist $10,000 or FL HLP $12,500', 'fico': '640 minimum program score', 'entries': [
                 {'label': 'FHA, VA, or USDA-RD', 'rate': '7.125%'},
-                {'label': 'Freddie Mac HFA Advantage', 'detail': 'At or below 80% AMI', 'rate': '7.375%'},
-                {'label': 'Freddie Mac HFA Advantage', 'detail': 'Over 80% AMI', 'rate': '7.500%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'At or below 80% AMI', 'rate': '7.250%'},
+                {'label': 'Freddie Mac HFA Advantage', 'detail': 'Over 80% AMI', 'rate': '7.375%'},
             ]},
             {'id': 'plus-tba', 'label': 'PLUS TBA', 'assistance': 'Forgivable assistance based on total loan amount', 'fico': '640 minimum program score', 'entries': [
-                {'label': '3% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.250%'},
-                {'label': '4% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.500%'},
-                {'label': '5% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.875%'},
-                {'label': '3% DPA', 'detail': 'Over 80% AMI', 'rate': '7.375%'},
-                {'label': '4% DPA', 'detail': 'Over 80% AMI', 'rate': '7.625%'},
-                {'label': '5% DPA', 'detail': 'Over 80% AMI', 'rate': 'N/A'},
+                {'label': '3% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.125%'},
+                {'label': '4% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.375%'},
+                {'label': '5% DPA', 'detail': 'At or below 80% AMI', 'rate': '7.750%'},
+                {'label': '3% DPA', 'detail': 'Over 80% AMI', 'rate': '7.250%'},
+                {'label': '4% DPA', 'detail': 'Over 80% AMI', 'rate': '7.500%'},
+                {'label': '5% DPA', 'detail': 'Over 80% AMI', 'rate': '7.875%'},
             ]},
-            {'id': 'heroes-bond', 'label': 'Hometown Heroes Bond', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Expected to open July 13', 'entries': [
-                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.000%'},
-                {'label': 'Fannie Mae HFA Preferred', 'rate': '7.000%'},
+            {'id': 'heroes-bond', 'label': 'Hometown Heroes Bond', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Available', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.250%'},
+                {'label': 'Fannie Mae HFA Preferred', 'rate': '6.750%'},
                 {'label': 'Freddie Mac HFA Advantage', 'rate': '6.500%'},
             ]},
-            {'id': 'heroes-tba', 'label': 'Hometown Heroes TBA', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Expected to open July 13', 'entries': [
-                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.375%'},
+            {'id': 'heroes-tba', 'label': 'Hometown Heroes TBA', 'assistance': '5% of the first mortgage, up to $35,000', 'fico': '640 minimum program score', 'status': 'Available', 'entries': [
+                {'label': 'FHA, VA, or USDA-RD', 'rate': '6.500%'},
                 {'label': 'Freddie Mac HFA Advantage', 'detail': 'At or below 80% AMI', 'rate': '6.625%'},
                 {'label': 'Freddie Mac HFA Advantage', 'detail': 'Over 80% AMI', 'rate': '6.750%'},
             ]},
@@ -1335,54 +1346,80 @@ def _dpa_fallback_snapshot():
     }
 
 
-def _dpa_cell(document, cell_id):
-    match = re.search(
-        rf'data-cell-id=["\']{re.escape(cell_id)}["\'][^>]*>(.*?)</t[dh]>',
+def _dpa_cells(document):
+    cells = {}
+    for cell_id, raw_value in re.findall(
+        r'data-cell-id=["\']([A-Z]+\d+)["\'][^>]*>(.*?)</t[dh]>',
         document,
         re.IGNORECASE | re.DOTALL,
-    )
+    ):
+        value = re.sub(r'<br\s*/?\s*>', ' ', raw_value, flags=re.IGNORECASE)
+        value = re.sub(r'<[^>]+>', ' ', value)
+        cells[cell_id.upper()] = re.sub(r'\s+', ' ', html_lib.unescape(value)).strip()
+    return cells
+
+
+def _dpa_cell(cells, cell_id):
+    return cells.get(cell_id.upper(), '')
+
+
+def _dpa_section_row(cells, expected_title):
+    for cell_id, value in cells.items():
+        if not cell_id.startswith('A'):
+            continue
+        if value.upper() == expected_title:
+            match = re.search(r'\d+$', cell_id)
+            if match:
+                return int(match.group(0))
+    raise ValueError(f'Official DPA section not found: {expected_title}')
+
+
+def _dpa_rate(cells, row):
+    value = _dpa_cell(cells, f'G{row}')
+    match = re.search(r'(?:\d+\.\d+%|n/a)', value, re.IGNORECASE)
     if not match:
-        return ''
-    value = re.sub(r'<br\s*/?\s*>', ' ', match.group(1), flags=re.IGNORECASE)
-    value = re.sub(r'<[^>]+>', ' ', value)
-    return re.sub(r'\s+', ' ', html_lib.unescape(value)).strip()
+        raise ValueError(f'Official DPA rate missing from G{row}')
+    return match.group(0).upper()
 
 
 @app.route('/api/dpa-rates', methods=['GET'])
 def dpa_rates_api():
-    source = 'https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/'
     snapshot = _dpa_fallback_snapshot()
     live = False
     try:
-        source_response = requests.get(source, timeout=12, headers={'User-Agent': 'DRMortgageUSA/2026'})
+        source_response = requests.get(DPA_RATE_SOURCE, timeout=20, headers={'User-Agent': 'DRMortgageUSA/2026'})
         source_response.raise_for_status()
-        document = source_response.text
+        cells = _dpa_cells(source_response.text)
         date_match = re.search(
             r'(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}',
-            _dpa_cell(document, 'A1'),
+            _dpa_cell(cells, 'A1'),
         )
-        if not date_match or not _dpa_cell(document, 'G5'):
-            raise ValueError('Official DPA table could not be parsed')
+        if not date_match:
+            raise ValueError('Official DPA rate-sheet date could not be parsed')
 
-        def cell_rate(cell_id, fallback):
-            rate_match = re.search(r'(?:\d+\.\d+%|n/a)', _dpa_cell(document, cell_id), re.IGNORECASE)
-            return rate_match.group(0) if rate_match else fallback
+        groups_by_id = {group['id']: group for group in snapshot['groups']}
+        for group_id, heading, offsets in DPA_SECTION_SPECS:
+            group = groups_by_id[group_id]
+            section_row = _dpa_section_row(cells, heading)
+            rate_rows = [section_row + offset for offset in offsets]
+            if len(rate_rows) != len(group['entries']):
+                raise ValueError(f'Unexpected offering count for {heading}')
+            for entry, rate_row in zip(group['entries'], rate_rows):
+                entry['rate'] = _dpa_rate(cells, rate_row)
+            fico = _dpa_cell(cells, f'D{section_row + 2}')
+            assistance = _dpa_cell(cells, f'E{section_row + 2}')
+            if fico:
+                group['fico'] = f'{fico} minimum program score'
+            if assistance and group_id != 'plus-tba':
+                group['assistance'] = assistance.replace('(Max ', '(max ')
 
-        cell_groups = [
-            ['G5', 'G6', 'G7'],
-            ['G10', 'G11', 'G12'],
-            ['G15', 'G16', 'G17', 'G18', 'G19', 'G20'],
-            ['G23', 'G24', 'G25'],
-            ['G28', 'G29', 'G30'],
-        ]
+        funding_notice = _dpa_cell(cells, 'A2')
         snapshot['asOf'] = date_match.group(0)
-        snapshot['notice'] = _dpa_cell(document, 'A2') or snapshot['notice']
-        for group, cell_ids in zip(snapshot['groups'], cell_groups):
-            for entry, cell_id in zip(group['entries'], cell_ids):
-                entry['rate'] = cell_rate(cell_id, entry['rate'])
+        snapshot['notice'] = funding_notice or snapshot['notice']
+        snapshot['heroesFunding'] = funding_notice or snapshot['heroesFunding']
         live = True
     except Exception as error:
-        app.logger.warning(f'DPA rate API is using the verified fallback: {error}')
+        app.logger.warning(f'DPA rate API is using its last verified fallback: {error}')
 
     response = jsonify({
         'snapshot': snapshot,

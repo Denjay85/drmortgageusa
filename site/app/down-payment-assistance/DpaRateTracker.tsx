@@ -100,6 +100,13 @@ export default function DpaRateTracker() {
         </div>
       </div>
 
+      {snapshot.heroesFunding ? (
+        <div className="dpa-rate-notice dpa-heroes-funding" role="status">
+          <strong>Hometown Heroes funding</strong>
+          <span>{snapshot.heroesFunding}</span>
+        </div>
+      ) : null}
+
       <div className="dpa-rate-notice">
         <strong>Current program note</strong>
         <span>{snapshot.notice}</span>

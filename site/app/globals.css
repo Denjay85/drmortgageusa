@@ -4869,6 +4869,20 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
   padding-top: 28px;
 }
 
+.dpa-heroes-funding {
+  border-color: rgba(242, 184, 75, 0.58);
+  background: linear-gradient(110deg, rgba(242, 184, 75, 0.19), rgba(242, 184, 75, 0.07));
+}
+
+.dpa-heroes-funding strong {
+  color: #ffe09a;
+}
+
+.dpa-heroes-funding span {
+  color: rgba(255, 255, 255, 0.86);
+  font-weight: 700;
+}
+
 .dpa-rate-notice {
   display: flex;
   align-items: center;
