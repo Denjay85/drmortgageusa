@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import HelocCalculator from "./HelocCalculator";
+import CalculatorNumberInput from "../CalculatorNumberInput";
 import { readMortgageScenario } from "../scenario-store";
 import { submitLead } from "../lead-client";
 
@@ -98,12 +99,12 @@ function NumberField({
   return (
     <label className="field studio-field">
       <span>{label}</span>
-      <input
-        type="number"
-        value={Number.isFinite(value) ? value : 0}
+      <CalculatorNumberInput
+        value={value}
         min={min}
         step={step}
-        onChange={(event) => onChange(Number(event.target.value))}
+        inputMode={step < 1 ? "decimal" : "numeric"}
+        onValueChange={onChange}
       />
       {help ? <small>{help}</small> : null}
     </label>

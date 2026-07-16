@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, type CSSProperties } from "react";
+import CalculatorNumberInput from "./CalculatorNumberInput";
 import { saveMortgageScenario, type MortgageGoal } from "./scenario-store";
 
 const money = new Intl.NumberFormat("en-US", {
@@ -108,15 +109,15 @@ export default function MortgageFlightDeck() {
           <div className="flight-number-grid">
             <label className="flight-number-field">
               <span><b>Home / property value</b><small>Enter the purchase price or current value</small></span>
-              <div><i aria-hidden="true">$</i><input aria-label="Home or property value" type="number" min="0" step="1000" inputMode="numeric" value={homePrice} onChange={(event) => setHomePrice(Number(event.target.value))} /></div>
+              <div><i aria-hidden="true">$</i><CalculatorNumberInput aria-label="Home or property value" min="0" step="1000" inputMode="numeric" value={homePrice} onValueChange={setHomePrice} /></div>
             </label>
             <label className="flight-number-field">
               <span><b>{goal === "equity" ? "Equity line / planned draw" : goal === "refinance" ? "Estimated equity position" : "Down payment"}</b><small>{result.downPercent.toFixed(1)}% of the property value</small></span>
-              <div><i aria-hidden="true">$</i><input aria-label={goal === "equity" ? "Equity line or planned draw" : goal === "refinance" ? "Estimated equity position" : "Down payment"} type="number" min="0" step="1000" inputMode="numeric" value={downPayment} onChange={(event) => setDownPayment(Number(event.target.value))} /></div>
+              <div><i aria-hidden="true">$</i><CalculatorNumberInput aria-label={goal === "equity" ? "Equity line or planned draw" : goal === "refinance" ? "Estimated equity position" : "Down payment"} min="0" step="1000" inputMode="numeric" value={downPayment} onValueChange={setDownPayment} /></div>
             </label>
             <label className="flight-number-field">
               <span><b>Interest-rate assumption</b><small>Use any rate you want to model</small></span>
-              <div><input aria-label="Interest rate assumption" type="number" min="0" max="25" step="0.01" inputMode="decimal" value={rate} onChange={(event) => setRate(Number(event.target.value))} /><i aria-hidden="true">%</i></div>
+              <div><CalculatorNumberInput aria-label="Interest rate assumption" min="0" max="25" step="0.01" inputMode="decimal" value={rate} onValueChange={setRate} /><i aria-hidden="true">%</i></div>
             </label>
           </div>
           <div className="flight-actions">

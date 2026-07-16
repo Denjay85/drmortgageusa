@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import CalculatorNumberInput from "../CalculatorNumberInput";
 import { readMortgageScenario } from "../scenario-store";
 
 const money = new Intl.NumberFormat("en-US", {
@@ -63,19 +64,19 @@ export default function HelocCalculator() {
         <div className="field-grid">
           <label className="field">
             <span>Estimated home value</span>
-            <input type="number" min="50000" step="5000" value={homeValue} onChange={(event) => setHomeValue(Number(event.target.value))} />
+            <CalculatorNumberInput min="50000" step="5000" inputMode="numeric" value={homeValue} onValueChange={setHomeValue} />
           </label>
           <label className="field">
             <span>Mortgage balance</span>
-            <input type="number" min="0" step="5000" value={mortgageBalance} onChange={(event) => setMortgageBalance(Number(event.target.value))} />
+            <CalculatorNumberInput min="0" step="5000" inputMode="numeric" value={mortgageBalance} onValueChange={setMortgageBalance} />
           </label>
           <label className="field">
             <span>Requested credit line</span>
-            <input type="number" min="0" step="5000" value={requestedLine} onChange={(event) => setRequestedLine(Number(event.target.value))} />
+            <CalculatorNumberInput min="0" step="5000" inputMode="numeric" value={requestedLine} onValueChange={setRequestedLine} />
           </label>
           <label className="field">
             <span>Planned initial draw</span>
-            <input type="number" min="0" step="5000" value={drawAmount} onChange={(event) => setDrawAmount(Number(event.target.value))} />
+            <CalculatorNumberInput min="0" step="5000" inputMode="numeric" value={drawAmount} onValueChange={setDrawAmount} />
           </label>
         </div>
 
