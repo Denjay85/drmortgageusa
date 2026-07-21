@@ -50,8 +50,8 @@ export default function AboutPage() {
       />
       <PageHero
         eyebrow="Meet Dennis Ross"
-        title="Mortgage guidance shaped by service, social work, and calm under pressure."
-        body="Dennis is a Navy veteran and Florida mortgage broker who helps people understand the decision instead of simply completing the paperwork."
+        title="I built this business to make a heavy decision feel easier to understand."
+        body="I am Dennis Ross, a Navy veteran and Florida mortgage broker. My job is not just to complete paperwork. It is to help you understand the decision you are making."
       >
         <Link className="button button-gold" href="/contact">Talk with Dennis</Link>
         <Link className="button button-outline-light" href="/get-started">Build my plan first</Link>
@@ -77,9 +77,9 @@ export default function AboutPage() {
           <div className="about-copy">
             <p className="eyebrow">The person behind the brand</p>
             <h2>Clear answers matter most when the decision feels heavy.</h2>
-            <p>Dennis served five years on active duty with two combat deployments and continues to serve in the Navy Reserve, totaling fifteen years of military service.</p>
-            <p>After active duty, he earned a master’s degree in social work and built a career helping people navigate major life decisions. He entered the mortgage industry in 2020 with the same mindset: stay disciplined, stay accurate, and help people remain calm when the pressure is real.</p>
-            <p>Today his focus is Florida first-time buyers, veterans, single buyers, self-employed borrowers, and investors who want to understand their choices without being pushed into a generic bank product.</p>
+            <p>I served five years on active duty with two combat deployments and continued in the Navy Reserve, totaling fifteen years of military service.</p>
+            <p>After active duty, I earned a master’s degree in social work and built a career helping people navigate major life decisions. I entered the mortgage industry in 2020 with the same mindset: stay disciplined, stay accurate, and help people remain calm when the pressure is real.</p>
+            <p>Today I work with Florida first-time buyers, move-up buyers, veterans, single buyers, self-employed borrowers, homeowners, and investors who want to understand their choices without being pushed into a generic bank product.</p>
           </div>
         </div>
       </section>
@@ -91,10 +91,10 @@ export default function AboutPage() {
             title="The standard is not “loan closed.” The standard is “I understood the plan.”"
           />
           <div className="content-grid-two values-grid">
-            <article className="info-card"><span>01</span><h3>You see the complete payment.</h3><p>Principal, interest, taxes, insurance, HOA, mortgage insurance, and cash-to-close assumptions are discussed early.</p></article>
-            <article className="info-card"><span>02</span><h3>You compare real options.</h3><p>As a wholesale broker, Dennis can compare multiple lender paths instead of forcing every file into one menu.</p></article>
-            <article className="info-card"><span>03</span><h3>You get plain-language follow-up.</h3><p>The conversation becomes a clear recap with decisions, missing information, and the next action.</p></article>
-            <article className="info-card"><span>04</span><h3>You choose when to move forward.</h3><p>Education can start without a credit check. Sensitive information moves only through the secure application when you are ready.</p></article>
+            <article className="info-card"><span>01</span><h3>You see the complete payment.</h3><p>I bring the loan payment, taxes, insurance, HOA, mortgage insurance, and cash needed into the conversation early.</p></article>
+            <article className="info-card"><span>02</span><h3>You compare real options.</h3><p>As a wholesale broker, I can compare multiple lender paths instead of forcing every borrower into one menu.</p></article>
+            <article className="info-card"><span>03</span><h3>You get a plain-language follow-up.</h3><p>I recap the choices, missing information, and next action so you do not have to remember everything from one call.</p></article>
+            <article className="info-card"><span>04</span><h3>You choose when to move forward.</h3><p>We can start without a credit check. Sensitive information goes through the secure application only when you are ready.</p></article>
           </div>
         </div>
       </section>

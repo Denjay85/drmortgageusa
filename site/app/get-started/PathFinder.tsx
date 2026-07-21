@@ -280,31 +280,31 @@ function recommendation(answers: Answers) {
   if (answers.goal === "refinance") {
     if (answers.currentLoan === "va" && answers.refinanceGoal === "lower-payment") {
       return {
-        title: "VA refinance and IRRRL review",
-        body: "Compare the current VA loan with IRRRL and full-refinance options, including payment benefit, allowable costs, recoupment, seasoning, and how long you expect to keep the property.",
+        title: "Let's see whether a VA streamline refinance would actually help.",
+        body: "Because you have a VA loan and want a lower payment, I would compare an IRRRL with a full refinance. We will look at the savings, costs, required waiting periods, and how long you expect to keep the home before deciding whether it is worth doing.",
         toolHref: "/tools#va-refinance",
         toolLabel: "Run the VA refinance calculator",
       };
     }
     if (answers.currentLoan === "fha" && answers.refinanceGoal === "remove-mi") {
       return {
-        title: "FHA-to-conventional comparison",
-        body: "Review the property value, estimated equity, current FHA mortgage insurance, new closing costs, and break-even point before assuming a conventional refinance is better.",
+        title: "Let's find out whether removing FHA mortgage insurance saves enough.",
+        body: "A conventional refinance may remove monthly mortgage insurance, but the new rate and closing costs still matter. I would compare your estimated equity, current payment, new payment, and the time it takes to recover the cost.",
         toolHref: "/tools#refinance",
         toolLabel: "Compare refinance scenarios",
       };
     }
     if (answers.refinanceGoal === "cash-out") {
       return {
-        title: "Cash-out refinance and equity review",
-        body: "Compare replacing the entire first mortgage with using a second-lien equity product. The right answer depends on the current loan, cash needed, payment change, costs, and ownership horizon.",
+        title: "Let's compare taking cash out with leaving your first mortgage alone.",
+        body: "A cash-out refinance replaces your entire first mortgage. A HELOC or fixed equity loan may not. I would compare the amount you need, your current rate, the new payment, closing costs, and how long you plan to keep the home.",
         toolHref: "/tools#refinance",
         toolLabel: "Model the cash-out refinance",
       };
     }
     return {
-      title: "Refinance break-even review",
-      body: "Build a side-by-side comparison of the current mortgage and proposed loan using payment change, closing costs, recapture time, total interest, and the expected ownership horizon.",
+      title: "Let's see whether refinancing saves enough to be worth the cost.",
+      body: "I would put your current mortgage beside the proposed one and compare the payment change, closing costs, total interest, and how long it takes to recover the cost. A lower rate by itself does not answer the question.",
       toolHref: "/tools#refinance",
       toolLabel: "Run the refinance calculator",
     };
@@ -313,15 +313,15 @@ function recommendation(answers: Answers) {
   if (answers.goal === "equity") {
     if (answers.equityPriority === "preserve-first" || answers.equityPriority === "flexible-draw") {
       return {
-        title: "HELOC and second-lien review",
-        body: "Start by preserving the current first mortgage, then compare a HELOC with a fixed home-equity loan using draw flexibility, variable-rate exposure, payment, fees, and payoff plan.",
+        title: "Let's look at using equity without replacing your first mortgage.",
+        body: "Keeping your current first mortgage sounds important here. I would compare a HELOC with a fixed home-equity loan based on how much you need, whether the payment can change, the fees, and how you plan to pay it back.",
         toolHref: "/heloc-calculator",
         toolLabel: "Open the HELOC calculator",
       };
     }
     return {
-      title: "Complete home-equity comparison",
-      body: "Compare a HELOC, fixed home-equity loan, and cash-out refinance around the amount needed, payment preference, current first mortgage, closing costs, and timing.",
+      title: "Let's compare the three main ways to use your equity.",
+      body: "A HELOC, fixed home-equity loan, and cash-out refinance each behave differently. I would compare them around the amount you need, the payment you prefer, your current first mortgage, closing costs, and timing.",
       toolHref: "/heloc-calculator",
       toolLabel: "Compare the equity paths",
     };
@@ -330,39 +330,39 @@ function recommendation(answers: Answers) {
   if (answers.goal === "purchase") {
     if (answers.financingProfile === "va") {
       return {
-        title: "VA purchase and payment review",
-        body: "Review entitlement, funding-fee status, complete payment, property questions, cash to close, and offer timing before opening the full application.",
+        title: "Let's build a VA purchase plan around your benefit.",
+        body: "Because VA financing matters to you, I would review entitlement, the possible funding fee, your full payment, property questions, cash needed, and offer timing before you open the full application.",
         toolHref: "/tools#va-purchase",
         toolLabel: "Run the VA purchase calculator",
       };
     }
     if (answers.financingProfile === "self-employed") {
       return {
-        title: "Self-employed purchase strategy",
-        body: "Map the income documents, business history, liquidity, and lender paths before choosing a price range or assuming the tax return is the only available route.",
+        title: "Let's find the clearest way to tell your income story.",
+        body: "Your tax return may not be the only path. I would review how your business earns, the documents available, the cash you want to keep, and which lenders are built to understand that picture before choosing a price range.",
         toolHref: "/mortgage-options#specialty",
         toolLabel: "Review specialty loan options",
       };
     }
     if (answers.financingProfile === "assistance") {
       return {
-        title: "Purchase and DPA fit review",
-        body: "Compare eligible assistance with a standard purchase option using the first-mortgage rate, payment, cash to close, income limits, property rules, and repayment terms.",
+        title: "Let's see whether assistance improves the whole purchase plan.",
+        body: "Because help with upfront cash matters to you, I would compare any eligible assistance with a standard low-down-payment option. We will look at the first-mortgage rate, full payment, cash needed, program limits, and repayment rules.",
         toolHref: "/dpa",
         toolLabel: "Explore DPA programs",
       };
     }
     if (answers.purchaseType === "investment" || answers.financingProfile === "investor") {
       return {
-        title: "Investment-property financing strategy",
-        body: "Compare conventional, DSCR, bank-statement, and project-specific options around property cash flow, reserves, down payment, occupancy, and the investment plan.",
+        title: "Let's match the financing to the investment plan.",
+        body: "I would compare conventional, DSCR, bank-statement, and project-specific options based on the property income, reserves, down payment, occupancy, and what you need the investment to accomplish.",
         toolHref: "/tools#dscr",
         toolLabel: "Run the DSCR calculator",
       };
     }
     return {
-      title: "Florida purchase roadmap",
-      body: "Build the comfortable payment, complete cash-to-close estimate, financing paths, and timing plan before shopping at the maximum someone might approve.",
+      title: "Let's build the purchase around a payment you can live with.",
+      body: "I would start with your comfortable monthly payment, then work through the cash needed, loan choices, and timing. That gives you a useful shopping range without treating the maximum approval like a target.",
       toolHref: "/tools#affordability",
       toolLabel: "Check affordability",
     };
@@ -370,34 +370,34 @@ function recommendation(answers: Answers) {
 
   const researchLinks: Record<string, { title: string; body: string; toolHref: string; toolLabel: string }> = {
     refinance: {
-      title: "Refinance learning path",
-      body: "Start with the refinance break-even guide and calculator so rate, payment, closing costs, and ownership horizon stay in the same comparison.",
+      title: "Start by asking whether the refinance is worth the cost.",
+      body: "Use the refinance guide and calculator to compare the rate, payment, closing costs, and how long you expect to keep the home. That is more useful than watching the rate alone.",
       toolHref: "/tools#refinance",
       toolLabel: "Explore refinance numbers",
     },
     equity: {
-      title: "Home-equity learning path",
-      body: "Start with the HELOC comparison, then review how fixed home-equity loans and cash-out refinances change payment, rate risk, and closing costs.",
+      title: "Start by comparing the ways you can use your equity.",
+      body: "The HELOC calculator will give you a starting point. Then compare a flexible line, a fixed equity loan, and a cash-out refinance based on the payment, rate changes, and closing costs.",
       toolHref: "/heloc-calculator",
       toolLabel: "Explore home-equity options",
     },
     investment: {
-      title: "Investor learning path",
-      body: "Start with property cash flow, reserves, down payment, and the difference between conventional, DSCR, and specialty financing.",
+      title: "Start with what the property needs to do for you.",
+      body: "Look at the property cash flow, cash reserves, down payment, and whether conventional, DSCR, or specialty financing fits the investment plan best.",
       toolHref: "/tools#dscr",
       toolLabel: "Explore investor calculators",
     },
     readiness: {
-      title: "Mortgage readiness path",
-      body: "Start with credit, monthly obligations, stable income, available cash, and a comfortable payment before deciding whether an application makes sense.",
+      title: "Start with the pieces you can understand and improve.",
+      body: "Credit, monthly obligations, stable income, available cash, and a comfortable payment all matter. You can learn where you stand before deciding whether an application makes sense.",
       toolHref: "/faq",
       toolLabel: "Read the mortgage FAQ",
     },
   };
 
   return researchLinks[answers.researchFocus || ""] || {
-    title: "Purchase learning path",
-    body: "Start with affordability, complete payment, cash to close, and the differences among conventional, FHA, VA, and assistance options.",
+    title: "Start by learning what the full purchase could cost.",
+    body: "Look at the monthly payment, cash needed, and the differences among conventional, FHA, VA, and assistance options before you worry about choosing a loan.",
     toolHref: "/resources",
     toolLabel: "Browse buyer resources",
   };
@@ -474,7 +474,7 @@ export default function PathFinder() {
     return (
       <section className="path-result" aria-live="polite">
         <span className="result-check" aria-hidden="true">✓</span>
-        <p className="eyebrow">Your focused next conversation</p>
+        <p className="eyebrow">Here is where I would start</p>
         <h1>{result.title}</h1>
         <p className="path-result-lede">{result.body}</p>
         <div className="result-summary">
@@ -482,9 +482,9 @@ export default function PathFinder() {
             <div key={label}><span>{label}</span><strong>{value}</strong></div>
           ))}
         </div>
-        <div className="preview-note">Your answers were sent with your contact preferences so Dennis can review the same scenario you built.</div>
+        <div className="preview-note">I received the answers and contact preferences you selected, so we can pick up from the same place when we talk.</div>
         <div className="hero-actions">
-          <Link className="button button-gold" href="/contact">Book the human review</Link>
+          <Link className="button button-gold" href="/contact">Talk this through with Dennis</Link>
           <Link className="button button-outline-navy" href={result.toolHref}>{result.toolLabel}</Link>
           <a className="button button-navy" href={secureApplicationUrl} target="_blank" rel="noopener noreferrer">Continue to secure application</a>
           <button className="button button-outline-navy" type="button" onClick={startOver}>Start over</button>
@@ -496,19 +496,19 @@ export default function PathFinder() {
   return (
     <section className="path-finder-card" aria-labelledby="path-step-title">
       <div className="path-progress-row">
-        <span>Mortgage path finder</span>
+        <span>Build my mortgage plan</span>
         <strong>{answers.goal ? `Step ${stepIndex + 1} of ${totalSteps}` : "Choose a starting point"}</strong>
       </div>
       <div className="path-progress" aria-hidden="true"><span style={{ width: `${progress}%` }} /></div>
       {answers.goal ? (
         <div className="path-branch-context">
           <span>{goalLabels[answers.goal]} path</span>
-          <small>Questions now adapt to this goal.</small>
+          <small>The next questions are only about this goal.</small>
         </div>
       ) : null}
       <div className="path-question" key={currentStep?.id || "contact"}>
-        <p className="eyebrow">{contactStep ? "Your answers stay in context" : currentStep?.eyebrow}</p>
-        <h1 id="path-step-title">{contactStep ? "Where should Dennis send the plan?" : currentStep?.title}</h1>
+        <p className="eyebrow">{contactStep ? "One last step" : currentStep?.eyebrow}</p>
+        <h1 id="path-step-title">{contactStep ? "Where should I send your starting plan?" : currentStep?.title}</h1>
         {!contactStep && currentStep ? (
           <div className="choice-grid">
             {currentStep.choices.map((choice) => (

@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 const programFamilies = [
-  ["Statewide programs", "Florida Housing programs can combine an eligible first mortgage with assistance. Income, purchase price, education, credit, and first-time-buyer rules can apply."],
-  ["County and city programs", "Local programs may offer forgivable, deferred, or repayable assistance. Funding windows and geographic boundaries matter."],
-  ["Occupation and service paths", "Some programs are shaped around an eligible occupation, military service, or veteran status. The definition and current availability must be verified."],
+  ["Florida programs", "Some statewide programs combine a first mortgage with down payment or closing-cost help. Your income, home price, credit, education, and homeownership history can all affect the answer."],
+  ["County and city programs", "Local programs can be generous, but they may open and close as funding changes. Where you buy matters just as much as how much you earn."],
+  ["Programs tied to work or service", "Some options are built for eligible occupations, military service, or veterans. I will help you confirm what is actually available before you plan around it."],
 ];
 
 export default function DownPaymentAssistancePage() {
@@ -21,33 +21,33 @@ export default function DownPaymentAssistancePage() {
     <PageShell>
       <PageHero
         eyebrow="Down payment assistance"
-        title="Assistance is part of the plan, not a standalone promise."
-        body="See which details determine program fit, understand how assistance can affect the first mortgage, and prepare for a current eligibility review."
+        title="Need help covering the down payment or closing costs?"
+        body="You may have more options than you think. I will help you sort through what may actually work before you get your hopes up or rule yourself out."
       >
-        <Link className="button button-gold" href="#dpa-rates">View today&apos;s DPA rates</Link>
-        <Link className="button button-outline-light" href="#dpa-check">Check the starting factors</Link>
+        <Link className="button button-gold" href="#dpa-rates">See today&apos;s DPA rates</Link>
+        <Link className="button button-outline-light" href="#dpa-check">Have Dennis check my options</Link>
       </PageHero>
 
       <section className="section dpa-intro-section">
         <div className="shell dpa-intro-grid">
           <div>
             <SectionHeading
-              eyebrow="What changes the answer"
-              title="The program name is only the beginning."
-              body="The useful question is not simply whether assistance exists. It is whether a currently funded option fits the location, household, first mortgage, timeline, and full file."
+              eyebrow="You do not have to know the program names"
+              title="Tell me about the home, the household, and the help you need."
+              body="It is my job to sort through the programs. Your job is to give me the basics so I can see which options are funded, which rules matter, and which ones are worth a closer look."
             />
             <ul className="check-list dpa-factor-list">
-              <li>County or city where the home will be purchased</li>
-              <li>Household size and program-specific income calculation</li>
-              <li>First-time homebuyer definition and possible exceptions</li>
-              <li>Credit, debt-to-income ratio, reserves, and approved first mortgage</li>
-              <li>Homebuyer education, funding availability, and closing timeline</li>
+              <li>Where in Florida you plan to buy</li>
+              <li>How many people are in the household and the household income</li>
+              <li>Whether you have owned a home recently</li>
+              <li>Your general credit, monthly obligations, and cash available</li>
+              <li>How soon you want to buy and whether the program is currently funded</li>
             </ul>
           </div>
           <aside className="dpa-reality-card">
-            <p className="eyebrow">Plan the complete cost</p>
-            <h2>Assistance can reduce cash needed upfront, but it may come with a second lien or repayment rules.</h2>
-            <p>Compare the interest rate, total payment, assistance terms, required cash, future sale or refinance impact, and an option without assistance.</p>
+            <p className="eyebrow">The honest comparison</p>
+            <h2>The biggest assistance amount is not always the best deal.</h2>
+            <p>Some programs come with a higher first-mortgage rate, a second lien, or rules about selling and refinancing. I will compare the help you receive with the payment and long-term cost so you can see the full tradeoff.</p>
           </aside>
         </div>
       </section>
@@ -61,9 +61,9 @@ export default function DownPaymentAssistancePage() {
       <section className="section section-cream">
         <div className="shell">
           <SectionHeading
-            eyebrow="Program map"
-            title="Three places to look, followed by one complete comparison."
-            body="These are broad program families, not a list of guaranteed benefits. Details and funding can change."
+            eyebrow="Where the help may come from"
+            title="There is more than one place to look for assistance."
+            body="These are the three main program families I review. None is guaranteed, and funding and rules can change."
           />
           <div className="dpa-program-grid">
             {programFamilies.map(([title, body], index) => (
@@ -80,14 +80,14 @@ export default function DownPaymentAssistancePage() {
       <section className="section anchor-target" id="dpa-check">
         <div className="shell dpa-check-grid">
           <div>
-            <p className="eyebrow">Quick fit check</p>
-            <h2>Start with the details that narrow the search.</h2>
-            <p>This is deliberately shorter than an application. It prepares a useful conversation without pretending that four answers determine approval.</p>
+            <p className="eyebrow">A quick starting point</p>
+            <h2>Give me the basics. I will help you narrow it down.</h2>
+            <p>This is not an application, and it will not determine approval. It simply gives me enough context to start looking in the right places.</p>
           </div>
           <div className="form-card"><DpaCheck /></div>
         </div>
       </section>
-      <FinalCTA title="Compare assistance with a low-down-payment option before you choose." body="Dennis can review the current assistance terms alongside the complete payment and cash-to-close picture." />
+      <FinalCTA title="Do not choose a program based only on the assistance amount." body="I can compare the current program terms with a standard low-down-payment option so you can see which one leaves you in the better position." />
     </PageShell>
   );
 }

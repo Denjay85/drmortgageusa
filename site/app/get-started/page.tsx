@@ -14,10 +14,10 @@ export default function GetStartedPage() {
       <section className="path-page">
         <div className="shell path-page-grid">
           <div className="path-page-copy">
-            <p className="eyebrow">Start small. Share more only when it makes sense.</p>
-            <h2>Know the path before the application.</h2>
-            <p>This is an educational starting point, not a prequalification. It helps Dennis understand the conversation you need without collecting sensitive financial data.</p>
-            <ul className="check-list"><li>No credit check to start</li><li>No SSN, bank data, or document upload</li><li>Separate email, call, and text permissions</li><li>Human review when the question becomes specific</li></ul>
+            <p className="eyebrow">No credit check to start</p>
+            <h2>You do not need to have the loan figured out before we talk.</h2>
+            <p>Tell me what you are trying to do and I will point you toward the conversation that makes sense. This is not a prequalification, and I will not ask for sensitive financial information here.</p>
+            <ul className="check-list"><li>No credit check to start</li><li>No Social Security number, bank data, or document upload</li><li>You choose whether I may email, call, or text</li><li>I can personally review the plan when your question becomes specific</li></ul>
           </div>
           <PathFinder />
         </div>

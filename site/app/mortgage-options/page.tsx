@@ -12,49 +12,49 @@ const options = [
   {
     id: "first-time",
     eyebrow: "Home purchase",
-    title: "Plan the first home or the next one around the complete move.",
-    body: "The right purchase loan is not automatically the one with the smallest down payment. We compare payment, mortgage insurance, closing costs, reserves, seller credits, assistance, current-home equity, and sale timing so the entire plan works.",
+    title: "Buying your first home or moving into the next one?",
+    body: "The loan with the smallest down payment is not automatically the best loan. I will help you compare the monthly payment, cash needed, closing costs, seller credits, assistance options, and the timing of your move so the whole plan works together.",
     pills: ["First home", "Move-up buyer", "Relocation", "FHA", "Conventional", "Florida DPA"],
     bullets: [
-      "A comfortable payment range, not only the maximum approval",
-      "A complete estimate of down payment, closing costs, reserves, and sale proceeds",
-      "Buy-before-sell, contingent-offer, and assistance questions reviewed early",
+      "Choose a payment that fits your life, not just the maximum approval",
+      "See the down payment, closing costs, reserves, and possible sale proceeds together",
+      "Talk through selling first, buying first, or making a contingent offer before you are under pressure",
     ],
   },
   {
     id: "va",
     eyebrow: "VA financing",
-    title: "Use the benefit with a veteran in your corner.",
-    body: "Dennis reviews entitlement, Certificate of Eligibility, funding-fee exemptions, residual income, property issues, taxes, insurance, and offer strategy before you are deep in a contract.",
+    title: "Using your VA benefit should feel like an advantage, not another maze.",
+    body: "I am a veteran too. I will help you understand your entitlement, Certificate of Eligibility, possible funding fee exemption, full monthly payment, property questions, and offer strategy before you are deep in a contract.",
     pills: ["0% down for eligible buyers", "No monthly PMI", "IRRRL", "Repeat use", "VA jumbo"],
     bullets: [
-      "Full or remaining entitlement review",
-      "Orlando condo and property-condition questions",
-      "Payment planning with taxes, insurance, and HOA included",
+      "Find out whether you have full or remaining entitlement",
+      "Catch condo, appraisal, and property-condition questions early",
+      "See the payment with taxes, insurance, and HOA included",
     ],
   },
   {
     id: "specialty",
     eyebrow: "Self-employed & investors",
-    title: "A complex file deserves more than one bank box.",
-    body: "Tax returns do not always tell the whole story. We can compare agency income, bank statements, 1099 income, asset depletion, DSCR, and other specialty paths across multiple wholesale lenders.",
+    title: "Your tax return may not tell the full story of your business.",
+    body: "Being self-employed does not mean you have only one way to qualify. I can compare traditional income, bank statements, 1099 income, assets, DSCR, and other specialty options across multiple wholesale lenders.",
     pills: ["Bank statement", "1099", "DSCR", "Fix & flip", "Asset-based"],
     bullets: [
-      "Review the document path before a credit pull",
-      "Compare rate and flexibility, not just approval",
-      "Keep business and property strategy in the same conversation",
+      "Find out which documents tell your story best before a credit pull",
+      "Compare the cost and flexibility, not just whether one lender says yes",
+      "Keep the business plan and the property plan in the same conversation",
     ],
   },
   {
     id: "equity",
     eyebrow: "Refinance & home equity",
-    title: "Match the tool to the reason you need the money.",
-    body: "A HELOC, fixed home-equity loan, cash-out refinance, or rate-and-term refinance can produce very different costs and risks. Start with your goal, current first mortgage, timeline, and break-even point.",
+    title: "You have equity. The real question is how much of it you should use.",
+    body: "A HELOC, fixed home-equity loan, cash-out refinance, and traditional refinance can solve different problems. I will help you compare them without casually giving up a good first mortgage or taking on a payment that does not fit the goal.",
     pills: ["HELOC", "Home equity loan", "Cash-out refinance", "Rate & term", "VA IRRRL"],
     bullets: [
-      "Keep a strong first mortgage in place when that makes sense",
-      "Compare variable-rate and fixed-payment tradeoffs",
-      "Calculate break-even before changing the loan",
+      "See when keeping your current first mortgage makes sense",
+      "Compare a flexible variable rate with a predictable fixed payment",
+      "Know how long it may take to recover the cost before changing the loan",
     ],
   },
 ];
@@ -64,8 +64,8 @@ export default function MortgageOptionsPage() {
     <PageShell>
       <PageHero
         eyebrow="Mortgage options"
-        title="The best loan is the one that fits the complete picture."
-        body="Credit, income, cash, property, timeline, and monthly comfort all matter. Compare the paths first; apply when the direction is clear."
+        title="You do not need to know the loan name before we start."
+        body="Tell me what you are trying to accomplish. I will help you compare the payment, cash, timing, and tradeoffs so the loan fits the move you are actually making."
       >
         <Link className="button button-gold" href="/get-started">Find my likely path</Link>
         <Link className="button button-outline-light" href="/contact">Talk with Dennis</Link>
@@ -87,15 +87,15 @@ export default function MortgageOptionsPage() {
                 <ul className="check-list">
                   {option.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
                 </ul>
-                <Link className="text-link" href="/get-started">Build a plan for this path <span>→</span></Link>
+                <Link className="text-link" href="/get-started">See what this could look like for me <span>→</span></Link>
               </div>
             </article>
           ))}
         </div>
       </section>
       <FinalCTA
-        title="Unsure which section is yours? That is exactly what the plan is for."
-        body="Answer a few simple questions and see the likely conversation to have next."
+        title="Not sure which option fits? You do not have to decide alone."
+        body="Answer a few simple questions and I will help you narrow down the conversation worth having next."
       />
     </PageShell>
   );

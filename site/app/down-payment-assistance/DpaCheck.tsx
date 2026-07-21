@@ -11,9 +11,9 @@ export default function DpaCheck() {
   if (submitted) {
     return (
       <div className="success-message" role="status">
-        <strong>Your DPA starting factors were sent.</strong>
-        <span>Dennis can now review the county, ownership, income, and household details against current program rules.</span>
-        <button className="button button-navy" type="button" onClick={() => setSubmitted(false)}>Review another scenario</button>
+        <strong>Thanks. I have the basics.</strong>
+        <span>Dennis can now look at the location, ownership history, income, and household details against current program rules.</span>
+        <button className="button button-navy" type="button" onClick={() => setSubmitted(false)}>Check another situation</button>
       </div>
     );
   }
@@ -102,7 +102,7 @@ export default function DpaCheck() {
       <label className="checkbox-field"><input type="checkbox" name="callConsent" /><span>Optional: Dennis may call me about this request.</span></label>
       <label className="checkbox-field"><input type="checkbox" name="smsConsent" /><span>Optional: Dennis may text me about this request. Message and data rates may apply. Reply STOP to opt out.</span></label>
       {error ? <p className="form-error" role="alert">{error} You can also call 850-346-8514.</p> : null}
-      <button className="button button-gold" type="submit" disabled={submitting}>{submitting ? "Sending..." : "Send my DPA starting factors"}</button>
+      <button className="button button-gold" type="submit" disabled={submitting}>{submitting ? "Sending..." : "Have Dennis review my options"}</button>
       <p className="form-note">This is an educational starting review, not a commitment to lend or a determination of eligibility. Consent is not a condition of obtaining services.</p>
     </form>
   );

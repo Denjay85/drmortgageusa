@@ -33,14 +33,14 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.doesNotMatch(html, /Dr\. Mortgage USA/);
   assert.match(html, /Hundreds/);
   assert.doesNotMatch(html, /600\+/);
-  assert.match(html, /Understand the numbers before you make the move/);
+  assert.match(html, /make the mortgage make sense before you make a move/);
   assert.match(html, /class="brand-mark"/);
   assert.match(html, /href="\/blog"/);
   assert.match(html, /href="\/dpa"/);
   assert.match(html, /href="\/dpa" class="nav-dpa">DPA programs/);
   assert.match(html, /href="\/heloc-calculator"/);
   assert.match(html, /Today&#x27;s mortgage rate ranges/);
-  assert.match(html, /Illustrative market snapshot/);
+  assert.match(html, /A quick market snapshot/);
   assert.match(html, /Conventional 15-year/);
   assert.match(html, /Jumbo 30-year/);
   assert.match(html, /Create Rate Watch/);
@@ -54,11 +54,11 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.match(html, /href="\/faq"/);
   assert.match(html, /Choose your conversation/);
   assert.match(html, /Active path/);
-  assert.match(html, /Start with the payment you can live with/);
+  assert.match(html, /start with the payment you can live with/i);
   assert.match(html, /First home, next home, or relocation/);
-  assert.match(html, /Current home and timing/);
-  assert.match(html, /Mortgage flight deck/);
-  assert.match(html, /Move the numbers\. Watch the financing paths reorganize/);
+  assert.match(html, /current home and timing/i);
+  assert.match(html, /Try your numbers/);
+  assert.match(html, /Put in the numbers you know/);
   assert.match(html, /Open the secure application/);
   assert.match(html, /home1st\.my1003app\.com\/2018381\/register/);
   assert.match(html, /aria-label="Home or property value"/);
@@ -68,7 +68,7 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.match(html, /class="client-motion-wall"/);
   assert.equal((html.match(/class="client-motion-tile\b/g) ?? []).length, 16);
   assert.doesNotMatch(html, /Closing\s+\d+/i);
-  assert.match(html, /Three decisions\. One clear path/);
+  assert.match(html, /Start simple\. Build from there/);
   assert.match(html, /class="premium-process"/);
   if (process.env.NEXT_PUBLIC_INDEXABLE === "true") {
     assert.match(html, /name="robots" content="index, follow"/);
@@ -94,8 +94,8 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
 test("renders the blog, DPA, and HELOC destinations", async () => {
   const cases = [
     ["/blog", /Search the library/, /Publishing since February 2026/],
-    ["/dpa", /Today&#x27;s Florida Housing DPA rate snapshot/, /Send my DPA starting factors/],
-    ["/heloc-calculator", /Estimate the line and pressure-test the payment/, /Modeled available line/],
+    ["/dpa", /major assistance programs are pricing today/, /Have Dennis review my options/],
+    ["/heloc-calculator", /How much equity could you use/, /Modeled available line/],
   ];
 
   for (const [path, heading, capability] of cases) {
@@ -121,7 +121,7 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
   const dpaHtml = await dpaResponse.text();
   assert.match(dpaHtml, /Standard Bond/);
   assert.match(dpaHtml, /Hometown Heroes Bond/);
-  assert.match(dpaHtml, /Official source connected|Last verified snapshot/);
+  assert.match(dpaHtml, /Connected to the official source|Last verified program snapshot/);
   assert.match(dpaHtml, /Program lock rates are not ordinary retail rate quotes/);
 });
 
@@ -145,7 +145,7 @@ test("renders the complete ten-calculator mortgage studio", async () => {
     assert.match(html, new RegExp(label));
   }
 
-  assert.match(html, /Compare the complete monthly payment/);
+  assert.match(html, /What could the full monthly payment look like/);
   assert.match(html, /HUD FHA mortgage-insurance structure/);
   assert.match(html, /VA funding-fee chart/);
 });

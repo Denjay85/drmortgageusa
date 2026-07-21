@@ -203,7 +203,7 @@ function ResultPanel({
       <div className="studio-result-radar" aria-hidden="true"><i /><i /><span /></div>
       <div className="result-topline">
         <span>{eyebrow}</span>
-        <small>Educational estimate</small>
+        <small>Your starting estimate</small>
       </div>
       <div className="studio-primary-result">
         <span>{label}</span>
@@ -288,8 +288,8 @@ function PurchaseCalculator() {
   return (
     <ScenarioLayout
       eyebrow="Purchase payment"
-      title="Compare the complete monthly payment."
-      description="Change the financing path and see the fee, mortgage-insurance, and payment assumptions update together."
+      title="What could the full monthly payment look like?"
+      description="Change the home price, down payment, and loan type. The estimate will update the loan payment, property costs, and mortgage insurance together."
       result={<ResultPanel
         eyebrow={`${loanType} purchase scenario`}
         label="Estimated monthly payment"
@@ -303,7 +303,7 @@ function PurchaseCalculator() {
           { label: "Financed upfront fee", value: money.format(result.financedFee) },
           { label: "Modeled total loan", value: money.format(result.totalLoan) },
         ]}
-        note="Loan-program fees and mortgage insurance are modeled from common current assumptions. Use the dedicated FHA and VA calculators for their program-specific inputs."
+        note="This is a useful starting point, not a quote or approval. FHA and VA have their own fees and rules, so use those dedicated calculators when either program matters to you."
       />}
     >
       <NumberField label="Home price" value={homePrice} onChange={setHomePrice} step={5000} min={50000} />
@@ -362,8 +362,8 @@ function AffordabilityCalculator() {
   return (
     <ScenarioLayout
       eyebrow="Affordability"
-      title="Work backward from income and debts."
-      description="Set a target debt-to-income ratio and financing path to estimate the purchase price supported by that monthly housing budget."
+      title="What price range may fit the income and debts you entered?"
+      description="Choose a loan type and a target debt-to-income ratio. The calculator will work backward to estimate a possible housing budget and purchase price."
       result={<ResultPanel
         eyebrow={`${loanType} affordability scenario`}
         label="Modeled home price"
@@ -375,7 +375,7 @@ function AffordabilityCalculator() {
           { label: "Estimated down payment", value: money.format(result.down) },
           { label: "Modeled total DTI", value: `${result.backEndDti.toFixed(1)}%` },
         ]}
-        note="This is a planning ceiling, not an approval or a recommended comfort level. Income treatment, credit, reserves, property, taxes, insurance, and program rules can materially change the result."
+        note="Treat this as a planning ceiling, not a target, approval, or promise. The way income is counted, along with credit, cash reserves, property costs, and program rules, can change the result."
       />}
     >
       <NumberField label="Gross monthly household income" value={income} onChange={setIncome} step={250} />
@@ -432,8 +432,8 @@ function FhaCalculator() {
   return (
     <ScenarioLayout
       eyebrow="FHA purchase"
-      title="See FHA financing as its own scenario."
-      description="The calculator separates the base loan, financed upfront mortgage-insurance premium, annual MIP, and complete monthly payment."
+      title="What does an FHA payment look like with its mortgage insurance included?"
+      description="See the down payment, base loan, upfront mortgage insurance, monthly mortgage insurance, and full estimated payment in one place."
       result={<ResultPanel
         eyebrow="FHA payment scenario"
         label="Estimated monthly payment"
@@ -497,8 +497,8 @@ function RefinanceCalculator() {
   return (
     <ScenarioLayout
       eyebrow="Rate-and-term or cash-out"
-      title="Compare the old loan with the proposed refinance."
-      description="Model a new rate, term, financed costs, and cash out. Then see the payment change, break-even point, and resulting loan-to-value."
+      title="Would the new mortgage improve enough to justify replacing the old one?"
+      description="Enter the new rate, term, costs, and any cash out. Then compare the payment change, the time it takes to recover the cost, and the resulting loan-to-value."
       result={<ResultPanel
         eyebrow="Refinance comparison"
         label={result.monthlySavings >= 0 ? "Estimated monthly savings" : "Estimated monthly increase"}
@@ -512,7 +512,7 @@ function RefinanceCalculator() {
           { label: "Cash out", value: money.format(cashOut) },
           { label: "Financed closing costs", value: money.format(closingCosts) },
         ]}
-        note="A payment comparison is not a complete refinance analysis. Review interest paid over the new term, recapture period, escrow changes, mortgage insurance, taxes, and how long you expect to keep the loan."
+        note="A lower payment does not automatically make a refinance worthwhile. Also compare the interest over the new term, closing costs, escrow changes, mortgage insurance, taxes, and how long you expect to keep the loan."
       />}
     >
       <NumberField label="Estimated property value" value={propertyValue} onChange={setPropertyValue} step={5000} />
@@ -564,8 +564,8 @@ function RentVsBuyCalculator() {
   return (
     <ScenarioLayout
       eyebrow="Rent vs. buy"
-      title="Compare a time horizon, not just two monthly payments."
-      description="Model rent growth, maintenance, appreciation, principal reduction, and selling costs over the years you expect to stay."
+      title="Which choice may leave you in a better position over the years you expect to stay?"
+      description="Compare rent growth, home maintenance, possible appreciation, loan payoff, and selling costs instead of looking at only this month&apos;s payment."
       result={<ResultPanel
         eyebrow={`${horizon}-year comparison`}
         label={result.difference >= 0 ? "Modeled buying advantage" : "Modeled renting advantage"}
@@ -637,8 +637,8 @@ function VaPurchaseCalculator() {
   return (
     <ScenarioLayout
       eyebrow="VA purchase"
-      title="Run the VA benefit as a VA scenario."
-      description="Model zero-down or partial-down financing, first or subsequent use, a potential funding-fee exemption, and the complete payment."
+      title="See the VA payment with the benefit&apos;s actual moving parts included."
+      description="Compare zero down with putting cash down, first use with later use, and a possible funding fee exemption. The full estimated payment updates as you go."
       result={<ResultPanel
         eyebrow="VA purchase scenario"
         label="Estimated monthly payment"
@@ -701,8 +701,8 @@ function VaRefinanceCalculator() {
   return (
     <ScenarioLayout
       eyebrow="VA refinance / IRRRL"
-      title="Separate the streamline from the cash-out scenario."
-      description="Switch between an IRRRL and a VA cash-out refinance to see how the funding-fee assumption, new loan, payment, and recapture period change."
+      title="Compare a VA streamline with a VA cash-out refinance."
+      description="Switch between the two paths to see how the funding fee, new loan amount, payment, and time needed to recover the cost may change."
       result={<ResultPanel
         eyebrow={`${refiType} scenario`}
         label={result.savings >= 0 ? "Estimated monthly savings" : "Estimated monthly increase"}
@@ -767,8 +767,8 @@ function DscrCalculator() {
   return (
     <ScenarioLayout
       eyebrow="DSCR investor"
-      title="Measure rental income against the property payment."
-      description="Model rent, PITIA, operating costs, leverage, and cash flow. See both a rent-to-PITIA ratio and an NOI-style coverage view."
+      title="Does the property income support the property payment?"
+      description="Enter the rent, full property payment, and operating costs. The calculator will show both a lender-style coverage ratio and a practical cash-flow view."
       result={<ResultPanel
         eyebrow="Rental coverage scenario"
         label="Modeled rent-to-PITIA ratio"
@@ -833,8 +833,8 @@ function FixFlipCalculator() {
   return (
     <ScenarioLayout
       eyebrow="Fix & flip"
-      title="Pressure-test the whole project."
-      description="Combine acquisition, rehab, financing, points, carrying costs, selling costs, and after-repair value into one project view."
+      title="Does the project still work after the costs you cannot ignore?"
+      description="Bring the purchase, rehab, financing, points, holding costs, selling costs, and after-repair value into one project estimate."
       result={<ResultPanel
         eyebrow={`${months}-month project scenario`}
         label="Modeled net profit"
@@ -875,9 +875,9 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
   return (
     <section className="studio-optin">
       <div>
-        <p className="eyebrow">Keep the scenario</p>
-        <h2>Save the numbers or ask Dennis to review the assumptions.</h2>
-        <p>Email this {label.toLowerCase()} setup to yourself, or ask Dennis for a one-time review without adding an automatic marketing-text opt-in.</p>
+        <p className="eyebrow">Want a second set of eyes?</p>
+        <h2>Save the numbers or ask me to check the assumptions.</h2>
+        <p>Email this {label.toLowerCase()} setup to yourself. If you want, ask me for a one-time review. This does not automatically opt you into marketing texts.</p>
       </div>
       {!saved ? (
         <form onSubmit={async (event) => {
@@ -908,15 +908,15 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
         }}>
           <label className="field"><span>Email</span><input name="email" type="email" required placeholder="you@example.com" /></label>
           <label className="checkbox-field"><input name="emailConsent" type="checkbox" required /><span>Email this scenario and allow a reply about this request. I acknowledge the Privacy Policy.</span></label>
-          <label className="checkbox-field"><input name="reviewRequested" type="checkbox" /><span>Optional: ask Dennis for a one-time review of this scenario.</span></label>
+          <label className="checkbox-field"><input name="reviewRequested" type="checkbox" /><span>Optional: have Dennis check the assumptions in this scenario.</span></label>
           {error ? <p className="form-error" role="alert">{error}</p> : null}
           <button className="button button-gold" type="submit" disabled={submitting}>{submitting ? "Sending..." : `Save this ${label} scenario`}</button>
           <p className="form-note">Consent is not a condition of obtaining services.</p>
         </form>
       ) : (
         <div className="success-message success-message-dark" role="status">
-          <strong>Your scenario was sent.</strong>
-          <span>The calculator mode, current inputs, and review preference were included.</span>
+          <strong>Your numbers are on the way.</strong>
+          <span>The calculator, the numbers you entered, and your review preference were included.</span>
           <button className="button button-gold" type="button" onClick={() => setSaved(false)}>Save another</button>
         </div>
       )}
@@ -953,10 +953,10 @@ export default function MortgageStudio() {
       <div className="studio-navigation" aria-label="Mortgage calculator choices">
         <div className="studio-navigation-heading">
           <div>
-            <p className="eyebrow">Choose a calculator</p>
-            <h2>Ten financing questions. Ten purpose-built tools.</h2>
+            <p className="eyebrow">What are you trying to figure out?</p>
+            <h2>Ten real mortgage questions. Ten calculators built for the job.</h2>
           </div>
-          <p>Switch scenarios without leaving the studio. Your inputs remain available while that calculator stays open.</p>
+          <p>Choose a question below. You can switch calculators without losing the numbers in the one you are using.</p>
         </div>
         <div className="studio-mode-grid" role="tablist" aria-label="Calculator suite">
           {modes.map((mode, index) => (

@@ -57,8 +57,8 @@ export default function HelocCalculator() {
       <section className="calculator-controls" aria-labelledby="heloc-inputs-title">
         <div className="tool-card-heading">
           <span>Home equity inputs</span>
-          <h2 id="heloc-inputs-title">Model the available line.</h2>
-          <p>Start with an estimated value and current first-mortgage balance.</p>
+          <h2 id="heloc-inputs-title">Start with what the home may be worth and what you still owe.</h2>
+          <p>Then enter the line you want and the amount you expect to use first.</p>
         </div>
 
         <div className="field-grid">
@@ -133,8 +133,8 @@ export default function HelocCalculator() {
         </dl>
 
         <div className="heloc-caution">
-          <strong>Why both payments?</strong>
-          <p>Many HELOCs have a draw period followed by repayment. Rates are commonly variable, so the actual payment can change. Review the note, margin, index, fees, draw period, and repayment terms before deciding.</p>
+          <strong>Why am I showing two payments?</strong>
+          <p>Many HELOCs begin with a draw period and later move into repayment. The rate is commonly variable, so the actual payment can change. Before deciding, review the index, margin, fees, draw period, and repayment terms.</p>
         </div>
       </section>
     </div>
