@@ -30,7 +30,10 @@ export default function LiveRatesPanel() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/rates", { signal: controller.signal })
+    fetch("/api/rates?source=mnd-daily-v2", {
+      signal: controller.signal,
+      cache: "no-store",
+    })
       .then((response) => {
         if (!response.ok) throw new Error("Rate source request failed");
         return response.json() as Promise<RatePayload>;
