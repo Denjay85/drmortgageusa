@@ -39,10 +39,11 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.match(html, /href="\/dpa"/);
   assert.match(html, /href="\/dpa" class="nav-dpa">DPA programs/);
   assert.match(html, /href="\/heloc-calculator"/);
-  assert.match(html, /Today&#x27;s mortgage rate ranges/);
-  assert.match(html, /A quick market snapshot/);
-  assert.match(html, /Conventional 15-year/);
-  assert.match(html, /Jumbo 30-year/);
+  assert.match(html, /Today&#x27;s national mortgage rate index/);
+  assert.match(html, /Checking Mortgage News Daily/);
+  assert.match(html, /Verifying today&#x27;s index/);
+  assert.doesNotMatch(html, /USDA 30-year/);
+  assert.doesNotMatch(html, /6\.65%/);
   assert.match(html, /Create Rate Watch/);
   assert.match(html, /id="rates"/);
   assert.ok(

@@ -14,12 +14,15 @@ import re
 import html as html_lib
 import requests
 import psycopg2
+import time
 from datetime import datetime, timezone
 from urllib.parse import quote
 from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string, Response
 from flask_compress import Compress
 import mimetypes
+
+from update_rates import MND_URL, fetch_mnd_snapshot, snapshot_is_fresh
 
 app = Flask(__name__, static_folder=None)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -1199,44 +1202,84 @@ def _blog_category(title, description):
     return 'Buying'
 
 
+MND_RATE_LABELS = {
+    'conv30': 'Conventional 30-year',
+    'conv15': 'Conventional 15-year',
+    'fha30': 'FHA 30-year',
+    'va30': 'VA 30-year',
+    'jumbo30': 'Jumbo 30-year',
+}
+MND_RATE_CACHE_SECONDS = 900
+_mnd_rate_cache = {'snapshot': None, 'fetched_at': 0.0}
+
+
+def _current_mnd_snapshot():
+    now = time.monotonic()
+    cached = _mnd_rate_cache['snapshot']
+    if (
+        cached
+        and snapshot_is_fresh(cached)
+        and now - _mnd_rate_cache['fetched_at'] < MND_RATE_CACHE_SECONDS
+    ):
+        return cached, True
+
+    try:
+        snapshot = fetch_mnd_snapshot()
+        _mnd_rate_cache['snapshot'] = snapshot
+        _mnd_rate_cache['fetched_at'] = now
+        return snapshot, False
+    except Exception as error:
+        app.logger.error(f'Mortgage News Daily rate fetch failed: {error}')
+        if cached and snapshot_is_fresh(cached):
+            return cached, True
+        return None, False
+
+
 @app.route('/api/rates', methods=['GET'])
 def mortgage_rates_api():
-    """Expose the existing updater's current market ranges to the redesign."""
-    rates_path = os.path.join(BASE_DIR, 'index.html')
-    rates = {}
-    reviewed = ''
-    try:
-        with open(rates_path, encoding='utf-8') as rates_file:
-            document = rates_file.read()
-        block_match = re.search(
-            r'const\s+MORTGAGE_RATES\s*=\s*\{(.*?)\};',
-            document,
-            re.DOTALL,
-        )
-        if block_match:
-            raw_rates = dict(re.findall(r'["\']([^"\']+)["\']\s*:\s*["\']([^"\']+)["\']', block_match.group(1)))
-            key_map = {
-                'Conventional 30-Year': 'Conventional 30-year',
-                'Conventional 15-Year': 'Conventional 15-year',
-                'FHA 30-Year': 'FHA 30-year',
-                'VA 30-Year': 'VA 30-year',
-                'USDA 30-Year': 'USDA 30-year',
-                'Jumbo 30-Year': 'Jumbo 30-year',
-            }
-            rates = {target: raw_rates[source] for source, target in key_map.items() if source in raw_rates}
+    """Return only current values from MND's dated daily-index table."""
+    snapshot, cached = _current_mnd_snapshot()
+    if snapshot:
+        rates = {
+            MND_RATE_LABELS[key]: f'{value}%'
+            for key, value in snapshot['rates'].items()
+            if key in MND_RATE_LABELS
+        }
+        as_of = datetime.strptime(
+            snapshot['as_of'],
+            '%Y-%m-%d',
+        ).strftime('%B %-d, %Y')
+        payload = {
+            'status': 'verified',
+            'verified': True,
+            'cached': cached,
+            'rates': rates,
+            'asOf': as_of,
+            'reviewed': as_of,
+            'source': {
+                'name': 'Mortgage News Daily',
+                'url': MND_URL,
+            },
+        }
+    else:
+        payload = {
+            'status': 'unavailable',
+            'verified': False,
+            'cached': False,
+            'rates': {},
+            'asOf': '',
+            'reviewed': '',
+            'source': {
+                'name': 'Mortgage News Daily',
+                'url': MND_URL,
+            },
+        }
 
-        reviewed_match = re.search(r'const\s+RATE_UPDATE_DATE\s*=\s*["\']([^"\']+)["\']', document)
-        reviewed = reviewed_match.group(1).strip() if reviewed_match else ''
-        if not re.search(r'\b20\d{2}\b', reviewed):
-            reviewed = datetime.fromtimestamp(
-                os.path.getmtime(rates_path),
-                tz=timezone.utc,
-            ).strftime('%B %-d, %Y')
-    except Exception as error:
-        app.logger.error(f'Mortgage rate API failed: {error}')
-
-    response = jsonify({'rates': rates, 'reviewed': reviewed})
-    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    response = jsonify(payload)
+    if snapshot:
+        response.headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=600'
+    else:
+        response.headers['Cache-Control'] = 'no-store'
     return response
 
 
@@ -2122,7 +2165,7 @@ import time as _time
 
 
 def _rate_update_scheduler():
-    from update_rates import fetch_mnd_rates, update_html_rates
+    from update_rates import update_html_rates
     import pytz
     from datetime import datetime as dt
     _time.sleep(30)
@@ -2136,9 +2179,9 @@ def _rate_update_scheduler():
                 print(
                     f"[Auto-Updater] Fetching rates at {now.strftime('%I:%M %p ET')}"
                 )
-                rates = fetch_mnd_rates()
-                if rates:
-                    success = update_html_rates(rates)
+                snapshot = fetch_mnd_snapshot()
+                if snapshot:
+                    success = update_html_rates(snapshot)
                     print(
                         f"[Auto-Updater] Rates {'updated' if success else 'unchanged'}"
                     )

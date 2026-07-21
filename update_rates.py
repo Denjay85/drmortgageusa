@@ -7,65 +7,120 @@ Runs daily at 10am EST via scheduled deployment
 
 import re
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 import pytz
+
+
+MND_URL = "https://www.mortgagenewsdaily.com/mortgage-rates"
+MND_PRODUCT_ROWS = {
+    'conv30': ('/mortgage-rates/30-year-fixed', '30 Yr. Fixed'),
+    'conv15': ('/mortgage-rates/15-year-fixed', '15 Yr. Fixed'),
+    'jumbo30': ('/mortgage-rates/30-year-jumbo', '30 Yr. Jumbo'),
+    'fha30': ('/mortgage-rates/30-year-fha', '30 Yr. FHA'),
+    'va30': ('/mortgage-rates/30-year-va', '30 Yr. VA'),
+}
+
+
+def parse_mnd_snapshot(document):
+    """Parse only the dated Mortgage News Daily daily-index table."""
+    header = re.search(
+        r'<div[^>]+class=["\'][^"\']*last-updated[^"\']*["\'][^>]*>'
+        r'\s*as\s+of\s+(\d{1,2}/\d{1,2}/\d{2,4})\s*</div>\s*'
+        r'<a[^>]+href=["\']/mortgage-rates/mnd["\'][^>]*>'
+        r'\s*Mortgage News Daily\s*</a>',
+        document,
+        re.IGNORECASE,
+    )
+    if not header:
+        raise ValueError('MND daily-index table was not found')
+
+    next_survey = re.search(
+        r'<a[^>]+href=["\']/mortgage-rates/(?:freddie-mac|mba)["\']',
+        document[header.end():],
+        re.IGNORECASE,
+    )
+    block_end = (
+        header.end() + next_survey.start()
+        if next_survey
+        else min(len(document), header.end() + 30000)
+    )
+    daily_table = document[header.end():block_end]
+
+    rates = {}
+    for key, (path, label) in MND_PRODUCT_ROWS.items():
+        row = re.search(
+            rf'<a[^>]+href=["\']{re.escape(path)}["\'][^>]*>'
+            rf'\s*{re.escape(label)}\s*</a>\s*</td>\s*'
+            r'<td[^>]+class=["\'][^"\']*\brate\b[^"\']*["\'][^>]*>'
+            r'\s*(\d{1,2}\.\d{1,3})%\s*</td>',
+            daily_table,
+            re.IGNORECASE,
+        )
+        if not row:
+            raise ValueError(f'MND daily-index row missing for {label}')
+        value = float(row.group(1))
+        if not 2.0 <= value <= 15.0:
+            raise ValueError(f'MND returned an implausible value for {label}')
+        rates[key] = f'{value:.2f}'
+
+    raw_date = header.group(1)
+    date_format = '%m/%d/%Y' if len(raw_date.rsplit('/', 1)[-1]) == 4 else '%m/%d/%y'
+    as_of_date = datetime.strptime(raw_date, date_format).date()
+    return {
+        'rates': rates,
+        'as_of': as_of_date.isoformat(),
+        'source': 'Mortgage News Daily',
+        'source_url': MND_URL,
+    }
+
+
+def snapshot_is_fresh(snapshot, now=None, max_age_days=4):
+    """Allow weekends and holiday gaps, but reject old or future snapshots."""
+    if not snapshot or not snapshot.get('as_of'):
+        return False
+    today = (now or datetime.now(timezone.utc)).date()
+    as_of = datetime.strptime(snapshot['as_of'], '%Y-%m-%d').date()
+    age = (today - as_of).days
+    return -1 <= age <= max_age_days
+
+
+def fetch_mnd_snapshot():
+    """Fetch the current dated daily index directly from MND."""
+    response = requests.get(
+        MND_URL,
+        timeout=20,
+        headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+        },
+    )
+    response.raise_for_status()
+    snapshot = parse_mnd_snapshot(response.text)
+    if not snapshot_is_fresh(snapshot):
+        raise ValueError(f"MND daily index is stale: {snapshot['as_of']}")
+    return snapshot
+
 
 def fetch_mnd_rates():
     """
     Fetch current mortgage rates from MortgageNewsDaily.com
     Returns dict with rate data
     """
-    rates = {}
-    
     try:
-        response = requests.get(
-            "https://www.mortgagenewsdaily.com/mortgage-rates",
-            timeout=20,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.5",
-            }
-        )
-        
-        if response.status_code == 200:
-            content = response.text
-            
-            match = re.search(r'30 Yr\. Fixed.*?(\d+\.\d+)%', content, re.DOTALL)
-            if match:
-                rates['conv30'] = match.group(1)
-                print(f"  30 Yr Fixed: {match.group(1)}%")
-            
-            match = re.search(r'15 Yr\. Fixed.*?(\d+\.\d+)%', content, re.DOTALL)
-            if match:
-                rates['conv15'] = match.group(1)
-                print(f"  15 Yr Fixed: {match.group(1)}%")
-            
-            match = re.search(r'30 Yr\. Jumbo.*?(\d+\.\d+)%', content, re.DOTALL)
-            if match:
-                rates['jumbo30'] = match.group(1)
-                print(f"  30 Yr Jumbo: {match.group(1)}%")
-            
-            match = re.search(r'30 Yr\. FHA.*?(\d+\.\d+)%', content, re.DOTALL)
-            if match:
-                rates['fha30'] = match.group(1)
-                print(f"  30 Yr FHA: {match.group(1)}%")
-            
-            match = re.search(r'30 Yr\. VA.*?(\d+\.\d+)%', content, re.DOTALL)
-            if match:
-                rates['va30'] = match.group(1)
-                print(f"  30 Yr VA: {match.group(1)}%")
-        else:
-            print(f"MND returned status code: {response.status_code}")
-            
+        snapshot = fetch_mnd_snapshot()
+        for key, value in snapshot['rates'].items():
+            print(f"  {key}: {value}%")
+        return snapshot
     except Exception as e:
         print(f"Error fetching from MND: {e}")
-    
-    return rates
+
+    return {}
 
 
-def update_html_rates(rates):
+def update_html_rates(snapshot):
     """Update the mortgage rates in index.html JavaScript object"""
+    rates = snapshot.get('rates', snapshot)
     
     try:
         with open('index.html', 'r', encoding='utf-8') as f:
@@ -74,9 +129,12 @@ def update_html_rates(rates):
         print("Error: index.html not found")
         return False
     
-    est = pytz.timezone('US/Eastern')
-    now = datetime.now(est)
-    date_str = now.strftime("%B %d, %Y")
+    as_of = snapshot.get('as_of')
+    if as_of:
+        date_str = datetime.strptime(as_of, '%Y-%m-%d').strftime('%B %-d, %Y')
+    else:
+        est = pytz.timezone('US/Eastern')
+        date_str = datetime.now(est).strftime("%B %-d, %Y")
     
     updated_count = 0
     
@@ -98,15 +156,6 @@ def update_html_rates(rates):
                 content = new_content
                 updated_count += 1
                 print(f"  Updated {display_name}: {rates[key]}%")
-    
-    if 'conv30' in rates:
-        usda_estimate = str(round(float(rates['conv30']) - 0.47, 2))
-        pattern = r'("USDA 30-Year":\s*")[\d.]+%(")'
-        replacement = rf'\g<1>{usda_estimate}%\2'
-        new_content, count = re.subn(pattern, replacement, content)
-        if count > 0:
-            content = new_content
-            print(f"  Updated USDA 30-Year: {usda_estimate}% (estimated)")
     
     date_pattern = r'const RATE_UPDATE_DATE = "[^"]+";'
     new_date = f'const RATE_UPDATE_DATE = "{date_str}";'
@@ -132,11 +181,11 @@ def main():
     print(f"\nRunning at: {now.strftime('%Y-%m-%d %I:%M %p EST')}")
     
     print("\nFetching rates from MortgageNewsDaily.com...")
-    rates = fetch_mnd_rates()
+    snapshot = fetch_mnd_rates()
     
-    if rates:
-        print(f"\nApplying {len(rates)} rates to website...")
-        success = update_html_rates(rates)
+    if snapshot:
+        print(f"\nApplying {len(snapshot['rates'])} rates to website...")
+        success = update_html_rates(snapshot)
         
         if success:
             print("\n" + "=" * 55)
