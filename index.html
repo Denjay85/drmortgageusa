@@ -3148,25 +3148,21 @@ html, body { max-width: 100%; overflow-x: hidden; }
 
     <script>
 // ============================================
-// MORTGAGE RATE CONFIGURATION - UPDATE WEEKLY
+// MORTGAGE RATE CONFIGURATION - MND DAILY INDEX SNAPSHOT
 // ============================================
-// TO UPDATE RATES:
-// 1. Visit: https://www.mortgagenewsdaily.com/mortgage-rates
-// 2. Update all rates below from the main rate boxes
-// 3. Update the date
-// 4. Save the file - rates will automatically update everywhere on the site
+// The production updater reads only MND's dated daily-index table.
+// Do not derive or estimate product rates that MND does not publish.
 // ============================================
 
 const MORTGAGE_RATES = {
-  "Conventional 30-Year": "6.04%",
-  "Conventional 15-Year": "5.60%",
-  "FHA 30-Year": "5.63%",
-  "VA 30-Year": "5.65%",
-  "USDA 30-Year": "5.57%", // Estimate based on typical USDA rates
-  "Jumbo 30-Year": "6.28%"
+  "Conventional 30-Year": "6.71%",
+  "Conventional 15-Year": "6.18%",
+  "FHA 30-Year": "6.30%",
+  "VA 30-Year": "6.32%",
+  "Jumbo 30-Year": "6.84%"
 };
 
-const RATE_UPDATE_DATE = "Call for today's live pricing";
+const RATE_UPDATE_DATE = "July 20, 2026";
 
 // Rate disclaimer for legal compliance
 const RATE_DISCLAIMER = "Rates shown are general market ranges. Your actual rate depends on your credit score, debt to income ratio, loan to value ratio, loan program, and current market pricing. You may not qualify for the ranges shown. All rates are subject to change without notice until locked with a lender.";

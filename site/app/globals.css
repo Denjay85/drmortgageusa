@@ -6251,7 +6251,7 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
 
 .hero-rate-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
@@ -6310,23 +6310,43 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
   line-height: 1.45;
 }
 
+.hero-rates-heading > div:first-child > span a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: underline;
+  text-decoration-color: rgba(248, 181, 53, 0.5);
+  text-underline-offset: 3px;
+}
+
+.hero-rate-status {
+  min-height: 94px;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(4, 17, 32, 0.28);
+}
+
+.hero-rate-status strong {
+  color: var(--paper);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+}
+
+.hero-rate-status span {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
 @media (max-width: 1080px) {
   .home-hero-grid {
     min-height: 920px;
     padding-bottom: 340px;
   }
 
-  .hero-rate-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .hero-rate-grid > a:nth-child(3) {
-    border-right: 0;
-  }
-
-  .hero-rate-grid > a:nth-child(-n + 3) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
 }
 
 @media (max-width: 850px) {
@@ -6348,6 +6368,24 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
     z-index: 50;
     right: 18px;
     bottom: 94px;
+  }
+
+  .hero-rate-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-rate-grid > a {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-rate-grid > a:nth-child(even) {
+    border-right: 0;
+  }
+
+  .hero-rate-grid > a:last-child {
+    grid-column: 1 / -1;
+    border-right: 0;
+    border-bottom: 0;
   }
 }
 
@@ -6391,6 +6429,10 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
 
   .hero-rate-grid > a:nth-last-child(-n + 2) {
     border-bottom: 0;
+  }
+
+  .hero-rate-grid > a:nth-child(4) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .hero-rate-watch-popover form {

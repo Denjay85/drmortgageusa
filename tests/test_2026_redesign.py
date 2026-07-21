@@ -1,6 +1,7 @@
 import os
 import re
 import unittest
+from datetime import datetime, timezone
 from unittest.mock import Mock, patch
 
 os.environ['ENABLE_RATE_UPDATER'] = '0'
@@ -58,9 +59,26 @@ class RedesignIntegrationTests(unittest.TestCase):
             response.close()
 
     def test_live_data_endpoints_feed_the_redesign(self):
-        rates = self.client.get('/api/rates')
+        snapshot = {
+            'rates': {
+                'conv30': '6.71',
+                'conv15': '6.18',
+                'fha30': '6.30',
+                'va30': '6.32',
+                'jumbo30': '6.84',
+            },
+            'as_of': datetime.now(timezone.utc).date().isoformat(),
+            'source': 'Mortgage News Daily',
+            'source_url': 'https://www.mortgagenewsdaily.com/mortgage-rates',
+        }
+        production_app._mnd_rate_cache.update(snapshot=None, fetched_at=0.0)
+        with patch.object(production_app, 'fetch_mnd_snapshot', return_value=snapshot):
+            rates = self.client.get('/api/rates')
         self.assertEqual(rates.status_code, 200)
-        self.assertIn('Conventional 30-year', rates.get_json()['rates'])
+        rate_payload = rates.get_json()
+        self.assertTrue(rate_payload['verified'])
+        self.assertEqual(rate_payload['rates']['Conventional 30-year'], '6.71%')
+        self.assertNotIn('USDA 30-year', rate_payload['rates'])
 
         blog = self.client.get('/api/blog')
         self.assertEqual(blog.status_code, 200)
@@ -71,6 +89,22 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertEqual(dpa.status_code, 200)
         self.assertFalse(dpa.get_json()['live'])
         self.assertEqual(len(dpa.get_json()['snapshot']['groups']), 5)
+
+    def test_rate_api_never_uses_static_numbers_when_mnd_is_unavailable(self):
+        production_app._mnd_rate_cache.update(snapshot=None, fetched_at=0.0)
+        with patch.object(
+            production_app,
+            'fetch_mnd_snapshot',
+            side_effect=RuntimeError('source unavailable'),
+        ):
+            response = self.client.get('/api/rates')
+
+        payload = response.get_json()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(payload['status'], 'unavailable')
+        self.assertFalse(payload['verified'])
+        self.assertEqual(payload['rates'], {})
+        self.assertEqual(response.headers['Cache-Control'], 'no-store')
 
     def test_lead_submission_preserves_consent_and_tracking_context(self):
         connection = FakeConnection()
