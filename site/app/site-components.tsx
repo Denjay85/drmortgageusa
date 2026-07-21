@@ -202,8 +202,8 @@ export function PageHero({
 }
 
 export function FinalCTA({
-  title = "Know the path before you fill out the application.",
-  body = "Answer a few simple questions and get a clearer next step without a credit check.",
+  title = "You do not need to have the loan figured out before we talk.",
+  body = "Answer a few simple questions and I will help you find a clearer next step. No credit check is needed to start.",
 }: {
   title?: string;
   body?: string;

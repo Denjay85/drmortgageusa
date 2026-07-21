@@ -40,11 +40,11 @@ export default function LiveRatesPanel() {
       <div className="hero-rates-heading">
         <div>
           <p className="hero-rates-title">Today&apos;s mortgage rate ranges</p>
-          <span>Illustrative market snapshot · reviewed {reviewed}</span>
+          <span>A quick market snapshot · reviewed {reviewed}</span>
         </div>
         <div className="hero-rates-actions">
           <Link className="hero-actual-rate" href="/contact">
-            Get my actual rate <span aria-hidden="true">→</span>
+            Check a rate for my situation <span aria-hidden="true">→</span>
           </Link>
           <RateWatchMini />
         </div>
@@ -54,7 +54,7 @@ export default function LiveRatesPanel() {
           <Link href={item.href} key={item.label}>
             <span>{item.label}</span>
             <strong>{item.rate}</strong>
-            <small>Model the payment <b aria-hidden="true">→</b></small>
+            <small>See the payment <b aria-hidden="true">→</b></small>
           </Link>
         ))}
       </div>

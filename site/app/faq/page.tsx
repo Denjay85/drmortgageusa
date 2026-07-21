@@ -15,8 +15,8 @@ export default function FaqPage() {
     <PageShell>
       <PageHero
         eyebrow="Mortgage FAQ"
-        title="The question should get easier before the application gets longer."
-        body="Search practical answers, understand what depends on the actual file, and move to a calculator or conversation only when it helps."
+        title="Ask the question you think you should already know the answer to."
+        body="You are not supposed to know all of this already. Search for a plain-language answer, see what depends on your actual situation, and reach out when the general answer is not enough."
       >
         <Link className="button button-gold" href="#faq-library">Search the answers</Link>
         <Link className="button button-outline-light" href="/contact">Ask Dennis directly</Link>
@@ -27,8 +27,8 @@ export default function FaqPage() {
         </div>
       </section>
       <FinalCTA
-        title="The FAQ can explain the framework. Your numbers determine the path."
-        body="Organize the basics first, then decide whether a human review or secure application makes sense."
+        title="The FAQ can explain the general rule. Your situation gives it meaning."
+        body="If the answer still leaves you wondering what to do, send me the question and I will help you find the right next step."
       />
     </PageShell>
   );

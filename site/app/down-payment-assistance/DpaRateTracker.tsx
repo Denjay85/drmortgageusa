@@ -37,14 +37,14 @@ export default function DpaRateTracker() {
     <div className="dpa-rate-board" data-interaction="dpa-rate-board">
       <div className="dpa-rate-board-heading">
         <div>
-          <p className="eyebrow">Daily program pricing</p>
-          <h2>Today&apos;s Florida Housing DPA rate snapshot.</h2>
-          <p>Compare the first-mortgage lock rates attached to major statewide assistance paths. Then compare the complete payment and assistance terms.</p>
+          <p className="eyebrow">Today&apos;s program pricing</p>
+          <h2>Here is what Florida&apos;s major assistance programs are pricing today.</h2>
+          <p>The assistance gets the attention, but the first-mortgage rate affects the payment. Click through the programs, then let me help you compare the full cost.</p>
         </div>
         <div className="dpa-rate-source-status">
           <span className={live ? "is-live" : ""} aria-hidden="true" />
           <div>
-            <strong>{live ? "Official source connected" : "Last verified snapshot"}</strong>
+            <strong>{live ? "Connected to the official source" : "Last verified program snapshot"}</strong>
             <small>Posted {snapshot.asOf}</small>
           </div>
         </div>
@@ -94,7 +94,7 @@ export default function DpaRateTracker() {
           </div>
 
           <div className="dpa-rate-actions">
-            <Link className="button button-gold button-small" href="#dpa-check">Check my DPA starting factors</Link>
+            <Link className="button button-gold button-small" href="#dpa-check">Have Dennis check my options</Link>
             <a className="button button-outline-light button-small" href={dpaRateSource}>Open official rate source</a>
           </div>
         </div>

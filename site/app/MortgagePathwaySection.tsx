@@ -57,16 +57,16 @@ export default function MortgagePathwaySection() {
         <div className="path-section-heading">
           <div>
             <p className="eyebrow">Start where you are</p>
-            <h2>One website. Four very different mortgage conversations.</h2>
+            <h2>What are you trying to make possible?</h2>
             <p>
-              Choose the situation that sounds most like yours. The questions,
-              tools, and useful next step change with you.
+              Choose the situation that sounds most like yours. I will show you
+              the questions worth asking and the tools that can help you answer them.
             </p>
           </div>
           <aside className="path-section-guide">
-            <span><i /> Interactive strategy map</span>
-            <strong>Choose a path and watch the plan respond.</strong>
-            <small>Move through purchase, VA, complex income, and home equity.</small>
+            <span><i /> Your starting point</span>
+            <strong>Pick a goal and the conversation changes with you.</strong>
+            <small>Explore buying, VA financing, self-employed income, or home equity.</small>
           </aside>
         </div>
 

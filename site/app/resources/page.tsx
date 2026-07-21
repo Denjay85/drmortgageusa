@@ -32,8 +32,8 @@ export default function ResourcesPage() {
     <PageShell>
       <PageHero
         eyebrow="Resources"
-        title="Clear explanations for decisions that are not generic."
-        body="Florida mortgage guidance shaped around the questions that change a payment, an approval, or a contract."
+        title="Start with the mortgage question that is already on your mind."
+        body="I built these guides, calculators, and answers around the Florida mortgage questions that can change a payment, an approval, or a contract."
       >
         <Link className="button button-gold" href="/blog">Search the blog</Link>
         <Link className="button button-outline-light" href="/tools">Open the calculators</Link>
@@ -41,14 +41,14 @@ export default function ResourcesPage() {
       <section className="section section-cream resource-destinations">
         <div className="shell">
           <SectionHeading
-            eyebrow="Start with the format you need"
-            title="Read the answer, run a scenario, or check a program path."
-            body="The homepage answers the first concerns. The searchable depth lives here, where each resource can do one job well."
+            eyebrow="Choose what would help right now"
+            title="Read an answer, run your numbers, or check a program."
+            body="You do not have to read everything. Pick the resource that helps with the decision in front of you."
           />
           <div className="resource-destination-grid">
             <Link href="/blog" className="resource-destination resource-destination-featured">
               <span>Mortgage blog</span>
-              <h2>Search Dennis’s growing library of Florida mortgage answers.</h2>
+              <h2>Search my growing library of Florida mortgage answers.</h2>
               <p>Browse recent VA, FHA, self-employed, homebuying, insurance, equity, and market-strategy articles.</p>
               <strong>Explore the blog →</strong>
             </Link>
@@ -70,8 +70,8 @@ export default function ResourcesPage() {
           <div className="resource-heading-row">
             <SectionHeading
               eyebrow="New on the blog"
-              title="Fresh answers to the questions Florida buyers are asking."
-              body="These articles come directly from the current DR. Mortgage USA publishing archive."
+              title="New answers to questions I am hearing from Florida borrowers."
+              body="These articles come directly from the current DR. Mortgage USA blog archive."
             />
             <Link className="text-link" href="/blog">View the blog library <span>→</span></Link>
           </div>
@@ -93,7 +93,7 @@ export default function ResourcesPage() {
           <SectionHeading
             eyebrow="Guide library"
             title="Start with the question in front of you."
-            body="The complete resource library can connect every guide to its best calculator, related articles, and a clear next step."
+            body="Choose a guide below, then use the related calculator or ask me how it applies to your situation."
           />
           <div className="resource-grid">
             {guides.map(([label, title, body], index) => (

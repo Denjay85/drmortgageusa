@@ -14,8 +14,8 @@ export default function HelocCalculatorPage() {
     <PageShell>
       <PageHero
         eyebrow="HELOC & home equity calculator"
-        title="Estimate the line and pressure-test the payment."
-        body="Explore how value, the existing mortgage, a combined-loan-to-value assumption, the credit line, the draw, and a variable rate work together."
+        title="How much equity could you use, and what might the payment look like?"
+        body="Enter the home value, current mortgage, amount you want to borrow, and an estimated rate. You will see the possible line, starting draw, and two ways the payment could behave."
       >
         <Link className="button button-gold" href="#calculator">Open the HELOC calculator</Link>
         <Link className="button button-outline-light" href="/mortgage-options#equity">Compare equity options</Link>
@@ -23,7 +23,7 @@ export default function HelocCalculatorPage() {
       <section className="section section-cream anchor-target" id="calculator">
         <div className="shell"><HelocCalculator /></div>
       </section>
-      <FinalCTA title="A HELOC can preserve your first mortgage, but that does not automatically make it the best equity option." body="Compare the variable-rate line with a home-equity loan and cash-out refinance using your complete scenario." />
+      <FinalCTA title="A HELOC may let you keep a good first mortgage, but it is not automatically the best choice." body="I can compare the flexible line with a fixed home-equity loan and a cash-out refinance using the amount, payment, and timeline that matter to you." />
     </PageShell>
   );
 }

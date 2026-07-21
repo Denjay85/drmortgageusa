@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Florida Mortgage Guidance",
   alternates: { canonical: "/" },
   description:
-    "Compare Florida mortgage paths, understand your payment, and get a clear next step with Navy veteran and mortgage broker Dennis Ross.",
+    "Get clear, personal Florida mortgage guidance from Navy veteran and mortgage broker Dennis Ross. Compare payments, loan options, and next steps before you apply.",
 };
 
 const organizationSchema = {
@@ -66,11 +66,11 @@ export default function Home() {
               <span>Independent guidance</span>
               <span>Florida · Est. 2020</span>
             </div>
-            <Eyebrow>Florida mortgage guidance · without the runaround</Eyebrow>
-            <h1>Understand the numbers before you make the move.</h1>
+            <Eyebrow>Florida mortgage guidance · straight answers first</Eyebrow>
+            <h1>Let&apos;s make the mortgage make sense before you make a move.</h1>
             <p className="hero-lede">
-              Dennis Ross helps Florida buyers compare mortgage paths, build a
-              realistic payment, and know what comes next before a full application.
+              I&apos;m Dennis Ross. I help Florida buyers and homeowners understand
+              the payment, the cash, and the choices before they commit to a loan.
             </p>
             <div className="hero-actions">
               <Link className="button button-gold" href="/get-started">
@@ -165,17 +165,17 @@ export default function Home() {
       <section className="section section-cream">
         <div className="shell calculator-feature">
           <div className="calculator-copy">
-            <Eyebrow>Start with the payment</Eyebrow>
-            <h2>A comfortable budget is more useful than a maximum approval.</h2>
+            <Eyebrow>Start with your real budget</Eyebrow>
+            <h2>What can you comfortably pay each month?</h2>
             <p>
-              See principal, interest, taxes, insurance, HOA, and estimated
-              mortgage insurance together. Then decide whether the payment fits
-              your actual life.
+              A loan approval tells you what may be possible. It does not tell you
+              what will still feel comfortable after groceries, daycare, travel,
+              savings, and everything else life brings.
             </p>
             <ul className="check-list">
-              <li>Use editable taxes and insurance instead of a generic national average.</li>
-              <li>Compare down-payment choices side by side.</li>
-              <li>Save your scenario or ask Dennis to review it.</li>
+              <li>Put in the taxes and insurance that match the home you are considering.</li>
+              <li>See how different down payments change both your payment and cash needed.</li>
+              <li>Save your numbers, or send them to me and I will help you check the assumptions.</li>
             </ul>
             <div className="calculator-feature-actions">
               <Link className="button button-navy" href="/tools#purchase">Purchase payment</Link>
@@ -209,16 +209,16 @@ export default function Home() {
         <div className="shell story-grid">
           <ClientMotionWall />
           <div className="story-copy">
-            <Eyebrow>Why clients call Dennis</Eyebrow>
+            <Eyebrow>Why people call me</Eyebrow>
             <blockquote>
               “You should understand every number, every tradeoff, and every next
               step before you feel pressured to move.”
             </blockquote>
             <p>
-              Dennis brings the discipline of fifteen years of Navy service and
-              the calm of a trained social worker to a process that can otherwise
-              feel confusing. You get a direct conversation, a plain-language
-              recap, and options shaped around your file.
+              I spent fifteen years serving in the Navy and built my first career
+              in social work. Both taught me how to listen, stay calm, and explain
+              hard decisions clearly. You will get a direct conversation, a
+              plain-language recap, and options built around your actual life.
             </p>
             <div className="story-actions">
               <Link className="text-link" href="/about">Meet Dennis <span>→</span></Link>
@@ -232,8 +232,8 @@ export default function Home() {
         <div className="shell">
           <SectionHeading
             eyebrow="A calmer process"
-            title="From curious to confident in three steps."
-            body="Start small. Share more only when the next step makes sense."
+            title="You do not have to figure it all out before we talk."
+            body="Start with the question on your mind. We will build the next step from there."
             align="center"
           />
           <PremiumProcess />
@@ -245,8 +245,8 @@ export default function Home() {
           <div className="resource-heading-row">
             <SectionHeading
               eyebrow="Useful, not generic"
-              title="The blog turns real questions into useful next steps."
-              body="Dennis is continually publishing Florida-specific answers about VA, FHA, self-employed income, insurance, equity, and the decisions buyers face right now."
+              title="If borrowers keep asking it, I write about it."
+              body="The blog is where I answer the real Florida mortgage questions I hear every week, including VA, FHA, self-employed income, insurance, equity, and what to do next."
             />
             <Link className="text-link" href="/blog">Search the blog <span>→</span></Link>
           </div>
@@ -258,19 +258,18 @@ export default function Home() {
         <div className="shell home-faq-layout">
           <div className="home-faq-intro">
             <Eyebrow>Questions before the call</Eyebrow>
-            <h2>Get the concern out of the way, then decide what deserves a closer look.</h2>
+            <h2>Ask the question you are worried might sound basic.</h2>
             <p>
-              These are the questions most likely to stop a borrower from taking
-              the next step. The full library goes deeper without turning the
-              homepage into a mortgage textbook.
+              You are not supposed to know all of this already. Start with a quick
+              answer here, then reach out if your situation needs a closer look.
             </p>
             <div className="home-faq-actions">
               <Link className="button button-navy" href="/faq">Search every answer</Link>
               <Link className="text-link" href="/contact">Ask Dennis directly <span>→</span></Link>
             </div>
             <div className="home-faq-note">
-              <strong>No blanket promises.</strong>
-              <span>Answers explain the framework and show what still depends on the actual file.</span>
+              <strong>Straight answers, no blanket promises.</strong>
+              <span>I will tell you what is generally true and what still depends on your actual file.</span>
             </div>
           </div>
 
@@ -301,8 +300,8 @@ export default function Home() {
         <div className="shell apply-band-inner">
           <div>
             <Eyebrow>Already know what you need?</Eyebrow>
-            <h2>Move directly to the secure application.</h2>
-            <p>Use this path when you are ready to share income, assets, employment, and credit information.</p>
+            <h2>Ready to skip the planning and apply?</h2>
+            <p>Use the secure application when you are ready to share income, assets, employment, and credit information.</p>
           </div>
           <a className="button button-navy" href={secureApplicationUrl}>Open secure application</a>
         </div>

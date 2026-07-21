@@ -21,29 +21,29 @@ const goals: Array<{ id: MortgageGoal; code: string; label: string; verb: string
 
 const pathCopy: Record<MortgageGoal, Array<{ name: string; fit: string; down: string; score: number }>> = {
   purchase: [
-    { name: "Conventional", fit: "Flexible property and occupancy path", down: "3–5%+", score: 86 },
-    { name: "FHA", fit: "Lower-down-payment comparison", down: "3.5%+", score: 76 },
-    { name: "DPA pairing", fit: "Cash-to-close support review", down: "Varies", score: 64 },
+    { name: "Conventional", fit: "Flexible choice for many buyers", down: "3–5%+", score: 86 },
+    { name: "FHA", fit: "Worth comparing with less cash down", down: "3.5%+", score: 76 },
+    { name: "DPA pairing", fit: "May help with upfront cash", down: "Varies", score: 64 },
   ],
   va: [
-    { name: "VA purchase", fit: "Benefit-first financing path", down: "0% possible", score: 94 },
-    { name: "VA with down payment", fit: "Funding-fee and payment tradeoff", down: "5–10%", score: 73 },
-    { name: "Conventional", fit: "Useful control comparison", down: "3–5%+", score: 49 },
+    { name: "VA purchase", fit: "Use the benefit with no down payment possible", down: "0% possible", score: 94 },
+    { name: "VA with down payment", fit: "See whether cash down improves the numbers", down: "5–10%", score: 73 },
+    { name: "Conventional", fit: "A useful side-by-side comparison", down: "3–5%+", score: 49 },
   ],
   fha: [
-    { name: "FHA", fit: "Low-down-payment baseline", down: "3.5%+", score: 93 },
-    { name: "Conventional", fit: "Compare mortgage insurance", down: "3–5%+", score: 70 },
-    { name: "FHA + DPA", fit: "Layer cash-to-close assistance", down: "Varies", score: 62 },
+    { name: "FHA", fit: "Start with 3.5% down", down: "3.5%+", score: 93 },
+    { name: "Conventional", fit: "Compare the payment and mortgage insurance", down: "3–5%+", score: 70 },
+    { name: "FHA + DPA", fit: "See whether assistance helps the whole plan", down: "Varies", score: 62 },
   ],
   refinance: [
-    { name: "Rate and term", fit: "Payment and break-even analysis", down: "Equity based", score: 88 },
-    { name: "Cash out", fit: "Liquidity versus new payment", down: "Equity based", score: 67 },
-    { name: "HELOC", fit: "Protect the first mortgage", down: "Equity based", score: 58 },
+    { name: "Rate and term", fit: "See whether the savings justify the cost", down: "Equity based", score: 88 },
+    { name: "Cash out", fit: "Compare the cash received with the new payment", down: "Equity based", score: 67 },
+    { name: "HELOC", fit: "Keep the first mortgage in place", down: "Equity based", score: 58 },
   ],
   equity: [
-    { name: "HELOC", fit: "Flexible draw and repayment", down: "Equity based", score: 91 },
-    { name: "Fixed equity loan", fit: "Predictable installment option", down: "Equity based", score: 72 },
-    { name: "Cash-out refinance", fit: "One-loan comparison", down: "Equity based", score: 55 },
+    { name: "HELOC", fit: "Borrow what you need, when you need it", down: "Equity based", score: 91 },
+    { name: "Fixed equity loan", fit: "Choose a predictable payment", down: "Equity based", score: 72 },
+    { name: "Cash-out refinance", fit: "Replace everything with one new loan", down: "Equity based", score: 55 },
   ],
 };
 
@@ -89,10 +89,10 @@ export default function MortgageFlightDeck() {
       <div className="flight-deck-grid" aria-hidden="true" />
       <div className="flight-deck-heading">
         <div>
-          <p className="eyebrow">Mortgage flight deck · live scenario</p>
-          <h2 id="flight-deck-title">Move the numbers. Watch the financing paths reorganize.</h2>
+          <p className="eyebrow">Try your numbers · see what changes</p>
+          <h2 id="flight-deck-title">Put in the numbers you know. We will help with the rest.</h2>
         </div>
-        <p>This is an educational planning model, not a quote or approval. It is designed to make the tradeoffs visible before a full application.</p>
+        <p>Use this as a starting point, not a quote or approval. Change the price, cash, and rate to see how the monthly payment and possible loan paths respond.</p>
       </div>
 
       <div className="flight-goals" role="tablist" aria-label="Choose a mortgage goal">
@@ -105,7 +105,7 @@ export default function MortgageFlightDeck() {
 
       <div className="flight-instrument-panel">
         <div className="flight-controls">
-          <div className="flight-status"><span className="flight-live-dot" /> LIVE MODEL <b>{activeGoal.verb}</b></div>
+          <div className="flight-status"><span className="flight-live-dot" /> YOUR LIVE ESTIMATE <b>{activeGoal.verb}</b></div>
           <div className="flight-number-grid">
             <label className="flight-number-field">
               <span><b>Home / property value</b><small>Enter the purchase price or current value</small></span>
@@ -128,21 +128,21 @@ export default function MortgageFlightDeck() {
 
         <div className="flight-result" aria-live="polite">
           <div className="flight-radar" aria-hidden="true"><i /><i /><i /><span /></div>
-          <p>{goal === "equity" ? "Illustrative interest-only payment" : "Complete modeled payment"}</p>
+          <p>{goal === "equity" ? "Estimated starting payment" : "Estimated total monthly payment"}</p>
           <strong key={Math.round(result.total)}>{money.format(result.total)}</strong>
-          <small>{goal === "equity" ? "per month on the modeled initial draw · variable-rate risk applies" : "per month · principal, interest, estimated taxes, insurance and modeled MI"}</small>
+          <small>{goal === "equity" ? "per month on the amount entered · the rate and payment can change" : "per month including principal, interest, estimated taxes, insurance, and mortgage insurance when applicable"}</small>
           <div className="flight-payment-stack" aria-label="Payment composition">
             <span style={{ width: `${result.total ? result.principalInterest / result.total * 100 : 0}%` }} />
             <span style={{ width: `${result.total ? result.taxes / result.total * 100 : 0}%` }} />
             <span style={{ width: `${result.total ? result.insurance / result.total * 100 : 0}%` }} />
             <span style={{ width: `${result.total ? result.mortgageInsurance / result.total * 100 : 0}%` }} />
           </div>
-          <div className="flight-legend"><span>P&amp;I {money.format(result.principalInterest)}</span><span>Taxes {money.format(result.taxes)}</span><span>Insurance {money.format(result.insurance)}</span><span>MI / fee {money.format(result.mortgageInsurance)}</span></div>
+          <div className="flight-legend"><span>Loan payment {money.format(result.principalInterest)}</span><span>Taxes {money.format(result.taxes)}</span><span>Insurance {money.format(result.insurance)}</span><span>Mortgage insurance or fee {money.format(result.mortgageInsurance)}</span></div>
         </div>
       </div>
 
       <div className="flight-paths">
-        <div className="flight-paths-intro"><span>Comparison stage</span><strong>Paths responding to your goal</strong><small>“Fit signal” is an interface guide, not underwriting or a recommendation.</small></div>
+        <div className="flight-paths-intro"><span>Options worth comparing</span><strong>How different paths may fit your goal</strong><small>The bars are a visual comparison, not underwriting, approval, or a recommendation.</small></div>
         {pathCopy[goal].map((path, index) => (
           <article style={{ "--path-score": `${path.score}%`, "--path-delay": `${index * 90}ms` } as CSSProperties} key={`${goal}-${path.name}`}>
             <div><span>0{index + 1}</span><strong>{path.name}</strong><small>{path.fit}</small></div>

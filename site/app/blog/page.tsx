@@ -16,7 +16,7 @@ export default function BlogPage() {
       <PageHero
         eyebrow="The DR. Mortgage USA blog"
         title="Start with the question already on your mind."
-        body="Plain-language mortgage answers for Florida buyers, veterans, homeowners, and self-employed borrowers, organized so the useful article is easier to find."
+        body="I write about the real questions Florida buyers, veterans, homeowners, and self-employed borrowers bring to me. Search the library the same way you would ask the question."
       >
         <a className="button button-gold" href="#blog-library">Browse the complete archive</a>
         <Link className="button button-outline-light" href="/tools">Run the numbers</Link>
@@ -27,7 +27,7 @@ export default function BlogPage() {
           <SectionHeading
             eyebrow="Live mortgage library"
             title="Browse by topic or search the way you would ask the question."
-            body="The library connects to the current DR. Mortgage USA blog and keeps a complete local fallback, so every article since February remains visible."
+            body="Every article I have published since February is here, including the newest posts from the live DR. Mortgage USA blog."
           />
           <BlogLibrary initialPosts={blogPosts} />
         </div>

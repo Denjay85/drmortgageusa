@@ -7,29 +7,29 @@ const steps = [
   {
     id: "goal",
     number: "01",
-    tab: "Set the goal",
-    eyebrow: "Your starting point",
-    title: "Tell us what you are trying to make possible.",
-    body: "Buying your first home, moving up, relocating, refinancing, or using equity all start with a different set of useful questions.",
+    tab: "Tell me the goal",
+    eyebrow: "Start with what you know",
+    title: "Tell me what you are trying to do, even if the plan is still fuzzy.",
+    body: "First home, next home, refinance, or home equity, each conversation starts differently. A few quick answers help us start in the right place.",
     detail: "About 60 seconds",
   },
   {
     id: "plan",
     number: "02",
-    tab: "Build the plan",
-    eyebrow: "The working model",
-    title: "Watch the numbers organize into a real mortgage path.",
-    body: "Payment, cash to close, loan structure, assistance, documents, and timing come together in one readable working plan.",
-    detail: "Complete payment view",
+    tab: "See the numbers",
+    eyebrow: "Make the tradeoffs visible",
+    title: "See what the payment and upfront cash could really look like.",
+    body: "We will bring the payment, cash needed, possible assistance, documents, and timing into one view you can actually use.",
+    detail: "Your numbers in one place",
   },
   {
     id: "choice",
     number: "03",
-    tab: "Choose the move",
-    eyebrow: "Your decision",
-    title: "Move forward only when the tradeoffs make sense.",
-    body: "Save the scenario, ask Dennis to review it, or continue securely when the direction is clear. The application is not the first conversation.",
-    detail: "Human review available",
+    tab: "Decide what is next",
+    eyebrow: "No pressure to apply",
+    title: "Move forward when the numbers make sense to you.",
+    body: "Save the scenario, ask me to review it, or open the secure application when you are ready. You do not have to apply just to ask a question.",
+    detail: "Dennis can review it with you",
   },
 ];
 
@@ -48,7 +48,7 @@ export default function PremiumProcess() {
   return (
     <div className="premium-process" data-interaction="premium-process">
       <div className="premium-process-tabs" role="tablist" aria-label="Mortgage planning steps">
-        <p>Three decisions. One clear path.</p>
+        <p>Start simple. Build from there.</p>
         {steps.map((step, index) => (
           <button
             type="button"
