@@ -5,9 +5,22 @@ import { FinalCTA, PageHero, PageShell, SectionHeading } from "../site-component
 import { dennisProfilePageSchema } from "../entity-schema";
 
 export const metadata: Metadata = {
-  title: "Meet Dennis Ross",
+  title: { absolute: "Dennis Ross, NMLS 2018381 | Orlando VA Mortgage Broker" },
   alternates: { canonical: "/about" },
-  description: "Meet Dennis Ross, Navy veteran, Florida mortgage broker, and the person behind DR. Mortgage USA.",
+  description: "Dennis Ross is a Navy veteran and Florida mortgage broker serving Greater Orlando with VA home loan guidance. Verify NMLS 2018381 and DR. Mortgage USA.",
+  openGraph: {
+    title: "Dennis Ross, NMLS 2018381 | DR. Mortgage USA",
+    description: "Navy veteran and Florida mortgage broker serving Greater Orlando with VA home loan guidance.",
+    url: "/about",
+    type: "profile",
+    firstName: "Dennis",
+    lastName: "Ross",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dennis Ross, NMLS 2018381 | DR. Mortgage USA",
+    description: "Navy veteran and Florida mortgage broker serving Greater Orlando with VA home loan guidance.",
+  },
 };
 
 export default function AboutPage() {
@@ -19,8 +32,8 @@ export default function AboutPage() {
       />
       <PageHero
         eyebrow="Meet Dennis Ross"
-        title="I built this business to make a heavy decision feel easier to understand."
-        body="I am Dennis Ross, a Navy veteran and Florida mortgage broker. My job is not just to complete paperwork. It is to help you understand the decision you are making."
+        title="Dennis Ross: Navy veteran and Greater Orlando mortgage broker."
+        body="I am Dennis Ross, NMLS #2018381, the person behind DR. Mortgage USA. I help veterans, service members, military families, and Florida homebuyers understand VA and other mortgage choices with clear numbers before they apply."
       >
         <Link className="button button-gold" href="/contact">Talk with Dennis</Link>
         <Link className="button button-outline-light" href="/get-started">Build my plan first</Link>
@@ -49,6 +62,8 @@ export default function AboutPage() {
             <p>I served five years on active duty with two combat deployments and continued in the Navy Reserve, totaling fifteen years of military service.</p>
             <p>After active duty, I earned a master’s degree in social work and built a career helping people navigate major life decisions. I entered the mortgage industry in 2020 with the same mindset: stay disciplined, stay accurate, and help people remain calm when the pressure is real.</p>
             <p>Today I work with Florida first-time buyers, move-up buyers, veterans, single buyers, self-employed borrowers, homeowners, and investors who want to understand their choices without being pushed into a generic bank product.</p>
+            <p>For veterans, active-duty service members, and eligible military families, I provide <Link href="/va-loans-orlando">VA home loan guidance across Greater Orlando</Link>, including Orlando, Lake Mary, Sanford, Winter Park, Altamonte Springs, and Oviedo.</p>
+            <p>Verify my professional identity through <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">NMLS Consumer Access</a>, my <a href="https://myhome1st.com/dennis/">official Home 1st Lending profile</a>, and my <a href="https://www.google.com/maps?cid=3829412552217676351">Google Business Profile</a>.</p>
           </div>
         </div>
       </section>
