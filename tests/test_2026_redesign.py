@@ -60,6 +60,21 @@ class RedesignIntegrationTests(unittest.TestCase):
                 self.assertNotIn(chr(8212), response.get_data(as_text=True), route)
             response.close()
 
+    def test_public_pages_do_not_publish_the_unrelated_plains_commerce_nmls(self):
+        sitemap_response = self.client.get('/sitemap.xml')
+        sitemap = sitemap_response.get_data(as_text=True)
+        sitemap_response.close()
+        routes = [
+            re.sub(r'^https://drmortgageusa\.com', '', value) or '/'
+            for value in re.findall(r'<loc>(.*?)</loc>', sitemap)
+        ]
+
+        for route in routes:
+            response = self.client.get(route)
+            body = response.get_data(as_text=True)
+            self.assertNotIn('463950', body, route)
+            response.close()
+
     def test_live_data_endpoints_feed_the_redesign(self):
         snapshot = {
             'rates': {
