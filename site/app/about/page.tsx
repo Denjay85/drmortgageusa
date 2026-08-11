@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { FinalCTA, PageHero, PageShell, SectionHeading } from "../site-components";
+import { dennisProfilePageSchema } from "../entity-schema";
 
 export const metadata: Metadata = {
   title: "Meet Dennis Ross",
@@ -9,49 +10,12 @@ export const metadata: Metadata = {
   description: "Meet Dennis Ross, Navy veteran, Florida mortgage broker, and the person behind DR. Mortgage USA.",
 };
 
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": "https://drmortgageusa.com/about#dennis-ross",
-  name: "Dennis Ross",
-  url: "https://drmortgageusa.com/about",
-  image: "https://drmortgageusa.com/media/dennis.webp",
-  jobTitle: "Mortgage Loan Originator and Mortgage Broker",
-  telephone: "+1-850-346-8514",
-  worksFor: {
-    "@id": "https://drmortgageusa.com/#organization",
-  },
-  memberOf: {
-    "@type": "Organization",
-    name: "Home 1st Lending, LLC",
-  },
-  identifier: {
-    "@type": "PropertyValue",
-    propertyID: "NMLS",
-    value: "2018381",
-  },
-  sameAs: [
-    "https://www.instagram.com/dr.mortgageusa/",
-    "https://www.facebook.com/DrMortgageUSA",
-    "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
-    "https://myhome1st.com/meet-our-team/",
-  ],
-  knowsAbout: [
-    "Florida mortgages",
-    "VA home loans in Orlando",
-    "FHA loans",
-    "Down payment assistance",
-    "Self-employed mortgage lending",
-    "Home equity financing",
-  ],
-};
-
 export default function AboutPage() {
   return (
     <PageShell>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dennisProfilePageSchema) }}
       />
       <PageHero
         eyebrow="Meet Dennis Ross"

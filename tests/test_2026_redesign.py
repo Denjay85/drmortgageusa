@@ -1,7 +1,9 @@
 import os
+import json
 import re
 import unittest
 from datetime import datetime, timezone
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 os.environ['ENABLE_RATE_UPDATER'] = '0'
@@ -194,6 +196,95 @@ class RedesignIntegrationTests(unittest.TestCase):
         )
         self.assertTrue(response.content_type.startswith('text/plain'))
         response.close()
+
+    def test_blog_posts_link_dennis_to_his_canonical_profile(self):
+        blog_directory = Path(production_app.BASE_DIR) / 'blog_posts'
+        blog_post_count = 0
+
+        for blog_path in blog_directory.glob('*.html'):
+            html = blog_path.read_text(encoding='utf-8')
+            for raw_schema in re.findall(
+                r'<script\s+type="application/ld\+json">\s*({.*?})\s*</script>',
+                html,
+                flags=re.DOTALL,
+            ):
+                schema = json.loads(raw_schema)
+                if schema.get('@type') != 'BlogPosting':
+                    continue
+
+                blog_post_count += 1
+                self.assertEqual(
+                    schema['author']['@id'],
+                    'https://drmortgageusa.com/about#dennis-ross',
+                    blog_path.name,
+                )
+                self.assertEqual(
+                    schema['author']['identifier']['value'],
+                    '2018381',
+                    blog_path.name,
+                )
+                self.assertEqual(
+                    schema['publisher']['@id'],
+                    'https://drmortgageusa.com/#organization',
+                    blog_path.name,
+                )
+                self.assertEqual(
+                    schema['mainEntityOfPage']['@id'],
+                    schema['url'],
+                    blog_path.name,
+                )
+
+        self.assertGreaterEqual(blog_post_count, 50)
+
+    def test_service_pages_share_the_canonical_business_entity(self):
+        for route in (
+            '/va-loans-orlando',
+            '/orlando-mortgage-broker',
+            '/first-time-homebuyer-orlando',
+            '/refinance-florida',
+            '/heloc-orlando',
+        ):
+            response = self.client.get(route)
+            html = response.get_data(as_text=True)
+            raw_schema = re.search(
+                r'<script\s+type="application/ld\+json">\s*({.*?})\s*</script>',
+                html,
+                flags=re.DOTALL,
+            )
+            self.assertIsNotNone(raw_schema, route)
+            schema = json.loads(raw_schema.group(1))
+            service = next(
+                entity for entity in schema['@graph']
+                if entity.get('@id', '').endswith('#service')
+            )
+            self.assertEqual(service['@type'], 'Service', route)
+            self.assertEqual(
+                service['provider']['@id'],
+                'https://drmortgageusa.com/#organization',
+                route,
+            )
+            self.assertEqual(
+                service['provider']['founder']['@id'],
+                'https://drmortgageusa.com/about#dennis-ross',
+                route,
+            )
+            dennis_entities = [
+                entity for entity in schema['@graph']
+                if entity.get('@id') == 'https://drmortgageusa.com/about#dennis-ross'
+            ]
+            for dennis in dennis_entities:
+                self.assertEqual(
+                    dennis['worksFor']['@id'],
+                    'https://myhome1st.com/#organization',
+                    route,
+                )
+                self.assertIn('https://myhome1st.com/dennis/', dennis['sameAs'], route)
+                self.assertIn(
+                    'https://www.google.com/maps?cid=3829412552217676351',
+                    dennis['sameAs'],
+                    route,
+                )
+            response.close()
 
     def test_missing_zapier_configuration_queues_the_lead(self):
         connection = FakeConnection()

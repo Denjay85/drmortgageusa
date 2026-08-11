@@ -16,6 +16,7 @@ import MortgageFlightDeck from "./MortgageFlightDeck";
 import ClientMotionWall from "./ClientMotionWall";
 import PremiumProcess from "./PremiumProcess";
 import MortgagePathwaySection from "./MortgagePathwaySection";
+import { homepageEntitySchema } from "./entity-schema";
 
 export const metadata: Metadata = {
   title: "Orlando VA Loan and Florida Mortgage Broker",
@@ -24,64 +25,12 @@ export const metadata: Metadata = {
     "Dennis Ross, NMLS #2018381, is an Orlando-based Navy veteran and Florida mortgage broker helping veterans, buyers, and homeowners compare clear mortgage options.",
 };
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": "https://drmortgageusa.com/#organization",
-  name: "DR. Mortgage USA",
-  alternateName: ["DrMortgageUSA", "Dennis Ross Mortgage Broker"],
-  url: "https://drmortgageusa.com/",
-  description:
-    "Orlando-based mortgage guidance from Navy veteran Dennis Ross for Florida veterans, buyers, homeowners, self-employed borrowers, and investors.",
-  logo: {
-    "@type": "ImageObject",
-    url: "https://drmortgageusa.com/media/logo.webp",
-    contentUrl: "https://drmortgageusa.com/media/logo.webp",
-    width: 192,
-    height: 158,
-  },
-  image: "https://drmortgageusa.com/media/dennis.webp",
-  telephone: "+1-850-346-8514",
-  sameAs: [
-    "https://www.instagram.com/dr.mortgageusa/",
-    "https://www.facebook.com/DrMortgageUSA",
-  ],
-  areaServed: [
-    { "@type": "City", name: "Orlando" },
-    { "@type": "State", name: "Florida" },
-  ],
-  knowsAbout: [
-    "VA home loans",
-    "Orlando mortgages",
-    "Florida mortgages",
-    "FHA loans",
-    "Down payment assistance",
-    "Self-employed mortgage lending",
-    "Home equity financing",
-  ],
-  founder: {
-    "@type": "Person",
-    "@id": "https://drmortgageusa.com/about#dennis-ross",
-    name: "Dennis Ross",
-    jobTitle: "Mortgage Loan Originator and Mortgage Broker",
-    identifier: {
-      "@type": "PropertyValue",
-      propertyID: "NMLS",
-      value: "2018381",
-    },
-    sameAs: [
-      "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
-      "https://myhome1st.com/meet-our-team/",
-    ],
-  },
-};
-
 export default function Home() {
   return (
     <PageShell>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageEntitySchema) }}
       />
       <section className="home-hero">
         <div className="shell home-hero-grid">

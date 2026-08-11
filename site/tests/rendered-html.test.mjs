@@ -83,12 +83,23 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.match(html, /property="og:image:width" content="1000"/);
   assert.match(html, /property="og:image:height" content="1000"/);
   assert.match(html, /name="twitter:image" content="https:\/\/drmortgageusa\.com\/dennis-ross-headshot\.png"/);
-  const organizationMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
-  assert.ok(organizationMatch, "homepage organization structured data should render");
-  const organization = JSON.parse(organizationMatch[1]);
-  assert.equal(organization["@type"], "Organization");
+  const entityMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
+  assert.ok(entityMatch, "homepage entity graph should render");
+  const entityGraph = JSON.parse(entityMatch[1]);
+  const organization = entityGraph["@graph"].find(
+    (entity) => entity["@id"] === "https://drmortgageusa.com/#organization",
+  );
+  const person = entityGraph["@graph"].find(
+    (entity) => entity["@id"] === "https://drmortgageusa.com/about#dennis-ross",
+  );
+  assert.equal(organization["@type"], "FinancialService");
   assert.equal(organization.name, "DR. Mortgage USA");
   assert.equal(organization.telephone, "+1-850-346-8514");
+  assert.equal(organization.address.addressLocality, "Lake Mary");
+  assert.equal(person.identifier.value, "2018381");
+  assert.ok(person.sameAs.includes("https://myhome1st.com/dennis/"));
+  assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
+  assert.match(html, /rel="me" href="https:\/\/www\.linkedin\.com\/in\/dennis-ross-87491257"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
@@ -160,11 +171,15 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.doesNotMatch(html, /class="flag-wave-sheen"/);
   assert.match(html, /Dennis Ross, DR\. Mortgage USA/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
-  assert.ok(personMatch, "about page person structured data should render");
-  const person = JSON.parse(personMatch[1]);
+  assert.ok(personMatch, "about profile page structured data should render");
+  const profilePage = JSON.parse(personMatch[1]);
+  const person = profilePage.mainEntity;
+  assert.equal(profilePage["@type"], "ProfilePage");
   assert.equal(person["@type"], "Person");
   assert.equal(person.name, "Dennis Ross");
   assert.equal(person.identifier.value, "2018381");
+  assert.ok(person.sameAs.includes("https://www.google.com/maps?cid=3829412552217676351"));
+  assert.ok(person.sameAs.includes("https://www.linkedin.com/in/dennis-ross-87491257"));
 });
 
 test("keeps purchase-only questions out of refinance and equity quiz branches", async () => {
