@@ -182,6 +182,19 @@ class RedesignIntegrationTests(unittest.TestCase):
             'noindex, nofollow, noarchive, nosnippet',
         )
 
+    def test_indexnow_key_is_publicly_verifiable(self):
+        response = self.client.get(
+            '/48a2679b14df424496b53777bbb1e2a4.txt'
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.get_data(as_text=True).strip(),
+            '48a2679b14df424496b53777bbb1e2a4',
+        )
+        self.assertTrue(response.content_type.startswith('text/plain'))
+        response.close()
+
     def test_missing_zapier_configuration_queues_the_lead(self):
         connection = FakeConnection()
         payload = {
