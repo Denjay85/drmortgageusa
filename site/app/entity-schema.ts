@@ -43,7 +43,9 @@ export const dennisRossSchema = {
   url: `${origin}/about`,
   image: `${origin}/media/dennis.webp`,
   description:
-    "Navy veteran, Florida mortgage broker, and Mortgage Loan Originator helping Greater Orlando veterans, buyers, and homeowners understand their financing options.",
+    "Known publicly as DR. Mortgage USA, Dennis Ross is a Navy veteran, Florida mortgage broker, and Mortgage Loan Originator helping Greater Orlando veterans, buyers, and homeowners understand their financing options.",
+  disambiguatingDescription:
+    "Navy veteran and Florida Mortgage Loan Originator NMLS 2018381 behind DR. Mortgage USA, based in Lake Mary and serving Greater Orlando.",
   jobTitle: "Mortgage Loan Originator and Mortgage Broker",
   telephone: "+1-850-346-8514",
   email: "dennis@drmortgageusa.com",
@@ -153,7 +155,7 @@ export const dennisProfilePageSchema = {
   "@type": "ProfilePage",
   "@id": `${origin}/about#profile-page`,
   url: `${origin}/about`,
-  name: "Dennis Ross | DR. Mortgage USA",
+  name: "Dennis Ross, NMLS 2018381 | Greater Orlando VA Home Loan Guidance",
   description:
     "Professional profile for Dennis Ross, Navy veteran and Greater Orlando mortgage broker, NMLS 2018381.",
   mainEntity: dennisRossSchema,
