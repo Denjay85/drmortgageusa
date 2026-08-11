@@ -347,21 +347,35 @@ def page_json(page: dict) -> str:
             "@context": "https://schema.org",
             "@graph": [
                 {
-                    "@type": "FinancialService",
+                    "@type": "Service",
                     "@id": f"https://drmortgageusa.com/{page['slug']}#service",
                     "name": "Dr.MortgageUSA - Dennis Ross",
                     "url": f"https://drmortgageusa.com/{page['slug']}",
-                    "telephone": "+1-850-346-8514",
-                    "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
                     "areaServed": [
                         {"@type": "City", "name": "Orlando"},
                         {"@type": "State", "name": "Florida"},
                     ],
                     "serviceType": page["hero_title"],
-                    "sameAs": [
-                        "https://www.instagram.com/dr.mortgageusa/",
-                        "https://www.facebook.com/DrMortgageUSA",
-                    ],
+                    "provider": {
+                        "@type": "FinancialService",
+                        "@id": "https://drmortgageusa.com/#organization",
+                        "name": "DR. Mortgage USA",
+                        "url": "https://drmortgageusa.com/",
+                        "telephone": "+1-850-346-8514",
+                        "founder": {
+                            "@id": "https://drmortgageusa.com/about#dennis-ross"
+                        },
+                        "parentOrganization": {
+                            "@type": "Organization",
+                            "@id": "https://myhome1st.com/#organization",
+                            "name": "Home 1st Lending, LLC",
+                            "identifier": {
+                                "@type": "PropertyValue",
+                                "propertyID": "NMLS",
+                                "value": "1418",
+                            },
+                        },
+                    },
                 },
                 {
                     "@type": "BreadcrumbList",

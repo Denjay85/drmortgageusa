@@ -34,17 +34,33 @@
         "description": "{description}",
         "author": {{
             "@type": "Person",
+            "@id": "https://drmortgageusa.com/about#dennis-ross",
             "name": "Dennis Ross",
-            "jobTitle": "Mortgage Broker",
-            "url": "https://drmortgageusa.com"
+            "url": "https://drmortgageusa.com/about",
+            "jobTitle": "Mortgage Loan Originator and Mortgage Broker",
+            "identifier": {{
+                "@type": "PropertyValue",
+                "propertyID": "NMLS",
+                "value": "2018381"
+            }}
         }},
         "publisher": {{
             "@type": "Organization",
-            "name": "Dr.MortgageUSA"
+            "@id": "https://drmortgageusa.com/#organization",
+            "name": "DR. Mortgage USA",
+            "url": "https://drmortgageusa.com/",
+            "logo": {{
+                "@type": "ImageObject",
+                "url": "https://drmortgageusa.com/media/logo.webp"
+            }}
         }},
         "datePublished": "{date}",
         "dateModified": "{date}",
-        "url": "https://drmortgageusa.com/blog/{slug}"
+        "url": "https://drmortgageusa.com/blog/{slug}",
+        "mainEntityOfPage": {{
+            "@type": "WebPage",
+            "@id": "https://drmortgageusa.com/blog/{slug}"
+        }}
     }}
     </script>
 </head>
