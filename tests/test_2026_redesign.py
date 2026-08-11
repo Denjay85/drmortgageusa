@@ -210,6 +210,10 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('Home 1st Lending, LLC, NMLS 1418', manifest)
         self.assertIn('Greater Orlando', manifest)
         self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
+        self.assertIn(
+            'https://www.va.gov/housing-assistance/home-loans/eligibility/',
+            manifest,
+        )
         response.close()
 
     def test_blog_articles_link_dennis_to_his_canonical_profile(self):
@@ -263,6 +267,11 @@ class RedesignIntegrationTests(unittest.TestCase):
                     r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$',
                     blog_path.name,
                 )
+                self.assertGreaterEqual(
+                    schema['dateModified'][:10],
+                    '2026-08-11',
+                    blog_path.name,
+                )
                 self.assertIn(
                     '<meta property="og:image" content="https://drmortgageusa.com/assets/client-collage.jpg">',
                     html,
@@ -298,9 +307,21 @@ class RedesignIntegrationTests(unittest.TestCase):
                 if entity.get('@id', '').endswith('#service')
             )
             self.assertEqual(service['@type'], 'Service', route)
+            self.assertIn('description', service, route)
+            self.assertNotEqual(service['name'], 'DR. Mortgage USA - Dennis Ross', route)
             self.assertEqual(
                 service['provider']['@id'],
                 'https://drmortgageusa.com/#organization',
+                route,
+            )
+            self.assertEqual(
+                service['provider']['address']['addressLocality'],
+                'Lake Mary',
+                route,
+            )
+            self.assertIn(
+                'https://www.google.com/maps?cid=3829412552217676351',
+                service['provider']['sameAs'],
                 route,
             )
             self.assertEqual(
@@ -324,7 +345,64 @@ class RedesignIntegrationTests(unittest.TestCase):
                     dennis['sameAs'],
                     route,
                 )
+            self.assertIn('<a href="/about">About Dennis</a>', html, route)
+            self.assertIn(
+                'https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381',
+                html,
+                route,
+            )
+            self.assertIn('https://myhome1st.com/dennis/', html, route)
+            self.assertNotIn('retargeting traffic', html.lower(), route)
+            self.assertNotIn('why this page exists', html.lower(), route)
+
+            if route == '/va-loans-orlando':
+                served_names = {
+                    area['name'] for area in service['areaServed']
+                }
+                self.assertTrue(
+                    {'Orlando', 'Lake Mary', 'Winter Park', 'Sanford',
+                     'Altamonte Springs', 'Oviedo'}.issubset(served_names)
+                )
+                self.assertIn('VA loan guidance across Greater Orlando', html)
+                self.assertIn(
+                    'https://www.va.gov/housing-assistance/home-loans/eligibility/',
+                    html,
+                )
+                self.assertIn(
+                    'https://www.va.gov/housing-assistance/home-loans/loan-types/purchase-loan/',
+                    html,
+                )
+                self.assertIn(
+                    '<meta name="twitter:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">',
+                    html,
+                )
             response.close()
+
+    def test_sitemap_lastmod_covers_the_current_authority_release(self):
+        response = self.client.get('/sitemap.xml')
+        sitemap = response.get_data(as_text=True)
+        lastmod_values = re.findall(r'<lastmod>(.*?)</lastmod>', sitemap)
+
+        self.assertEqual(len(lastmod_values), 77)
+        self.assertTrue(all(value >= '2026-08-11' for value in lastmod_values))
+        response.close()
+
+    def test_sitemap_generator_uses_article_modified_date(self):
+        from update_blog import build_sitemap
+
+        sitemap = build_sitemap([
+            {
+                'url': 'https://drmortgageusa.com/blog/example',
+                'lastmod': '2026-08-11',
+            },
+        ])
+        article_block = re.search(
+            r'<url>\s*<loc>https://drmortgageusa.com/blog/example</loc>'
+            r'\s*<lastmod>(.*?)</lastmod>',
+            sitemap,
+        )
+        self.assertIsNotNone(article_block)
+        self.assertEqual(article_block.group(1), '2026-08-11')
 
     def test_missing_zapier_configuration_queues_the_lead(self):
         connection = FakeConnection()

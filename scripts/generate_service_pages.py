@@ -18,15 +18,36 @@ COMMON_LINKS = [
     ("HELOC Orlando", "/heloc-orlando"),
 ]
 
+DENNIS_SAME_AS = [
+    "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
+    "https://myhome1st.com/dennis/",
+    "https://www.google.com/maps?cid=3829412552217676351",
+    "https://www.instagram.com/dr.mortgageusa/",
+    "https://www.facebook.com/p/Dennis-Ross-Mortgage-Loan-Originator-Nmls2018381-100084710485166/",
+    "https://www.linkedin.com/in/dennis-ross-87491257",
+    "https://www.youtube.com/@Dr.MortgageUSA",
+]
+
+GREATER_ORLANDO_AREAS = [
+    {"@type": "City", "name": "Orlando"},
+    {"@type": "City", "name": "Lake Mary"},
+    {"@type": "City", "name": "Winter Park"},
+    {"@type": "City", "name": "Sanford"},
+    {"@type": "City", "name": "Altamonte Springs"},
+    {"@type": "City", "name": "Oviedo"},
+    {"@type": "AdministrativeArea", "name": "Central Florida"},
+    {"@type": "State", "name": "Florida"},
+]
+
 
 PAGES = [
     {
         "slug": "va-loans-orlando",
-        "title": "VA Loans Orlando | VA Mortgage Broker for Orlando Veterans | Dr.MortgageUSA",
-        "description": "VA loans in Orlando for veterans and active-duty buyers. Get 0% down options, clear payment numbers, and fast VA pre-approval guidance from Dennis Ross.",
+        "title": "VA Loans Orlando | Dennis Ross, Navy Veteran and Mortgage Broker",
+        "description": "Greater Orlando VA loan guidance from Navy veteran Dennis Ross, NMLS 2018381. Review eligibility, COE, zero-down options, and local payment planning.",
         "eyebrow": "Orlando VA Loan Help",
         "hero_title": "VA Loans in Orlando Without the Confusion",
-        "hero_lead": "Dennis Ross is a Navy veteran and Florida mortgage broker who helps Orlando-area veterans use the benefit they already earned with clear numbers, fast pre-approval, and straight answers.",
+        "hero_lead": "Dennis Ross is a Navy veteran and Florida mortgage broker who helps Orlando-area veterans use the benefit they already earned with clear numbers and straight answers.",
         "form_heading": "Get your Orlando VA game plan",
         "form_text": "Tell me where you are in the process and I will map out your next best move.",
         "segment": "veteran",
@@ -34,7 +55,7 @@ PAGES = [
         "primary_cta": ("Start My VA Review", APPLY_URL),
         "secondary_cta": ("Call 850-346-8514", "tel:+18503468514"),
         "support_cta": ("Read the Florida VA Guide", "/blog/va-loan-guide-florida-veterans-2026"),
-        "hero_stats": [("0% down", "For eligible buyers"), ("No PMI", "On VA purchase loans"), ("24-48 hrs", "Typical pre-approval timeline")],
+        "hero_stats": [("0% down", "For eligible buyers"), ("No PMI", "On VA purchase loans"), ("VA review", "COE, payment, and eligibility")],
         "sections": [
             {
                 "title": "Why Orlando veterans use VA financing first",
@@ -62,6 +83,25 @@ PAGES = [
             ("Real Orlando payment clarity", "Taxes, insurance, HOA, and concession strategy get discussed early, not after you are under contract."),
             ("Broker-level options", "Dennis can compare lenders and overlays instead of forcing every borrower into one bank product."),
         ],
+        "trust_heading": "Why veterans trust Dennis",
+        "cta_text": "Bring your service history, homebuying timeline, and target payment. Dennis can help identify the documents and VA-loan questions to resolve before you make an offer.",
+        "local_service_areas": [
+            "Orlando and nearby Orange County communities",
+            "Lake Mary and Sanford",
+            "Winter Park and Altamonte Springs",
+            "Oviedo and eastern Seminole County",
+            "Greater Orlando and Central Florida, with mortgage licensing across Florida",
+        ],
+        "official_resources": [
+            ("VA home-loan eligibility and Certificate of Eligibility", "https://www.va.gov/housing-assistance/home-loans/eligibility/"),
+            ("VA-backed purchase-loan benefits and requirements", "https://www.va.gov/housing-assistance/home-loans/loan-types/purchase-loan/"),
+            ("VA entitlement and loan-limit guidance", "https://www.va.gov/housing-assistance/home-loans/loan-limits/"),
+            ("VA home-buying process", "https://www.va.gov/housing-assistance/home-loans/home-buying-process/"),
+        ],
+        "schema_area_served": GREATER_ORLANDO_AREAS,
+        "schema_service_name": "VA Home Loan Guidance in Greater Orlando",
+        "schema_service_type": "VA home loan guidance",
+        "breadcrumb_name": "VA Loans in Orlando",
         "process_points": [
             ("1", "Review eligibility and COE", "We confirm benefit status, service history, and whether you have full or partial entitlement."),
             ("2", "Build the real payment", "We run the numbers with Orlando-specific costs so you know what is comfortable, not just what is technically approvable."),
@@ -69,7 +109,7 @@ PAGES = [
         ],
         "faqs": [
             ("Can I get a VA loan in Orlando with no down payment?", "Yes, if you are eligible and qualify with the lender. Many Orlando buyers use VA financing with zero down, but the payment still has to work with taxes, insurance, and HOA costs."),
-            ("How fast can I get pre-approved for a VA loan?", "Most solid VA pre-approvals can move within 24 to 48 hours once documents are in. Timeline depends on income complexity and how quickly you send what is needed."),
+            ("How do I start a VA pre-approval review?", "Start by sharing your timeline, income picture, and property goal. The review depends on document readiness, income complexity, credit, and the property."),
             ("Do VA loans work for condos in Orlando?", "Sometimes. The condo has to meet approval requirements, and some buildings create financing issues. It is smart to check this before you get deep into a deal."),
             ("Can I use a VA loan more than once?", "Yes. Repeat use is possible, but entitlement and current loan status matter. Dennis can review whether you have full entitlement or need a more strategic structure."),
         ],
@@ -114,8 +154,10 @@ PAGES = [
         "trust_points": [
             ("Strategy before paperwork", "The call starts with what you are trying to do, not with a generic application script."),
             ("Local relevance", "Orlando taxes, insurance, condos, and HOA realities get baked into the recommendation."),
-            ("Warm-traffic ready", "This page gives return visitors a clear next move instead of dropping them back on a generic homepage."),
+            ("After you submit", "Dennis reviews what you are trying to do and follows up with the next practical step for your loan path."),
         ],
+        "trust_heading": "Why borrowers trust Dennis",
+        "cta_text": "Share what you are buying or refinancing, your timeline, and the payment questions you need answered. Dennis can narrow the loan and lender paths that fit the file.",
         "process_points": [
             ("1", "Clarify the goal", "Purchase, refinance, move-up, first home, HELOC, investment, or self-employed scenario."),
             ("2", "Match the lane", "Dennis narrows the lender and program set to what actually fits your file."),
@@ -167,9 +209,11 @@ PAGES = [
         ],
         "trust_points": [
             ("DPA conversation included", "Dennis can help you think through whether Orlando-area assistance programs actually improve your position."),
-            ("Educational but direct", "This page is built for search visitors and retargeting visitors who need trust before they click apply."),
-            ("Conversion clarity", "Call, apply, or ask for a plan. The next step is obvious."),
+            ("Educational but direct", "You get plain answers on payment, cash to close, credit, and whether a program actually fits your file."),
+            ("After you submit", "Dennis reviews your scenario and follows up with the cleanest next step, not a generic application push."),
         ],
+        "trust_heading": "Why buyers trust Dennis",
+        "cta_text": "Start with a realistic payment, cash-to-close target, and timeline. Dennis can compare first-home loan and assistance paths before you begin serious home shopping.",
         "process_points": [
             ("1", "Set the comfort budget", "We start with a payment that fits life, not just lender max."),
             ("2", "Choose the loan lane", "FHA, conventional, VA, and assistance options get narrowed based on your actual file."),
@@ -222,8 +266,10 @@ PAGES = [
         "trust_points": [
             ("Blunt refinance advice", "If the refinance does not make sense, the right move is to say that early."),
             ("Program-specific guidance", "VA, FHA, and conventional refinance lanes are not interchangeable."),
-            ("Warm-traffic conversion path", "Visitors returning from Meta get a tighter refinance page instead of a general homepage."),
+            ("After you submit", "Dennis reviews the refinance goal, rough break-even picture, and whether another option may be cleaner."),
         ],
+        "trust_heading": "Why homeowners trust Dennis",
+        "cta_text": "Share the current loan, the result you want, and how long you expect to keep the mortgage. Dennis can compare the refinance math with HELOC and do-nothing alternatives.",
         "process_points": [
             ("1", "Review the current loan", "Rate, term, balance, MI, and the real reason you are considering a refinance."),
             ("2", "Compare the right structures", "Dennis looks at refinance lanes against HELOC or do-nothing options when appropriate."),
@@ -274,10 +320,12 @@ PAGES = [
             },
         ],
         "trust_points": [
-            ("Calculator plus guidance", "This page works with the existing HELOC calculator instead of leaving visitors to interpret it alone."),
+            ("Calculator plus guidance", "You can use the HELOC calculator, then ask Dennis to help interpret the payment and risk tradeoffs."),
             ("No equity hype", "The recommendation is about fit and risk, not just maximum draw amount."),
-            ("Clear warm-traffic path", "Retargeted visitors can come back to a page built specifically for HELOC intent."),
+            ("After you submit", "Dennis reviews your goal and follows up on whether a HELOC, home equity loan, refinance, or waiting makes more sense."),
         ],
+        "trust_heading": "Why homeowners trust Dennis",
+        "cta_text": "Share how you plan to use the equity, how much flexibility you need, and the current first mortgage. Dennis can compare a HELOC with fixed-equity and refinance alternatives.",
         "process_points": [
             ("1", "Clarify the goal", "What the equity is for changes whether a HELOC is the right structure."),
             ("2", "Review equity and payment", "Dennis helps estimate access, rate range, and monthly effect."),
@@ -295,6 +343,14 @@ PAGES = [
 
 def render_list(items: list[str], class_name: str) -> str:
     rendered = "".join(f"<li>{html.escape(item)}</li>" for item in items)
+    return f'<ul class="{class_name}">{rendered}</ul>'
+
+
+def render_link_list(items: list[tuple[str, str]], class_name: str) -> str:
+    rendered = "".join(
+        f'<li><a href="{html.escape(href, quote=True)}">{html.escape(label)}</a></li>'
+        for label, href in items
+    )
     return f'<ul class="{class_name}">{rendered}</ul>'
 
 
@@ -342,50 +398,96 @@ def faq_json(page: dict) -> str:
 
 
 def page_json(page: dict) -> str:
-    return json.dumps(
-        {
-            "@context": "https://schema.org",
-            "@graph": [
-                {
-                    "@type": "Service",
-                    "@id": f"https://drmortgageusa.com/{page['slug']}#service",
-                    "name": "Dr.MortgageUSA - Dennis Ross",
-                    "url": f"https://drmortgageusa.com/{page['slug']}",
-                    "areaServed": [
-                        {"@type": "City", "name": "Orlando"},
-                        {"@type": "State", "name": "Florida"},
-                    ],
-                    "serviceType": page["hero_title"],
-                    "provider": {
-                        "@type": "FinancialService",
-                        "@id": "https://drmortgageusa.com/#organization",
-                        "name": "DR. Mortgage USA",
-                        "url": "https://drmortgageusa.com/",
-                        "telephone": "+1-850-346-8514",
-                        "founder": {
-                            "@id": "https://drmortgageusa.com/about#dennis-ross"
-                        },
-                        "parentOrganization": {
-                            "@type": "Organization",
-                            "@id": "https://myhome1st.com/#organization",
-                            "name": "Home 1st Lending, LLC",
-                            "identifier": {
-                                "@type": "PropertyValue",
-                                "propertyID": "NMLS",
-                                "value": "1418",
-                            },
-                        },
-                    },
-                },
-                {
-                    "@type": "BreadcrumbList",
-                    "itemListElement": [
-                        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://drmortgageusa.com/"},
-                        {"@type": "ListItem", "position": 2, "name": page["hero_title"], "item": f"https://drmortgageusa.com/{page['slug']}"},
-                    ],
-                },
-            ],
+    area_served = page.get(
+        "schema_area_served",
+        [
+            {"@type": "City", "name": "Orlando"},
+            {"@type": "State", "name": "Florida"},
+        ],
+    )
+    provider = {
+        "@type": "FinancialService",
+        "@id": "https://drmortgageusa.com/#organization",
+        "name": "DR. Mortgage USA",
+        "alternateName": ["DrMortgageUSA", "Dennis Ross, Dr.MortgageUSA"],
+        "url": "https://drmortgageusa.com/",
+        "description": "Greater Orlando and Florida mortgage guidance from Navy veteran Dennis Ross.",
+        "telephone": "+1-850-346-8514",
+        "email": "dennis@drmortgageusa.com",
+        "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "1130 Business Center Dr, Suite 1000",
+            "addressLocality": "Lake Mary",
+            "addressRegion": "FL",
+            "postalCode": "32746",
+            "addressCountry": "US",
         },
+        "areaServed": GREATER_ORLANDO_AREAS,
+        "founder": {"@id": "https://drmortgageusa.com/about#dennis-ross"},
+        "parentOrganization": {
+            "@type": "Organization",
+            "@id": "https://myhome1st.com/#organization",
+            "name": "Home 1st Lending, LLC",
+            "identifier": {
+                "@type": "PropertyValue",
+                "propertyID": "NMLS",
+                "value": "1418",
+            },
+        },
+        "sameAs": DENNIS_SAME_AS,
+    }
+    graph = [
+        {
+            "@type": "Service",
+            "@id": f"https://drmortgageusa.com/{page['slug']}#service",
+            "name": page.get("schema_service_name", page["hero_title"]),
+            "description": page["description"],
+            "url": f"https://drmortgageusa.com/{page['slug']}",
+            "areaServed": area_served,
+            "serviceType": page.get("schema_service_type", page["hero_title"]),
+            "provider": provider,
+        }
+    ]
+
+    if page["slug"] == "va-loans-orlando":
+        graph.append(
+            {
+                "@type": "Person",
+                "@id": "https://drmortgageusa.com/about#dennis-ross",
+                "name": "Dennis Ross",
+                "jobTitle": "Mortgage Loan Originator and Mortgage Broker",
+                "description": "Navy veteran and Florida mortgage broker helping Greater Orlando veterans understand VA home loan options.",
+                "url": "https://drmortgageusa.com/about",
+                "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "NMLS",
+                    "value": "2018381",
+                },
+                "sameAs": DENNIS_SAME_AS,
+                "knowsAbout": [
+                    "VA home loans in Greater Orlando",
+                    "Florida mortgages",
+                    "VA entitlement",
+                    "VA funding fees",
+                    "VA appraisals",
+                ],
+                "worksFor": {"@id": "https://myhome1st.com/#organization"},
+            }
+        )
+
+    graph.append(
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://drmortgageusa.com/"},
+                {"@type": "ListItem", "position": 2, "name": page.get("breadcrumb_name", page["hero_title"]), "item": f"https://drmortgageusa.com/{page['slug']}"},
+            ],
+        }
+    )
+    return json.dumps(
+        {"@context": "https://schema.org", "@graph": graph},
         ensure_ascii=False,
     )
 
@@ -413,6 +515,25 @@ def render_page(page: dict) -> str:
         f'<div class="stat"><strong>{html.escape(stat)}</strong><span>{html.escape(text)}</span></div>'
         for stat, text in page["hero_stats"]
     )
+    authority_section = ""
+    if page.get("local_service_areas") and page.get("official_resources"):
+        authority_section = f"""
+      <section class="section" id="greater-orlando-va-service-area">
+        <div class="section-grid">
+          <article class="section-card">
+            <h2>VA loan guidance across Greater Orlando</h2>
+            <p>Dennis works from Lake Mary and serves veterans, active-duty service members, and eligible military families throughout the Greater Orlando area.</p>
+            {render_list(page['local_service_areas'], 'detail-list')}
+          </article>
+          <article class="section-card">
+            <h2>Official VA and licensing sources</h2>
+            <p>Use VA.gov for benefit rules and Dennis for help applying those rules to your documented loan scenario.</p>
+            {render_link_list(page['official_resources'], 'detail-list')}
+            <p class="source-note">Verify <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Dennis Ross, NMLS 2018381</a>, review his <a href="https://myhome1st.com/dennis/">Home 1st Lending profile</a>, or open the <a href="https://www.google.com/maps?cid=3829412552217676351">Google Business Profile</a>.</p>
+          </article>
+        </div>
+      </section>
+"""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -428,10 +549,12 @@ def render_page(page: dict) -> str:
   <meta property="og:title" content="{html.escape(page['title'])}">
   <meta property="og:description" content="{html.escape(page['description'])}">
   <meta property="og:url" content="https://drmortgageusa.com/{page['slug']}">
+  <meta property="og:locale" content="en_US">
   <meta property="og:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{html.escape(page['title'])}">
   <meta name="twitter:description" content="{html.escape(page['description'])}">
+  <meta name="twitter:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -454,6 +577,7 @@ def render_page(page: dict) -> str:
         </a>
         <nav class="nav-links" aria-label="Primary">
           <a href="/">Home</a>
+          <a href="/about">About Dennis</a>
           <a href="/dpa">DPA Programs</a>
           <a href="/heloc-calculator">HELOC Calculator</a>
           <a href="/blog">Blog</a>
@@ -519,7 +643,7 @@ def render_page(page: dict) -> str:
       </section>
 
       <section class="trust">
-        <h2>Why this page exists</h2>
+        <h2>{html.escape(page.get('trust_heading', 'Why clients trust Dennis'))}</h2>
         <div class="trust-grid">
           {trust_cards}
         </div>
@@ -532,6 +656,8 @@ def render_page(page: dict) -> str:
         </div>
       </section>
 
+{authority_section}
+
       <section class="faq">
         <h2>Frequently asked questions</h2>
         <div class="faq-grid">
@@ -541,7 +667,7 @@ def render_page(page: dict) -> str:
 
       <section class="cta-band">
         <h2 style="margin-top: 0;">Ready for the next step?</h2>
-        <p>This page is built to help both search visitors and returning retargeting traffic convert with a clearer next move.</p>
+        <p>{html.escape(page.get('cta_text', 'Share your goal and timeline so Dennis can identify the right next step.'))}</p>
         <div class="hero-actions" style="margin-bottom: 0;">
           <a class="button" href="{APPLY_URL}" data-track="apply" data-content-category="{page['source']}">Apply Securely</a>
           <a class="button-secondary" href="tel:+18503468514" data-track="call" data-content-category="{page['source']}">Call Dennis</a>
@@ -552,12 +678,18 @@ def render_page(page: dict) -> str:
     <footer class="footer">
       <div class="container">
         <strong style="display: block; margin-bottom: 6px;">Dr.MortgageUSA | Dennis Ross | NMLS #2018381</strong>
-        <div>Licensed in Florida | Powered by Home1st Lending, LLC NMLS #1418</div>
+        <div>Licensed in Florida | Powered by Home 1st Lending, LLC NMLS #1418</div>
+        <div>1130 Business Center Dr, Suite 1000, Lake Mary, FL 32746</div>
         <div class="footer-links">
           <a href="/">Home</a>
+          <a href="/about">About Dennis</a>
+          <a href="/va-loans-orlando">VA Loans Orlando</a>
           <a href="/blog">Blog</a>
           <a href="/dpa">DPA Programs</a>
           <a href="/heloc-calculator">HELOC Calculator</a>
+          <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Verify NMLS 2018381</a>
+          <a href="https://myhome1st.com/dennis/">Home 1st Profile</a>
+          <a rel="me" href="https://www.google.com/maps?cid=3829412552217676351">Google Business Profile</a>
           <a href="tel:+18503468514">850-346-8514</a>
         </div>
       </div>
