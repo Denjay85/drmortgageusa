@@ -237,6 +237,8 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('https://www.experience.com/reviews/dennis-14873595', manifest)
         self.assertIn('explicitly lists VA Home Loan among services', manifest)
         self.assertIn('16 verified reviews', manifest)
+        self.assertIn('display name contains the text USMC-VET', manifest)
+        self.assertIn('does not identify which loan program was used', manifest)
         self.assertIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
         self.assertIn(
             'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
@@ -522,6 +524,8 @@ class RedesignIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn('View the Experience.com profile.', html)
                 self.assertIn('16 verified reviews', html)
+                self.assertIn('display name contains the text USMC-VET', html)
+                self.assertIn('does not identify which loan program was used', html)
                 self.assertIn(
                     'specifically recommends Dennis to veterans looking to buy a home',
                     html,
