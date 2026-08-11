@@ -83,6 +83,10 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.match(html, /property="og:image:width" content="1000"/);
   assert.match(html, /property="og:image:height" content="1000"/);
   assert.match(html, /name="twitter:image" content="https:\/\/drmortgageusa\.com\/dennis-ross-headshot\.png"/);
+  assert.match(
+    html,
+    /name="msvalidate\.01" content="5CC872A1985FD683E724A7CBF0779BB1"/,
+  );
   const entityMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(entityMatch, "homepage entity graph should render");
   const entityGraph = JSON.parse(entityMatch[1]);

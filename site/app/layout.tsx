@@ -40,6 +40,11 @@ export const metadata: Metadata = {
       description: "Understand the numbers before you make the move.",
       images: [`${origin}/dennis-ross-headshot.png`],
     },
+    verification: {
+      other: {
+        "msvalidate.01": "5CC872A1985FD683E724A7CBF0779BB1",
+      },
+    },
     robots: { index: indexable, follow: indexable },
 };
 
