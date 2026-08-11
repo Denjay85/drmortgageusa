@@ -9,17 +9,45 @@ const projectRoot = path.resolve(scriptDirectory, "..");
 const blogDirectory = path.join(projectRoot, "blog_posts");
 const articleImage = "https://drmortgageusa.com/assets/client-collage.jpg";
 
+const authorSameAs = [
+  "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
+  "https://myhome1st.com/dennis/",
+  "https://www.google.com/maps?cid=3829412552217676351",
+  "https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023",
+  "https://www.instagram.com/dr.mortgageusa/",
+  "https://www.facebook.com/p/Dennis-Ross-Mortgage-Loan-Originator-Nmls2018381-100084710485166/",
+  "https://www.linkedin.com/in/dennis-ross-87491257",
+  "https://www.youtube.com/@Dr.MortgageUSA",
+  "https://www.experience.com/reviews/dennis-14873595",
+  "https://www.zillow.com/lender-profile/dennis0564/",
+];
+
 const author = {
   "@type": "Person",
   "@id": "https://drmortgageusa.com/about#dennis-ross",
   name: "Dennis Ross",
   url: "https://drmortgageusa.com/about",
+  description:
+    "Navy veteran and Florida Mortgage Loan Originator helping Greater Orlando veterans, buyers, and homeowners understand VA and other mortgage options.",
+  disambiguatingDescription:
+    "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
   jobTitle: "Mortgage Loan Originator and Mortgage Broker",
   identifier: {
     "@type": "PropertyValue",
     propertyID: "NMLS",
     value: "2018381",
   },
+  worksFor: { "@id": "https://myhome1st.com/#organization" },
+  sameAs: authorSameAs,
+  knowsAbout: [
+    "VA home loans in Greater Orlando",
+    "Florida mortgages",
+    "VA loan entitlement and funding fees",
+    "FHA loans",
+    "Down payment assistance",
+    "Self-employed mortgage lending",
+    "Home equity financing",
+  ],
 };
 
 const publisher = {

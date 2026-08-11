@@ -260,6 +260,36 @@ class RedesignIntegrationTests(unittest.TestCase):
                     blog_path.name,
                 )
                 self.assertEqual(
+                    schema['author']['worksFor']['@id'],
+                    'https://myhome1st.com/#organization',
+                    blog_path.name,
+                )
+                self.assertIn(
+                    'https://myhome1st.com/dennis/',
+                    schema['author']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertIn(
+                    'https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023',
+                    schema['author']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertIn(
+                    'https://www.experience.com/reviews/dennis-14873595',
+                    schema['author']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertIn(
+                    'https://www.zillow.com/lender-profile/dennis0564/',
+                    schema['author']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertIn(
+                    'Navy veteran',
+                    schema['author']['description'],
+                    blog_path.name,
+                )
+                self.assertEqual(
                     schema['publisher']['@id'],
                     'https://drmortgageusa.com/#organization',
                     blog_path.name,
