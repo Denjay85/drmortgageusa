@@ -37,10 +37,13 @@ const dennisSameAs = [
   "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
   "https://myhome1st.com/dennis/",
   "https://www.google.com/maps?cid=3829412552217676351",
+  "https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023",
   "https://www.instagram.com/dr.mortgageusa/",
   "https://www.facebook.com/p/Dennis-Ross-Mortgage-Loan-Originator-Nmls2018381-100084710485166/",
   "https://www.linkedin.com/in/dennis-ross-87491257",
   "https://www.youtube.com/@Dr.MortgageUSA",
+  "https://www.experience.com/reviews/dennis-14873595",
+  "https://www.zillow.com/lender-profile/dennis0564/",
 ];
 
 const jsonLdPattern = /(<script\s+type="application\/ld\+json">\s*)(\{[\s\S]*?\})(\s*<\/script>)/g;
