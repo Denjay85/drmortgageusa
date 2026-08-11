@@ -120,6 +120,11 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.ok(home1st.sameAs.includes("https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418"));
   assert.ok(home1st.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
   assert.ok(!person.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
+  assert.match(html, /Independent profile evidence:/);
+  assert.match(html, /Experience\.com(?:&apos;|&#x27;)'?s public Dennis Ross Jr\. profile/);
+  assert.match(html, /identifies NMLS #2018381 and Dr MortgageUSA in Lake Mary/);
+  assert.match(html, /lists VA\s*Home Loan among the services/);
+  assert.match(html, /5\.0 average across 16\s*reviews aggregated from Google and Zillow/);
   assert.match(html, /alt="DR\. Mortgage USA logo"/);
   assert.match(html, /rel="me" href="https:\/\/www\.linkedin\.com\/in\/dennis-ross-87491257"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
