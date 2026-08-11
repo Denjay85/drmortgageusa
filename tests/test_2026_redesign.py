@@ -197,6 +197,21 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertTrue(response.content_type.startswith('text/plain'))
         response.close()
 
+    def test_llms_manifest_is_plain_text_and_uses_canonical_identity(self):
+        response = self.client.get('/llms.txt')
+        manifest = response.get_data(as_text=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.content_type.startswith('text/plain'))
+        self.assertIn('# DR. Mortgage USA', manifest)
+        self.assertIn('https://drmortgageusa.com/about', manifest)
+        self.assertIn('https://drmortgageusa.com/va-loans-orlando', manifest)
+        self.assertIn('NMLS 2018381', manifest)
+        self.assertIn('Home 1st Lending, LLC, NMLS 1418', manifest)
+        self.assertIn('Greater Orlando', manifest)
+        self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
+        response.close()
+
     def test_blog_articles_link_dennis_to_his_canonical_profile(self):
         blog_directory = Path(production_app.BASE_DIR) / 'blog_posts'
         article_count = 0
