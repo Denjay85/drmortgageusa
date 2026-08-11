@@ -414,17 +414,17 @@ def page_json(page: dict) -> str:
             {"@type": "State", "name": "Florida"},
         ],
     )
-    provider = {
-        "@type": "FinancialService",
-        "@id": "https://drmortgageusa.com/#organization",
-        "name": "DR. Mortgage USA",
-        "alternateName": ["DrMortgageUSA", "Dennis Ross, Dr.MortgageUSA"],
-        "url": "https://drmortgageusa.com/",
-        "description": "DR. Mortgage USA is the professional brand and educational website of Navy veteran Dennis Ross, individual NMLS 2018381, serving Greater Orlando and Florida through Home 1st Lending, LLC, company NMLS 1418. It is not a separate lender or mortgage company.",
-        "disambiguatingDescription": "The DR. Mortgage USA name on drmortgageusa.com identifies Dennis Ross and his Greater Orlando mortgage practice through Home 1st Lending, LLC; it does not identify Dr. Mortgage, LLC or another separately licensed mortgage company.",
-        "telephone": "+1-850-346-8514",
-        "email": "dennis@drmortgageusa.com",
-        "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
+    home1st = {
+        "@type": "Organization",
+        "@id": "https://myhome1st.com/#organization",
+        "name": "Home 1st Lending, LLC",
+        "url": "https://myhome1st.com/",
+        "identifier": {
+            "@type": "PropertyValue",
+            "propertyID": "NMLS",
+            "value": "1418",
+        },
+        "sameAs": HOME1ST_SAME_AS,
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "1130 Business Center Dr, Suite 1000",
@@ -433,21 +433,55 @@ def page_json(page: dict) -> str:
             "postalCode": "32746",
             "addressCountry": "US",
         },
-        "areaServed": GREATER_ORLANDO_AREAS,
-        "founder": {"@id": "https://drmortgageusa.com/about#dennis-ross"},
-        "parentOrganization": {
-            "@type": "Organization",
-            "@id": "https://myhome1st.com/#organization",
-            "name": "Home 1st Lending, LLC",
-            "url": "https://myhome1st.com/",
-            "identifier": {
-                "@type": "PropertyValue",
-                "propertyID": "NMLS",
-                "value": "1418",
-            },
-            "sameAs": HOME1ST_SAME_AS,
+    }
+    brand = {
+        "@type": "Brand",
+        "@id": "https://drmortgageusa.com/#brand",
+        "name": "DR. Mortgage USA",
+        "alternateName": ["DrMortgageUSA", "Dennis Ross, Dr.MortgageUSA"],
+        "url": "https://drmortgageusa.com/",
+        "description": "DR. Mortgage USA is the professional brand and educational website of Navy veteran Dennis Ross, individual NMLS 2018381, serving Greater Orlando and Florida through Home 1st Lending, LLC, company NMLS 1418. It is not a separate lender or mortgage company.",
+        "disambiguatingDescription": "The DR. Mortgage USA name on drmortgageusa.com identifies Dennis Ross and his Greater Orlando mortgage practice through Home 1st Lending, LLC; it does not identify Dr. Mortgage, LLC or another separately licensed mortgage company.",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://drmortgageusa.com/media/logo.webp",
         },
+        "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
+        "owner": {"@id": "https://drmortgageusa.com/about#dennis-ross"},
+    }
+    knows_about = [
+        "VA home loans in Greater Orlando",
+        "Florida mortgages",
+        "FHA loans",
+        "Down payment assistance",
+        "Self-employed mortgage lending",
+        "Home equity financing",
+    ]
+    if page["slug"] == "va-loans-orlando":
+        knows_about.extend(
+            ["VA entitlement", "VA funding fees", "VA appraisals"]
+        )
+    dennis = {
+        "@type": "Person",
+        "@id": "https://drmortgageusa.com/about#dennis-ross",
+        "name": "Dennis Ross",
+        "alternateName": ["DR. Mortgage USA", "DrMortgageUSA"],
+        "jobTitle": "Mortgage Loan Originator and Mortgage Broker",
+        "description": "Navy veteran and Florida mortgage broker helping Greater Orlando veterans, buyers, and homeowners understand VA and other mortgage options.",
+        "disambiguatingDescription": "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and website and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
+        "url": "https://drmortgageusa.com/about",
+        "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
+        "telephone": "+1-850-346-8514",
+        "email": "dennis@drmortgageusa.com",
+        "identifier": {
+            "@type": "PropertyValue",
+            "propertyID": "NMLS",
+            "value": "2018381",
+        },
+        "brand": {"@id": "https://drmortgageusa.com/#brand"},
+        "worksFor": {"@id": "https://myhome1st.com/#organization"},
         "sameAs": DENNIS_SAME_AS,
+        "knowsAbout": knows_about,
     }
     graph = [
         {
@@ -458,37 +492,13 @@ def page_json(page: dict) -> str:
             "url": f"https://drmortgageusa.com/{page['slug']}",
             "areaServed": area_served,
             "serviceType": page.get("schema_service_type", page["hero_title"]),
-            "provider": provider,
-        }
+            "provider": {"@id": "https://drmortgageusa.com/about#dennis-ross"},
+            "brand": {"@id": "https://drmortgageusa.com/#brand"},
+        },
+        dennis,
+        home1st,
+        brand,
     ]
-
-    if page["slug"] == "va-loans-orlando":
-        graph.append(
-            {
-                "@type": "Person",
-                "@id": "https://drmortgageusa.com/about#dennis-ross",
-                "name": "Dennis Ross",
-                "jobTitle": "Mortgage Loan Originator and Mortgage Broker",
-                "description": "Navy veteran and Florida mortgage broker helping Greater Orlando veterans understand VA home loan options.",
-                "disambiguatingDescription": "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and website and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
-                "url": "https://drmortgageusa.com/about",
-                "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
-                "identifier": {
-                    "@type": "PropertyValue",
-                    "propertyID": "NMLS",
-                    "value": "2018381",
-                },
-                "sameAs": DENNIS_SAME_AS,
-                "knowsAbout": [
-                    "VA home loans in Greater Orlando",
-                    "Florida mortgages",
-                    "VA entitlement",
-                    "VA funding fees",
-                    "VA appraisals",
-                ],
-                "worksFor": {"@id": "https://myhome1st.com/#organization"},
-            }
-        )
 
     graph.append(
         {

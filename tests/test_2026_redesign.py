@@ -333,8 +333,28 @@ class RedesignIntegrationTests(unittest.TestCase):
                     blog_path.name,
                 )
                 self.assertEqual(
+                    schema['author']['brand']['@id'],
+                    'https://drmortgageusa.com/#brand',
+                    blog_path.name,
+                )
+                self.assertEqual(
+                    schema['author']['brand']['@type'],
+                    'Brand',
+                    blog_path.name,
+                )
+                self.assertEqual(
+                    schema['author']['brand']['owner']['@id'],
+                    'https://drmortgageusa.com/about#dennis-ross',
+                    blog_path.name,
+                )
+                self.assertEqual(
                     schema['publisher']['@id'],
-                    'https://drmortgageusa.com/#organization',
+                    'https://drmortgageusa.com/about#dennis-ross',
+                    blog_path.name,
+                )
+                self.assertEqual(
+                    schema['publisher']['@type'],
+                    'Person',
                     blog_path.name,
                 )
                 self.assertEqual(
@@ -375,7 +395,7 @@ class RedesignIntegrationTests(unittest.TestCase):
 
         self.assertGreaterEqual(article_count, 58)
 
-    def test_service_pages_share_the_canonical_business_entity(self):
+    def test_service_pages_share_the_canonical_person_brand_and_employer_entities(self):
         for route in (
             '/va-loans-orlando',
             '/orlando-mortgage-broker',
@@ -401,105 +421,102 @@ class RedesignIntegrationTests(unittest.TestCase):
             self.assertNotEqual(service['name'], 'DR. Mortgage USA - Dennis Ross', route)
             self.assertEqual(
                 service['provider']['@id'],
-                'https://drmortgageusa.com/#organization',
+                'https://drmortgageusa.com/about#dennis-ross',
                 route,
             )
             self.assertEqual(
-                service['provider']['address']['addressLocality'],
-                'Lake Mary',
+                service['brand']['@id'],
+                'https://drmortgageusa.com/#brand',
+                route,
+            )
+            self.assertFalse(
+                any(
+                    entity.get('@id') == 'https://drmortgageusa.com/#organization'
+                    or (
+                        entity.get('@type') == 'FinancialService'
+                        and entity.get('name') == 'DR. Mortgage USA'
+                    )
+                    for entity in schema['@graph']
+                ),
+                route,
+            )
+            dennis = next(
+                entity for entity in schema['@graph']
+                if entity.get('@id') == 'https://drmortgageusa.com/about#dennis-ross'
+            )
+            brand = next(
+                entity for entity in schema['@graph']
+                if entity.get('@id') == 'https://drmortgageusa.com/#brand'
+            )
+            home1st = next(
+                entity for entity in schema['@graph']
+                if entity.get('@id') == 'https://myhome1st.com/#organization'
+            )
+            self.assertEqual(dennis['@type'], 'Person', route)
+            self.assertEqual(dennis['identifier']['value'], '2018381', route)
+            self.assertEqual(
+                dennis['worksFor']['@id'],
+                'https://myhome1st.com/#organization',
+                route,
+            )
+            self.assertEqual(
+                dennis['brand']['@id'],
+                'https://drmortgageusa.com/#brand',
                 route,
             )
             self.assertIn(
                 'https://www.google.com/maps?cid=3829412552217676351',
-                service['provider']['sameAs'],
+                dennis['sameAs'],
                 route,
             )
             self.assertIn(
                 'https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023',
-                service['provider']['sameAs'],
+                dennis['sameAs'],
                 route,
             )
             self.assertIn(
                 'https://linktr.ee/dr.mortgageusa',
-                service['provider']['sameAs'],
+                dennis['sameAs'],
                 route,
             )
             self.assertIn(
                 'https://www.experience.com/reviews/dennis-14873595',
-                service['provider']['sameAs'],
+                dennis['sameAs'],
                 route,
             )
             self.assertIn(
                 'https://www.zillow.com/lender-profile/dennis0564/',
-                service['provider']['sameAs'],
+                dennis['sameAs'],
                 route,
             )
+            self.assertEqual(brand['@type'], 'Brand', route)
             self.assertEqual(
-                service['provider']['founder']['@id'],
+                brand['owner']['@id'],
                 'https://drmortgageusa.com/about#dennis-ross',
                 route,
             )
             self.assertIn(
-                'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
-                service['provider']['parentOrganization']['sameAs'],
-                route,
-            )
-            self.assertNotIn(
-                'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
-                service['provider']['sameAs'],
-                route,
-            )
-            self.assertIn(
                 'not a separate lender or mortgage company',
-                service['provider']['description'],
+                brand['description'],
                 route,
             )
             self.assertIn(
                 'does not identify Dr. Mortgage, LLC',
-                service['provider']['disambiguatingDescription'],
+                brand['disambiguatingDescription'],
                 route,
             )
-            dennis_entities = [
-                entity for entity in schema['@graph']
-                if entity.get('@id') == 'https://drmortgageusa.com/about#dennis-ross'
-            ]
-            for dennis in dennis_entities:
-                self.assertEqual(
-                    dennis['worksFor']['@id'],
-                    'https://myhome1st.com/#organization',
-                    route,
-                )
-                self.assertIn('https://myhome1st.com/dennis/', dennis['sameAs'], route)
-                self.assertIn(
-                    'https://www.google.com/maps?cid=3829412552217676351',
-                    dennis['sameAs'],
-                    route,
-                )
-                self.assertIn(
-                    'https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023',
-                    dennis['sameAs'],
-                    route,
-                )
-                self.assertIn(
-                    'https://www.facebook.com/100084710485166',
-                    dennis['sameAs'],
-                    route,
-                )
-                self.assertIn(
-                    'https://linktr.ee/dr.mortgageusa',
-                    dennis['sameAs'],
-                    route,
-                )
-                self.assertIn(
-                    'https://www.experience.com/reviews/dennis-14873595',
-                    dennis['sameAs'],
-                    route,
-                )
-                self.assertIn(
-                    'https://www.zillow.com/lender-profile/dennis0564/',
-                    dennis['sameAs'],
-                    route,
-                )
+            for inappropriate_property in (
+                'address', 'telephone', 'openingHoursSpecification',
+                'founder', 'parentOrganization', 'sameAs',
+            ):
+                self.assertNotIn(inappropriate_property, brand, route)
+            self.assertEqual(home1st['identifier']['value'], '1418', route)
+            self.assertEqual(home1st['address']['addressLocality'], 'Lake Mary', route)
+            self.assertIn(
+                'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
+                home1st['sameAs'],
+                route,
+            )
             self.assertIn('<a href="/about">About Dennis</a>', html, route)
             self.assertIn(
                 'https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381',

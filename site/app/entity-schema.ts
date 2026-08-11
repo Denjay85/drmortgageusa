@@ -1,7 +1,7 @@
 const origin = "https://drmortgageusa.com";
 
 export const dennisRossId = `${origin}/about#dennis-ross`;
-export const drMortgageOrganizationId = `${origin}/#organization`;
+export const drMortgageBrandId = `${origin}/#brand`;
 export const websiteId = `${origin}/#website`;
 export const home1stOrganizationId = "https://myhome1st.com/#organization";
 
@@ -64,6 +64,7 @@ export const dennisRossSchema = {
     propertyID: "NMLS",
     value: "2018381",
   },
+  brand: { "@id": drMortgageBrandId },
   worksFor: home1stOrganizationSchema,
   sameAs: dennisRossSameAs,
   knowsAbout: [
@@ -78,9 +79,9 @@ export const dennisRossSchema = {
   ],
 };
 
-export const drMortgageOrganizationSchema = {
-  "@type": "FinancialService",
-  "@id": drMortgageOrganizationId,
+export const drMortgageBrandSchema = {
+  "@type": "Brand",
+  "@id": drMortgageBrandId,
   name: "DR. Mortgage USA",
   alternateName: [
     "DR. Mortgage USA",
@@ -101,45 +102,7 @@ export const drMortgageOrganizationSchema = {
     height: 158,
   },
   image: `${origin}/media/dennis.webp`,
-  telephone: "+1-850-346-8514",
-  email: "dennis@drmortgageusa.com",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "1130 Business Center Dr, Suite 1000",
-    addressLocality: "Lake Mary",
-    addressRegion: "FL",
-    postalCode: "32746",
-    addressCountry: "US",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 28.7842131,
-    longitude: -81.3610467,
-  },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "19:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Saturday",
-      opens: "11:00",
-      closes: "17:00",
-    },
-  ],
-  areaServed: [
-    { "@type": "City", name: "Orlando" },
-    { "@type": "City", name: "Lake Mary" },
-    { "@type": "AdministrativeArea", name: "Central Florida" },
-    { "@type": "State", name: "Florida" },
-  ],
-  founder: { "@id": dennisRossId },
-  parentOrganization: { "@id": home1stOrganizationId },
-  sameAs: dennisRossSameAs,
-  knowsAbout: dennisRossSchema.knowsAbout,
+  owner: { "@id": dennisRossId },
 };
 
 export const websiteSchema = {
@@ -148,14 +111,16 @@ export const websiteSchema = {
   name: "DR. Mortgage USA",
   alternateName: "DrMortgageUSA",
   url: `${origin}/`,
-  publisher: { "@id": drMortgageOrganizationId },
+  creator: { "@id": dennisRossId },
+  publisher: { "@id": dennisRossId },
+  about: { "@id": dennisRossId },
   inLanguage: "en-US",
 };
 
 export const homepageEntitySchema = {
   "@context": "https://schema.org",
   "@graph": [
-    drMortgageOrganizationSchema,
+    drMortgageBrandSchema,
     dennisRossSchema,
     home1stOrganizationSchema,
     websiteSchema,
@@ -185,7 +150,7 @@ export const blogCollectionSchema = {
       description:
         "Florida mortgage and Greater Orlando VA home loan guidance authored by Navy veteran Dennis Ross, individual NMLS 2018381.",
       author: { "@id": dennisRossId },
-      publisher: { "@id": drMortgageOrganizationId },
+      publisher: { "@id": dennisRossId },
       isPartOf: { "@id": websiteId },
       about: [
         { "@type": "Thing", name: "VA home loans in Greater Orlando" },
@@ -196,7 +161,7 @@ export const blogCollectionSchema = {
       inLanguage: "en-US",
     },
     dennisRossSchema,
-    drMortgageOrganizationSchema,
+    drMortgageBrandSchema,
     home1stOrganizationSchema,
     websiteSchema,
   ],

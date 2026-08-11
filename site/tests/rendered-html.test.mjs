@@ -94,8 +94,8 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   const entityMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(entityMatch, "homepage entity graph should render");
   const entityGraph = JSON.parse(entityMatch[1]);
-  const organization = entityGraph["@graph"].find(
-    (entity) => entity["@id"] === "https://drmortgageusa.com/#organization",
+  const brand = entityGraph["@graph"].find(
+    (entity) => entity["@id"] === "https://drmortgageusa.com/#brand",
   );
   const person = entityGraph["@graph"].find(
     (entity) => entity["@id"] === "https://drmortgageusa.com/about#dennis-ross",
@@ -103,12 +103,30 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   const home1st = entityGraph["@graph"].find(
     (entity) => entity["@id"] === "https://myhome1st.com/#organization",
   );
-  assert.equal(organization["@type"], "FinancialService");
-  assert.equal(organization.name, "DR. Mortgage USA");
-  assert.match(organization.description, /not a separate lender or mortgage company/);
-  assert.match(organization.disambiguatingDescription, /does not identify Dr\. Mortgage, LLC/);
-  assert.equal(organization.telephone, "+1-850-346-8514");
-  assert.equal(organization.address.addressLocality, "Lake Mary");
+  const website = entityGraph["@graph"].find(
+    (entity) => entity["@id"] === "https://drmortgageusa.com/#website",
+  );
+  assert.equal(brand["@type"], "Brand");
+  assert.equal(brand.name, "DR. Mortgage USA");
+  assert.match(brand.description, /not a separate lender or mortgage company/);
+  assert.match(brand.disambiguatingDescription, /does not identify Dr\. Mortgage, LLC/);
+  assert.equal(brand.owner["@id"], "https://drmortgageusa.com/about#dennis-ross");
+  assert.equal(brand.address, undefined);
+  assert.equal(brand.telephone, undefined);
+  assert.equal(brand.parentOrganization, undefined);
+  assert.equal(
+    person.brand["@id"],
+    "https://drmortgageusa.com/#brand",
+  );
+  assert.equal(
+    website.publisher["@id"],
+    "https://drmortgageusa.com/about#dennis-ross",
+  );
+  assert.ok(
+    !entityGraph["@graph"].some(
+      (entity) => entity["@id"] === "https://drmortgageusa.com/#organization",
+    ),
+  );
   assert.equal(person.identifier.value, "2018381");
   assert.ok(person.sameAs.includes("https://myhome1st.com/dennis/"));
   assert.ok(person.sameAs.includes("https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023"));
