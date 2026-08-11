@@ -172,7 +172,7 @@ PAGES = [
     },
     {
         "slug": "first-time-homebuyer-orlando",
-        "title": "First-Time Homebuyer Orlando | Loan Help and DPA Options | Dr.MortgageUSA",
+        "title": "First-Time Homebuyer Orlando | Loans and DPA",
         "description": "First-time homebuyer help in Orlando with low-down-payment loans, DPA guidance, and realistic payment planning. Speak with Dennis Ross at Dr.MortgageUSA.",
         "eyebrow": "First-Time Buyer Orlando",
         "hero_title": "First-Time Homebuyer Help for Orlando Buyers Who Want Clear Numbers",
@@ -228,7 +228,7 @@ PAGES = [
     },
     {
         "slug": "refinance-florida",
-        "title": "Refinance Florida | Refinance Options for Florida Homeowners | Dr.MortgageUSA",
+        "title": "Florida Refinance Options | Dennis Ross",
         "description": "Explore refinance options in Florida, including FHA-to-conventional, VA IRRRL, cash-out, and rate-term strategies. Get clear refinance guidance from Dr.MortgageUSA.",
         "eyebrow": "Refinance Options Florida",
         "hero_title": "Refinance Options in Florida That Start With the Math",
