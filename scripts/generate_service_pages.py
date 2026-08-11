@@ -43,7 +43,7 @@ GREATER_ORLANDO_AREAS = [
 PAGES = [
     {
         "slug": "va-loans-orlando",
-        "title": "VA Loans Orlando | Dennis Ross, Navy Veteran and Mortgage Broker",
+        "title": "VA Loans Orlando | Navy Veteran Dennis Ross",
         "description": "Greater Orlando VA loan guidance from Navy veteran Dennis Ross, NMLS 2018381. Review eligibility, COE, zero-down options, and local payment planning.",
         "eyebrow": "Orlando VA Loan Help",
         "hero_title": "VA Loans in Orlando Without the Confusion",
