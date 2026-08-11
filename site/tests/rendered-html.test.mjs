@@ -109,6 +109,8 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.equal(person.identifier.value, "2018381");
   assert.ok(person.sameAs.includes("https://myhome1st.com/dennis/"));
   assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
+  assert.ok(person.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
+  assert.ok(person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
   assert.match(html, /rel="me" href="https:\/\/www\.linkedin\.com\/in\/dennis-ross-87491257"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
