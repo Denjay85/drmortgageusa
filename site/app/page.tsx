@@ -199,6 +199,19 @@ export default function Home() {
               hard decisions clearly. You will get a direct conversation, a
               plain-language recap, and options built around your actual life.
             </p>
+            <p className="story-proof">
+              <strong>Independent profile evidence:</strong>{" "}
+              <a
+                href="https://www.experience.com/reviews/dennis-14873595"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Experience.com&apos;s public Dennis Ross Jr. profile
+              </a>{" "}
+              identifies NMLS #2018381 and Dr MortgageUSA in Lake Mary, lists VA
+              Home Loan among the services, and shows a 5.0 average across 16
+              reviews aggregated from Google and Zillow.
+            </p>
             <div className="story-actions">
               <Link className="text-link" href="/about">Meet Dennis <span>→</span></Link>
               <a className="text-link" href="https://www.google.com/search?q=Dennis+Ross+Mortgage+Reviews">Read Google reviews <span>→</span></a>

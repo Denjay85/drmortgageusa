@@ -3236,6 +3236,26 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
   color: rgba(255, 255, 255, 0.62);
 }
 
+.story-copy > .story-proof {
+  margin-top: 24px;
+  padding-left: 18px;
+  border-left: 2px solid var(--gold-500);
+  font-size: 0.94rem;
+  line-height: 1.72;
+}
+
+.story-proof strong {
+  color: var(--white);
+}
+
+.story-proof a {
+  color: var(--gold-500);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-color: rgba(216, 178, 91, 0.52);
+  text-underline-offset: 3px;
+}
+
 .story-copy .text-link {
   color: var(--gold-500);
 }
