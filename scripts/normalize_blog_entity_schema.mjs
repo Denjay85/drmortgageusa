@@ -22,6 +22,22 @@ const authorSameAs = [
   "https://www.zillow.com/lender-profile/dennis0564/",
 ];
 
+const home1stOrganization = {
+  "@type": "Organization",
+  "@id": "https://myhome1st.com/#organization",
+  name: "Home 1st Lending, LLC",
+  url: "https://myhome1st.com/",
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "NMLS",
+    value: "1418",
+  },
+  sameAs: [
+    "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
+    "https://www.yelp.com/biz/home-1st-lending-lake-mary-2",
+  ],
+};
+
 const author = {
   "@type": "Person",
   "@id": "https://drmortgageusa.com/about#dennis-ross",
@@ -37,7 +53,7 @@ const author = {
     propertyID: "NMLS",
     value: "2018381",
   },
-  worksFor: { "@id": "https://myhome1st.com/#organization" },
+  worksFor: home1stOrganization,
   sameAs: authorSameAs,
   knowsAbout: [
     "VA home loans in Greater Orlando",

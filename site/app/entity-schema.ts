@@ -18,6 +18,11 @@ export const dennisRossSameAs = [
   "https://www.zillow.com/lender-profile/dennis0564/",
 ];
 
+export const home1stSameAs = [
+  "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
+  "https://www.yelp.com/biz/home-1st-lending-lake-mary-2",
+];
+
 export const home1stOrganizationSchema = {
   "@type": "Organization",
   "@id": home1stOrganizationId,
@@ -28,6 +33,7 @@ export const home1stOrganizationSchema = {
     propertyID: "NMLS",
     value: "1418",
   },
+  sameAs: home1stSameAs,
   address: {
     "@type": "PostalAddress",
     streetAddress: "1130 Business Center Dr, Suite 1000",
@@ -57,7 +63,7 @@ export const dennisRossSchema = {
     propertyID: "NMLS",
     value: "2018381",
   },
-  worksFor: { "@id": home1stOrganizationId },
+  worksFor: home1stOrganizationSchema,
   sameAs: dennisRossSameAs,
   knowsAbout: [
     "VA home loans in Greater Orlando",

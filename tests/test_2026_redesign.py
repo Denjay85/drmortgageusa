@@ -237,6 +237,10 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('https://www.experience.com/reviews/dennis-14873595', manifest)
         self.assertIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
         self.assertIn(
+            'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
+            manifest,
+        )
+        self.assertIn(
             'https://www.va.gov/housing-assistance/home-loans/eligibility/',
             manifest,
         )
@@ -271,6 +275,16 @@ class RedesignIntegrationTests(unittest.TestCase):
                 self.assertEqual(
                     schema['author']['worksFor']['@id'],
                     'https://myhome1st.com/#organization',
+                    blog_path.name,
+                )
+                self.assertIn(
+                    'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
+                    schema['author']['worksFor']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertNotIn(
+                    'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
+                    schema['author']['sameAs'],
                     blog_path.name,
                 )
                 self.assertIn(
@@ -401,6 +415,16 @@ class RedesignIntegrationTests(unittest.TestCase):
                 route,
             )
             self.assertIn(
+                'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
+                service['provider']['parentOrganization']['sameAs'],
+                route,
+            )
+            self.assertNotIn(
+                'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
+                service['provider']['sameAs'],
+                route,
+            )
+            self.assertIn(
                 'not a separate lender or mortgage company',
                 service['provider']['description'],
                 route,
@@ -473,6 +497,11 @@ class RedesignIntegrationTests(unittest.TestCase):
                     html,
                 )
                 self.assertIn('Independent client evidence:', html)
+                self.assertIn('Company service verification:', html)
+                self.assertIn(
+                    'Home 1st Lending Yelp profile',
+                    html,
+                )
                 self.assertIn(
                     'specifically recommends Dennis to veterans looking to buy a home',
                     html,

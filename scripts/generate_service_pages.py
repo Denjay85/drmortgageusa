@@ -31,6 +31,11 @@ DENNIS_SAME_AS = [
     "https://www.zillow.com/lender-profile/dennis0564/",
 ]
 
+HOME1ST_SAME_AS = [
+    "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
+    "https://www.yelp.com/biz/home-1st-lending-lake-mary-2",
+]
+
 GREATER_ORLANDO_AREAS = [
     {"@type": "City", "name": "Orlando"},
     {"@type": "City", "name": "Lake Mary"},
@@ -433,11 +438,13 @@ def page_json(page: dict) -> str:
             "@type": "Organization",
             "@id": "https://myhome1st.com/#organization",
             "name": "Home 1st Lending, LLC",
+            "url": "https://myhome1st.com/",
             "identifier": {
                 "@type": "PropertyValue",
                 "propertyID": "NMLS",
                 "value": "1418",
             },
+            "sameAs": HOME1ST_SAME_AS,
         },
         "sameAs": DENNIS_SAME_AS,
     }
@@ -536,6 +543,7 @@ def render_page(page: dict) -> str:
             {render_link_list(page['official_resources'], 'detail-list')}
             <p class="source-note">Verify <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Dennis Ross, NMLS 2018381</a>, review his <a href="https://myhome1st.com/dennis/">Home 1st Lending profile</a>, or open the <a href="https://www.google.com/maps?cid=3829412552217676351">Google Business Profile</a>.</p>
             <p class="source-note"><strong>Independent client evidence:</strong> Dennis's public Google Business Profile shows a 5.0 rating from more than 30 reviews, including a client who specifically recommends Dennis to veterans looking to buy a home. <a href="https://www.google.com/maps?cid=3829412552217676351">Read the public Google reviews.</a></p>
+            <p class="source-note"><strong>Company service verification:</strong> Home 1st Lending's claimed Yelp business profile lists VA loan as a service verified by the business. <a href="https://www.yelp.com/biz/home-1st-lending-lake-mary-2">View the Home 1st Lending Yelp profile.</a></p>
           </article>
         </div>
       </section>
