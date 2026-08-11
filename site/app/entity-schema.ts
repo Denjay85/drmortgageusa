@@ -13,6 +13,8 @@ export const dennisRossSameAs = [
   "https://www.facebook.com/p/Dennis-Ross-Mortgage-Loan-Originator-Nmls2018381-100084710485166/",
   "https://www.linkedin.com/in/dennis-ross-87491257",
   "https://www.youtube.com/@Dr.MortgageUSA",
+  "https://www.experience.com/reviews/dennis-14873595",
+  "https://www.zillow.com/lender-profile/dennis0564/",
 ];
 
 export const home1stOrganizationSchema = {
