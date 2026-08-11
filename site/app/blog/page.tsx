@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FinalCTA, PageHero, PageShell, SectionHeading } from "../site-components";
+import { blogCollectionSchema } from "../entity-schema";
 import BlogLibrary from "./BlogLibrary";
 import { blogPosts } from "./posts";
 
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogCollectionSchema) }}
+      />
       <PageHero
         eyebrow="The DR. Mortgage USA blog"
         title="Start with the question already on your mind."

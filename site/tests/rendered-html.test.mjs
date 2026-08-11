@@ -142,6 +142,21 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
   const blogHtml = await blogResponse.text();
   assert.equal((blogHtml.match(/class="blog-card"/g) ?? []).length, 48);
   assert.match(blogHtml, /VA Loan Guide for Florida Veterans/);
+  const blogEntityMatch = blogHtml.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
+  assert.ok(blogEntityMatch, "blog entity graph should render");
+  const blogEntityGraph = JSON.parse(blogEntityMatch[1]);
+  const collection = blogEntityGraph["@graph"].find(
+    (entity) => entity["@id"] === "https://drmortgageusa.com/blog#collection",
+  );
+  const blogAuthor = blogEntityGraph["@graph"].find(
+    (entity) => entity["@id"] === "https://drmortgageusa.com/about#dennis-ross",
+  );
+  assert.equal(collection["@type"], "CollectionPage");
+  assert.match(collection.description, /Navy veteran Dennis Ross/);
+  assert.ok(collection.about.some((topic) => topic.name === "VA home loans in Greater Orlando"));
+  assert.ok(blogAuthor.sameAs.includes("https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023"));
+  assert.ok(blogAuthor.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
+  assert.ok(blogAuthor.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
 
   const dpaResponse = await render("/dpa");
   const dpaHtml = await dpaResponse.text();
