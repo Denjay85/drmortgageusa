@@ -20,7 +20,7 @@ export function Header() {
         <div className="shell header-inner">
           <Link href="/" className="brand" aria-label="DR. Mortgage USA home">
             <span className="brand-mark" aria-hidden="true">
-              <Image src="/media/logo.webp" alt="" width={48} height={48} priority unoptimized />
+              <Image src="/media/logo.webp" alt="DR. Mortgage USA logo" width={48} height={48} priority unoptimized />
             </span>
             <span>
               <strong>DR. Mortgage USA</strong>
@@ -79,7 +79,7 @@ export function Footer() {
         <div className="footer-brand">
           <Link href="/" className="brand brand-light">
             <span className="brand-mark" aria-hidden="true">
-              <Image src="/media/logo.webp" alt="" width={56} height={56} unoptimized />
+              <Image src="/media/logo.webp" alt="DR. Mortgage USA logo" width={56} height={56} unoptimized />
             </span>
             <span>
               <strong>DR. Mortgage USA</strong>
