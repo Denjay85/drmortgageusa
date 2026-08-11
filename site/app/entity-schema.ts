@@ -43,9 +43,9 @@ export const dennisRossSchema = {
   url: `${origin}/about`,
   image: `${origin}/media/dennis.webp`,
   description:
-    "Known publicly as DR. Mortgage USA, Dennis Ross is a Navy veteran, Florida mortgage broker, and Mortgage Loan Originator helping Greater Orlando veterans, buyers, and homeowners understand their financing options.",
+    "Known publicly as DR. Mortgage USA, Dennis Ross is a Navy veteran and Florida Mortgage Loan Originator with Home 1st Lending, LLC, helping Greater Orlando veterans, buyers, and homeowners understand their financing options.",
   disambiguatingDescription:
-    "Navy veteran and Florida Mortgage Loan Originator NMLS 2018381 behind DR. Mortgage USA, based in Lake Mary and serving Greater Orlando.",
+    "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and website. He is based in Lake Mary, serves Greater Orlando, and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
   jobTitle: "Mortgage Loan Originator and Mortgage Broker",
   telephone: "+1-850-346-8514",
   email: "dennis@drmortgageusa.com",
@@ -80,7 +80,9 @@ export const drMortgageOrganizationSchema = {
   ],
   url: `${origin}/`,
   description:
-    "Greater Orlando and Florida mortgage guidance from Navy veteran Dennis Ross for veterans, buyers, homeowners, self-employed borrowers, and investors.",
+    "DR. Mortgage USA is the professional brand and educational website of Navy veteran Dennis Ross, individual NMLS 2018381, serving Greater Orlando and Florida through Home 1st Lending, LLC, company NMLS 1418. It is not a separate lender or mortgage company.",
+  disambiguatingDescription:
+    "The DR. Mortgage USA name on drmortgageusa.com identifies Dennis Ross and his Greater Orlando mortgage practice through Home 1st Lending, LLC; it does not identify Dr. Mortgage, LLC or another separately licensed mortgage company.",
   logo: {
     "@type": "ImageObject",
     url: `${origin}/media/logo.webp`,

@@ -134,6 +134,11 @@ export function Footer() {
           Opportunity. All loans are subject to credit and property approval.
           Programs, rates, and availability may change without notice.
         </p>
+        <p>
+          DR. Mortgage USA is Dennis Ross&apos;s professional brand and educational
+          website. It is not a separate lender or mortgage company; mortgage loan
+          origination is conducted through Home 1st Lending, LLC, NMLS #1418.
+        </p>
         <p>© 2026 DR. Mortgage USA. All rights reserved.</p>
       </div>
     </footer>

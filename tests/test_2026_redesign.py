@@ -209,6 +209,8 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('NMLS 2018381', manifest)
         self.assertIn('Home 1st Lending, LLC, NMLS 1418', manifest)
         self.assertIn('Greater Orlando', manifest)
+        self.assertIn('DR. Mortgage USA is not a separate lender or mortgage company', manifest)
+        self.assertIn('does not refer to Dr. Mortgage, LLC', manifest)
         self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
         self.assertIn(
             'https://www.va.gov/housing-assistance/home-loans/eligibility/',
@@ -327,6 +329,16 @@ class RedesignIntegrationTests(unittest.TestCase):
             self.assertEqual(
                 service['provider']['founder']['@id'],
                 'https://drmortgageusa.com/about#dennis-ross',
+                route,
+            )
+            self.assertIn(
+                'not a separate lender or mortgage company',
+                service['provider']['description'],
+                route,
+            )
+            self.assertIn(
+                'does not identify Dr. Mortgage, LLC',
+                service['provider']['disambiguatingDescription'],
                 route,
             )
             dennis_entities = [

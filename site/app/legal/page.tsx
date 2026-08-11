@@ -43,6 +43,7 @@ export default function LegalPage() {
             <p className="eyebrow">Licensing & mortgage disclosures</p>
             <h2>Licensing and Disclosures</h2>
             <p>Dennis Ross, Mortgage Loan Originator, NMLS #2018381. Licensed in Florida. Powered by Home 1st Lending, LLC, NMLS #1418. Equal Housing Opportunity.</p>
+            <p>DR. Mortgage USA is Dennis Ross&apos;s professional brand and educational website. It is not a separate lender or mortgage company. Mortgage loan origination is conducted through Home 1st Lending, LLC, NMLS #1418. The DR. Mortgage USA name on this website does not refer to Dr. Mortgage, LLC or another similarly named mortgage company.</p>
             <p>All loans are subject to credit and property approval. Not all applicants will qualify. Programs, interest rates, fees, pricing, and availability are subject to change without notice. Calculator and rate examples are educational estimates and are not an offer, approval, prequalification, commitment to lend, or rate lock.</p>
             <p><a className="text-link" href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418">View Home 1st Lending in NMLS Consumer Access <span>→</span></a></p>
           </section>

@@ -411,7 +411,8 @@ def page_json(page: dict) -> str:
         "name": "DR. Mortgage USA",
         "alternateName": ["DrMortgageUSA", "Dennis Ross, Dr.MortgageUSA"],
         "url": "https://drmortgageusa.com/",
-        "description": "Greater Orlando and Florida mortgage guidance from Navy veteran Dennis Ross.",
+        "description": "DR. Mortgage USA is the professional brand and educational website of Navy veteran Dennis Ross, individual NMLS 2018381, serving Greater Orlando and Florida through Home 1st Lending, LLC, company NMLS 1418. It is not a separate lender or mortgage company.",
+        "disambiguatingDescription": "The DR. Mortgage USA name on drmortgageusa.com identifies Dennis Ross and his Greater Orlando mortgage practice through Home 1st Lending, LLC; it does not identify Dr. Mortgage, LLC or another separately licensed mortgage company.",
         "telephone": "+1-850-346-8514",
         "email": "dennis@drmortgageusa.com",
         "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
@@ -458,6 +459,7 @@ def page_json(page: dict) -> str:
                 "name": "Dennis Ross",
                 "jobTitle": "Mortgage Loan Originator and Mortgage Broker",
                 "description": "Navy veteran and Florida mortgage broker helping Greater Orlando veterans understand VA home loan options.",
+                "disambiguatingDescription": "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and website and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
                 "url": "https://drmortgageusa.com/about",
                 "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
                 "identifier": {
@@ -680,6 +682,7 @@ def render_page(page: dict) -> str:
       <div class="container">
         <strong style="display: block; margin-bottom: 6px;">Dr.MortgageUSA | Dennis Ross | NMLS #2018381</strong>
         <div>Licensed in Florida | Powered by Home 1st Lending, LLC NMLS #1418</div>
+        <div>DR. Mortgage USA is Dennis Ross's professional brand and educational website, not a separate lender or mortgage company.</div>
         <div>1130 Business Center Dr, Suite 1000, Lake Mary, FL 32746</div>
         <div class="footer-links">
           <a href="/">Home</a>

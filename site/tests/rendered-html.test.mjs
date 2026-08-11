@@ -94,6 +94,8 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   );
   assert.equal(organization["@type"], "FinancialService");
   assert.equal(organization.name, "DR. Mortgage USA");
+  assert.match(organization.description, /not a separate lender or mortgage company/);
+  assert.match(organization.disambiguatingDescription, /does not identify Dr\. Mortgage, LLC/);
   assert.equal(organization.telephone, "+1-850-346-8514");
   assert.equal(organization.address.addressLocality, "Lake Mary");
   assert.equal(person.identifier.value, "2018381");
@@ -176,6 +178,8 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /NMLS Consumer Access/);
   assert.match(html, /official Home 1st Lending profile/);
   assert.match(html, /Google Business Profile/);
+  assert.match(html, /DR\. Mortgage USA is my professional brand and educational website/);
+  assert.match(html, /does not refer to Dr\. Mortgage, LLC/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(personMatch, "about profile page structured data should render");
   const profilePage = JSON.parse(personMatch[1]);
@@ -185,6 +189,7 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.equal(person.name, "Dennis Ross");
   assert.equal(person.identifier.value, "2018381");
   assert.match(person.disambiguatingDescription, /NMLS 2018381/);
+  assert.match(person.disambiguatingDescription, /Home 1st Lending, LLC/);
   assert.match(person.description, /Known publicly as DR\. Mortgage USA/);
   assert.ok(person.sameAs.includes("https://www.google.com/maps?cid=3829412552217676351"));
   assert.ok(person.sameAs.includes("https://www.linkedin.com/in/dennis-ross-87491257"));
