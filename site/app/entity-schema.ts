@@ -9,6 +9,7 @@ export const dennisRossSameAs = [
   "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
   "https://myhome1st.com/dennis/",
   "https://www.google.com/maps?cid=3829412552217676351",
+  "https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023",
   "https://www.instagram.com/dr.mortgageusa/",
   "https://www.facebook.com/p/Dennis-Ross-Mortgage-Loan-Originator-Nmls2018381-100084710485166/",
   "https://www.linkedin.com/in/dennis-ross-87491257",

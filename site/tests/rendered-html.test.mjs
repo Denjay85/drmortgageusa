@@ -108,6 +108,7 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.equal(organization.address.addressLocality, "Lake Mary");
   assert.equal(person.identifier.value, "2018381");
   assert.ok(person.sameAs.includes("https://myhome1st.com/dennis/"));
+  assert.ok(person.sameAs.includes("https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023"));
   assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
   assert.ok(person.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
   assert.ok(person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
