@@ -25,11 +25,16 @@ const provider = {
     "@type": "Organization",
     "@id": "https://myhome1st.com/#organization",
     name: "Home 1st Lending, LLC",
+    url: "https://myhome1st.com/",
     identifier: {
       "@type": "PropertyValue",
       propertyID: "NMLS",
       value: "1418",
     },
+    sameAs: [
+      "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
+      "https://www.yelp.com/biz/home-1st-lending-lake-mary-2",
+    ],
   },
 };
 

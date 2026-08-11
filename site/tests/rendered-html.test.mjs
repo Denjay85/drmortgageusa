@@ -100,6 +100,9 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   const person = entityGraph["@graph"].find(
     (entity) => entity["@id"] === "https://drmortgageusa.com/about#dennis-ross",
   );
+  const home1st = entityGraph["@graph"].find(
+    (entity) => entity["@id"] === "https://myhome1st.com/#organization",
+  );
   assert.equal(organization["@type"], "FinancialService");
   assert.equal(organization.name, "DR. Mortgage USA");
   assert.match(organization.description, /not a separate lender or mortgage company/);
@@ -112,6 +115,9 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
   assert.ok(person.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
   assert.ok(person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
+  assert.ok(home1st.sameAs.includes("https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418"));
+  assert.ok(home1st.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
+  assert.ok(!person.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
   assert.match(html, /alt="DR\. Mortgage USA logo"/);
   assert.match(html, /rel="me" href="https:\/\/www\.linkedin\.com\/in\/dennis-ross-87491257"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
@@ -205,6 +211,8 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /NMLS Consumer Access/);
   assert.match(html, /official Home 1st Lending profile/);
   assert.match(html, /Google Business Profile/);
+  assert.match(html, /claimed Yelp business profile/);
+  assert.match(html, /VA loan as a service verified by the business/);
   assert.match(html, /DR\. Mortgage USA is my professional brand and educational website/);
   assert.match(html, /does not refer to Dr\. Mortgage, LLC/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
@@ -220,6 +228,8 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(person.description, /Known publicly as DR\. Mortgage USA/);
   assert.ok(person.sameAs.includes("https://www.google.com/maps?cid=3829412552217676351"));
   assert.ok(person.sameAs.includes("https://www.linkedin.com/in/dennis-ross-87491257"));
+  assert.ok(person.worksFor.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
+  assert.ok(!person.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
 });
 
 test("keeps purchase-only questions out of refinance and equity quiz branches", async () => {
