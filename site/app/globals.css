@@ -4326,7 +4326,7 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
 
 .depth-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -5310,7 +5310,6 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
     grid-template-columns: 1fr 1fr;
   }
 
-  .depth-card:last-child,
   .blog-card:last-child,
   .dpa-program-grid article:last-child {
     grid-column: 1 / -1;

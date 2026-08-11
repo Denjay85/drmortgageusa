@@ -2231,6 +2231,13 @@ def blog_post(slug):
 @app.after_request
 def add_cache_headers(response):
     try:
+        # Keep Render preview services out of every search and answer-engine
+        # index even though the committed production export is indexable.
+        if (PREVIEW_MODE and response.content_type
+                and 'text/html' in response.content_type):
+            response.headers['X-Robots-Tag'] = (
+                'noindex, nofollow, noarchive, nosnippet'
+            )
         if response.headers.get('Cache-Control'):
             pass
         # Static assets: cache for 1 week

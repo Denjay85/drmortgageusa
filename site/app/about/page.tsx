@@ -30,10 +30,15 @@ const personSchema = {
     propertyID: "NMLS",
     value: "2018381",
   },
-  sameAs: ["https://www.instagram.com/dr.mortgageusa"],
+  sameAs: [
+    "https://www.instagram.com/dr.mortgageusa/",
+    "https://www.facebook.com/DrMortgageUSA",
+    "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
+    "https://myhome1st.com/meet-our-team/",
+  ],
   knowsAbout: [
     "Florida mortgages",
-    "VA loans",
+    "VA home loans in Orlando",
     "FHA loans",
     "Down payment assistance",
     "Self-employed mortgage lending",

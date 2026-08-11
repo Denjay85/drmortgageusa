@@ -29,6 +29,7 @@ export function Header() {
           </Link>
 
           <nav className="desktop-nav" aria-label="Primary navigation">
+            <Link href="/va-loans-orlando">VA loans</Link>
             <Link href="/mortgage-options">Mortgage options</Link>
             <Link className="nav-dpa" href="/dpa">DPA programs</Link>
             <Link href="/#rates">Today&apos;s rates</Link>
@@ -52,6 +53,7 @@ export function Header() {
           <details className="mobile-menu">
             <summary aria-label="Open navigation">Menu</summary>
             <nav aria-label="Mobile navigation">
+              <Link href="/va-loans-orlando">VA loans in Orlando</Link>
               <Link href="/mortgage-options">Mortgage options</Link>
               <Link className="nav-dpa" href="/dpa">DPA programs</Link>
               <Link href="/#rates">Today&apos;s rates</Link>
@@ -93,6 +95,7 @@ export function Footer() {
 
         <div>
           <h2>Explore</h2>
+          <Link href="/va-loans-orlando">VA loans in Orlando</Link>
           <Link href="/mortgage-options">Mortgage options</Link>
           <Link href="/#rates">Today&apos;s rates</Link>
           <Link href="/tools">Calculators & tools</Link>

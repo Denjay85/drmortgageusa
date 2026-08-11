@@ -18,10 +18,10 @@ import PremiumProcess from "./PremiumProcess";
 import MortgagePathwaySection from "./MortgagePathwaySection";
 
 export const metadata: Metadata = {
-  title: "Florida Mortgage Guidance",
+  title: "Orlando VA Loan and Florida Mortgage Broker",
   alternates: { canonical: "/" },
   description:
-    "Get clear, personal Florida mortgage guidance from Navy veteran and mortgage broker Dennis Ross. Compare payments, loan options, and next steps before you apply.",
+    "Dennis Ross, NMLS #2018381, is an Orlando-based Navy veteran and Florida mortgage broker helping veterans, buyers, and homeowners compare clear mortgage options.",
 };
 
 const organizationSchema = {
@@ -29,10 +29,10 @@ const organizationSchema = {
   "@type": "Organization",
   "@id": "https://drmortgageusa.com/#organization",
   name: "DR. Mortgage USA",
-  alternateName: "Dennis Ross Mortgage Broker",
+  alternateName: ["DrMortgageUSA", "Dennis Ross Mortgage Broker"],
   url: "https://drmortgageusa.com/",
   description:
-    "Florida mortgage guidance for buyers, homeowners, veterans, self-employed borrowers, and investors.",
+    "Orlando-based mortgage guidance from Navy veteran Dennis Ross for Florida veterans, buyers, homeowners, self-employed borrowers, and investors.",
   logo: {
     "@type": "ImageObject",
     url: "https://drmortgageusa.com/media/logo.webp",
@@ -42,13 +42,37 @@ const organizationSchema = {
   },
   image: "https://drmortgageusa.com/media/dennis.webp",
   telephone: "+1-850-346-8514",
-  sameAs: ["https://www.instagram.com/dr.mortgageusa"],
-  areaServed: {
-    "@type": "State",
-    name: "Florida",
-  },
+  sameAs: [
+    "https://www.instagram.com/dr.mortgageusa/",
+    "https://www.facebook.com/DrMortgageUSA",
+  ],
+  areaServed: [
+    { "@type": "City", name: "Orlando" },
+    { "@type": "State", name: "Florida" },
+  ],
+  knowsAbout: [
+    "VA home loans",
+    "Orlando mortgages",
+    "Florida mortgages",
+    "FHA loans",
+    "Down payment assistance",
+    "Self-employed mortgage lending",
+    "Home equity financing",
+  ],
   founder: {
+    "@type": "Person",
     "@id": "https://drmortgageusa.com/about#dennis-ross",
+    name: "Dennis Ross",
+    jobTitle: "Mortgage Loan Originator and Mortgage Broker",
+    identifier: {
+      "@type": "PropertyValue",
+      propertyID: "NMLS",
+      value: "2018381",
+    },
+    sameAs: [
+      "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
+      "https://myhome1st.com/meet-our-team/",
+    ],
   },
 };
 
@@ -62,15 +86,16 @@ export default function Home() {
       <section className="home-hero">
         <div className="shell home-hero-grid">
           <div className="home-hero-copy">
-            <div className="hero-editorial-meta" aria-label="Independent Florida mortgage guidance">
+            <div className="hero-editorial-meta" aria-label="Independent Orlando and Florida mortgage guidance">
               <span>Independent guidance</span>
-              <span>Florida · Est. 2020</span>
+              <span>Orlando · Florida · Est. 2020</span>
             </div>
-            <Eyebrow>Florida mortgage guidance · straight answers first</Eyebrow>
+            <Eyebrow>Orlando VA and Florida mortgage guidance · straight answers first</Eyebrow>
             <h1>Let&apos;s make the mortgage make sense before you make a move.</h1>
             <p className="hero-lede">
-              I&apos;m Dennis Ross. I help Florida buyers and homeowners understand
-              the payment, the cash, and the choices before they commit to a loan.
+              I&apos;m Dennis Ross, an Orlando-based Navy veteran and Florida mortgage
+              broker. I help veterans, buyers, and homeowners understand the payment,
+              the cash, and the choices before they commit to a loan.
             </p>
             <div className="hero-actions">
               <Link className="button button-gold" href="/get-started">
@@ -144,6 +169,11 @@ export default function Home() {
 
       <section className="depth-strip" aria-label="Popular mortgage resources">
         <div className="shell depth-grid">
+          <Link href="/va-loans-orlando" className="depth-card">
+            <span className="depth-card-icon">VA</span>
+            <div><small>Using your earned benefit?</small><strong>Explore VA loans in Orlando</strong></div>
+            <b aria-hidden="true">→</b>
+          </Link>
           <Link href="/blog" className="depth-card">
             <span className="depth-card-icon">?</span>
             <div><small>Have a specific question?</small><strong>Search the mortgage blog</strong></div>

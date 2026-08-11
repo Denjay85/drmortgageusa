@@ -25,7 +25,7 @@ const scenarios = [
     headline: "You earned the benefit. Let's make sure you know how to use it well.",
     body: "I will help you review entitlement, the possible funding fee, the full payment, appraisal questions, property condition, and offer timing from one veteran to another.",
     questions: ["Your entitlement", "Your full payment", "The property and offer"],
-    primary: { label: "Explore VA financing", href: "/mortgage-options#va" },
+    primary: { label: "Explore Orlando VA financing", href: "/va-loans-orlando" },
     secondary: { label: "Run the VA calculator", href: "/tools#va-purchase" },
   },
   {
