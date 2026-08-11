@@ -298,6 +298,16 @@ class RedesignIntegrationTests(unittest.TestCase):
                     blog_path.name,
                 )
                 self.assertIn(
+                    'https://www.facebook.com/100084710485166',
+                    schema['author']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertNotIn(
+                    'https://www.facebook.com/p/Dennis-Ross-Mortgage-Loan-Originator-Nmls2018381-100084710485166/',
+                    schema['author']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertIn(
                     'https://www.experience.com/reviews/dennis-14873595',
                     schema['author']['sameAs'],
                     blog_path.name,
@@ -452,6 +462,11 @@ class RedesignIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn(
                     'https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023',
+                    dennis['sameAs'],
+                    route,
+                )
+                self.assertIn(
+                    'https://www.facebook.com/100084710485166',
                     dennis['sameAs'],
                     route,
                 )
