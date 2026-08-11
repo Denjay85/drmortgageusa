@@ -224,6 +224,8 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /Experience\.com profile/);
   assert.match(html, /explicitly lists VA Home Loan among my services/);
   assert.match(html, /16 verified reviews/);
+  assert.match(html, /display name contains the text USMC-VET/);
+  assert.match(html, /does not identify which loan program was used/);
   assert.match(html, /DR\. Mortgage USA is my professional brand and educational website/);
   assert.match(html, /does not refer to Dr\. Mortgage, LLC/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
