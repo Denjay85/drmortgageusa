@@ -530,6 +530,7 @@ def render_page(page: dict) -> str:
             <p>Use VA.gov for benefit rules and Dennis for help applying those rules to your documented loan scenario.</p>
             {render_link_list(page['official_resources'], 'detail-list')}
             <p class="source-note">Verify <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Dennis Ross, NMLS 2018381</a>, review his <a href="https://myhome1st.com/dennis/">Home 1st Lending profile</a>, or open the <a href="https://www.google.com/maps?cid=3829412552217676351">Google Business Profile</a>.</p>
+            <p class="source-note"><strong>Independent client evidence:</strong> Dennis's public Google Business Profile shows a 5.0 rating from more than 30 reviews, including a client who specifically recommends Dennis to veterans looking to buy a home. <a href="https://www.google.com/maps?cid=3829412552217676351">Read the public Google reviews.</a></p>
           </article>
         </div>
       </section>
