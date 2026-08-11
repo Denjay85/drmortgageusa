@@ -71,10 +71,10 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.doesNotMatch(html, /Closing\s+\d+/i);
   assert.match(html, /Start simple\. Build from there/);
   assert.match(html, /class="premium-process"/);
-  if (process.env.NEXT_PUBLIC_INDEXABLE === "true") {
-    assert.match(html, /name="robots" content="index, follow"/);
-  } else {
+  if (process.env.NEXT_PUBLIC_INDEXABLE === "false") {
     assert.match(html, /name="robots" content="noindex, nofollow"/);
+  } else {
+    assert.match(html, /name="robots" content="index, follow"/);
   }
   assert.match(html, /rel="canonical" href="https:\/\/drmortgageusa\.com\/"/);
   assert.match(html, /property="og:title" content="DR\. Mortgage USA"/);

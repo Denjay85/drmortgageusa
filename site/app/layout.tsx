@@ -3,7 +3,9 @@ import Script from "next/script";
 import "./globals.css";
 
 const origin = "https://drmortgageusa.com";
-const indexable = process.env.NEXT_PUBLIC_INDEXABLE === "true";
+// Production exports must be indexable by default. Preview builds can still
+// opt out explicitly, and Flask adds an X-Robots-Tag while in preview mode.
+const indexable = process.env.NEXT_PUBLIC_INDEXABLE !== "false";
 
 export const metadata: Metadata = {
     metadataBase: new URL(origin),

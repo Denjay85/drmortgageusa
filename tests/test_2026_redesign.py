@@ -172,6 +172,16 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertNotIn('connect.facebook.net', script)
         self.assertNotIn('googletagmanager.com', script)
 
+    def test_preview_pages_send_a_noindex_header(self):
+        with patch.object(production_app, 'PREVIEW_MODE', True):
+            response = self.client.get('/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.headers['X-Robots-Tag'],
+            'noindex, nofollow, noarchive, nosnippet',
+        )
+
     def test_missing_zapier_configuration_queues_the_lead(self):
         connection = FakeConnection()
         payload = {
