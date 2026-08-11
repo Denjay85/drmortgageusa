@@ -75,6 +75,12 @@ class RedesignIntegrationTests(unittest.TestCase):
             self.assertNotIn('463950', body, route)
             response.close()
 
+    def test_legacy_html_sources_do_not_publish_the_unrelated_plains_commerce_nmls(self):
+        legacy_pages = Path(production_app.BASE_DIR).glob('*.html')
+
+        for page in legacy_pages:
+            self.assertNotIn('463950', page.read_text(encoding='utf-8'), str(page))
+
     def test_live_data_endpoints_feed_the_redesign(self):
         snapshot = {
             'rates': {
