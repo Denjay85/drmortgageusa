@@ -87,6 +87,10 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
     html,
     /name="msvalidate\.01" content="5CC872A1985FD683E724A7CBF0779BB1"/,
   );
+  assert.match(
+    html,
+    /name="google-site-verification" content="Q8StPrmafCxwpofzJV9Mizb1x32yYo2JE8Gyqa_sFlM"/,
+  );
   const entityMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(entityMatch, "homepage entity graph should render");
   const entityGraph = JSON.parse(entityMatch[1]);

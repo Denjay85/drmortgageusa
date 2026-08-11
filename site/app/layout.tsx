@@ -41,6 +41,7 @@ export const metadata: Metadata = {
       images: [`${origin}/dennis-ross-headshot.png`],
     },
     verification: {
+      google: "Q8StPrmafCxwpofzJV9Mizb1x32yYo2JE8Gyqa_sFlM",
       other: {
         "msvalidate.01": "5CC872A1985FD683E724A7CBF0779BB1",
       },
