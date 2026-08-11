@@ -341,6 +341,21 @@ class RedesignIntegrationTests(unittest.TestCase):
                 service['provider']['sameAs'],
                 route,
             )
+            self.assertIn(
+                'https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023',
+                service['provider']['sameAs'],
+                route,
+            )
+            self.assertIn(
+                'https://www.experience.com/reviews/dennis-14873595',
+                service['provider']['sameAs'],
+                route,
+            )
+            self.assertIn(
+                'https://www.zillow.com/lender-profile/dennis0564/',
+                service['provider']['sameAs'],
+                route,
+            )
             self.assertEqual(
                 service['provider']['founder']['@id'],
                 'https://drmortgageusa.com/about#dennis-ross',
@@ -369,6 +384,21 @@ class RedesignIntegrationTests(unittest.TestCase):
                 self.assertIn('https://myhome1st.com/dennis/', dennis['sameAs'], route)
                 self.assertIn(
                     'https://www.google.com/maps?cid=3829412552217676351',
+                    dennis['sameAs'],
+                    route,
+                )
+                self.assertIn(
+                    'https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023',
+                    dennis['sameAs'],
+                    route,
+                )
+                self.assertIn(
+                    'https://www.experience.com/reviews/dennis-14873595',
+                    dennis['sameAs'],
+                    route,
+                )
+                self.assertIn(
+                    'https://www.zillow.com/lender-profile/dennis0564/',
                     dennis['sameAs'],
                     route,
                 )
