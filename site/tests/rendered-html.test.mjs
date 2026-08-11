@@ -112,6 +112,8 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.equal(person.identifier.value, "2018381");
   assert.ok(person.sameAs.includes("https://myhome1st.com/dennis/"));
   assert.ok(person.sameAs.includes("https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023"));
+  assert.ok(person.sameAs.includes("https://www.facebook.com/100084710485166"));
+  assert.ok(!person.sameAs.some((url) => url.includes("facebook.com/p/Dennis-Ross-")));
   assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
   assert.ok(person.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
   assert.ok(person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
@@ -161,6 +163,7 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
   assert.match(collection.description, /Navy veteran Dennis Ross/);
   assert.ok(collection.about.some((topic) => topic.name === "VA home loans in Greater Orlando"));
   assert.ok(blogAuthor.sameAs.includes("https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023"));
+  assert.ok(blogAuthor.sameAs.includes("https://www.facebook.com/100084710485166"));
   assert.ok(blogAuthor.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
   assert.ok(blogAuthor.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
 
@@ -228,6 +231,7 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(person.description, /Known publicly as DR\. Mortgage USA/);
   assert.ok(person.sameAs.includes("https://www.google.com/maps?cid=3829412552217676351"));
   assert.ok(person.sameAs.includes("https://www.linkedin.com/in/dennis-ross-87491257"));
+  assert.ok(person.sameAs.includes("https://www.facebook.com/100084710485166"));
   assert.ok(person.worksFor.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
   assert.ok(!person.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
 });
