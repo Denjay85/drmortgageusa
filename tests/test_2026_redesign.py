@@ -235,6 +235,8 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
         self.assertIn('https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023', manifest)
         self.assertIn('https://www.experience.com/reviews/dennis-14873595', manifest)
+        self.assertIn('explicitly lists VA Home Loan among services', manifest)
+        self.assertIn('16 verified reviews', manifest)
         self.assertIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
         self.assertIn(
             'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
@@ -513,10 +515,13 @@ class RedesignIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn('Independent client evidence:', html)
                 self.assertIn('Company service verification:', html)
+                self.assertIn('Third-party profile evidence:', html)
                 self.assertIn(
                     'Home 1st Lending Yelp profile',
                     html,
                 )
+                self.assertIn('View the Experience.com profile.', html)
+                self.assertIn('16 verified reviews', html)
                 self.assertIn(
                     'specifically recommends Dennis to veterans looking to buy a home',
                     html,

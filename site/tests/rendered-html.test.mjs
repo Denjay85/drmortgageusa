@@ -216,6 +216,9 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /Google Business Profile/);
   assert.match(html, /claimed Yelp business profile/);
   assert.match(html, /VA loan as a service verified by the business/);
+  assert.match(html, /Experience\.com profile/);
+  assert.match(html, /explicitly lists VA Home Loan among my services/);
+  assert.match(html, /16 verified reviews/);
   assert.match(html, /DR\. Mortgage USA is my professional brand and educational website/);
   assert.match(html, /does not refer to Dr\. Mortgage, LLC/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
