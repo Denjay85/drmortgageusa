@@ -376,6 +376,14 @@ class RedesignIntegrationTests(unittest.TestCase):
                     '<meta name="twitter:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">',
                     html,
                 )
+                self.assertIn('Independent client evidence:', html)
+                self.assertIn(
+                    'specifically recommends Dennis to veterans looking to buy a home',
+                    html,
+                )
+                self.assertIn('Read the public Google reviews.', html)
+                self.assertNotIn('"@type": "Review"', html)
+                self.assertNotIn('"aggregateRating"', html)
             response.close()
 
     def test_sitemap_lastmod_covers_the_current_authority_release(self):
