@@ -14,28 +14,41 @@ const servicePages = [
   "heloc-orlando.html",
 ];
 
-const provider = {
-  "@type": "FinancialService",
-  "@id": "https://drmortgageusa.com/#organization",
-  name: "DR. Mortgage USA",
-  url: "https://drmortgageusa.com/",
-  telephone: "+1-850-346-8514",
-  founder: { "@id": "https://drmortgageusa.com/about#dennis-ross" },
-  parentOrganization: {
-    "@type": "Organization",
-    "@id": "https://myhome1st.com/#organization",
-    name: "Home 1st Lending, LLC",
-    url: "https://myhome1st.com/",
-    identifier: {
-      "@type": "PropertyValue",
-      propertyID: "NMLS",
-      value: "1418",
-    },
-    sameAs: [
-      "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
-      "https://www.yelp.com/biz/home-1st-lending-lake-mary-2",
-    ],
+const dennisId = "https://drmortgageusa.com/about#dennis-ross";
+const brandId = "https://drmortgageusa.com/#brand";
+const home1stId = "https://myhome1st.com/#organization";
+
+const home1st = {
+  "@type": "Organization",
+  "@id": home1stId,
+  name: "Home 1st Lending, LLC",
+  url: "https://myhome1st.com/",
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "NMLS",
+    value: "1418",
   },
+  sameAs: [
+    "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
+    "https://www.yelp.com/biz/home-1st-lending-lake-mary-2",
+  ],
+};
+
+const brand = {
+  "@type": "Brand",
+  "@id": brandId,
+  name: "DR. Mortgage USA",
+  alternateName: ["DrMortgageUSA", "Dennis Ross, Dr.MortgageUSA"],
+  url: "https://drmortgageusa.com/",
+  description:
+    "DR. Mortgage USA is Dennis Ross's professional brand and educational website, not a separate lender or mortgage company.",
+  disambiguatingDescription:
+    "The DR. Mortgage USA name on drmortgageusa.com identifies Dennis Ross, individual NMLS 2018381, and does not identify Dr. Mortgage, LLC or another separately licensed mortgage company.",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://drmortgageusa.com/media/logo.webp",
+  },
+  owner: { "@id": dennisId },
 };
 
 const dennisSameAs = [
@@ -51,6 +64,28 @@ const dennisSameAs = [
   "https://www.experience.com/reviews/dennis-14873595",
   "https://www.zillow.com/lender-profile/dennis0564/",
 ];
+
+const dennis = {
+  "@type": "Person",
+  "@id": dennisId,
+  name: "Dennis Ross",
+  alternateName: ["DR. Mortgage USA", "DrMortgageUSA"],
+  url: "https://drmortgageusa.com/about",
+  image: "https://drmortgageusa.com/dennis-ross-headshot.png",
+  description:
+    "Navy veteran and Florida Mortgage Loan Originator helping Greater Orlando veterans, buyers, and homeowners understand VA and other mortgage options.",
+  disambiguatingDescription:
+    "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
+  jobTitle: "Mortgage Loan Originator and Mortgage Broker",
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "NMLS",
+    value: "2018381",
+  },
+  brand: { "@id": brandId },
+  worksFor: { "@id": home1stId },
+  sameAs: dennisSameAs,
+};
 
 const jsonLdPattern = /(<script\s+type="application\/ld\+json">\s*)(\{[\s\S]*?\})(\s*<\/script>)/g;
 let updatedPages = 0;
@@ -76,18 +111,26 @@ for (const fileName of servicePages) {
     }
 
     service["@type"] = "Service";
-    service.provider = provider;
+    service.provider = { "@id": dennisId };
+    service.brand = { "@id": brandId };
     delete service.telephone;
     delete service.image;
     delete service.sameAs;
     delete service.parentOrganization;
 
-    const dennis = schema["@graph"]?.find(
-      (entity) => entity["@id"] === "https://drmortgageusa.com/about#dennis-ross",
+    schema["@graph"] = schema["@graph"].filter(
+      (entity) => entity["@id"] !== "https://drmortgageusa.com/#organization",
     );
-    if (dennis) {
-      dennis.sameAs = dennisSameAs;
-      dennis.worksFor = { "@id": "https://myhome1st.com/#organization" };
+
+    for (const entity of [dennis, home1st, brand]) {
+      const entityIndex = schema["@graph"].findIndex(
+        (candidate) => candidate["@id"] === entity["@id"],
+      );
+      if (entityIndex === -1) {
+        schema["@graph"].push(entity);
+      } else {
+        schema["@graph"][entityIndex] = entity;
+      }
     }
 
     pageChanged = true;

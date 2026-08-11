@@ -39,11 +39,30 @@ const home1stOrganization = {
   ],
 };
 
+const brand = {
+  "@type": "Brand",
+  "@id": "https://drmortgageusa.com/#brand",
+  name: "DR. Mortgage USA",
+  alternateName: ["DrMortgageUSA", "Dennis Ross, Dr.MortgageUSA"],
+  url: "https://drmortgageusa.com/",
+  description:
+    "DR. Mortgage USA is Dennis Ross's professional brand and educational website, not a separate lender or mortgage company.",
+  disambiguatingDescription:
+    "The DR. Mortgage USA name on drmortgageusa.com identifies Dennis Ross, individual NMLS 2018381, and does not identify Dr. Mortgage, LLC or another separately licensed mortgage company.",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://drmortgageusa.com/media/logo.webp",
+  },
+  owner: { "@id": "https://drmortgageusa.com/about#dennis-ross" },
+};
+
 const author = {
   "@type": "Person",
   "@id": "https://drmortgageusa.com/about#dennis-ross",
   name: "Dennis Ross",
+  alternateName: ["DR. Mortgage USA", "DrMortgageUSA"],
   url: "https://drmortgageusa.com/about",
+  image: "https://drmortgageusa.com/dennis-ross-headshot.png",
   description:
     "Navy veteran and Florida Mortgage Loan Originator helping Greater Orlando veterans, buyers, and homeowners understand VA and other mortgage options.",
   disambiguatingDescription:
@@ -54,6 +73,7 @@ const author = {
     propertyID: "NMLS",
     value: "2018381",
   },
+  brand,
   worksFor: home1stOrganization,
   sameAs: authorSameAs,
   knowsAbout: [
@@ -68,14 +88,11 @@ const author = {
 };
 
 const publisher = {
-  "@type": "Organization",
-  "@id": "https://drmortgageusa.com/#organization",
-  name: "DR. Mortgage USA",
-  url: "https://drmortgageusa.com/",
-  logo: {
-    "@type": "ImageObject",
-    url: "https://drmortgageusa.com/media/logo.webp",
-  },
+  "@type": "Person",
+  "@id": author["@id"],
+  name: author.name,
+  url: author.url,
+  image: author.image,
 };
 
 const floridaOffsetFormatter = new Intl.DateTimeFormat("en-US", {
