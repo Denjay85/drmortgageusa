@@ -227,6 +227,9 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('DR. Mortgage USA is not a separate lender or mortgage company', manifest)
         self.assertIn('does not refer to Dr. Mortgage, LLC', manifest)
         self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
+        self.assertIn('https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023', manifest)
+        self.assertIn('https://www.experience.com/reviews/dennis-14873595', manifest)
+        self.assertIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
         self.assertIn(
             'https://www.va.gov/housing-assistance/home-loans/eligibility/',
             manifest,

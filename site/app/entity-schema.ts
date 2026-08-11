@@ -166,3 +166,31 @@ export const dennisProfilePageSchema = {
   mainEntity: dennisRossSchema,
   isPartOf: { "@id": websiteId },
 };
+
+export const blogCollectionSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${origin}/blog#collection`,
+      url: `${origin}/blog`,
+      name: "Florida Mortgage Blog by Dennis Ross",
+      description:
+        "Florida mortgage and Greater Orlando VA home loan guidance authored by Navy veteran Dennis Ross, individual NMLS 2018381.",
+      author: { "@id": dennisRossId },
+      publisher: { "@id": drMortgageOrganizationId },
+      isPartOf: { "@id": websiteId },
+      about: [
+        { "@type": "Thing", name: "VA home loans in Greater Orlando" },
+        { "@type": "Thing", name: "Florida mortgages" },
+        { "@type": "Thing", name: "First-time homebuyer guidance" },
+        { "@type": "Thing", name: "Mortgage planning for Florida homeowners" },
+      ],
+      inLanguage: "en-US",
+    },
+    dennisRossSchema,
+    drMortgageOrganizationSchema,
+    home1stOrganizationSchema,
+    websiteSchema,
+  ],
+};
