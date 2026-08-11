@@ -8,6 +8,8 @@ on:
       - "sitemap.xml"
       - "update_blog.py"
       - "blog_posts/**"
+      - "scripts/**"
+      - "*.html"
       - "site/**"
       - "tests/**"
       - ".github/workflows/website-migration-ci.yml"
@@ -50,6 +52,9 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: site/package-lock.json
+
+      - name: Validate search title lengths
+        run: node scripts/normalize_title_lengths.mjs --check
 
       - name: Install front-end dependencies
         working-directory: site
