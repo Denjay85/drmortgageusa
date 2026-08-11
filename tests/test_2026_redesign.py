@@ -234,6 +234,7 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('does not refer to Dr. Mortgage, LLC', manifest)
         self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
         self.assertIn('https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023', manifest)
+        self.assertIn('https://linktr.ee/dr.mortgageusa', manifest)
         self.assertIn('https://www.experience.com/reviews/dennis-14873595', manifest)
         self.assertIn('explicitly lists VA Home Loan among services', manifest)
         self.assertIn('16 verified reviews', manifest)
@@ -303,6 +304,11 @@ class RedesignIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn(
                     'https://www.facebook.com/100084710485166',
+                    schema['author']['sameAs'],
+                    blog_path.name,
+                )
+                self.assertIn(
+                    'https://linktr.ee/dr.mortgageusa',
                     schema['author']['sameAs'],
                     blog_path.name,
                 )
@@ -414,6 +420,11 @@ class RedesignIntegrationTests(unittest.TestCase):
                 route,
             )
             self.assertIn(
+                'https://linktr.ee/dr.mortgageusa',
+                service['provider']['sameAs'],
+                route,
+            )
+            self.assertIn(
                 'https://www.experience.com/reviews/dennis-14873595',
                 service['provider']['sameAs'],
                 route,
@@ -471,6 +482,11 @@ class RedesignIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn(
                     'https://www.facebook.com/100084710485166',
+                    dennis['sameAs'],
+                    route,
+                )
+                self.assertIn(
+                    'https://linktr.ee/dr.mortgageusa',
                     dennis['sameAs'],
                     route,
                 )

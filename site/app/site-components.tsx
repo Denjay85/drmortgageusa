@@ -115,6 +115,7 @@ export function Footer() {
           <a rel="me" href="https://www.facebook.com/100084710485166">Facebook</a>
           <a rel="me" href="https://www.linkedin.com/in/dennis-ross-87491257">LinkedIn</a>
           <a rel="me" href="https://www.youtube.com/@Dr.MortgageUSA">YouTube</a>
+          <a rel="me" href="https://linktr.ee/dr.mortgageusa">Linktree</a>
         </div>
 
         <div>
