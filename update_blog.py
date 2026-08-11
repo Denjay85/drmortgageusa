@@ -45,7 +45,7 @@ STATIC_PAGES = [
 DRY_RUN = "--dry-run" in sys.argv
 
 def extract_meta(filepath):
-    """Pull title, description, and date from an HTML blog post file."""
+    """Pull title, description, publication date, and lastmod from a post."""
     content = filepath.read_text(encoding="utf-8")
 
     title = ""
@@ -81,7 +81,16 @@ def extract_meta(filepath):
         # Fall back to file modification date
         date = datetime.fromtimestamp(filepath.stat().st_mtime).strftime("%Y-%m-%d")
 
-    return title, desc, date
+    lastmod = date
+    m = re.search(
+        r'"dateModified"\s*:\s*"([\d-]+)',
+        content,
+        re.IGNORECASE,
+    )
+    if m:
+        lastmod = m.group(1)[:10]
+
+    return title, desc, date, lastmod
 
 def format_date_display(date_str):
     """Convert 2026-02-22 to February 22, 2026."""
@@ -98,7 +107,7 @@ def get_posts():
         if f.name == "index.html":
             continue
         slug = f.stem
-        title, desc, date = extract_meta(f)
+        title, desc, date, lastmod = extract_meta(f)
         if not title:
             print(f"  WARNING: No title found in {f.name} - skipping")
             continue
@@ -108,6 +117,7 @@ def get_posts():
             "title": title,
             "desc": desc,
             "date": date,
+            "lastmod": lastmod,
             "date_display": format_date_display(date),
             "url": f"{BASE_URL}/blog/{slug}",
         })
@@ -209,7 +219,7 @@ def build_sitemap(posts):
         urls += f"""
   <url>
     <loc>{p['url']}</loc>
-    <lastmod>{p['date']}</lastmod>
+    <lastmod>{p['lastmod']}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>"""

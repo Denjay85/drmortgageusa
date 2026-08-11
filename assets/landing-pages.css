@@ -380,6 +380,17 @@ img {
   font-size: 1.15rem;
 }
 
+.detail-list a,
+.source-note a {
+  color: #8a6418;
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.section-card p.source-note {
+  margin-top: 20px;
+}
+
 .trust {
   padding: 18px 0 10px;
 }
