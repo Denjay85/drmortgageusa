@@ -7,6 +7,7 @@ import path from "node:path";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
 const blogDirectory = path.join(projectRoot, "blog_posts");
+const articleImage = "https://drmortgageusa.com/assets/client-collage.jpg";
 
 const author = {
   "@type": "Person",
@@ -32,6 +33,25 @@ const publisher = {
   },
 };
 
+const floridaOffsetFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  timeZoneName: "longOffset",
+});
+
+function asFloridaDateTime(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return value;
+  }
+
+  const timezoneName = floridaOffsetFormatter
+    .formatToParts(new Date(`${value}T12:00:00Z`))
+    .find((part) => part.type === "timeZoneName")?.value;
+  const offset = timezoneName?.startsWith("GMT")
+    ? timezoneName.slice(3) || "+00:00"
+    : "-05:00";
+  return `${value}T09:00:00${offset}`;
+}
+
 const jsonLdPattern = /(<script\s+type="application\/ld\+json">\s*)(\{[\s\S]*?\})(\s*<\/script>)/g;
 const files = (await readdir(blogDirectory))
   .filter((name) => name.endsWith(".html"))
@@ -42,9 +62,12 @@ let updatedSchemas = 0;
 for (const fileName of files) {
   const filePath = path.join(blogDirectory, fileName);
   const source = await readFile(filePath, "utf8");
+  const canonicalUrl = source.match(
+    /<link\s+rel="canonical"\s+href="([^"]+)"/i,
+  )?.[1];
   let fileChanged = false;
 
-  const next = source.replace(jsonLdPattern, (full, before, jsonText, after) => {
+  let next = source.replace(jsonLdPattern, (full, before, jsonText, after) => {
     let schema;
     try {
       schema = JSON.parse(jsonText);
@@ -52,29 +75,46 @@ for (const fileName of files) {
       return full;
     }
 
-    if (schema["@type"] !== "BlogPosting") {
+    if (!["Article", "BlogPosting"].includes(schema["@type"])) {
       return full;
     }
 
+    schema.url ??= canonicalUrl;
     schema.author = author;
     schema.publisher = publisher;
     schema.mainEntityOfPage = {
       "@type": "WebPage",
       "@id": schema.url,
     };
+    schema.image = [articleImage];
+    schema.datePublished = asFloridaDateTime(schema.datePublished);
+    schema.dateModified = asFloridaDateTime(schema.dateModified);
 
     updatedSchemas += 1;
     fileChanged = true;
     return `${before}${JSON.stringify(schema, null, 4)}${after}`;
   });
 
+  if (!/<meta\s+property="og:image"/i.test(next)) {
+    next = next.replace(
+      /(\s*<meta\s+property="og:site_name"[^>]*>)/i,
+      `$1\n    <meta property="og:image" content="${articleImage}">`,
+    );
+  }
+  if (!/<meta\s+name="twitter:image"/i.test(next)) {
+    next = next.replace(
+      /(\s*<meta\s+name="twitter:card"[^>]*>)/i,
+      `$1\n    <meta name="twitter:image" content="${articleImage}">`,
+    );
+  }
+
   if (fileChanged && next !== source) {
     await writeFile(filePath, next, "utf8");
   }
 }
 
-if (updatedSchemas < 50) {
-  throw new Error(`Expected at least 50 BlogPosting schemas, found ${updatedSchemas}`);
+if (updatedSchemas < 58) {
+  throw new Error(`Expected at least 58 article schemas, found ${updatedSchemas}`);
 }
 
-console.log(`Normalized ${updatedSchemas} BlogPosting author entities.`);
+console.log(`Normalized ${updatedSchemas} article author entities.`);

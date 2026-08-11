@@ -197,9 +197,9 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertTrue(response.content_type.startswith('text/plain'))
         response.close()
 
-    def test_blog_posts_link_dennis_to_his_canonical_profile(self):
+    def test_blog_articles_link_dennis_to_his_canonical_profile(self):
         blog_directory = Path(production_app.BASE_DIR) / 'blog_posts'
-        blog_post_count = 0
+        article_count = 0
 
         for blog_path in blog_directory.glob('*.html'):
             html = blog_path.read_text(encoding='utf-8')
@@ -209,10 +209,10 @@ class RedesignIntegrationTests(unittest.TestCase):
                 flags=re.DOTALL,
             ):
                 schema = json.loads(raw_schema)
-                if schema.get('@type') != 'BlogPosting':
+                if schema.get('@type') not in ('Article', 'BlogPosting'):
                     continue
 
-                blog_post_count += 1
+                article_count += 1
                 self.assertEqual(
                     schema['author']['@id'],
                     'https://drmortgageusa.com/about#dennis-ross',
@@ -233,8 +233,33 @@ class RedesignIntegrationTests(unittest.TestCase):
                     schema['url'],
                     blog_path.name,
                 )
+                self.assertEqual(
+                    schema['image'],
+                    ['https://drmortgageusa.com/assets/client-collage.jpg'],
+                    blog_path.name,
+                )
+                self.assertRegex(
+                    schema['datePublished'],
+                    r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$',
+                    blog_path.name,
+                )
+                self.assertRegex(
+                    schema['dateModified'],
+                    r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$',
+                    blog_path.name,
+                )
+                self.assertIn(
+                    '<meta property="og:image" content="https://drmortgageusa.com/assets/client-collage.jpg">',
+                    html,
+                    blog_path.name,
+                )
+                self.assertIn(
+                    '<meta name="twitter:image" content="https://drmortgageusa.com/assets/client-collage.jpg">',
+                    html,
+                    blog_path.name,
+                )
 
-        self.assertGreaterEqual(blog_post_count, 50)
+        self.assertGreaterEqual(article_count, 58)
 
     def test_service_pages_share_the_canonical_business_entity(self):
         for route in (
