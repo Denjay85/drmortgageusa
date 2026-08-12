@@ -208,9 +208,10 @@ export default function Home() {
               >
                 Experience.com&apos;s public Dennis Ross Jr. profile
               </a>{" "}
-              identifies NMLS #2018381 and Dr MortgageUSA in Lake Mary, lists VA
-              Home Loan among the services, and shows a 5.0 average across 16
-              reviews aggregated from Google and Zillow.
+              identifies NMLS #2018381 and Dr MortgageUSA in Lake Mary, publishes
+              Orlando as his primary serving area, lists VA Home Loan among the
+              services, and shows a 5.0 average across 16 reviews aggregated from
+              Google and Zillow.
             </p>
             <div className="story-actions">
               <Link className="text-link" href="/about">Meet Dennis <span>→</span></Link>
