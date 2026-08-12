@@ -15,7 +15,6 @@ export const dennisRossSameAs = [
   "https://www.linkedin.com/in/dennis-ross-87491257",
   "https://www.youtube.com/@Dr.MortgageUSA",
   "https://linktr.ee/dr.mortgageusa",
-  "https://www.zillow.com/lender-profile/dennis0564/",
 ];
 
 export const home1stSameAs = [
