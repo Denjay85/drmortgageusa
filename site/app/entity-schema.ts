@@ -15,7 +15,6 @@ export const dennisRossSameAs = [
   "https://www.linkedin.com/in/dennis-ross-87491257",
   "https://www.youtube.com/@Dr.MortgageUSA",
   "https://linktr.ee/dr.mortgageusa",
-  "https://www.experience.com/reviews/dennis-14873595",
   "https://www.zillow.com/lender-profile/dennis0564/",
 ];
 
@@ -55,7 +54,7 @@ export const dennisRossSchema = {
   description:
     "Known publicly as DR. Mortgage USA, Dennis Ross is a Navy veteran and Florida Mortgage Loan Originator with Home 1st Lending, LLC, helping Greater Orlando veterans, buyers, and homeowners understand their financing options.",
   disambiguatingDescription:
-    "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and website. He is based in Lake Mary, serves Greater Orlando, and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
+    "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and website. He serves borrowers across Florida and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
   jobTitle: "Mortgage Loan Originator and Mortgage Broker",
   telephone: "+1-850-346-8514",
   email: "dennis@drmortgageusa.com",

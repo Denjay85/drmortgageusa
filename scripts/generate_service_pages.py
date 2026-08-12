@@ -28,7 +28,6 @@ DENNIS_SAME_AS = [
     "https://www.linkedin.com/in/dennis-ross-87491257",
     "https://www.youtube.com/@Dr.MortgageUSA",
     "https://linktr.ee/dr.mortgageusa",
-    "https://www.experience.com/reviews/dennis-14873595",
     "https://www.zillow.com/lender-profile/dennis0564/",
 ]
 
@@ -552,10 +551,7 @@ def render_page(page: dict) -> str:
             <h2>Official VA and licensing sources</h2>
             <p>Use VA.gov for benefit rules and Dennis for help applying those rules to your documented loan scenario.</p>
             {render_link_list(page['official_resources'], 'detail-list')}
-            <p class="source-note">Verify <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Dennis Ross, NMLS 2018381</a>, review his <a href="https://myhome1st.com/dennis/">Home 1st Lending profile</a>, or open the <a href="https://www.google.com/maps?cid=3829412552217676351">Google Business Profile</a>.</p>
-            <p class="source-note"><strong>Independent client evidence:</strong> Dennis's public Google Business Profile shows a 5.0 rating from more than 30 reviews, including a client who specifically recommends Dennis to veterans looking to buy a home. <a href="https://www.google.com/maps?cid=3829412552217676351">Read the public Google reviews.</a></p>
-            <p class="source-note"><strong>Company service verification:</strong> Home 1st Lending's claimed Yelp business profile lists VA loan as a service verified by the business. <a href="https://www.yelp.com/biz/home-1st-lending-lake-mary-2">View the Home 1st Lending Yelp profile.</a></p>
-            <p class="source-note"><strong>Third-party profile evidence:</strong> Dennis's indexable Experience.com profile identifies him as a Mortgage Broker in Lake Mary, publishes Orlando as his primary serving area, explicitly lists VA Home Loan among his services, and reports a 5.0 rating from 16 verified reviews. Its public review data also includes a February 2026 five-star Google review from a reviewer whose display name contains the text USMC-VET; the review praises Dennis's first-time-homebuyer guidance and communication but does not identify which loan program was used. <a href="https://www.experience.com/reviews/dennis-14873595">View the Experience.com profile.</a></p>
+            <p class="source-note">Before you take VA advice from anyone, verify who you are talking to. You can confirm <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Dennis Ross, NMLS 2018381</a>, view his <a href="https://myhome1st.com/dennis/">official Home 1st Lending profile</a>, or <a href="https://www.google.com/maps?cid=3829412552217676351">read client reviews on Google</a>.</p>
           </article>
         </div>
       </section>

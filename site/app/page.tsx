@@ -200,21 +200,13 @@ export default function Home() {
               plain-language recap, and options built around your actual life.
             </p>
             <p className="story-proof">
-              <strong>Independent profile evidence:</strong>{" "}
-              <a
-                href="https://www.experience.com/reviews/dennis-14873595"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Experience.com&apos;s public Dennis Ross Jr. profile
-              </a>{" "}
-              identifies NMLS #2018381 and Dr MortgageUSA in Lake Mary, publishes
-              Orlando as his primary serving area, lists VA Home Loan among the
-              services, and shows a 5.0 average across 16 reviews aggregated from
-              Google and Zillow.
+              <strong>Do your homework on me.</strong> Before you share anything
+              personal, verify my license and read what clients have said. You
+              should feel comfortable with the person helping you.
             </p>
             <div className="story-actions">
               <Link className="text-link" href="/about">Meet Dennis <span>→</span></Link>
+              <a className="text-link" href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Verify NMLS #2018381 <span>→</span></a>
               <a className="text-link" href="https://www.google.com/search?q=Dennis+Ross+Mortgage+Reviews">Read Google reviews <span>→</span></a>
             </div>
           </div>
