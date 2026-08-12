@@ -240,7 +240,7 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertNotIn('experience.com', manifest.lower())
         self.assertNotIn('primary serving area', manifest.lower())
         self.assertNotIn('display name contains', manifest.lower())
-        self.assertIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
+        self.assertNotIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
         self.assertIn(
             'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
             manifest,
@@ -321,7 +321,7 @@ class RedesignIntegrationTests(unittest.TestCase):
                     any('experience.com' in url for url in schema['author']['sameAs']),
                     blog_path.name,
                 )
-                self.assertIn(
+                self.assertNotIn(
                     'https://www.zillow.com/lender-profile/dennis0564/',
                     schema['author']['sameAs'],
                     blog_path.name,
@@ -482,7 +482,7 @@ class RedesignIntegrationTests(unittest.TestCase):
                 any('experience.com' in url for url in dennis['sameAs']),
                 route,
             )
-            self.assertIn(
+            self.assertNotIn(
                 'https://www.zillow.com/lender-profile/dennis0564/',
                 dennis['sameAs'],
                 route,

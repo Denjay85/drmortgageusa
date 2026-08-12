@@ -135,7 +135,7 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
   assert.ok(person.sameAs.includes("https://linktr.ee/dr.mortgageusa"));
   assert.ok(!person.sameAs.some((url) => url.includes("experience.com")));
-  assert.ok(person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
+  assert.ok(!person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
   assert.ok(home1st.sameAs.includes("https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418"));
   assert.ok(home1st.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
   assert.ok(!person.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
@@ -201,7 +201,7 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
   assert.ok(blogAuthor.sameAs.includes("https://www.facebook.com/100084710485166"));
   assert.ok(blogAuthor.sameAs.includes("https://linktr.ee/dr.mortgageusa"));
   assert.ok(!blogAuthor.sameAs.some((url) => url.includes("experience.com")));
-  assert.ok(blogAuthor.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
+  assert.ok(!blogAuthor.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
 
   const dpaResponse = await render("/dpa");
   const dpaHtml = await dpaResponse.text();

@@ -28,7 +28,6 @@ DENNIS_SAME_AS = [
     "https://www.linkedin.com/in/dennis-ross-87491257",
     "https://www.youtube.com/@Dr.MortgageUSA",
     "https://linktr.ee/dr.mortgageusa",
-    "https://www.zillow.com/lender-profile/dennis0564/",
 ]
 
 HOME1ST_SAME_AS = [
