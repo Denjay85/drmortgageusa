@@ -10,6 +10,8 @@ os.environ['ENABLE_RATE_UPDATER'] = '0'
 
 import app as production_app
 
+ROOT = Path(__file__).resolve().parents[1]
+
 
 class FakeCursor:
     def __init__(self):
@@ -568,9 +570,32 @@ class RedesignIntegrationTests(unittest.TestCase):
                     html,
                 )
                 self.assertIn('Read the public Google reviews.', html)
-                self.assertNotIn('"@type": "Review"', html)
-                self.assertNotIn('"aggregateRating"', html)
+                self.assertIn('id="orlando-va-loan-guides"', html)
+                self.assertIn('/blog/va-loan-credit-score-requirements-florida-2026', html)
+                self.assertIn('/blog/va-termite-inspection-requirements-florida-2026', html)
+                self.assertIn('/blog/va-loan-occupancy-requirements-florida-2026', html)
+                self.assertIn('/blog/va-loan-seller-concessions-florida', html)
+
+            self.assertNotIn('"@type": "Review"', html)
+            self.assertNotIn('"aggregateRating"', html)
             response.close()
+
+    def test_va_credit_score_guide_links_back_to_orlando_service(self):
+        html = (ROOT / 'blog_posts' / 'va-loan-credit-score-requirements-florida-2026.html').read_text()
+        self.assertGreaterEqual(html.count('href="/va-loans-orlando"'), 2)
+        self.assertIn('Greater Orlando VA perspective:', html)
+
+        raw_schema = re.search(
+            r'<script\s+type="application/ld\+json">\s*({.*?})\s*</script>',
+            html,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(raw_schema)
+        schema = json.loads(raw_schema.group(1))
+        about_names = {item['name'] for item in schema['about']}
+        self.assertIn('VA loan credit score requirements in Florida', about_names)
+        self.assertIn('VA home loans in Greater Orlando', about_names)
+        self.assertEqual(schema['isPartOf']['@id'], 'https://drmortgageusa.com/#website')
 
     def test_sitemap_lastmod_covers_the_current_authority_release(self):
         response = self.client.get('/sitemap.xml')

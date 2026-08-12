@@ -559,6 +559,22 @@ def render_page(page: dict) -> str:
           </article>
         </div>
       </section>
+
+      <section class="section" id="orlando-va-loan-guides">
+        <article class="section-card">
+          <h2>VA loan guides for Orlando and Florida buyers</h2>
+          <p>Use these plain-language guides to answer the questions that most often affect a VA pre-approval, property review, contract, or closing plan.</p>
+          <ul class="detail-list">
+            <li><a href="/blog/va-loan-credit-score-requirements-florida-2026">VA loan credit score requirements in Florida</a></li>
+            <li><a href="/blog/va-termite-inspection-requirements-florida-2026">VA termite inspection requirements in Florida</a></li>
+            <li><a href="/blog/va-loan-occupancy-requirements-florida-2026">VA occupancy requirements and common exceptions</a></li>
+            <li><a href="/blog/va-loan-seller-concessions-florida">VA seller concessions for Florida homebuyers</a></li>
+            <li><a href="/blog/va-minimum-property-requirements-florida-2026">VA minimum property requirements in Florida</a></li>
+            <li><a href="/blog/va-loan-guide-florida-veterans-2026">Complete Florida VA loan guide for veterans</a></li>
+          </ul>
+          <p class="source-note">These guides provide general education. Dennis can help apply the rules to a documented scenario for a Greater Orlando or Florida property.</p>
+        </article>
+      </section>
 """
 
     return f"""<!DOCTYPE html>
