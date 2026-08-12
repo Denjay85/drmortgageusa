@@ -251,8 +251,10 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /does not refer to Dr\. Mortgage, LLC/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(personMatch, "about profile page structured data should render");
-  const profilePage = JSON.parse(personMatch[1]);
-  const person = profilePage.mainEntity;
+  const schema = JSON.parse(personMatch[1]);
+  const profilePage = schema["@graph"].find((node) => node["@type"] === "ProfilePage");
+  const person = schema["@graph"].find((node) => node["@id"] === profilePage.mainEntity["@id"]);
+  const brand = schema["@graph"].find((node) => node["@id"] === person.brand["@id"]);
   assert.equal(profilePage["@type"], "ProfilePage");
   assert.equal(person["@type"], "Person");
   assert.equal(person.name, "Dennis Ross");
@@ -266,6 +268,9 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.ok(person.sameAs.includes("https://linktr.ee/dr.mortgageusa"));
   assert.ok(person.worksFor.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
   assert.ok(!person.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
+  assert.equal(brand["@type"], "Brand");
+  assert.equal(brand.name, "DR. Mortgage USA");
+  assert.equal(brand.owner["@id"], person["@id"]);
 });
 
 test("keeps purchase-only questions out of refinance and equity quiz branches", async () => {

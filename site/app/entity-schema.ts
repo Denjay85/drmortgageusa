@@ -129,14 +129,22 @@ export const homepageEntitySchema = {
 
 export const dennisProfilePageSchema = {
   "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  "@id": `${origin}/about#profile-page`,
-  url: `${origin}/about`,
-  name: "Dennis Ross, NMLS 2018381 | Greater Orlando VA Home Loan Guidance",
-  description:
-    "Professional profile for Dennis Ross, Navy veteran and Greater Orlando mortgage broker, NMLS 2018381.",
-  mainEntity: dennisRossSchema,
-  isPartOf: { "@id": websiteId },
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": `${origin}/about#profile-page`,
+      url: `${origin}/about`,
+      name: "Dennis Ross, NMLS 2018381 | Greater Orlando VA Home Loan Guidance",
+      description:
+        "Professional profile for Dennis Ross, Navy veteran and Greater Orlando mortgage broker, NMLS 2018381.",
+      mainEntity: { "@id": dennisRossId },
+      isPartOf: { "@id": websiteId },
+    },
+    dennisRossSchema,
+    drMortgageBrandSchema,
+    home1stOrganizationSchema,
+    websiteSchema,
+  ],
 };
 
 export const blogCollectionSchema = {

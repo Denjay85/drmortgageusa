@@ -25,7 +25,6 @@ INDEX_PATH = BLOG_DIR / "index.html"
 BASE_URL = "https://drmortgageusa.com"
 STATIC_PAGES = [
     ("/dpa", "monthly", "0.9"),
-    ("/down-payment-assistance", "monthly", "0.9"),
     ("/heloc-calculator", "monthly", "0.7"),
     ("/mortgage-options", "monthly", "0.8"),
     ("/tools", "monthly", "0.8"),
