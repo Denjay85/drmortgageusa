@@ -147,6 +147,10 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.match(html, /alt="DR\. Mortgage USA logo"/);
   assert.match(html, /rel="me" href="https:\/\/www\.linkedin\.com\/in\/dennis-ross-87491257"/);
   assert.match(html, /rel="me" href="https:\/\/linktr\.ee\/dr\.mortgageusa"/);
+  assert.match(
+    html,
+    /href="https:\/\/www\.experience\.com\/reviews\/dennis-14873595">Reviews on Experience\.com/,
+  );
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
