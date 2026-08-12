@@ -142,6 +142,7 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.match(html, /Independent profile evidence:/);
   assert.match(html, /Experience\.com(?:&apos;|&#x27;)'?s public Dennis Ross Jr\. profile/);
   assert.match(html, /identifies NMLS #2018381 and Dr MortgageUSA in Lake Mary/);
+  assert.match(html, /publishes\s*Orlando as his primary serving area/);
   assert.match(html, /lists VA\s*Home Loan among the services/);
   assert.match(html, /5\.0 average across 16\s*reviews aggregated from Google and Zillow/);
   assert.match(html, /alt="DR\. Mortgage USA logo"/);
@@ -247,6 +248,7 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /claimed Yelp business profile/);
   assert.match(html, /VA loan as a service verified by the business/);
   assert.match(html, /Experience\.com profile/);
+  assert.match(html, /publishes Orlando as my primary serving area/);
   assert.match(html, /explicitly lists VA Home Loan among my services/);
   assert.match(html, /16 verified reviews/);
   assert.match(html, /display name contains the text USMC-VET/);

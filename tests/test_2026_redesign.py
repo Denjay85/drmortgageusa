@@ -556,6 +556,10 @@ class RedesignIntegrationTests(unittest.TestCase):
                     html,
                 )
                 self.assertIn('View the Experience.com profile.', html)
+                self.assertIn(
+                    'publishes Orlando as his primary serving area',
+                    html,
+                )
                 self.assertIn('16 verified reviews', html)
                 self.assertIn('display name contains the text USMC-VET', html)
                 self.assertIn('does not identify which loan program was used', html)
