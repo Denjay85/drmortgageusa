@@ -849,6 +849,12 @@ def heloc_calculator():
 
 
 
+@app.route('/down-payment-assistance')
+def redirect_legacy_dpa():
+    """Consolidate the retired DPA URL into its canonical destination."""
+    return redirect('/dpa', code=301)
+
+
 @app.route('/dpa')
 def serve_dpa():
     redesign = send_redesign_page('down-payment-assistance')

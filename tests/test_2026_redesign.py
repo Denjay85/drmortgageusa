@@ -581,6 +581,13 @@ class RedesignIntegrationTests(unittest.TestCase):
         )
         response.close()
 
+    def test_legacy_dpa_route_permanently_redirects_to_canonical(self):
+        response = self.client.get('/down-payment-assistance')
+
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.headers['Location'], '/dpa')
+        response.close()
+
     def test_sitemap_generator_uses_article_modified_date(self):
         from update_blog import build_sitemap
 
