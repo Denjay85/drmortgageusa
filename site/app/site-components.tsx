@@ -111,14 +111,16 @@ export function Footer() {
           <Link href="/get-started">Build my mortgage plan</Link>
           <Link href="/contact">Book a conversation</Link>
           <a href={secureApplicationUrl}>Secure application</a>
+        </div>
+
+        <div>
+          <h2>Connect with Dennis</h2>
           <a rel="me" href="https://www.instagram.com/dr.mortgageusa/">Instagram</a>
           <a rel="me" href="https://www.facebook.com/100084710485166">Facebook</a>
           <a rel="me" href="https://www.linkedin.com/in/dennis-ross-87491257">LinkedIn</a>
           <a rel="me" href="https://www.youtube.com/@Dr.MortgageUSA">YouTube</a>
           <a rel="me" href="https://linktr.ee/dr.mortgageusa">Linktree</a>
-          <a href="https://www.experience.com/reviews/dennis-14873595">
-            Reviews on Experience.com
-          </a>
+          <a href="https://www.google.com/maps?cid=3829412552217676351">Google reviews</a>
         </div>
 
         <div>

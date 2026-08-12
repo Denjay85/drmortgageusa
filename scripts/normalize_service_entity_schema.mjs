@@ -32,6 +32,14 @@ const home1st = {
     "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
     "https://www.yelp.com/biz/home-1st-lending-lake-mary-2",
   ],
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "1130 Business Center Dr, Suite 1000",
+    addressLocality: "Lake Mary",
+    addressRegion: "FL",
+    postalCode: "32746",
+    addressCountry: "US",
+  },
 };
 
 const brand = {
@@ -61,7 +69,6 @@ const dennisSameAs = [
   "https://www.linkedin.com/in/dennis-ross-87491257",
   "https://www.youtube.com/@Dr.MortgageUSA",
   "https://linktr.ee/dr.mortgageusa",
-  "https://www.experience.com/reviews/dennis-14873595",
   "https://www.zillow.com/lender-profile/dennis0564/",
 ];
 

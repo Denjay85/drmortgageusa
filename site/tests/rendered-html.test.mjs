@@ -134,24 +134,29 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.ok(!person.sameAs.some((url) => url.includes("facebook.com/p/Dennis-Ross-")));
   assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
   assert.ok(person.sameAs.includes("https://linktr.ee/dr.mortgageusa"));
-  assert.ok(person.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
+  assert.ok(!person.sameAs.some((url) => url.includes("experience.com")));
   assert.ok(person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
   assert.ok(home1st.sameAs.includes("https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418"));
   assert.ok(home1st.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
   assert.ok(!person.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
-  assert.match(html, /Independent profile evidence:/);
-  assert.match(html, /Experience\.com(?:&apos;|&#x27;)'?s public Dennis Ross Jr\. profile/);
-  assert.match(html, /identifies NMLS #2018381 and Dr MortgageUSA in Lake Mary/);
-  assert.match(html, /publishes\s*Orlando as his primary serving area/);
-  assert.match(html, /lists VA\s*Home Loan among the services/);
-  assert.match(html, /5\.0 average across 16\s*reviews aggregated from Google and Zillow/);
+  assert.match(html, /Do your homework on me/);
+  assert.match(html, /You should feel comfortable with the person helping you/);
   assert.match(html, /alt="DR\. Mortgage USA logo"/);
   assert.match(html, /rel="me" href="https:\/\/www\.linkedin\.com\/in\/dennis-ross-87491257"/);
   assert.match(html, /rel="me" href="https:\/\/linktr\.ee\/dr\.mortgageusa"/);
-  assert.match(
-    html,
-    /href="https:\/\/www\.experience\.com\/reviews\/dennis-14873595">Reviews on Experience\.com/,
-  );
+  assert.match(html, /href="https:\/\/www\.google\.com\/maps\?cid=3829412552217676351">Google reviews/);
+  const nextStepFooter = html.match(/<h2>Next step<\/h2>([\s\S]*?)<\/div>/)?.[1] ?? "";
+  const connectFooter = html.match(/<h2>Connect with Dennis<\/h2>([\s\S]*?)<\/div>/)?.[1] ?? "";
+  assert.match(nextStepFooter, /Build my mortgage plan/);
+  assert.match(nextStepFooter, /Book a conversation/);
+  assert.match(nextStepFooter, /Secure application/);
+  assert.doesNotMatch(nextStepFooter, /Instagram|Facebook|LinkedIn|YouTube|Linktree|reviews/);
+  assert.match(connectFooter, /Instagram/);
+  assert.match(connectFooter, /Facebook/);
+  assert.match(connectFooter, /LinkedIn/);
+  assert.match(connectFooter, /YouTube/);
+  assert.match(connectFooter, /Linktree/);
+  assert.match(connectFooter, /Google reviews/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
@@ -195,7 +200,7 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
   assert.ok(blogAuthor.sameAs.includes("https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023"));
   assert.ok(blogAuthor.sameAs.includes("https://www.facebook.com/100084710485166"));
   assert.ok(blogAuthor.sameAs.includes("https://linktr.ee/dr.mortgageusa"));
-  assert.ok(blogAuthor.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
+  assert.ok(!blogAuthor.sameAs.some((url) => url.includes("experience.com")));
   assert.ok(blogAuthor.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
 
   const dpaResponse = await render("/dpa");
@@ -239,22 +244,16 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /class="about-portrait-caption"/);
   assert.doesNotMatch(html, /class="flag-wave-sheen"/);
   assert.match(html, /Dennis Ross, DR\. Mortgage USA/);
-  assert.match(html, /<title>Dennis Ross, NMLS 2018381 \| Orlando VA Mortgage Broker<\/title>/);
-  assert.match(html, /Dennis Ross: Navy veteran and Greater Orlando mortgage broker/);
-  assert.match(html, /VA home loan guidance across Greater Orlando/);
-  assert.match(html, /NMLS Consumer Access/);
-  assert.match(html, /official Home 1st Lending profile/);
-  assert.match(html, /Google Business Profile/);
-  assert.match(html, /claimed Yelp business profile/);
-  assert.match(html, /VA loan as a service verified by the business/);
-  assert.match(html, /Experience\.com profile/);
-  assert.match(html, /publishes Orlando as my primary serving area/);
-  assert.match(html, /explicitly lists VA Home Loan among my services/);
-  assert.match(html, /16 verified reviews/);
-  assert.match(html, /display name contains the text USMC-VET/);
-  assert.match(html, /does not identify which loan program was used/);
-  assert.match(html, /DR\. Mortgage USA is my professional brand and educational website/);
-  assert.match(html, /does not refer to Dr\. Mortgage, LLC/);
+  assert.match(html, /<title>Dennis Ross, NMLS 2018381 \| Florida Mortgage Broker<\/title>/);
+  assert.match(html, /Mortgage decisions get easier when somebody takes the time to listen/);
+  assert.match(html, /Mortgage conversations are personal/);
+  assert.match(html, /You will get a straight answer, even when the right answer is to wait/);
+  assert.match(html, /Easy to verify/);
+  assert.match(html, /You should know exactly who you are working with/);
+  assert.match(html, /Verify my license/);
+  assert.match(html, /View my lender profile/);
+  assert.match(html, /Read client reviews/);
+  assert.doesNotMatch(html, /Experience\.com|primary serving area|display name contains|Identity note/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(personMatch, "about profile page structured data should render");
   const schema = JSON.parse(personMatch[1]);

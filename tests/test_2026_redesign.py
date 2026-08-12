@@ -237,11 +237,9 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
         self.assertIn('https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023', manifest)
         self.assertIn('https://linktr.ee/dr.mortgageusa', manifest)
-        self.assertIn('https://www.experience.com/reviews/dennis-14873595', manifest)
-        self.assertIn('explicitly lists VA Home Loan among services', manifest)
-        self.assertIn('16 verified reviews', manifest)
-        self.assertIn('display name contains the text USMC-VET', manifest)
-        self.assertIn('does not identify which loan program was used', manifest)
+        self.assertNotIn('experience.com', manifest.lower())
+        self.assertNotIn('primary serving area', manifest.lower())
+        self.assertNotIn('display name contains', manifest.lower())
         self.assertIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
         self.assertIn(
             'https://www.yelp.com/biz/home-1st-lending-lake-mary-2',
@@ -319,9 +317,8 @@ class RedesignIntegrationTests(unittest.TestCase):
                     schema['author']['sameAs'],
                     blog_path.name,
                 )
-                self.assertIn(
-                    'https://www.experience.com/reviews/dennis-14873595',
-                    schema['author']['sameAs'],
+                self.assertFalse(
+                    any('experience.com' in url for url in schema['author']['sameAs']),
                     blog_path.name,
                 )
                 self.assertIn(
@@ -481,9 +478,8 @@ class RedesignIntegrationTests(unittest.TestCase):
                 dennis['sameAs'],
                 route,
             )
-            self.assertIn(
-                'https://www.experience.com/reviews/dennis-14873595',
-                dennis['sameAs'],
+            self.assertFalse(
+                any('experience.com' in url for url in dennis['sameAs']),
                 route,
             )
             self.assertIn(
@@ -550,26 +546,13 @@ class RedesignIntegrationTests(unittest.TestCase):
                     '<meta name="twitter:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">',
                     html,
                 )
-                self.assertIn('Independent client evidence:', html)
-                self.assertIn('Company service verification:', html)
-                self.assertIn('Third-party profile evidence:', html)
-                self.assertIn(
-                    'Home 1st Lending Yelp profile',
-                    html,
-                )
-                self.assertIn('View the Experience.com profile.', html)
-                self.assertIn(
-                    'publishes Orlando as his primary serving area',
-                    html,
-                )
-                self.assertIn('16 verified reviews', html)
-                self.assertIn('display name contains the text USMC-VET', html)
-                self.assertIn('does not identify which loan program was used', html)
-                self.assertIn(
-                    'specifically recommends Dennis to veterans looking to buy a home',
-                    html,
-                )
-                self.assertIn('Read the public Google reviews.', html)
+                self.assertIn('Before you take VA advice from anyone', html)
+                self.assertIn('official Home 1st Lending profile', html)
+                self.assertIn('read client reviews on Google', html)
+                self.assertNotIn('Third-party profile evidence:', html)
+                self.assertNotIn('Experience.com', html)
+                self.assertNotIn('primary serving area', html)
+                self.assertNotIn('display name contains', html)
                 self.assertIn('id="orlando-va-loan-guides"', html)
                 self.assertIn('/blog/va-loan-credit-score-requirements-florida-2026', html)
                 self.assertIn('/blog/va-termite-inspection-requirements-florida-2026', html)

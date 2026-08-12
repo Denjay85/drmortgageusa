@@ -5,12 +5,12 @@ import { FinalCTA, PageHero, PageShell, SectionHeading } from "../site-component
 import { dennisProfilePageSchema } from "../entity-schema";
 
 export const metadata: Metadata = {
-  title: { absolute: "Dennis Ross, NMLS 2018381 | Orlando VA Mortgage Broker" },
+  title: { absolute: "Dennis Ross, NMLS 2018381 | Florida Mortgage Broker" },
   alternates: { canonical: "/about" },
-  description: "Dennis Ross is a Navy veteran and Florida mortgage broker serving Greater Orlando with VA home loan guidance. Verify NMLS 2018381 and DR. Mortgage USA.",
+  description: "Meet Dennis Ross, a Navy veteran and Florida mortgage broker who helps buyers and homeowners understand the numbers before they make a move.",
   openGraph: {
     title: "Dennis Ross, NMLS 2018381 | DR. Mortgage USA",
-    description: "Navy veteran and Florida mortgage broker serving Greater Orlando with VA home loan guidance.",
+    description: "Navy veteran and Florida mortgage broker helping people make sense of the numbers before they make a move.",
     url: "/about",
     type: "profile",
     firstName: "Dennis",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Dennis Ross, NMLS 2018381 | DR. Mortgage USA",
-    description: "Navy veteran and Florida mortgage broker serving Greater Orlando with VA home loan guidance.",
+    description: "Navy veteran and Florida mortgage broker helping people make sense of the numbers before they make a move.",
   },
 };
 
@@ -32,8 +32,8 @@ export default function AboutPage() {
       />
       <PageHero
         eyebrow="Meet Dennis Ross"
-        title="Dennis Ross: Navy veteran and Greater Orlando mortgage broker."
-        body="I am Dennis Ross, NMLS #2018381, the person behind DR. Mortgage USA. I help veterans, service members, military families, and Florida homebuyers understand VA and other mortgage choices with clear numbers before they apply."
+        title="Mortgage decisions get easier when somebody takes the time to listen."
+        body="I am Dennis Ross, a Navy veteran and Florida mortgage broker. I help people understand the numbers, compare their real options, and make the next move with confidence."
       >
         <Link className="button button-gold" href="/contact">Talk with Dennis</Link>
         <Link className="button button-outline-light" href="/get-started">Build my plan first</Link>
@@ -61,10 +61,29 @@ export default function AboutPage() {
             <h2>Clear answers matter most when the decision feels heavy.</h2>
             <p>I served five years on active duty with two combat deployments and continued in the Navy Reserve, totaling fifteen years of military service.</p>
             <p>After active duty, I earned a master’s degree in social work and built a career helping people navigate major life decisions. I entered the mortgage industry in 2020 with the same mindset: stay disciplined, stay accurate, and help people remain calm when the pressure is real.</p>
-            <p>Today I work with Florida first-time buyers, move-up buyers, veterans, single buyers, self-employed borrowers, homeowners, and investors who want to understand their choices without being pushed into a generic bank product.</p>
-            <p>For veterans, active-duty service members, and eligible military families, I provide <Link href="/va-loans-orlando">VA home loan guidance across Greater Orlando</Link>, including Orlando, Lake Mary, Sanford, Winter Park, Altamonte Springs, and Oviedo.</p>
-            <p><strong>Identity note:</strong> DR. Mortgage USA is my professional brand and educational website, not a separate lender or mortgage company. I originate mortgage loans through Home 1st Lending, LLC, company NMLS #1418, under my individual NMLS #2018381. DR. Mortgage USA on this website does not refer to Dr. Mortgage, LLC or another similarly named mortgage company.</p>
-            <p>Verify my professional identity through <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">NMLS Consumer Access</a>, my <a href="https://myhome1st.com/dennis/">official Home 1st Lending profile</a>, and my <a href="https://www.google.com/maps?cid=3829412552217676351">Google Business Profile</a>. Home 1st Lending&apos;s <a href="https://www.yelp.com/biz/home-1st-lending-lake-mary-2">claimed Yelp business profile</a> also lists VA loan as a service verified by the business. My <a href="https://www.experience.com/reviews/dennis-14873595">Experience.com profile</a> identifies me as a Lake Mary mortgage broker, publishes Orlando as my primary serving area, explicitly lists VA Home Loan among my services, and reports a 5.0 rating from 16 verified reviews. Its public review data also includes a February 2026 five-star Google review from a reviewer whose display name contains the text USMC-VET; the review praises my first-time-homebuyer guidance and communication but does not identify which loan program was used.</p>
+            <p>Mortgage conversations are personal. You may be buying your first place, looking for more room, using a VA benefit, refinancing, or trying to understand how self-employed income looks on paper. My job is to meet you where you are and make the next step feel clear.</p>
+            <p>I am based in Greater Orlando and work with borrowers across Florida. We start with what you are trying to accomplish, the payment you can live with, and what needs to happen next. You will get a straight answer, even when the right answer is to wait.</p>
+
+            <aside className="about-verification" aria-labelledby="about-verification-title">
+              <p className="eyebrow">Easy to verify</p>
+              <h3 id="about-verification-title">You should know exactly who you are working with.</h3>
+              <p>
+                DR. Mortgage USA is the name of my educational brand. I originate
+                mortgage loans through Home 1st Lending, LLC, company NMLS #1418,
+                under my individual NMLS #2018381.
+              </p>
+              <div className="about-verification-links">
+                <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381" target="_blank" rel="noopener noreferrer">
+                  Verify my license <span aria-hidden="true">↗</span>
+                </a>
+                <a href="https://myhome1st.com/dennis/" target="_blank" rel="noopener noreferrer">
+                  View my lender profile <span aria-hidden="true">↗</span>
+                </a>
+                <a href="https://www.google.com/maps?cid=3829412552217676351" target="_blank" rel="noopener noreferrer">
+                  Read client reviews <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </aside>
           </div>
         </div>
       </section>
