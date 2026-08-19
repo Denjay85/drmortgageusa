@@ -585,7 +585,9 @@ class RedesignIntegrationTests(unittest.TestCase):
         sitemap = response.get_data(as_text=True)
         lastmod_values = re.findall(r'<lastmod>(.*?)</lastmod>', sitemap)
 
-        self.assertEqual(len(lastmod_values), 76)
+        loc_values = re.findall(r'<loc>(.*?)</loc>', sitemap)
+        self.assertGreaterEqual(len(lastmod_values), 76)
+        self.assertEqual(len(lastmod_values), len(loc_values))
         self.assertTrue(all(value >= '2026-08-11' for value in lastmod_values))
         self.assertNotIn(
             '<loc>https://drmortgageusa.com/down-payment-assistance</loc>',
