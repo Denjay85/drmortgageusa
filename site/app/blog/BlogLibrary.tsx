@@ -23,7 +23,7 @@ export default function BlogLibrary({ initialPosts = blogPosts }: { initialPosts
     const controller = new AbortController();
     let active = true;
 
-    fetch("/api/blog", { signal: controller.signal })
+    fetch("/api/blog", { signal: controller.signal, cache: "no-store" })
       .then((response) => {
         if (!response.ok) throw new Error("Live archive unavailable");
         return response.json() as Promise<{ posts?: BlogPost[] }>;

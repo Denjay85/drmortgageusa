@@ -1342,7 +1342,9 @@ def blog_archive_api():
         'syncedAt': datetime.now(timezone.utc).isoformat(),
         'source': '/blog',
     })
-    response.headers['Cache-Control'] = 'public, max-age=900, stale-while-revalidate=3600'
+    # New autonomous publications must appear in the visitor-facing archive
+    # immediately. A cached archive can falsely hide a live article.
+    response.headers['Cache-Control'] = 'no-store'
     return response
 
 

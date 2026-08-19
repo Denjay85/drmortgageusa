@@ -108,6 +108,7 @@ class RedesignIntegrationTests(unittest.TestCase):
         blog = self.client.get('/api/blog')
         self.assertEqual(blog.status_code, 200)
         self.assertGreaterEqual(len(blog.get_json()['posts']), 40)
+        self.assertEqual(blog.headers['Cache-Control'], 'no-store')
 
         with patch.object(production_app.requests, 'get', side_effect=RuntimeError('offline test')):
             dpa = self.client.get('/api/dpa-rates')
