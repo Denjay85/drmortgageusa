@@ -8367,3 +8367,23 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
     transition: none !important;
   }
 }
+
+/* The public blog's entry point into the source-backed question assistant. */
+.blog-ask-section { padding-bottom: 0; }
+.blog-ask-panel { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(28px, 5vw, 72px); padding: clamp(24px, 4vw, 56px); background: var(--navy-900); color: var(--white); border-top: 4px solid var(--gold-500); }
+.blog-ask-copy h2 { font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1.1; margin-bottom: 20px; color: var(--white); }
+.blog-ask-copy > p:not(.eyebrow) { color: #d5dee7; max-width: 58ch; }
+.blog-ask-copy .eyebrow { color: var(--gold-500); }
+.blog-ask-copy .button { margin: 8px 0 20px; }
+.blog-ask-copy .blog-ask-note { font-size: .85rem; margin: 0; }
+.blog-ask-note a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+.blog-ask-examples { align-self: center; display: grid; gap: 12px; min-width: 0; }
+.blog-ask-examples > p { margin: 0 0 2px; color: var(--gold-500); font-weight: 700; }
+.blog-ask-examples > a { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; border: 1px solid #597087; background: var(--navy-800); line-height: 1.45; }
+.blog-ask-examples > a:hover { border-color: var(--gold-500); }
+.blog-ask-examples > small { color: #c0ccd8; margin-top: 8px; }
+.blog-ask-panel a:focus-visible { outline: 3px solid var(--gold-500); outline-offset: 4px; }
+@media (max-width: 760px) {
+  .blog-ask-panel { grid-template-columns: 1fr; }
+  .blog-ask-copy .button { width: 100%; }
+}
