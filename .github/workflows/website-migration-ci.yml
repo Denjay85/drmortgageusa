@@ -46,6 +46,9 @@ jobs:
       - name: Compile Flask application
         run: python -m py_compile app.py
 
+      - name: Validate discoverability audit regression detection
+        run: python -m unittest tests.test_discoverability_audit -v
+
       - name: Set up Node
         uses: actions/setup-node@v5
         with:

@@ -28,6 +28,7 @@ DENNIS_SAME_AS = [
     "https://www.linkedin.com/in/dennis-ross-87491257",
     "https://www.youtube.com/@Dr.MortgageUSA",
     "https://linktr.ee/dr.mortgageusa",
+    "https://www.experience.com/reviews/dennis-14873595",
 ]
 
 HOME1ST_SAME_AS = [
@@ -551,6 +552,7 @@ def render_page(page: dict) -> str:
             <p>Use VA.gov for benefit rules and Dennis for help applying those rules to your documented loan scenario.</p>
             {render_link_list(page['official_resources'], 'detail-list')}
             <p class="source-note">Before you take VA advice from anyone, verify who you are talking to. You can confirm <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Dennis Ross, NMLS 2018381</a>, view his <a href="https://myhome1st.com/dennis/">official Home 1st Lending profile</a>, or <a href="https://www.google.com/maps?cid=3829412552217676351">read client reviews on Google</a>.</p>
+            <p class="source-note">You can also view <a href="https://www.experience.com/reviews/dennis-14873595">Dennis's Experience.com profile</a>, which lists his VA Home Loan services and links to customer reviews.</p>
           </article>
         </div>
       </section>

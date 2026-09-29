@@ -42,6 +42,23 @@ class FakeConnection:
 
 
 class RedesignIntegrationTests(unittest.TestCase):
+    def test_all_public_routes_pass_discoverability_identity_audit(self):
+        import xml.etree.ElementTree as ET
+        from scripts.audit_discoverability import inspect_page, ORIGIN
+        client = production_app.app.test_client()
+        with client.get('/sitemap.xml') as sitemap_response:
+            sitemap = ET.fromstring(sitemap_response.data)
+        for node in sitemap.findall('{*}url/{*}loc'):
+            url = node.text.strip()
+            response = client.get(url.removeprefix(ORIGIN))
+            result = dict(url=url, final_url=url, status=response.status_code,
+                          content_type=response.content_type,
+                          x_robots=response.headers.get('X-Robots-Tag', ''),
+                          body=response.get_data(as_text=True))
+            response.close()
+            with self.subTest(url=url):
+                self.assertEqual(inspect_page(result)['issues'], [])
+
     def setUp(self):
         production_app.app.config.update(TESTING=True)
         self.client = production_app.app.test_client()
@@ -238,7 +255,7 @@ class RedesignIntegrationTests(unittest.TestCase):
         self.assertIn('https://www.google.com/maps?cid=3829412552217676351', manifest)
         self.assertIn('https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023', manifest)
         self.assertIn('https://linktr.ee/dr.mortgageusa', manifest)
-        self.assertNotIn('experience.com', manifest.lower())
+        self.assertIn('https://www.experience.com/reviews/dennis-14873595', manifest)
         self.assertNotIn('primary serving area', manifest.lower())
         self.assertNotIn('display name contains', manifest.lower())
         self.assertNotIn('https://www.zillow.com/lender-profile/dennis0564/', manifest)
@@ -318,8 +335,9 @@ class RedesignIntegrationTests(unittest.TestCase):
                     schema['author']['sameAs'],
                     blog_path.name,
                 )
-                self.assertFalse(
-                    any('experience.com' in url for url in schema['author']['sameAs']),
+                self.assertIn(
+                    'https://www.experience.com/reviews/dennis-14873595',
+                    schema['author']['sameAs'],
                     blog_path.name,
                 )
                 self.assertNotIn(
@@ -479,8 +497,9 @@ class RedesignIntegrationTests(unittest.TestCase):
                 dennis['sameAs'],
                 route,
             )
-            self.assertFalse(
-                any('experience.com' in url for url in dennis['sameAs']),
+            self.assertIn(
+                'https://www.experience.com/reviews/dennis-14873595',
+                dennis['sameAs'],
                 route,
             )
             self.assertNotIn(
@@ -551,7 +570,7 @@ class RedesignIntegrationTests(unittest.TestCase):
                 self.assertIn('official Home 1st Lending profile', html)
                 self.assertIn('read client reviews on Google', html)
                 self.assertNotIn('Third-party profile evidence:', html)
-                self.assertNotIn('Experience.com', html)
+                self.assertIn('href="https://www.experience.com/reviews/dennis-14873595"', html)
                 self.assertNotIn('primary serving area', html)
                 self.assertNotIn('display name contains', html)
                 self.assertIn('id="orlando-va-loan-guides"', html)

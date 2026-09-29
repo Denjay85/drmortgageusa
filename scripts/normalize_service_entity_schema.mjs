@@ -69,6 +69,7 @@ const dennisSameAs = [
   "https://www.linkedin.com/in/dennis-ross-87491257",
   "https://www.youtube.com/@Dr.MortgageUSA",
   "https://linktr.ee/dr.mortgageusa",
+  "https://www.experience.com/reviews/dennis-14873595",
 ];
 
 const dennis = {
