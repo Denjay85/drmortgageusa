@@ -134,7 +134,7 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.ok(!person.sameAs.some((url) => url.includes("facebook.com/p/Dennis-Ross-")));
   assert.ok(person.sameAs.includes("https://www.youtube.com/@Dr.MortgageUSA"));
   assert.ok(person.sameAs.includes("https://linktr.ee/dr.mortgageusa"));
-  assert.ok(!person.sameAs.some((url) => url.includes("experience.com")));
+  assert.ok(person.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
   assert.ok(!person.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
   assert.ok(home1st.sameAs.includes("https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418"));
   assert.ok(home1st.sameAs.includes("https://www.yelp.com/biz/home-1st-lending-lake-mary-2"));
@@ -200,7 +200,7 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
   assert.ok(blogAuthor.sameAs.includes("https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023"));
   assert.ok(blogAuthor.sameAs.includes("https://www.facebook.com/100084710485166"));
   assert.ok(blogAuthor.sameAs.includes("https://linktr.ee/dr.mortgageusa"));
-  assert.ok(!blogAuthor.sameAs.some((url) => url.includes("experience.com")));
+  assert.ok(blogAuthor.sameAs.includes("https://www.experience.com/reviews/dennis-14873595"));
   assert.ok(!blogAuthor.sameAs.includes("https://www.zillow.com/lender-profile/dennis0564/"));
 
   const dpaResponse = await render("/dpa");
@@ -253,7 +253,10 @@ test("renders the About portrait in a proportion-controlled frame", async () => 
   assert.match(html, /Verify my license/);
   assert.match(html, /View my lender profile/);
   assert.match(html, /Read client reviews/);
-  assert.doesNotMatch(html, /Experience\.com|primary serving area|display name contains|Identity note/);
+  assert.match(html, /View my Experience\.com profile/);
+  assert.match(html, /VA home loan guidance across Greater Orlando/);
+  assert.match(html, /not a separate lender or mortgage company and not Dr\. Mortgage, LLC/);
+  assert.doesNotMatch(html, /primary serving area|display name contains|Identity note/);
   const personMatch = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/);
   assert.ok(personMatch, "about profile page structured data should render");
   const schema = JSON.parse(personMatch[1]);

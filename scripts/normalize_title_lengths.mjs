@@ -7,6 +7,8 @@ const maximumTitleLength = 69;
 const checkOnly = process.argv.includes("--check");
 
 const titleOverrides = new Map([
+  ["conditional-approval-vs-clear-to-close-florida.html", "Conditional Approval vs Clear to Close in Florida"],
+  ["va-one-time-close-construction-loan-florida.html", "VA One-Time Close Construction Loans in Florida"],
   ["dpa.html", "Florida Down Payment Assistance | Orlando DPA"],
   ["first-time-homebuyer-orlando.html", "First-Time Homebuyer Orlando | Loans and DPA"],
   ["refinance-florida.html", "Florida Refinance Options | Dennis Ross"],

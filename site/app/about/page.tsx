@@ -7,10 +7,10 @@ import { dennisProfilePageSchema } from "../entity-schema";
 export const metadata: Metadata = {
   title: { absolute: "Dennis Ross, NMLS 2018381 | Florida Mortgage Broker" },
   alternates: { canonical: "/about" },
-  description: "Meet Dennis Ross, a Navy veteran and Florida mortgage broker who helps buyers and homeowners understand the numbers before they make a move.",
+  description: "Meet Navy veteran Dennis Ross, NMLS 2018381, for VA home loan guidance in Greater Orlando and mortgage planning across Florida.",
   openGraph: {
     title: "Dennis Ross, NMLS 2018381 | DR. Mortgage USA",
-    description: "Navy veteran and Florida mortgage broker helping people make sense of the numbers before they make a move.",
+    description: "Navy veteran Dennis Ross provides VA home loan guidance in Greater Orlando and mortgage planning across Florida.",
     url: "/about",
     type: "profile",
     firstName: "Dennis",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Dennis Ross, NMLS 2018381 | DR. Mortgage USA",
-    description: "Navy veteran and Florida mortgage broker helping people make sense of the numbers before they make a move.",
+    description: "Navy veteran Dennis Ross provides VA home loan guidance in Greater Orlando and mortgage planning across Florida.",
   },
 };
 
@@ -63,6 +63,7 @@ export default function AboutPage() {
             <p>After active duty, I earned a master’s degree in social work and built a career helping people navigate major life decisions. I entered the mortgage industry in 2020 with the same mindset: stay disciplined, stay accurate, and help people remain calm when the pressure is real.</p>
             <p>Mortgage conversations are personal. You may be buying your first place, looking for more room, using a VA benefit, refinancing, or trying to understand how self-employed income looks on paper. My job is to meet you where you are and make the next step feel clear.</p>
             <p>I am based in Greater Orlando and work with borrowers across Florida. We start with what you are trying to accomplish, the payment you can live with, and what needs to happen next. You will get a straight answer, even when the right answer is to wait.</p>
+            <p>As a Navy veteran, I provide <Link href="/va-loans-orlando">VA home loan guidance across Greater Orlando</Link> for eligible veterans, active-duty service members, and military families, from understanding the benefit to planning the full monthly payment.</p>
 
             <aside className="about-verification" aria-labelledby="about-verification-title">
               <p className="eyebrow">Easy to verify</p>
@@ -72,6 +73,7 @@ export default function AboutPage() {
                 mortgage loans through Home 1st Lending, LLC, company NMLS #1418,
                 under my individual NMLS #2018381.
               </p>
+              <p>DR. Mortgage USA is my professional brand and educational website, not a separate lender or mortgage company and not Dr. Mortgage, LLC.</p>
               <div className="about-verification-links">
                 <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381" target="_blank" rel="noopener noreferrer">
                   Verify my license <span aria-hidden="true">↗</span>
@@ -81,6 +83,9 @@ export default function AboutPage() {
                 </a>
                 <a href="https://www.google.com/maps?cid=3829412552217676351" target="_blank" rel="noopener noreferrer">
                   Read client reviews <span aria-hidden="true">↗</span>
+                </a>
+                <a href="https://www.experience.com/reviews/dennis-14873595" target="_blank" rel="noopener noreferrer">
+                  View my Experience.com profile <span aria-hidden="true">↗</span>
                 </a>
               </div>
             </aside>
