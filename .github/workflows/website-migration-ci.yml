@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "app.py"
+      - "assets/**"
+      - "templates/**"
       - "render.yaml"
       - "sitemap.xml"
       - "update_blog.py"
@@ -41,7 +43,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Validate Flask integration
-        run: python -m unittest tests.test_2026_redesign tests.test_lead_endpoint -v
+        run: python -m unittest tests.test_2026_redesign tests.test_lead_endpoint tests.test_service_forms -v
 
       - name: Compile Flask application
         run: python -m py_compile app.py
@@ -58,6 +60,9 @@ jobs:
 
       - name: Validate search title lengths
         run: node scripts/normalize_title_lengths.mjs --check
+
+      - name: Validate service form behavior
+        run: node --test tests/lead-forms.test.cjs
 
       - name: Install front-end dependencies
         working-directory: site
