@@ -7,7 +7,7 @@ from unittest.mock import patch
 os.environ['ENABLE_RATE_UPDATER'] = '0'
 
 import app as production_app
-from scripts.generate_service_pages import PAGES, render_page
+from scripts.generate_service_pages import PAGES, RELATED_GUIDES, render_page
 
 
 class Elements(HTMLParser):
@@ -68,6 +68,23 @@ class ServiceFormTests(unittest.TestCase):
             database.assert_not_called()
             zapier.assert_not_called()
             meta.assert_not_called()
+
+    def test_related_guides_and_search_entry_review_links_resolve(self):
+        for links in RELATED_GUIDES.values():
+            for _, href in links:
+                with self.subTest(href=href), self.client.get(href) as response:
+                    self.assertEqual(response.status_code, 200)
+        targets = {
+            'florida-condo-questionnaire-mortgage-buyers': 'orlando-mortgage-broker',
+            'va-approved-condos-florida-check-project': 'va-loans-orlando',
+            'va-termite-inspection-requirements-florida-2026': 'va-loans-orlando',
+            'how-seller-concessions-work-florida': 'first-time-homebuyer-orlando',
+        }
+        for article, service in targets.items():
+            with self.client.get('/blog/' + article) as response:
+                self.assertIn('href="/' + service + '#request-review"', response.get_data(as_text=True))
+            with self.client.get('/' + service) as response:
+                self.assertIn('id="request-review"', response.get_data(as_text=True))
 
     def test_service_requests_require_email_permission_on_both_paths(self):
         for endpoint in ('/api/quiz-submit', '/request-review'):

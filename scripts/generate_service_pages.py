@@ -18,6 +18,29 @@ COMMON_LINKS = [
     ("HELOC Orlando", "/heloc-orlando"),
 ]
 
+RELATED_GUIDES = {
+    'orlando-mortgage-broker': [
+        ('Preapproval vs. prequalification in Florida', '/blog/mortgage-preapproval-vs-prequalification-florida'),
+        ('Florida condo questionnaires and project review', '/blog/florida-condo-questionnaire-mortgage-buyers'),
+        ('Self-employed borrower documentation checklist', '/blog/florida-self-employed-borrower-documentation-checklist'),
+    ],
+    'first-time-homebuyer-orlando': [
+        ('Florida first-time homebuyer guide', '/blog/first-time-homebuyer-florida-2026'),
+        ('Why preapproval is not the same as your buying budget', '/blog/why-preapproval-amount-not-real-homebuying-budget'),
+        ('How seller concessions work in Florida', '/blog/how-seller-concessions-work-florida'),
+    ],
+    'refinance-florida': [
+        ('Refinancing from FHA to conventional in Florida', '/blog/refinancing-out-of-fha-to-conventional-florida'),
+        ('VA IRRRL refinance guide', '/blog/irrrl-va-streamline-refinance-florida-2026'),
+        ('Home equity loan vs. cash-out refinance', '/blog/home-equity-loan-vs-cash-out-refinance-florida'),
+    ],
+    'heloc-orlando': [
+        ('HELOC vs. home equity loan in Florida', '/blog/heloc-vs-home-equity-loan-florida-2026'),
+        ('Home equity loan vs. cash-out refinance', '/blog/home-equity-loan-vs-cash-out-refinance-florida'),
+        ('Try the HELOC payment calculator', '/heloc-calculator'),
+    ],
+}
+
 DENNIS_SAME_AS = [
     "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
     "https://myhome1st.com/dennis/",
@@ -538,6 +561,17 @@ def render_page(page: dict) -> str:
         for stat, text in page["hero_stats"]
     )
     authority_section = ""
+    related_section = ""
+    if page['slug'] in RELATED_GUIDES:
+        related_section = f"""
+      <section class="section" aria-labelledby="related-guides-heading">
+        <article class="section-card">
+          <h2 id="related-guides-heading">Resources for your next mortgage decision</h2>
+          <p>Explore the questions behind this mortgage path, then bring your scenario to Dennis for a review.</p>
+          {render_link_list(RELATED_GUIDES[page['slug']], 'detail-list')}
+        </article>
+      </section>
+"""
     if page.get("local_service_areas") and page.get("official_resources"):
         authority_section = f"""
       <section class="section" id="greater-orlando-va-service-area">
@@ -564,6 +598,7 @@ def render_page(page: dict) -> str:
           <ul class="detail-list">
             <li><a href="/blog/va-loan-credit-score-requirements-florida-2026">VA loan credit score requirements in Florida</a></li>
             <li><a href="/blog/va-termite-inspection-requirements-florida-2026">VA termite inspection requirements in Florida</a></li>
+            <li><a href="/blog/va-approved-condos-florida-check-project">How to check a Florida condo for VA financing</a></li>
             <li><a href="/blog/va-loan-occupancy-requirements-florida-2026">VA occupancy requirements and common exceptions</a></li>
             <li><a href="/blog/va-loan-seller-concessions-florida">VA seller concessions for Florida homebuyers</a></li>
             <li><a href="/blog/va-minimum-property-requirements-florida-2026">VA minimum property requirements in Florida</a></li>
@@ -700,6 +735,7 @@ def render_page(page: dict) -> str:
       </section>
 
 {authority_section}
+{related_section}
 
       <section class="faq">
         <h2>Frequently asked questions</h2>
