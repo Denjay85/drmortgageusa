@@ -45,6 +45,9 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.doesNotMatch(html, /USDA 30-year/);
   assert.doesNotMatch(html, /6\.65%/);
   assert.match(html, /Create Rate Watch/);
+  assert.match(html, /Email me about this rate-watch request/);
+  assert.match(html, /assets\/lead-context\.js/);
+  assert.ok(/<input(?=[^>]*name="emailConsent")(?=[^>]*required="")[^>]*>/.test(html), "rate-watch permission must be explicitly required");
   assert.match(html, /id="rates"/);
   assert.ok(
     html.indexOf('class="hero-rates-panel') > html.indexOf('class="hero-portrait"'),

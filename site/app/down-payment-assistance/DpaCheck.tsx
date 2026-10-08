@@ -5,14 +5,15 @@ import { submitLead } from "../lead-client";
 
 export default function DpaCheck() {
   const [submitted, setSubmitted] = useState(false);
+  const [preview, setPreview] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   if (submitted) {
     return (
       <div className="success-message" role="status">
-        <strong>Thanks. I have the basics.</strong>
-        <span>Dennis can now look at the location, ownership history, income, and household details against current program rules.</span>
+        <strong>{preview ? "Preview test complete." : "Thanks. Your request was received."}</strong>
+        <span>{preview ? "No lead was saved or sent." : "Dennis can now look at the location, ownership history, income, and household details against current program rules."}</span>
         <button className="button button-navy" type="button" onClick={() => setSubmitted(false)}>Check another situation</button>
       </div>
     );
@@ -21,11 +22,12 @@ export default function DpaCheck() {
   return (
     <form className="dpa-check-form" onSubmit={async (event) => {
       event.preventDefault();
+      if (submitting) return;
       setSubmitting(true);
       setError("");
       const form = new FormData(event.currentTarget);
       try {
-        await submitLead({
+        const result = await submitLead({
           firstName: String(form.get("firstName") || ""),
           email: String(form.get("email") || ""),
           phone: String(form.get("phone") || ""),
@@ -40,6 +42,7 @@ export default function DpaCheck() {
           smsConsent: form.get("smsConsent") === "on",
           source: "redesign-dpa-review",
         });
+        setPreview(result.preview === true);
         setSubmitted(true);
       } catch (caught) {
         setError(caught instanceof Error ? caught.message : "The request could not be submitted.");
@@ -98,7 +101,7 @@ export default function DpaCheck() {
         <label className="field"><span>Email</span><input name="email" type="email" autoComplete="email" required /></label>
       </div>
       <label className="field"><span>Phone <small>(optional)</small></span><input name="phone" type="tel" autoComplete="tel" /></label>
-      <label className="checkbox-field"><input type="checkbox" name="emailConsent" required /><span>Email my DPA review and allow Dennis to reply by email. I acknowledge the Privacy Policy.</span></label>
+      <label className="checkbox-field"><input type="checkbox" name="emailConsent" required /><span>Email my DPA review and allow Dennis to reply by email. I acknowledge the <a href="/privacy">Privacy Policy</a>.</span></label>
       <label className="checkbox-field"><input type="checkbox" name="callConsent" /><span>Optional: Dennis may call me about this request.</span></label>
       <label className="checkbox-field"><input type="checkbox" name="smsConsent" /><span>Optional: Dennis may text me about this request. Message and data rates may apply. Reply STOP to opt out.</span></label>
       {error ? <p className="form-error" role="alert">{error} You can also call 850-346-8514.</p> : null}

@@ -43,7 +43,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Validate Flask integration
-        run: python -m unittest tests.test_2026_redesign tests.test_lead_endpoint tests.test_service_forms -v
+        run: python -m unittest tests.test_2026_redesign tests.test_lead_endpoint tests.test_service_forms tests.test_lead_attribution -v
 
       - name: Compile Flask application
         run: python -m py_compile app.py
@@ -61,8 +61,8 @@ jobs:
       - name: Validate search title lengths
         run: node scripts/normalize_title_lengths.mjs --check
 
-      - name: Validate service form behavior
-        run: node --test tests/lead-forms.test.cjs
+      - name: Validate service forms, attribution and tracking events
+        run: node --test tests/lead-forms.test.cjs tests/lead-context.test.cjs tests/tracking-events.test.cjs
 
       - name: Install front-end dependencies
         working-directory: site
@@ -71,6 +71,9 @@ jobs:
       - name: Lint front end
         working-directory: site
         run: npm run lint
+
+      - name: Validate confirmed lead behavior
+        run: node --test tests/lead-client.test.cjs
 
       - name: Build and test front end
         working-directory: site

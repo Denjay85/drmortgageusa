@@ -7,7 +7,7 @@ const test = require('node:test');
 const script = fs.readFileSync(path.join(__dirname, '../assets/lead-forms.js'), 'utf8');
 
 function harness({ result = { success: true, lead_id: 123, event_id: 'server_event' }, ok = true,
-  tracking, fields = {}, fetchImpl, valid = true } = {}) {
+  tracking, attribution, fields = {}, fetchImpl, valid = true } = {}) {
   let handler;
   let resets = 0;
   const requests = [];
@@ -27,7 +27,8 @@ function harness({ result = { success: true, lead_id: 123, event_id: 'server_eve
     emailConsent: 'on', source: 'service-page-va-loans-orlando', segment: 'veteran', ...fields }));
   const context = {
     window: { location: { origin: 'http://localhost', pathname: '/va-loans-orlando' },
-      crypto: { randomUUID: () => 'test_uuid' }, DrMortgageTracking: tracking },
+      crypto: { randomUUID: () => 'test_uuid' }, DrMortgageTracking: tracking,
+      DrMortgageLeadContext: attribution },
     document: { readyState: 'complete', title: 'Local service page', querySelectorAll: () => [form] },
     FormData: function () { return data; },
     fetch: async (url, options) => {
@@ -83,6 +84,7 @@ for (const [name, options] of [
   ['HTTP failure', { ok: false }],
   ['false success response', { result: { success: false } }],
   ['missing saved lead ID', { result: { success: true } }],
+  ['string preview flag without saved lead ID', { result: { success: true, preview: 'false' } }],
   ['invalid JSON', { fetchImpl: async () => ({ ok: true, json() { throw Error('HTML'); } }) }],
   ['network failure', { fetchImpl: async () => { throw Error('offline'); } }]
 ]) {
@@ -120,4 +122,21 @@ test('invalid form does not send', async () => {
   const h = harness({ valid: false });
   await h.submit();
   assert.equal(h.requests.length, 0);
+});
+
+test('adds campaign context without overriding form identity', async () => {
+  const h = harness({ attribution: { get: () => ({ utm_source: 'google', gclid: 'test-click',
+    source: 'untrusted', email: 'wrong@example.test' }) } });
+  await h.submit();
+  const body = JSON.parse(h.requests[0].options.body);
+  assert.equal(body.utm_source, 'google');
+  assert.equal(body.gclid, 'test-click');
+  assert.equal(body.email, 'local@example.test');
+  assert.equal(body.source, 'service-page-va-loans-orlando');
+});
+
+test('blocked attribution is optional', async () => {
+  const h = harness({ attribution: { get() { throw Error('blocked'); } } });
+  await h.submit();
+  assert.equal(h.resets, 1);
 });

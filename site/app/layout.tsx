@@ -58,6 +58,7 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body>
+        <Script src="/assets/lead-context.js?v=20261008-1" strategy="beforeInteractive" />
         <Script src="/site-tracking.js" strategy="beforeInteractive" />
         {children}
       </body>

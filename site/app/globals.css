@@ -6271,7 +6271,8 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
 
 .hero-rate-watch-popover form > div,
 .hero-rate-watch-popover form > button,
-.hero-rate-watch-popover form > small {
+.hero-rate-watch-popover form > small,
+.hero-rate-watch-popover form > .checkbox-field {
   grid-column: 1 / -1;
 }
 
@@ -6293,6 +6294,24 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
   color: var(--ink-700);
   font-size: 0.67rem;
   font-weight: 800;
+}
+
+.hero-rate-watch-popover label.checkbox-field {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  font-weight: 400;
+}
+
+.hero-rate-watch-popover .checkbox-field input {
+  width: 18px;
+  min-height: 18px;
+  height: 18px;
+  padding: 0;
+}
+
+.checkbox-field a {
+  text-decoration: underline;
 }
 
 .hero-rate-watch-popover input,
@@ -6456,11 +6475,26 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
     margin-bottom: 28px;
   }
 
+  .hero-rates-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-rate-watch {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .hero-rate-watch > summary {
+    width: 100%;
+  }
+
   .hero-rate-watch-popover {
-    position: fixed;
-    z-index: 50;
-    right: 18px;
-    bottom: 94px;
+    position: static;
+    width: 100%;
+    margin-top: 12px;
+    padding: 18px;
   }
 
   .hero-rate-grid {
