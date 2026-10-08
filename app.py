@@ -16,7 +16,7 @@ import requests
 import psycopg2
 import time
 from datetime import datetime, timezone
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit, urlunsplit
 from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template, render_template_string, Response
 from flask_compress import Compress
@@ -151,6 +151,66 @@ def as_bool(value):
     return str(value or '').strip().lower() in ('1', 'true', 'yes', 'on')
 
 
+ATTRIBUTION_FIELDS = ('utm_source', 'utm_medium', 'utm_campaign', 'utm_content',
+                      'utm_term', 'gclid', 'gbraid', 'wbraid')
+
+
+def clean_attribution_value(value, limit):
+    if not isinstance(value, str) or len(value) > limit:
+        return ''
+    if re.search(r'[@<>\x00-\x1f]|%40|%3c|%3e|%0[ad]', value, re.I):
+        return ''
+    return value.strip()
+
+
+def clean_context_url(value, origin_only=False):
+    """Do not retain query strings, fragments or URL credentials with a lead."""
+    if not isinstance(value, str) or len(value) > 2048:
+        return ''
+    try:
+        parts = urlsplit(value)
+        if parts.scheme not in ('http', 'https') or not parts.hostname or parts.username or parts.password:
+            return ''
+        return urlunsplit((parts.scheme, parts.netloc, '' if origin_only else parts.path, '', ''))
+    except ValueError:
+        return ''
+
+
+def sanitize_lead_attribution(data):
+    """Keep only bounded campaign fields inside attribution; never a full URL query."""
+    for name in ATTRIBUTION_FIELDS:
+        value = clean_attribution_value(data.pop(name, None), 256 if name.startswith('utm_') else 512)
+        if value:
+            data[name] = value
+    for name in ('firstTouch', 'lastTouch'):
+        raw = data.pop(name, None)
+        try:
+            touch = json.loads(raw) if isinstance(raw, str) and len(raw) <= 4096 else None
+        except (ValueError, TypeError):
+            touch = None
+        if not isinstance(touch, dict):
+            continue
+        cleaned = {}
+        for field in ATTRIBUTION_FIELDS:
+            value = clean_attribution_value(touch.get(field), 256 if field.startswith('utm_') else 512)
+            if value:
+                cleaned[field] = value
+        path = clean_attribution_value(touch.get('landing_path'), 512)
+        if path.startswith('/') and '?' not in path and '#' not in path:
+            cleaned['landing_path'] = path
+        referrer = clean_context_url(touch.get('referrer_origin'), origin_only=True)
+        if referrer:
+            cleaned['referrer_origin'] = referrer
+        timestamp = touch.get('timestamp')
+        if isinstance(timestamp, (int, float)) and not isinstance(timestamp, bool) and 0 < timestamp <= (time.time() + 60) * 1000:
+            cleaned['timestamp'] = timestamp
+        if cleaned:
+            data[name] = json.dumps(cleaned, separators=(',', ':'))
+    for name in ('pageUrl', 'referrer'):
+        if name in data:
+            data[name] = clean_context_url(data[name], origin_only=name == 'referrer')
+
+
 def forward_to_zapier(payload):
     """Deliver a lead to Zapier without making lead capture depend on Zapier."""
     if PREVIEW_MODE:
@@ -243,7 +303,7 @@ def track_meta_server_event(event_name, event_id, data, custom_data=None):
             'event_time': int(datetime.now(timezone.utc).timestamp()),
             'event_id': event_id,
             'action_source': 'website',
-            'event_source_url': request.url,
+            'event_source_url': clean_context_url(data.get('pageUrl')) or request.base_url,
             'user_data': user_data,
             'custom_data': custom_data or {}
         }]
@@ -419,6 +479,8 @@ def serve_index():
 
 @app.route('/site-tracking.js')
 def site_tracking():
+    with open(os.path.join(BASE_DIR, 'assets', 'lead-context.js'), encoding='utf-8') as context_file:
+        context_js = context_file.read()
     if PREVIEW_MODE:
         preview_js = """
 (function() {
@@ -442,7 +504,7 @@ def site_tracking():
   window.__drPreviewMode = true;
 })();
 """
-        response = Response(preview_js, mimetype='application/javascript')
+        response = Response(context_js + preview_js, mimetype='application/javascript')
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         return response
 
@@ -589,7 +651,7 @@ def site_tracking():
     return Object.assign({{
       page_title: document.title,
       page_path: window.location.pathname,
-      page_location: window.location.href
+      page_location: window.location.origin + window.location.pathname
     }}, defaults || {{}}, overrides || {{}});
   }}
 
@@ -602,14 +664,14 @@ def site_tracking():
     pushDataLayerEvent('dr_apply_click', payload);
 
     if (typeof window.fbq === 'function') {{
-      window.fbq('track', 'CompleteRegistration', {{
+      window.fbq('trackCustom', 'ApplicationOpened', {{
         content_name: payload.content_name,
         content_category: payload.content_category
       }}, {{ eventID: eventId }});
     }}
 
-    trackGoogleEvent('generate_lead', {{
-      event_category: 'conversion',
+    trackGoogleEvent('application_opened', {{
+      event_category: 'engagement',
       event_label: payload.href || payload.content_category,
       page_path: payload.page_path
     }});
@@ -626,14 +688,14 @@ def site_tracking():
     pushDataLayerEvent('dr_phone_click', payload);
 
     if (typeof window.fbq === 'function') {{
-      window.fbq('track', 'Contact', {{
+      window.fbq('trackCustom', 'PhoneLinkClick', {{
         content_name: payload.content_name,
         content_category: payload.content_category
       }}, {{ eventID: eventId }});
     }}
 
-    trackGoogleEvent('contact', {{
-      event_category: 'conversion',
+    trackGoogleEvent('phone_click', {{
+      event_category: 'engagement',
       event_label: payload.href || payload.content_category,
       page_path: payload.page_path
     }});
@@ -710,29 +772,23 @@ def site_tracking():
 
   function bindClickTracking() {{
     if (options.disableAutoClickTracking) return;
-
-    document.querySelectorAll('a[href*="my1003app.com"], a[data-track="apply"]').forEach(function(el) {{
-      if (el.dataset.drTrackBoundApply) return;
-      el.dataset.drTrackBoundApply = '1';
-      el.addEventListener('click', function() {{
+    // Delegation also covers links rendered after client-side navigation.
+    document.addEventListener('click', function(event) {{
+      var el = event.target && event.target.closest ? event.target.closest('a') : null;
+      if (!el) return;
+      if (el.matches('a[href*="my1003app.com"], a[data-track="apply"]')) {{
         trackApplyClick({{
           href: el.href,
           content_name: el.dataset.contentName || document.title,
           content_category: el.dataset.contentCategory || 'apply-click'
         }});
-      }});
-    }});
-
-    document.querySelectorAll('a[href^="tel:"], a[data-track="call"]').forEach(function(el) {{
-      if (el.dataset.drTrackBoundCall) return;
-      el.dataset.drTrackBoundCall = '1';
-      el.addEventListener('click', function() {{
+      }} else if (el.matches('a[href^="tel:"], a[data-track="call"]')) {{
         trackPhoneClick({{
           href: el.getAttribute('href'),
           content_name: el.dataset.contentName || document.title,
           content_category: el.dataset.contentCategory || 'phone-click'
         }});
-      }});
+      }}
     }});
   }}
 
@@ -743,6 +799,8 @@ def site_tracking():
       form.dataset.drLeadBound = '1';
       form.addEventListener('submit', function(event) {{
         event.preventDefault();
+        if (form.dataset.drLeadPending === '1' || !form.reportValidity()) return;
+        form.dataset.drLeadPending = '1';
 
         var formData = new FormData(form);
         var submitButton = form.querySelector('button[type="submit"]');
@@ -759,9 +817,10 @@ def site_tracking():
           downPayment: formData.get('downPayment') || '',
           source: formData.get('source') || form.dataset.source || 'service-page',
           eventId: eventId,
-          fbp: getOrCreateFbp(),
-          fbc: getOrCreateFbc()
+          pageUrl: window.location.origin + window.location.pathname
         }};
+        try {{ payload.fbp = getOrCreateFbp(); payload.fbc = getOrCreateFbc(); }} catch (_) {{}}
+        try {{ payload = Object.assign({{}}, window.DrMortgageLeadContext.get(), payload); }} catch (_) {{}}
 
         formData.forEach(function(value, key) {{
           if (!(key in payload)) payload[key] = value;
@@ -782,14 +841,21 @@ def site_tracking():
           body: JSON.stringify(payload)
         }}).then(function(response) {{
           if (!response.ok) throw new Error('Lead submission failed');
-          trackLeadSubmit({{
-            eventId: eventId,
-            content_name: payload.segment || document.title,
-            content_category: payload.source,
-            source: payload.source
-          }});
+          return response.json();
+        }}).then(function(result) {{
+          if (!result || result.success !== true || (result.preview !== true && !result.lead_id)) throw new Error('Unconfirmed delivery');
+          if (result.preview !== true) {{
+            try {{
+              trackLeadSubmit({{
+                eventId: result.event_id || eventId,
+                content_name: payload.segment || document.title,
+                content_category: payload.source,
+                source: payload.source
+              }});
+            }} catch (_) {{ /* Optional analytics cannot invalidate a saved request. */ }}
+          }}
           if (message) {{
-            message.textContent = form.dataset.successMessage || 'Thanks. Dennis will reach out shortly.';
+            message.textContent = result.preview === true ? 'Preview test complete. No lead was saved or sent.' : (form.dataset.successMessage || 'Thanks. Dennis will reach out shortly.');
             message.classList.add('is-success');
           }}
           form.reset();
@@ -799,6 +865,7 @@ def site_tracking():
             message.classList.remove('is-success');
           }}
         }}).finally(function() {{
+          delete form.dataset.drLeadPending;
           if (submitButton) {{
             submitButton.disabled = false;
             submitButton.textContent = originalText;
@@ -819,12 +886,11 @@ def site_tracking():
     trackSecondaryLandingView: trackSecondaryLandingView
   }};
 
-  getOrCreateFbp();
-  getOrCreateFbc();
-  initGoogle();
-  initMeta();
   bindClickTracking();
   bindLeadForms();
+  try {{ getOrCreateFbp(); getOrCreateFbc(); }} catch (_) {{}}
+  try {{ initGoogle(); }} catch (_) {{}}
+  try {{ initMeta(); }} catch (_) {{}}
 
   if (document.readyState === 'loading') {{
     document.addEventListener('DOMContentLoaded', fireIntentView, {{ once: true }});
@@ -833,7 +899,7 @@ def site_tracking():
   }}
 }})();
 """
-    response = Response(js, mimetype='application/javascript')
+    response = Response(context_js + js, mimetype='application/javascript')
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
@@ -1530,8 +1596,13 @@ def quiz_submit_read():
 @app.route('/api/quiz-submit', methods=['POST'])
 def quiz_submit():
     """Receive quiz submission, store in DB, forward to Zapier"""
+    conn = None
+    cur = None
     try:
         data = request.get_json(silent=True) or request.form.to_dict()
+        if not isinstance(data, dict):
+            return jsonify({'success': False, 'errors': ['invalid form data']}), 400
+        sanitize_lead_attribution(data)
 
         first_name = (data.get('firstName', data.get('first_name', '')) or '').strip()
         email = normalize_email(data.get('email', ''))
@@ -1553,8 +1624,11 @@ def quiz_submit():
         sms_consent = as_bool(data.get('smsConsent', data.get('sms_consent')))
 
         errors = []
-        if source in {f'service-page-{slug}' for slug in SERVICE_PAGE_MAP}:
-            if not first_name:
+        service_sources = {f'service-page-{slug}' for slug in SERVICE_PAGE_MAP}
+        named_form_sources = service_sources | {'redesign-contact', 'redesign-dpa-review', 'redesign-build-my-plan'}
+        email_form_sources = named_form_sources | {'redesign-rate-watch', 'redesign-calculator-save'}
+        if source in email_form_sources:
+            if source in named_form_sources and not first_name:
                 errors.append('first name is required')
             if not email or not email_consent:
                 errors.append('email and permission to reply are required')
@@ -1614,8 +1688,16 @@ def quiz_submit():
 
         result = cur.fetchone()
         lead_id = result[0] if result else None
+        if not lead_id:
+            raise RuntimeError('No saved lead identifier')
+        # A lead must be durable before any downstream system counts it.
+        conn.commit()
 
-        zapier_result = forward_to_zapier(data)
+        try:
+            zapier_result = forward_to_zapier(data)
+        except Exception:
+            app.logger.error('Zapier delivery failed for saved lead %s', lead_id)
+            zapier_result = {'sent': False, 'reason': 'request_error'}
         zapier_forwarded = bool(zapier_result.get('sent'))
 
         meta_result = {'sent': False, 'reason': 'not_attempted'}
@@ -1636,26 +1718,33 @@ def quiz_submit():
             print(f"Meta CAPI forward failed: {e}")
 
         zapier_error = None if zapier_forwarded else zapier_result.get('reason')
-        cur.execute(
-            """
-            UPDATE leads
-            SET zapier_forwarded = %s,
-                meta_capi_sent = %s,
-                zapier_attempts = COALESCE(zapier_attempts, 0) + 1,
-                zapier_last_error = %s,
-                zapier_last_attempt_at = CURRENT_TIMESTAMP
-            WHERE id = %s
-            """,
-            (
-                zapier_forwarded,
-                bool(meta_result.get('sent')),
-                zapier_error,
-                lead_id,
-            ),
-        )
-        conn.commit()
-        cur.close()
-        conn.close()
+        try:
+            cur.execute(
+                """
+                UPDATE leads
+                SET zapier_forwarded = %s,
+                    meta_capi_sent = %s,
+                    zapier_attempts = COALESCE(zapier_attempts, 0) + 1,
+                    zapier_last_error = %s,
+                    zapier_last_attempt_at = CURRENT_TIMESTAMP
+                WHERE id = %s
+                """,
+                (
+                    zapier_forwarded,
+                    bool(meta_result.get('sent')),
+                    zapier_error,
+                    lead_id,
+                ),
+            )
+            conn.commit()
+        except Exception:
+            # The lead is already saved. A delivery-status failure must not
+            # invite another submission or erase the original inquiry.
+            app.logger.exception('Could not update delivery status for saved lead %s', lead_id)
+            try:
+                conn.rollback()
+            except Exception:
+                pass
 
         return jsonify({
             "success": True,
@@ -1665,8 +1754,20 @@ def quiz_submit():
         })
 
     except Exception as e:
-        print(f"Quiz submission error: {e}")
-        return jsonify({"success": False, "error": str(e)}), 500
+        app.logger.error('Quiz submission failed: %s', type(e).__name__)
+        if conn is not None:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        return jsonify({"success": False, "error": "We could not confirm delivery. Please call 850-346-8514 before sending again."}), 500
+    finally:
+        for resource in (cur, conn):
+            if resource is not None:
+                try:
+                    resource.close()
+                except Exception:
+                    pass
 
 
 def review_result_page(title, message, status=200, back_url='/'):

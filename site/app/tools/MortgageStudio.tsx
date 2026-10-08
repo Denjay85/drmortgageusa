@@ -868,6 +868,7 @@ function FixFlipCalculator() {
 
 function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
   const [saved, setSaved] = useState(false);
+  const [preview, setPreview] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const label = modes.find((mode) => mode.id === activeMode)?.label || "Mortgage";
@@ -882,6 +883,7 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
       {!saved ? (
         <form onSubmit={async (event) => {
           event.preventDefault();
+          if (submitting) return;
           setSubmitting(true);
           setError("");
           const form = new FormData(event.currentTarget);
@@ -890,7 +892,7 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
             value: input.value,
           }));
           try {
-            await submitLead({
+            const result = await submitLead({
               email: String(form.get("email") || ""),
               segment: `${label} calculator scenario`,
               scenarioMode: activeMode,
@@ -899,6 +901,7 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
               emailConsent: form.get("emailConsent") === "on",
               source: "redesign-calculator-save",
             });
+            setPreview(result.preview === true);
             setSaved(true);
           } catch (caught) {
             setError(caught instanceof Error ? caught.message : "The scenario could not be sent.");
@@ -907,7 +910,7 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
           }
         }}>
           <label className="field"><span>Email</span><input name="email" type="email" required placeholder="you@example.com" /></label>
-          <label className="checkbox-field"><input name="emailConsent" type="checkbox" required /><span>Email this scenario and allow a reply about this request. I acknowledge the Privacy Policy.</span></label>
+          <label className="checkbox-field"><input name="emailConsent" type="checkbox" required /><span>Email this scenario and allow a reply about this request. I acknowledge the <a href="/privacy">Privacy Policy</a>.</span></label>
           <label className="checkbox-field"><input name="reviewRequested" type="checkbox" /><span>Optional: have Dennis check the assumptions in this scenario.</span></label>
           {error ? <p className="form-error" role="alert">{error}</p> : null}
           <button className="button button-gold" type="submit" disabled={submitting}>{submitting ? "Sending..." : `Save this ${label} scenario`}</button>
@@ -915,8 +918,8 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
         </form>
       ) : (
         <div className="success-message success-message-dark" role="status">
-          <strong>Your numbers are on the way.</strong>
-          <span>The calculator, the numbers you entered, and your review preference were included.</span>
+          <strong>{preview ? "Preview test complete." : "Your scenario was received."}</strong>
+          <span>{preview ? "No lead was saved or sent." : "The calculator, the numbers you entered, and your review preference were included with your request."}</span>
           <button className="button button-gold" type="button" onClick={() => setSaved(false)}>Save another</button>
         </div>
       )}

@@ -636,7 +636,8 @@ def render_page(page: dict) -> str:
   <link rel="stylesheet" href="/assets/landing-pages.css?v=20261008-1">
   <script type="application/ld+json">{page_json(page)}</script>
   <script type="application/ld+json">{faq_json(page)}</script>
-  <script src="/assets/lead-forms.js?v=20261008-1" defer></script>
+  <script src="/assets/lead-context.js?v=20261008-1" defer></script>
+  <script src="/assets/lead-forms.js?v=20261008-2" defer></script>
   <script src="/site-tracking.js?v=20260508-1" defer></script>
 </head>
 <body data-page-category="service" data-page-intent="{html.escape(page['segment'])}">

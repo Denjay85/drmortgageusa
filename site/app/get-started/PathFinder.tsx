@@ -440,6 +440,7 @@ export default function PathFinder() {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [complete, setComplete] = useState(false);
+  const [preview, setPreview] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -482,7 +483,7 @@ export default function PathFinder() {
             <div key={label}><span>{label}</span><strong>{value}</strong></div>
           ))}
         </div>
-        <div className="preview-note">I received the answers and contact preferences you selected, so we can pick up from the same place when we talk.</div>
+        <div className="preview-note">{preview ? "Preview test complete. No lead was saved or sent." : "Your answers and contact preferences were received, so we can pick up from the same place when we talk."}</div>
         <div className="hero-actions">
           <Link className="button button-gold" href="/contact">Talk this through with Dennis</Link>
           <Link className="button button-outline-navy" href={result.toolHref}>{result.toolLabel}</Link>
@@ -522,11 +523,12 @@ export default function PathFinder() {
         ) : (
           <form className="path-contact" onSubmit={async (event) => {
             event.preventDefault();
+            if (submitting) return;
             setSubmitting(true);
             setError("");
             const form = new FormData(event.currentTarget);
             try {
-              await submitLead({
+              const result = await submitLead({
                 firstName: String(form.get("firstName") || ""),
                 email: String(form.get("email") || ""),
                 phone: String(form.get("phone") || ""),
@@ -540,6 +542,7 @@ export default function PathFinder() {
                 smsConsent: form.get("smsConsent") === "on",
                 source: "redesign-build-my-plan",
               });
+              setPreview(result.preview === true);
               setComplete(true);
             } catch (caught) {
               setError(caught instanceof Error ? caught.message : "The request could not be submitted.");
@@ -552,7 +555,7 @@ export default function PathFinder() {
               <label className="field"><span>Email</span><input name="email" type="email" autoComplete="email" required /></label>
             </div>
             <label className="field"><span>Phone <small>(optional)</small></span><input name="phone" type="tel" autoComplete="tel" /></label>
-            <label className="checkbox-field"><input name="emailConsent" type="checkbox" required /><span>Email my plan and allow Dennis to reply by email about this request. I acknowledge the Privacy Policy.</span></label>
+            <label className="checkbox-field"><input name="emailConsent" type="checkbox" required /><span>Email my plan and allow Dennis to reply by email about this request. I acknowledge the <a href="/privacy">Privacy Policy</a>.</span></label>
             <label className="checkbox-field"><input name="callConsent" type="checkbox" /><span>Optional: Dennis may call me about this request.</span></label>
             <label className="checkbox-field"><input name="smsConsent" type="checkbox" /><span>Optional: Dennis may text me about this request. Message and data rates may apply. Reply STOP to opt out.</span></label>
             {error ? <p className="form-error" role="alert">{error} You can also call 850-346-8514.</p> : null}

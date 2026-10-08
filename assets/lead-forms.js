@@ -23,7 +23,9 @@
         var button = form.querySelector('button[type="submit"]');
         var message = form.querySelector('[data-form-message]');
         var originalText = button.textContent;
-        var payload = Object.fromEntries(fields.entries());
+        var attribution = {};
+        try { attribution = window.DrMortgageLeadContext ? window.DrMortgageLeadContext.get() : {}; } catch (_) { /* Optional. */ }
+        var payload = Object.assign({}, attribution, Object.fromEntries(fields.entries()));
         ['emailConsent', 'callConsent', 'smsConsent'].forEach(function (name) {
           payload[name] = fields.get(name) === 'on';
         });
@@ -52,11 +54,11 @@
             body: JSON.stringify(payload)
           });
           var result = await response.json();
-          if (!response.ok || result.success !== true || (!result.preview && !result.lead_id)) {
+          if (!response.ok || result.success !== true || (result.preview !== true && !result.lead_id)) {
             throw new Error('Receipt was not confirmed');
           }
           // Analytics must never change whether a successfully received form looks successful.
-          if (!result.preview) {
+          if (result.preview !== true) {
             try {
               var tracking = window.DrMortgageTracking;
               if (tracking && tracking.trackLeadSubmit) tracking.trackLeadSubmit({
@@ -68,7 +70,7 @@
             } catch (_) { /* The lead was already received. */ }
           }
           form.reset();
-          message.textContent = result.preview
+          message.textContent = result.preview === true
             ? 'Preview test complete. No lead was saved or sent.'
             : form.dataset.successMessage;
           message.classList.add('is-success');

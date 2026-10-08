@@ -16,6 +16,7 @@ type TrackingApi = {
 declare global {
   interface Window {
     DrMortgageTracking?: TrackingApi;
+    DrMortgageLeadContext?: { get: () => Record<string, string> };
   }
 }
 
@@ -24,15 +25,23 @@ function createFallbackEventId(prefix: string) {
 }
 
 export async function submitLead(payload: LeadPayload) {
+  if ((payload.callConsent === true || payload.smsConsent === true) && !String(payload.phone || "").trim()) {
+    throw new Error("Please add a phone number for calls or texts, or leave those permissions unchecked.");
+  }
   const tracking = window.DrMortgageTracking;
-  const eventId = tracking?.createEventId?.("lead_submit") || createFallbackEventId("lead_submit");
+  const eventId = createFallbackEventId("lead_submit");
+  const optionalValue = (read: () => string | undefined) => {
+    try { return read() || ""; } catch { return ""; }
+  };
+  let attribution: Record<string, string> = {};
+  try { attribution = window.DrMortgageLeadContext?.get() || {}; } catch { /* Optional measurement. */ }
   const body = {
+    ...attribution,
     ...payload,
     eventId,
-    fbp: tracking?.getOrCreateFbp?.() || "",
-    fbc: tracking?.getOrCreateFbc?.() || "",
-    pageUrl: window.location.href,
-    referrer: document.referrer,
+    fbp: optionalValue(() => tracking?.getOrCreateFbp?.()),
+    fbc: optionalValue(() => tracking?.getOrCreateFbc?.()),
+    pageUrl: window.location.origin + window.location.pathname,
   };
 
   const response = await fetch("/api/quiz-submit", {
@@ -41,17 +50,25 @@ export async function submitLead(payload: LeadPayload) {
     body: JSON.stringify(body),
   });
 
-  if (!response.ok) {
-    const result = await response.json().catch(() => null) as { errors?: string[]; error?: string } | null;
-    throw new Error(result?.errors?.join(" ") || result?.error || "The request could not be submitted.");
+  const result = await response.json().catch(() => null) as {
+    success?: boolean; preview?: boolean; lead_id?: number; event_id?: string; errors?: string[];
+  } | null;
+  if (!response.ok || result?.success !== true || (result.preview !== true && !result.lead_id)) {
+    const validation = response.status === 400 && Array.isArray(result?.errors)
+      ? result.errors.join(" ") : "We could not confirm delivery. Please call 850-346-8514 before sending again.";
+    throw new Error(validation);
   }
 
-  tracking?.trackLeadSubmit?.({
-    eventId,
-    content_name: payload.segment,
-    content_category: payload.source,
-    source: payload.source,
-  });
+  if (result.preview !== true) {
+    try {
+      tracking?.trackLeadSubmit?.({
+        eventId: result.event_id || eventId,
+        content_name: payload.segment,
+        content_category: payload.source,
+        source: payload.source,
+      });
+    } catch { /* Tracking cannot turn an already saved lead into a failed form. */ }
+  }
 
-  return response.json();
+  return result;
 }

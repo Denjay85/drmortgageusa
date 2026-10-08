@@ -3498,14 +3498,17 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" }
       }).then(response => {
         if (!response.ok) throw new Error("Quiz lead submission failed");
-        if (window.DrMortgageTracking && typeof window.DrMortgageTracking.trackLeadSubmit === 'function') {
+        return response.json();
+      }).then(result => {
+        if (!result || result.success !== true || (result.preview !== true && !result.lead_id)) throw new Error('Unconfirmed delivery');
+        try { if (result.preview !== true && window.DrMortgageTracking && typeof window.DrMortgageTracking.trackLeadSubmit === 'function') {
           window.DrMortgageTracking.trackLeadSubmit({
-            eventId: leadEventId,
+            eventId: result.event_id || leadEventId,
             content_name: segment,
             content_category: '60-second-quiz',
             source: '60-second-quiz'
           });
-        }
+        } } catch (_) { /* The lead was already saved. */ }
       }).catch(err => console.log("API error:", err));
       
       // Show results
@@ -3600,15 +3603,18 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { 'Content-Type': 'application/json' }
       }).then(response => {
         if (!response.ok) throw new Error('Lead submission failed');
-        if (window.DrMortgageTracking && typeof window.DrMortgageTracking.trackLeadSubmit === 'function') {
+        return response.json();
+      }).then(result => {
+        if (!result || result.success !== true || (result.preview !== true && !result.lead_id)) throw new Error('Unconfirmed delivery');
+        try { if (result.preview !== true && window.DrMortgageTracking && typeof window.DrMortgageTracking.trackLeadSubmit === 'function') {
           window.DrMortgageTracking.trackLeadSubmit({
-            eventId: leadEventId,
+            eventId: result.event_id || leadEventId,
             content_name: data.segment || 'segment-form',
             content_category: 'segment-form',
             source: data.source || 'segment-form'
           });
-        }
-        const personalizedMessage = firstName ? 
+        } } catch (_) { /* The lead was already saved. */ }
+        const personalizedMessage = result.preview === true ? 'Preview only. No lead was saved or sent.' : firstName ?
           `✓ Thanks ${firstName}! We'll contact you soon.` : 
           '✓ Success! We\'ll contact you soon.';
         

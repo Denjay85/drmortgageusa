@@ -48,7 +48,8 @@ class ServiceFormTests(unittest.TestCase):
                 for name in ('callConsent', 'smsConsent'):
                     self.assertNotIn('required', checkboxes[name])
                     self.assertNotIn('checked', checkboxes[name])
-                self.assertIn('/assets/lead-forms.js?v=20261008-1', html)
+                self.assertIn('/assets/lead-forms.js?v=20261008-2', html)
+                self.assertIn('/assets/lead-context.js?v=20261008-1', html)
                 self.assertIn('href="#request-review"', html)
                 self.assertIn('href="/privacy"', html)
                 self.assertNotIn('href="#request-review" data-track="apply"', html)
