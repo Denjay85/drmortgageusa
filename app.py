@@ -18,7 +18,7 @@ import time
 from datetime import datetime, timezone
 from urllib.parse import quote
 from functools import wraps
-from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template_string, Response
+from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template, render_template_string, Response
 from flask_compress import Compress
 import mimetypes
 
@@ -738,6 +738,7 @@ def site_tracking():
 
   function bindLeadForms() {{
     document.querySelectorAll('form[data-lead-form]').forEach(function(form) {{
+      if (form.dataset.leadHandler === 'standalone') return;
       if (form.dataset.drLeadBound) return;
       form.dataset.drLeadBound = '1';
       form.addEventListener('submit', function(event) {{
@@ -1552,6 +1553,13 @@ def quiz_submit():
         sms_consent = as_bool(data.get('smsConsent', data.get('sms_consent')))
 
         errors = []
+        if source in {f'service-page-{slug}' for slug in SERVICE_PAGE_MAP}:
+            if not first_name:
+                errors.append('first name is required')
+            if not email or not email_consent:
+                errors.append('email and permission to reply are required')
+            if (call_consent or sms_consent) and not phone:
+                errors.append('a phone number is required for calls or texts')
         if email and not is_valid_email(email):
             errors.append('valid email is required')
         if phone and len(phone) < 10:
@@ -1659,6 +1667,74 @@ def quiz_submit():
     except Exception as e:
         print(f"Quiz submission error: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
+
+
+def review_result_page(title, message, status=200, back_url='/'):
+    response = Response(render_template(
+        'lead_result.html', title=title, message=message,
+        back_url=back_url,
+        back_label='Back to the form' if status >= 400 else 'Return to the website',
+    ), status=status, mimetype='text/html')
+    response.headers['X-Robots-Tag'] = 'noindex, nofollow'
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+
+@app.route('/request-review', methods=['GET', 'POST'])
+def request_review():
+    """Progressive-enhancement fallback: no visitor contact details in URLs."""
+    if request.method != 'POST':
+        response = review_result_page(
+            'Use a review form', 'Please submit your request from a service page.', 405,
+            '/contact',
+        )
+        response.headers['Allow'] = 'POST, OPTIONS'
+        return response
+
+    source = request.form.get('source', '')
+    sources = {f'service-page-{slug}': slug for slug in SERVICE_PAGE_MAP}
+    if source not in sources:
+        return review_result_page(
+            'Please use the contact form',
+            'This request could not be processed. No new request was submitted.',
+            400, '/contact',
+        )
+    response = app.make_response(quiz_submit())
+    result = response.get_json(silent=True) or {}
+    if response.status_code == 200 and result.get('success') is True and (
+            result.get('preview') or result.get('lead_id')):
+        destination = url_for('request_received')
+        if result.get('preview'):
+            destination += '?preview=1'
+        redirect_response = redirect(destination, code=303)
+        redirect_response.headers['Cache-Control'] = 'no-store'
+        redirect_response.headers['X-Robots-Tag'] = 'noindex, nofollow'
+        return redirect_response
+    if response.status_code == 400:
+        message = ('Check your first name, email and permission to reply. '
+                   'If you select calls or texts, include a valid phone number. '
+                   'Use your browser Back button to review your entries.')
+    else:
+        message = ('We could not confirm delivery. Please call 850-346-8514 '
+                   'for help before sending again.')
+    return review_result_page(
+        'Your request needs attention', message,
+        400 if response.status_code == 400 else 503,
+        '/' + sources[source] + '#request-review',
+    )
+
+
+@app.route('/request-received')
+def request_received():
+    if PREVIEW_MODE:
+        return review_result_page(
+            'Preview test complete', 'No lead was saved or sent from this preview.',
+        )
+    return review_result_page(
+        'Your request was received',
+        'Dennis will follow up using the contact preferences you selected. '
+        'This is a request for a conversation, not a loan approval or completed application.',
+    )
 
 
 @app.route('/admin')

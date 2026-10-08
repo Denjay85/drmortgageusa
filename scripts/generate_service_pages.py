@@ -60,7 +60,7 @@ PAGES = [
         "form_text": "Tell me where you are in the process and I will map out your next best move.",
         "segment": "veteran",
         "source": "service-page-va-loans-orlando",
-        "primary_cta": ("Start My VA Review", APPLY_URL),
+        "primary_cta": ("Start My VA Review", "#request-review"),
         "secondary_cta": ("Call 850-346-8514", "tel:+18503468514"),
         "support_cta": ("Read the Florida VA Guide", "/blog/va-loan-guide-florida-veterans-2026"),
         "hero_stats": [("0% down", "For eligible buyers"), ("No PMI", "On VA purchase loans"), ("VA review", "COE, payment, and eligibility")],
@@ -133,7 +133,7 @@ PAGES = [
         "form_text": "Tell me what you are buying or refinancing and I will point you to the right next step.",
         "segment": "broker",
         "source": "service-page-orlando-mortgage-broker",
-        "primary_cta": ("Compare My Options", APPLY_URL),
+        "primary_cta": ("Compare My Options", "#request-review"),
         "secondary_cta": ("Call 850-346-8514", "tel:+18503468514"),
         "support_cta": ("See Orlando affordability guidance", "/blog/how-much-house-afford-orlando-2026"),
         "hero_stats": [("79+ lenders", "Broker-side access"), ("Purchase + refi", "Owner-occupied and investor"), ("Florida focused", "Orlando-based guidance")],
@@ -189,7 +189,7 @@ PAGES = [
         "form_text": "Share your timeline and I will help you narrow the best starting point.",
         "segment": "first-time",
         "source": "service-page-first-time-homebuyer-orlando",
-        "primary_cta": ("Check My Buying Options", APPLY_URL),
+        "primary_cta": ("Check My Buying Options", "#request-review"),
         "secondary_cta": ("Call 850-346-8514", "tel:+18503468514"),
         "support_cta": ("Review Orlando DPA programs", "/dpa"),
         "hero_stats": [("3%-3.5% down", "Common first-home paths"), ("DPA guidance", "State + local options"), ("No fluff", "Real payment planning")],
@@ -245,7 +245,7 @@ PAGES = [
         "form_text": "Share your timeline and whether you want lower payment, cash out, or mortgage insurance relief.",
         "segment": "repeat-buyer",
         "source": "service-page-refinance-florida",
-        "primary_cta": ("Run My Refinance Review", APPLY_URL),
+        "primary_cta": ("Run My Refinance Review", "#request-review"),
         "secondary_cta": ("Call 850-346-8514", "tel:+18503468514"),
         "support_cta": ("See FHA-to-conventional guidance", "/blog/refinancing-out-of-fha-to-conventional-florida"),
         "hero_stats": [("Rate-term", "Lower cost or shorter term"), ("Cash-out", "Use equity carefully"), ("VA + FHA", "Program-specific strategy")],
@@ -301,7 +301,7 @@ PAGES = [
         "form_text": "Share what you want to use the equity for and Dennis will point you to the cleanest next move.",
         "segment": "repeat-buyer",
         "source": "service-page-heloc-orlando",
-        "primary_cta": ("Check My HELOC Options", APPLY_URL),
+        "primary_cta": ("Check My HELOC Options", "#request-review"),
         "secondary_cta": ("Call 850-346-8514", "tel:+18503468514"),
         "support_cta": ("Use the HELOC calculator", "/heloc-calculator"),
         "hero_stats": [("Equity access", "Without replacing every loan"), ("Fast review", "Clear next-step guidance"), ("Orlando context", "Local payment realities matter")],
@@ -598,9 +598,10 @@ def render_page(page: dict) -> str:
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/landing-pages.css">
+  <link rel="stylesheet" href="/assets/landing-pages.css?v=20261008-1">
   <script type="application/ld+json">{page_json(page)}</script>
   <script type="application/ld+json">{faq_json(page)}</script>
+  <script src="/assets/lead-forms.js?v=20261008-1" defer></script>
   <script src="/site-tracking.js?v=20260508-1" defer></script>
 </head>
 <body data-page-category="service" data-page-intent="{html.escape(page['segment'])}">
@@ -637,7 +638,7 @@ def render_page(page: dict) -> str:
             <h1>{html.escape(page['hero_title'])}</h1>
             <p class="lead">{html.escape(page['hero_lead'])}</p>
             <div class="hero-actions">
-              <a class="button" href="{page['primary_cta'][1]}" data-track="apply" data-content-category="{page['source']}">{html.escape(page['primary_cta'][0])}</a>
+              <a class="button" href="{page['primary_cta'][1]}">{html.escape(page['primary_cta'][0])}</a>
               <a class="button-secondary" href="{page['secondary_cta'][1]}" data-track="call" data-content-category="{page['source']}">{html.escape(page['secondary_cta'][0])}</a>
             </div>
             <a href="{page['support_cta'][1]}" style="color: var(--gold-soft); text-decoration: none; font-weight: 700;">{html.escape(page['support_cta'][0])}</a>
@@ -646,30 +647,33 @@ def render_page(page: dict) -> str:
             </div>
           </div>
 
-          <aside class="hero-card">
-            <h2>{html.escape(page['form_heading'])}</h2>
+          <aside class="hero-card" id="request-review" tabindex="-1" aria-labelledby="review-heading">
+            <h2 id="review-heading">{html.escape(page['form_heading'])}</h2>
             <p>{html.escape(page['form_text'])}</p>
-            <form class="lead-form" data-lead-form data-segment="{html.escape(page['segment'])}" data-source="{html.escape(page['source'])}" data-success-message="Thanks. Dennis will reach out with the right next step.">
+            <form class="lead-form" method="post" action="/request-review" data-lead-form data-lead-handler="standalone" data-segment="{html.escape(page['segment'])}" data-source="{html.escape(page['source'])}" data-success-message="Your request was received. Dennis will follow up using the contact preferences you selected.">
               <div class="field-grid">
-                <input type="text" name="firstName" placeholder="First name" required>
-                <input type="email" name="email" placeholder="Email" required>
+                <label class="field"><span>First name</span><input type="text" name="firstName" autocomplete="given-name" required></label>
+                <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
               </div>
               <div class="field-grid">
-                <input type="tel" name="phone" placeholder="Phone number">
-                <select name="timeline">
-                  <option value="">Timeline</option>
+                <label class="field"><span>Phone (optional)</span><input type="tel" name="phone" autocomplete="tel"></label>
+                <label class="field"><span>Timeline (optional)</span><select name="timeline">
+                  <option value="">Select a timeline</option>
                   <option value="asap">ASAP</option>
                   <option value="0-30">Within 30 days</option>
                   <option value="1-3 months">1-3 months</option>
                   <option value="3-6 months">3-6 months</option>
                   <option value="6+ months">6+ months</option>
-                </select>
+                </select></label>
               </div>
               <input type="hidden" name="segment" value="{html.escape(page['segment'])}">
               <input type="hidden" name="source" value="{html.escape(page['source'])}">
+              <label class="checkbox-field"><input type="checkbox" name="emailConsent" required><span>I agree to receive a reply by email about this request and acknowledge the <a href="/privacy">Privacy Policy</a>.</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="callConsent"><span>Optional: Dennis may call me about this request.</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="smsConsent"><span>Optional: Dennis may text me about this request. Message and data rates may apply. Reply STOP to opt out.</span></label>
               <button class="button" type="submit">{html.escape(page['form_heading'])}</button>
-              <p data-form-message></p>
-              <p class="form-note">No pressure. No generic call-center script. Just the right next step for your scenario.</p>
+              <p data-form-message role="status" aria-live="polite" tabindex="-1"></p>
+              <p class="form-note">This requests a conversation, not a loan approval or completed application. Consent is not a condition of obtaining services. You can also <a href="tel:+18503468514">call 850-346-8514</a>.</p>
             </form>
           </aside>
         </div>
@@ -708,9 +712,10 @@ def render_page(page: dict) -> str:
         <h2 style="margin-top: 0;">Ready for the next step?</h2>
         <p>{html.escape(page.get('cta_text', 'Share your goal and timeline so Dennis can identify the right next step.'))}</p>
         <div class="hero-actions" style="margin-bottom: 0;">
-          <a class="button" href="{APPLY_URL}" data-track="apply" data-content-category="{page['source']}">Apply Securely</a>
+          <a class="button" href="#request-review">Request a review</a>
           <a class="button-secondary" href="tel:+18503468514" data-track="call" data-content-category="{page['source']}">Call Dennis</a>
         </div>
+        <p class="form-note">Ready to complete the application? <a href="{APPLY_URL}" data-track="apply" data-content-category="{page['source']}">Open the secure mortgage application</a>.</p>
       </section>
     </main>
 
