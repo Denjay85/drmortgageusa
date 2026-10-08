@@ -41,7 +41,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Validate Flask integration
-        run: python -m unittest tests.test_2026_redesign -v
+        run: python -m unittest tests.test_2026_redesign tests.test_lead_endpoint -v
 
       - name: Compile Flask application
         run: python -m py_compile app.py

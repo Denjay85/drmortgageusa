@@ -1512,6 +1512,20 @@ def serve_static(path):
                      mimetype='text/html')
 
 
+@app.route('/api/quiz-submit', methods=['GET'])
+def quiz_submit_read():
+    """Keep the submission endpoint out of the public HTML fallback and search."""
+    response = jsonify({
+        'success': False,
+        'error': 'This endpoint accepts POST submissions only.',
+    })
+    response.status_code = 405
+    response.headers['Allow'] = 'POST, OPTIONS'
+    response.headers['X-Robots-Tag'] = 'noindex, nofollow'
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+
 @app.route('/api/quiz-submit', methods=['POST'])
 def quiz_submit():
     """Receive quiz submission, store in DB, forward to Zapier"""
