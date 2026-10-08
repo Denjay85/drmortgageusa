@@ -269,6 +269,17 @@ class RedesignIntegrationTests(unittest.TestCase):
         )
         response.close()
 
+    def test_blog_call_buttons_use_the_complete_published_phone_number(self):
+        blog_directory = Path(production_app.BASE_DIR) / 'blog_posts'
+        checked_links = 0
+        for blog_path in blog_directory.glob('*.html'):
+            html = blog_path.read_text(encoding='utf-8')
+            for phone in re.findall(r'href=[\"\']tel:([^\"\']+)', html):
+                with self.subTest(article=blog_path.name, phone=phone):
+                    self.assertIn(phone, ('+18503468514', '8503468514'))
+                    checked_links += 1
+        self.assertGreater(checked_links, 100)
+
     def test_blog_articles_link_dennis_to_his_canonical_profile(self):
         blog_directory = Path(production_app.BASE_DIR) / 'blog_posts'
         article_count = 0
