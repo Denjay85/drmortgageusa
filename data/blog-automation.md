@@ -102,6 +102,12 @@ If a prior run staged a complete draft but failed before publication:
 63. ✅ Florida homebuyer final walkthrough and mortgage closing checklist (published 2026-09-30)
 64. ✅ Home equity loan vs cash-out refinance for Florida homeowners (published 2026-10-03)
 65. ✅ Orlando homebuyers guide to appraisal reconsideration of value (published 2026-10-06)
+66. ✅ Should you pay off your car before buying a home in Florida? (published 2026-10-12)
+67. ☐ Earnest money deposits and mortgage documentation for Florida buyers
+68. ☐ Buying a Florida home while your current home is listed but not sold
+69. ☐ What Orlando buyers should check when comparing HOA and non-HOA homes
+70. ☐ Mortgage shopping credit inquiries for Florida homebuyers
+71. ☐ First mortgage payment after closing in Florida, timing and budgeting
 
 ## Queue Continuity Rule
 If every topic in the queue is marked published, generate six SEO topics from current content gaps, Scout/Scribe reports, borrower questions, and the DrMortgageUSA content calendar, append them to the queue, and continue autonomous publication. Verify substantive mortgage claims against authoritative sources.
