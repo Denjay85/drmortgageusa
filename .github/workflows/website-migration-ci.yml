@@ -86,6 +86,7 @@ jobs:
           test -f site/dist/client/blog.html
           test -f site/dist/client/dpa.html
           test -f site/dist/client/get-started.html
+          test -f site/dist/client/va-loans-orlando.html
           python - <<'PY'
           from pathlib import Path
 

@@ -1,0 +1,376 @@
+{
+  "page": {
+    "slug": "va-loans-orlando",
+    "title": "VA Loans Orlando | Navy Veteran Dennis Ross",
+    "description": "Greater Orlando VA loan guidance from Navy veteran Dennis Ross, NMLS 2018381. Review eligibility, COE, zero-down options, and local payment planning.",
+    "eyebrow": "Orlando VA Loan Help",
+    "hero_title": "VA Loans in Orlando Without the Confusion",
+    "hero_lead": "Dennis Ross is a Navy veteran and Florida mortgage broker who helps Orlando-area veterans use the benefit they already earned with clear numbers and straight answers.",
+    "form_heading": "Get your Orlando VA game plan",
+    "form_text": "Tell me where you are in the process and I will map out your next best move.",
+    "segment": "veteran",
+    "source": "service-page-va-loans-orlando",
+    "primary_cta": [
+      "Start My VA Review",
+      "#request-review"
+    ],
+    "secondary_cta": [
+      "Call 850-346-8514",
+      "tel:+18503468514"
+    ],
+    "support_cta": [
+      "Read the Florida VA Guide",
+      "/blog/va-loan-guide-florida-veterans-2026"
+    ],
+    "hero_stats": [
+      [
+        "0% down",
+        "For eligible buyers"
+      ],
+      [
+        "No PMI",
+        "On VA purchase loans"
+      ],
+      [
+        "VA review",
+        "COE, payment, and eligibility"
+      ]
+    ],
+    "sections": [
+      {
+        "title": "Why Orlando veterans use VA financing first",
+        "body": "For many eligible buyers, VA financing is the strongest purchase loan on the board. You can often buy with no down payment, skip monthly mortgage insurance, and keep more cash for reserves, repairs, and moving costs.",
+        "items": [
+          "Lower monthly payment pressure than comparable low-down-payment options",
+          "Flexible underwriting for strong borrowers who do not fit a perfect bank box",
+          "Better cash preservation when you are relocating or buying after service",
+          "Support with COE retrieval, entitlement questions, and seller strategy"
+        ]
+      },
+      {
+        "title": "What Orlando buyers need to think about",
+        "body": "The Orlando market is not just about rate. Property taxes, insurance, HOA fees, condo eligibility, and seller expectations all affect what feels affordable and what gets approved.",
+        "items": [
+          "Condos may need warrantability review before a VA loan works cleanly",
+          "HOA dues and insurance can change the real payment fast",
+          "Seller negotiations still matter even with a great VA benefit",
+          "A strong pre-approval letter helps veterans compete with conventional offers"
+        ]
+      }
+    ],
+    "trust_points": [
+      [
+        "Veteran-led guidance",
+        "You are not getting generic VA talking points from someone who has never worn the uniform."
+      ],
+      [
+        "Real Orlando payment clarity",
+        "Taxes, insurance, HOA, and concession strategy get discussed early, not after you are under contract."
+      ],
+      [
+        "Broker-level options",
+        "Dennis can compare lenders and overlays instead of forcing every borrower into one bank product."
+      ]
+    ],
+    "trust_heading": "Why veterans trust Dennis",
+    "cta_text": "Bring your service history, homebuying timeline, and target payment. Dennis can help identify the documents and VA-loan questions to resolve before you make an offer.",
+    "local_service_areas": [
+      "Orlando and nearby Orange County communities",
+      "Lake Mary and Sanford",
+      "Winter Park and Altamonte Springs",
+      "Oviedo and eastern Seminole County",
+      "Greater Orlando and Central Florida, with mortgage licensing across Florida"
+    ],
+    "official_resources": [
+      [
+        "VA home-loan eligibility and Certificate of Eligibility",
+        "https://www.va.gov/housing-assistance/home-loans/eligibility/"
+      ],
+      [
+        "VA-backed purchase-loan benefits and requirements",
+        "https://www.va.gov/housing-assistance/home-loans/loan-types/purchase-loan/"
+      ],
+      [
+        "VA entitlement and loan-limit guidance",
+        "https://www.va.gov/housing-assistance/home-loans/loan-limits/"
+      ],
+      [
+        "VA home-buying process",
+        "https://www.va.gov/housing-assistance/home-loans/home-buying-process/"
+      ]
+    ],
+    "schema_area_served": [
+      {
+        "@type": "City",
+        "name": "Orlando"
+      },
+      {
+        "@type": "City",
+        "name": "Lake Mary"
+      },
+      {
+        "@type": "City",
+        "name": "Winter Park"
+      },
+      {
+        "@type": "City",
+        "name": "Sanford"
+      },
+      {
+        "@type": "City",
+        "name": "Altamonte Springs"
+      },
+      {
+        "@type": "City",
+        "name": "Oviedo"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Central Florida"
+      },
+      {
+        "@type": "State",
+        "name": "Florida"
+      }
+    ],
+    "schema_service_name": "VA Home Loan Guidance in Greater Orlando",
+    "schema_service_type": "VA home loan guidance",
+    "breadcrumb_name": "VA Loans in Orlando",
+    "process_points": [
+      [
+        "1",
+        "Review eligibility and COE",
+        "We confirm benefit status, service history, and whether you have full or partial entitlement."
+      ],
+      [
+        "2",
+        "Build the real payment",
+        "We run the numbers with Orlando-specific costs so you know what is comfortable, not just what is technically approvable."
+      ],
+      [
+        "3",
+        "Issue a strong pre-approval",
+        "You get a cleaner shopping plan, tighter expectations, and a faster path when the right house shows up."
+      ]
+    ],
+    "faqs": [
+      [
+        "Can I get a VA loan in Orlando with no down payment?",
+        "Yes, if you are eligible and qualify with the lender. Many Orlando buyers use VA financing with zero down, but the payment still has to work with taxes, insurance, and HOA costs."
+      ],
+      [
+        "How do I start a VA pre-approval review?",
+        "Start by sharing your timeline, income picture, and property goal. The review depends on document readiness, income complexity, credit, and the property."
+      ],
+      [
+        "Do VA loans work for condos in Orlando?",
+        "Sometimes. The condo has to meet approval requirements, and some buildings create financing issues. It is smart to check this before you get deep into a deal."
+      ],
+      [
+        "Can I use a VA loan more than once?",
+        "Yes. Repeat use is possible, but entitlement and current loan status matter. Dennis can review whether you have full entitlement or need a more strategic structure."
+      ]
+    ]
+  },
+  "schema": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": "https://drmortgageusa.com/va-loans-orlando#service",
+        "name": "VA Home Loan Guidance in Greater Orlando",
+        "description": "Greater Orlando VA loan guidance from Navy veteran Dennis Ross, NMLS 2018381. Review eligibility, COE, zero-down options, and local payment planning.",
+        "url": "https://drmortgageusa.com/va-loans-orlando",
+        "areaServed": [
+          {
+            "@type": "City",
+            "name": "Orlando"
+          },
+          {
+            "@type": "City",
+            "name": "Lake Mary"
+          },
+          {
+            "@type": "City",
+            "name": "Winter Park"
+          },
+          {
+            "@type": "City",
+            "name": "Sanford"
+          },
+          {
+            "@type": "City",
+            "name": "Altamonte Springs"
+          },
+          {
+            "@type": "City",
+            "name": "Oviedo"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Central Florida"
+          },
+          {
+            "@type": "State",
+            "name": "Florida"
+          }
+        ],
+        "serviceType": "VA home loan guidance",
+        "provider": {
+          "@id": "https://drmortgageusa.com/about#dennis-ross"
+        },
+        "brand": {
+          "@id": "https://drmortgageusa.com/#brand"
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://drmortgageusa.com/about#dennis-ross",
+        "name": "Dennis Ross",
+        "alternateName": [
+          "DR. Mortgage USA",
+          "DrMortgageUSA"
+        ],
+        "jobTitle": "Mortgage Loan Originator and Mortgage Broker",
+        "description": "Navy veteran and Florida mortgage broker helping Greater Orlando veterans, buyers, and homeowners understand VA and other mortgage options.",
+        "disambiguatingDescription": "Dennis Ross, individual NMLS 2018381, is the Navy veteran behind the DR. Mortgage USA professional brand and website and originates mortgage loans through Home 1st Lending, LLC, company NMLS 1418.",
+        "url": "https://drmortgageusa.com/about",
+        "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
+        "telephone": "+1-850-346-8514",
+        "email": "dennis@drmortgageusa.com",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "NMLS",
+          "value": "2018381"
+        },
+        "brand": {
+          "@id": "https://drmortgageusa.com/#brand"
+        },
+        "worksFor": {
+          "@id": "https://myhome1st.com/#organization"
+        },
+        "sameAs": [
+          "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381",
+          "https://myhome1st.com/dennis/",
+          "https://www.google.com/maps?cid=3829412552217676351",
+          "https://www.bing.com/maps?ss=ypid.YN215EB5A5FBD32023",
+          "https://www.instagram.com/dr.mortgageusa/",
+          "https://www.facebook.com/100084710485166",
+          "https://www.linkedin.com/in/dennis-ross-87491257",
+          "https://www.youtube.com/@Dr.MortgageUSA",
+          "https://linktr.ee/dr.mortgageusa",
+          "https://www.experience.com/reviews/dennis-14873595"
+        ],
+        "knowsAbout": [
+          "VA home loans in Greater Orlando",
+          "Florida mortgages",
+          "FHA loans",
+          "Down payment assistance",
+          "Self-employed mortgage lending",
+          "Home equity financing",
+          "VA entitlement",
+          "VA funding fees",
+          "VA appraisals"
+        ]
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://myhome1st.com/#organization",
+        "name": "Home 1st Lending, LLC",
+        "url": "https://myhome1st.com/",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "NMLS",
+          "value": "1418"
+        },
+        "sameAs": [
+          "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/1418",
+          "https://www.yelp.com/biz/home-1st-lending-lake-mary-2"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "1130 Business Center Dr, Suite 1000",
+          "addressLocality": "Lake Mary",
+          "addressRegion": "FL",
+          "postalCode": "32746",
+          "addressCountry": "US"
+        }
+      },
+      {
+        "@type": "Brand",
+        "@id": "https://drmortgageusa.com/#brand",
+        "name": "DR. Mortgage USA",
+        "alternateName": [
+          "DrMortgageUSA",
+          "Dennis Ross, Dr.MortgageUSA"
+        ],
+        "url": "https://drmortgageusa.com/",
+        "description": "DR. Mortgage USA is the professional brand and educational website of Navy veteran Dennis Ross, individual NMLS 2018381, serving Greater Orlando and Florida through Home 1st Lending, LLC, company NMLS 1418. It is not a separate lender or mortgage company.",
+        "disambiguatingDescription": "The DR. Mortgage USA name on drmortgageusa.com identifies Dennis Ross and his Greater Orlando mortgage practice through Home 1st Lending, LLC; it does not identify Dr. Mortgage, LLC or another separately licensed mortgage company.",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://drmortgageusa.com/media/logo.webp"
+        },
+        "image": "https://drmortgageusa.com/dennis-ross-headshot.png",
+        "owner": {
+          "@id": "https://drmortgageusa.com/about#dennis-ross"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://drmortgageusa.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "VA Loans in Orlando",
+            "item": "https://drmortgageusa.com/va-loans-orlando"
+          }
+        ]
+      }
+    ]
+  },
+  "faqSchema": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I get a VA loan in Orlando with no down payment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, if you are eligible and qualify with the lender. Many Orlando buyers use VA financing with zero down, but the payment still has to work with taxes, insurance, and HOA costs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I start a VA pre-approval review?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Start by sharing your timeline, income picture, and property goal. The review depends on document readiness, income complexity, credit, and the property."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do VA loans work for condos in Orlando?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sometimes. The condo has to meet approval requirements, and some buildings create financing issues. It is smart to check this before you get deep into a deal."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use a VA loan more than once?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Repeat use is possible, but entitlement and current loan status matter. Dennis can review whether you have full entitlement or need a more strategic structure."
+        }
+      }
+    ]
+  }
+}

@@ -573,10 +573,7 @@ class RedesignIntegrationTests(unittest.TestCase):
                     'https://www.va.gov/housing-assistance/home-loans/loan-types/purchase-loan/',
                     html,
                 )
-                self.assertIn(
-                    '<meta name="twitter:image" content="https://drmortgageusa.com/dennis-ross-headshot.png">',
-                    html,
-                )
+                self.assertRegex(html, r'<meta name="twitter:image" content="https://drmortgageusa\.com/dennis-ross-headshot\.png"\s*/?>')
                 self.assertIn('Before you take VA advice from anyone', html)
                 self.assertIn('official Home 1st Lending profile', html)
                 self.assertIn('read client reviews on Google', html)

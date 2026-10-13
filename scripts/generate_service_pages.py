@@ -788,6 +788,17 @@ def main() -> None:
         output_path.write_text(render_page(page), encoding="utf-8")
         print(f"Wrote {output_path.name}")
 
+    # The redesigned VA route and legacy fallback share one content/schema source.
+    va_page = next(page for page in PAGES if page['slug'] == 'va-loans-orlando')
+    content_path = BASE_DIR / 'site/app/va-loans-orlando/content.json'
+    content_path.parent.mkdir(parents=True, exist_ok=True)
+    content_path.write_text(json.dumps({
+        'page': va_page,
+        'schema': json.loads(page_json(va_page)),
+        'faqSchema': json.loads(faq_json(va_page)),
+    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    print(f"Wrote {content_path.relative_to(BASE_DIR)}")
+
 
 if __name__ == "__main__":
     main()

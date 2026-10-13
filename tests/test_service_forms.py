@@ -1,3 +1,4 @@
+import json
 import os
 import unittest
 from html.parser import HTMLParser
@@ -7,7 +8,7 @@ from unittest.mock import patch
 os.environ['ENABLE_RATE_UPDATER'] = '0'
 
 import app as production_app
-from scripts.generate_service_pages import PAGES, RELATED_GUIDES, render_page
+from scripts.generate_service_pages import PAGES, RELATED_GUIDES, render_page, page_json, faq_json
 
 
 class Elements(HTMLParser):
@@ -69,6 +70,45 @@ class ServiceFormTests(unittest.TestCase):
             database.assert_not_called()
             zapier.assert_not_called()
             meta.assert_not_called()
+
+    def test_va_redesign_shares_content_and_preserves_native_form_contract(self):
+        page = next(page for page in PAGES if page['slug'] == 'va-loans-orlando')
+        content = json.loads((Path(production_app.BASE_DIR) /
+                             'site/app/va-loans-orlando/content.json').read_text())
+        self.assertEqual(content, json.loads(json.dumps({
+            'page': page, 'schema': json.loads(page_json(page)),
+            'faqSchema': json.loads(faq_json(page)),
+        })))
+        with self.client.get('/va-loans-orlando') as response:
+            self.assertEqual(response.status_code, 200)
+            html = response.get_data(as_text=True)
+        self.assertIn('class="site-header"', html)
+        self.assertIn('class="site-footer"', html)
+        self.assertIn('form-card va-review-card', html)
+        self.assertNotIn('assets/lead-forms.js', html)
+        tags = Elements(html).tags
+        forms = [attrs for tag, attrs in tags if tag == 'form']
+        self.assertEqual(len(forms), 1)
+        self.assertEqual(forms[0]['action'], '/request-review')
+        self.assertEqual(forms[0]['method'], 'post')
+        self.assertNotIn('data-lead-form', forms[0])  # React owns this submission.
+        fields = {attrs['name']: attrs for tag, attrs in tags
+                  if tag in ('input', 'select') and 'name' in attrs}
+        self.assertEqual(fields['source']['value'], self.payload['source'])
+        self.assertEqual(fields['segment']['value'], 'veteran')
+        for name in ('firstName', 'email', 'emailConsent'):
+            self.assertIn('required', fields[name])
+        for name in ('phone', 'timeline', 'callConsent', 'smsConsent'):
+            self.assertNotIn('required', fields[name])
+        for name in ('emailConsent', 'callConsent', 'smsConsent'):
+            self.assertNotIn('checked', fields[name])
+        self.assertIn('href="#request-review"', html)
+
+    def test_va_keeps_legacy_fallback_if_frontend_export_is_missing(self):
+        with patch.object(production_app, 'send_redesign_page', return_value=None):
+            with self.client.get('/va-loans-orlando') as response:
+                self.assertEqual(response.status_code, 200)
+                self.assertIn('data-lead-handler="standalone"', response.get_data(as_text=True))
 
     def test_related_guides_and_search_entry_review_links_resolve(self):
         for links in RELATED_GUIDES.values():
