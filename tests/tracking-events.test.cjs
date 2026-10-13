@@ -87,6 +87,43 @@ test('only lead submissions use the lead destination and no query-bearing page U
   assert.equal(h.context.window.dataLayer[0].page_location, 'https://drmortgageusa.com/contact');
 });
 
+test('repeated handling of one saved lead emits once per destination; distinct leads still count', () => {
+  const h = harness();
+  h.tracking.trackLeadSubmit({ eventId: 'saved-one' });
+  h.tracking.trackLeadSubmit({ eventId: 'saved-one' });
+  h.tracking.trackLeadSubmit({ eventId: 'saved-two' });
+  assert.equal(h.google.filter(args => args[1] === 'generate_lead').length, 2);
+  assert.equal(h.google.filter(args => args[1] === 'conversion').length, 2);
+  assert.equal(h.meta.filter(args => args[1] === 'Lead').length, 2);
+  assert.equal(h.context.window.dataLayer.filter(item => item.event === 'dr_lead_form_submit').length, 2);
+});
+
+test('a failed Meta handler cannot suppress Google lead measurement or duplicate successful destinations', () => {
+  const h = harness();
+  const fbq = h.context.window.fbq;
+  h.context.window.fbq = () => { throw Error('Meta blocked'); };
+  assert.doesNotThrow(() => h.tracking.trackLeadSubmit({ eventId: 'saved-retry' }));
+  assert.equal(h.google.filter(args => args[1] === 'conversion').length, 1);
+  h.context.window.fbq = fbq;
+  h.tracking.trackLeadSubmit({ eventId: 'saved-retry' });
+  assert.equal(h.meta.filter(args => args[1] === 'Lead').length, 1);
+  assert.equal(h.google.filter(args => args[1] === 'generate_lead').length, 1);
+  assert.equal(h.google.filter(args => args[1] === 'conversion').length, 1);
+});
+
+test('a temporarily unavailable Google tag can be retried without replaying other destinations', () => {
+  const h = harness();
+  const gtag = h.context.window.gtag;
+  delete h.context.window.gtag;
+  h.tracking.trackLeadSubmit({ eventId: 'saved-late-tag' });
+  h.context.window.gtag = gtag;
+  h.tracking.trackLeadSubmit({ eventId: 'saved-late-tag' });
+  h.tracking.trackLeadSubmit({ eventId: 'saved-late-tag' });
+  assert.equal(h.google.filter(args => args[1] === 'generate_lead').length, 1);
+  assert.equal(h.google.filter(args => args[1] === 'conversion').length, 1);
+  assert.equal(h.meta.filter(args => args[1] === 'Lead').length, 1);
+});
+
 test('legacy shared forms also require a saved lead before conversion', async () => {
   const h = harness();
   await h.submit();
