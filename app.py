@@ -10,13 +10,14 @@ import os
 import json
 import secrets
 import hashlib
+import hmac
 import re
 import html as html_lib
 import requests
 import psycopg2
 import time
 from datetime import datetime, timezone
-from urllib.parse import quote, urlsplit, urlunsplit
+from urllib.parse import quote, urlsplit, urlunsplit, urlencode
 from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for, render_template, render_template_string, Response
 from flask_compress import Compress
@@ -282,6 +283,8 @@ def integration_readiness():
         'meta_pixel': bool(META_PIXEL_ID),
         'meta_capi': bool(META_ACCESS_TOKEN),
         'manychat': bool(MANYCHAT_API_KEY and MANYCHAT_WEBHOOK_SECRET),
+        'manychat_capture': bool(MANYCHAT_WEBHOOK_SECRET),
+        'manychat_sending': bool(MANYCHAT_API_KEY),
         'google_ads': bool(os.environ.get('GOOGLE_ADS_ID', 'AW-18055212874').strip()),
         'ga4': bool(os.environ.get('GA_MEASUREMENT_ID', '').strip()),
         'google_tag_manager': bool(os.environ.get('GTM_CONTAINER_ID', '').strip()),
@@ -428,6 +431,9 @@ def init_database():
                 UNIQUE(subscriber_id, keyword)
             )
         """)
+
+        cur.execute("ALTER TABLE keyword_leads ADD COLUMN IF NOT EXISTS payload JSONB DEFAULT '{}'::jsonb")
+        cur.execute("ALTER TABLE keyword_leads ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP")
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS refiwatch_leads (
@@ -1066,10 +1072,10 @@ def manychat_enroll_redirect():
     try:
         subscriber_id = request.args.get('sid', '')
         name = request.args.get('name', 'Unknown')
-        
+
         if subscriber_id:
             app.logger.info(f'HELOC 5DAYS enrollment via link: subscriber={subscriber_id}, name={name}')
-        
+
         return redirect('https://drmortgageusa.com/heloc-calculator')
     except Exception as e:
         app.logger.error(f'ManyChat redirect error: {e}')
@@ -1078,48 +1084,68 @@ def manychat_enroll_redirect():
 
 @app.route('/api/manychat/enroll', methods=['POST'])
 def manychat_enroll():
-    """Webhook called by ManyChat when someone triggers ANY keyword.
-    Stores lead in Postgres DB with keyword, subscriber info, and timestamp."""
+    """Save each subscriber/keyword without claiming success if persistence fails."""
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return jsonify({'status': 'error', 'message': 'invalid form data'}), 400
+    secret = request.headers.get('X-Webhook-Secret') or data.get('secret')
+    if (not MANYCHAT_WEBHOOK_SECRET or not isinstance(secret, str)
+            or not secrets.compare_digest(secret, MANYCHAT_WEBHOOK_SECRET)):
+        return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
+    def field(*keys, default='', limit=500):
+        for key in keys:
+            value = data.get(key)
+            if isinstance(value, (str, int)) and not isinstance(value, bool) and str(value).strip():
+                return str(value).strip()[:limit]
+        return default
+    subscriber_id = field('subscriber_id', 'id', limit=100)
+    keyword = field('keyword', default='5DAYS', limit=50).upper()
+    if not subscriber_id:
+        return jsonify({'status': 'error', 'message': 'subscriber_id required'}), 400
+    # Capture mapped form answers and attribution; never persist the webhook credential.
+    allowed = ('message', 'notes', 'comments', 'question', 'answers', 'custom_fields',
+               'campaign', 'flow_id', 'flow_name', 'post_id', 'ad_id', 'event_id',
+               'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+               'emailConsent', 'callConsent', 'smsConsent')
+    payload = {key: data[key] for key in allowed if key in data}
+    payload.update(subscriber_id=subscriber_id, keyword=keyword, channel='instagram',
+                   source='manychat-instagram',
+                   name=field('name', 'first_name', limit=200),
+                   ig_username=field('ig_username', 'instagram_username', limit=100),
+                   email=field('email', limit=255), phone=field('phone', limit=50))
+    if PREVIEW_MODE:
+        return jsonify({'status': 'success', 'preview': True, 'enrolled': False})
+    conn = cur = None
     try:
-        data = request.get_json(force=True)
-        subscriber_id = data.get('subscriber_id') or data.get('id')
-        name = data.get('name', data.get('first_name', 'Unknown'))
-        keyword = data.get('keyword', '5DAYS')
-        ig_username = data.get('ig_username', '')
-        email = data.get('email', '')
-        phone = data.get('phone', '')
-        secret = data.get('secret') or request.headers.get('X-Webhook-Secret')
-        
-        if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
-            return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
-        
-        if not subscriber_id:
-            return jsonify({'status': 'error', 'message': 'subscriber_id required'}), 400
-        
-        # Store in Postgres
-        try:
-            conn = get_db_connection()
-            cur = conn.cursor()
-            cur.execute("""
-                INSERT INTO keyword_leads (subscriber_id, subscriber_name, keyword, ig_username, email, phone)
-                VALUES (%s, %s, %s, %s, %s, %s)
-                ON CONFLICT (subscriber_id, keyword) DO UPDATE SET
-                    subscriber_name = EXCLUDED.subscriber_name,
-                    ig_username = EXCLUDED.ig_username,
-                    email = EXCLUDED.email,
-                    phone = EXCLUDED.phone
-            """, (str(subscriber_id), name, keyword.upper(), ig_username, email, phone))
-            conn.commit()
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO keyword_leads (subscriber_id, subscriber_name, keyword, ig_username, email, phone, payload)
+            VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb)
+            ON CONFLICT (subscriber_id, keyword) DO UPDATE SET
+                subscriber_name = COALESCE(NULLIF(EXCLUDED.subscriber_name, ''), keyword_leads.subscriber_name),
+                ig_username = COALESCE(NULLIF(EXCLUDED.ig_username, ''), keyword_leads.ig_username),
+                email = COALESCE(NULLIF(EXCLUDED.email, ''), keyword_leads.email),
+                phone = COALESCE(NULLIF(EXCLUDED.phone, ''), keyword_leads.phone),
+                payload = COALESCE(keyword_leads.payload, '{}'::jsonb) || EXCLUDED.payload,
+                updated_at = CURRENT_TIMESTAMP
+            RETURNING id
+        """, (subscriber_id, payload['name'], keyword, payload['ig_username'], payload['email'],
+              payload['phone'], json.dumps({key: value for key, value in payload.items() if value != ''})))
+        lead_id = cur.fetchone()[0]
+        conn.commit()
+        return jsonify({'status': 'success', 'enrolled': True, 'lead_id': lead_id,
+                        'subscriber_id': subscriber_id, 'keyword': keyword})
+    except Exception:
+        if conn is not None:
+            conn.rollback()
+        app.logger.exception('ManyChat lead could not be saved')
+        return jsonify({'status': 'error', 'message': 'lead_not_saved'}), 503
+    finally:
+        if cur is not None:
             cur.close()
+        if conn is not None:
             conn.close()
-        except Exception as db_err:
-            app.logger.error(f'DB insert error: {db_err}')
-        
-        app.logger.info(f'ManyChat keyword lead: subscriber={subscriber_id}, name={name}, keyword={keyword}, ig=@{ig_username}')
-        return jsonify({'status': 'success', 'enrolled': True, 'subscriber_id': subscriber_id, 'keyword': keyword})
-    except Exception as e:
-        app.logger.error(f'ManyChat webhook error: {e}')
-        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
 @app.route('/api/manychat/leads', methods=['GET'])
@@ -1128,7 +1154,7 @@ def manychat_leads():
     secret = request.args.get('secret') or request.headers.get('X-Webhook-Secret')
     if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
         return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
-    
+
     try:
         since = request.args.get('since', '2026-01-01')
         conn = get_db_connection()
@@ -1164,13 +1190,13 @@ def manychat_send_sequence():
         secret = data.get('secret')
         if not MANYCHAT_WEBHOOK_SECRET or secret != MANYCHAT_WEBHOOK_SECRET:
             return jsonify({'status': 'error', 'message': 'unauthorized'}), 401
-        
+
         subscriber_id = data.get('subscriber_id')
         day = data.get('day')
-        
+
         if not subscriber_id or day not in SEQUENCE_FLOWS:
             return jsonify({'status': 'error', 'message': 'invalid params'}), 400
-        
+
         flow_ns = SEQUENCE_FLOWS[day]
         resp = requests.post(
             'https://api.manychat.com/fb/sending/sendFlow',
@@ -1180,7 +1206,7 @@ def manychat_send_sequence():
             },
             json={'subscriber_id': int(subscriber_id), 'flow_ns': flow_ns}
         )
-        
+
         result = resp.json()
         return jsonify(result)
     except Exception as e:
@@ -2075,101 +2101,164 @@ def delete_lead(lead_id):
     return redirect(url_for('admin_dashboard'))
 
 
-@app.route('/admin/dashboard')
-@login_required
-def admin_dashboard():
-    """Admin dashboard showing all leads"""
+LEAD_RECORDS_SQL = """
+WITH records AS (
+    SELECT 'website'::text AS channel, to_jsonb(l) AS profile,
+           l.payload, l.id, l.first_name, l.email, l.phone, l.segment,
+           l.source, l.created_at, l.zapier_forwarded
+    FROM leads l
+    UNION ALL
+    SELECT 'manychat', to_jsonb(k),
+           COALESCE(k.payload, '{}'::jsonb) || jsonb_build_object(
+               'subscriber_id', k.subscriber_id, 'keyword', k.keyword,
+               'ig_username', k.ig_username, 'processed', k.processed,
+               'last_received_at', k.updated_at),
+           k.id, k.subscriber_name, k.email, k.phone, k.keyword,
+           'manychat-instagram', k.created_at, NULL::boolean
+    FROM keyword_leads k
+    UNION ALL
+    SELECT 'refiwatch', to_jsonb(r),
+           to_jsonb(r) - 'id' - 'zapier_forwarded' - 'meta_capi_sent',
+           r.id, r.name, r.email, r.phone, 'refinance', r.source,
+           r.created_at, r.zapier_forwarded
+    FROM refiwatch_leads r
+)
+"""
+
+
+def lead_payload(value):
+    """Support current JSONB records and older serialized payloads."""
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except (ValueError, TypeError):
+            value = {}
+    return value if isinstance(value, dict) else {}
+
+
+def present_lead(row):
+    lead = {**lead_payload(row.get('profile')), **row}
+    lead.pop('profile', None)
+    lead['record_key'] = f"{lead.get('channel', 'website')}:{lead['id']}"
+    payload = lead_payload(lead.get('payload'))
+    lead['payload'] = payload
+    messages = []
+    for key in ('message', 'notes', 'comments', 'question', 'additionalInfo', 'additional_info'):
+        value = payload.get(key)
+        if isinstance(value, str) and value.strip() and value.strip() not in messages:
+            messages.append(value.strip())
+    lead['message'] = '\n\n'.join(messages)
+    lead['source'] = lead.get('source') or payload.get('source') or 'Not recorded'
+    lead['delivery_status'] = 'Accepted by Zapier' if lead.get('zapier_forwarded') else 'Not delivered to Zapier'
+    if lead.get('channel') == 'manychat':
+        lead['delivery_status'] = 'Not routed through Zapier'
+    lead['payload_json'] = json.dumps(payload, indent=2, ensure_ascii=False)
+    lead['fields'] = [
+        {'name': key, 'value': json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value)}
+        for key, value in payload.items()
+    ]
+    return lead
+
+
+def read_lead_dashboard(args):
+    """One read-only query contract for the admin UI and Mission Control."""
+    page = max(1, min(int(args.get('page', 1)), 100000))
+    limit = 50
+    search = (args.get('search', '') or '').strip()[:200]
+    segment = (args.get('segment', '') or '').strip()[:150]
+    source = (args.get('source', '') or '').strip()[:150]
+    delivery = args.get('status', '')
+    channel = args.get('channel', '')
+    messages_only = args.get('messages') == '1'
+    conditions, params = [], []
+    if channel in ('website', 'manychat', 'refiwatch'):
+        conditions.append('channel = %s')
+        params.append(channel)
+    if search:
+        conditions.append("(first_name ILIKE %s OR email ILIKE %s OR phone ILIKE %s OR payload::text ILIKE %s)")
+        params.extend([f'%{search}%'] * 4)
+    if segment:
+        conditions.append('segment = %s')
+        params.append(segment)
+    if source:
+        conditions.append("COALESCE(NULLIF(source, ''), payload->>'source', 'Not recorded') = %s")
+        params.append(source)
+    if delivery in ('sent', 'pending'):
+        conditions.append('zapier_forwarded IS TRUE' if delivery == 'sent' else "(channel <> 'manychat' AND zapier_forwarded IS NOT TRUE)")
+    if messages_only:
+        conditions.append("(" + " OR ".join(
+            "(jsonb_typeof(payload->'%s') = 'string' AND BTRIM(payload->>'%s') <> '')" % (key, key)
+            for key in ('message', 'notes', 'comments', 'question', 'additionalInfo', 'additional_info')
+        ) + ")")
+    where = ' WHERE ' + ' AND '.join(conditions) if conditions else ''
+    conn = get_db_connection()
+    cur = None
     try:
-        conn = get_db_connection()
         cur = conn.cursor()
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS leads (
-                id SERIAL PRIMARY KEY,
-                first_name VARCHAR(100),
-                email VARCHAR(255),
-                phone VARCHAR(50),
-                segment VARCHAR(50),
-                price_range VARCHAR(100),
-                down_payment VARCHAR(100),
-                timeline VARCHAR(100),
-                credit_score VARCHAR(50),
-                military_status VARCHAR(50),
-                property_type VARCHAR(100),
-                investor_loan_type VARCHAR(100),
-                zapier_forwarded BOOLEAN DEFAULT FALSE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        conn.commit()
-
-        segment_filter = request.args.get('segment', '')
-        search = request.args.get('search', '')
-
-        query = "SELECT * FROM leads WHERE 1=1"
-        params = []
-
-        if segment_filter:
-            query += " AND segment = %s"
-            params.append(segment_filter)
-
-        if search:
-            query += " AND (first_name ILIKE %s OR email ILIKE %s OR phone ILIKE %s)"
-            search_param = f"%{search}%"
-            params.extend([search_param, search_param, search_param])
-
-        query += " ORDER BY created_at DESC"
-
-        cur.execute(query, params)
-        columns = [desc[0]
-                   for desc in cur.description] if cur.description else []
-        leads = [dict(zip(columns, row)) for row in cur.fetchall()]
-
-        cur.execute("SELECT COUNT(*) FROM leads")
-        count_result = cur.fetchone()
-        total_leads = count_result[0] if count_result else 0
-
-        cur.execute(
-            "SELECT COUNT(*) FROM leads WHERE zapier_forwarded IS NOT TRUE"
-        )
-        queued_result = cur.fetchone()
-        queued_leads = queued_result[0] if queued_result else 0
-
-        cur.execute("SELECT segment, COUNT(*) FROM leads GROUP BY segment")
-        segment_counts = dict(cur.fetchall())
-
-        cur.close()
+        cur.execute(LEAD_RECORDS_SQL + 'SELECT COUNT(*) FROM records' + where, params)
+        matched = cur.fetchone()[0]
+        page = min(page, max(1, (matched + limit - 1) // limit))
+        cur.execute(LEAD_RECORDS_SQL + 'SELECT * FROM records' + where + ' ORDER BY created_at DESC, channel, id DESC LIMIT %s OFFSET %s',
+                    params + [limit, (page - 1) * limit])
+        columns = [desc[0] for desc in cur.description]
+        leads = [present_lead(dict(zip(columns, row))) for row in cur.fetchall()]
+        cur.execute(LEAD_RECORDS_SQL + "SELECT COUNT(*), COUNT(*) FILTER (WHERE channel = 'website' AND zapier_forwarded IS NOT TRUE) FROM records")
+        total, queued = cur.fetchone()
+        cur.execute(LEAD_RECORDS_SQL + 'SELECT segment, COUNT(*) FROM records GROUP BY segment')
+        segments = dict(cur.fetchall())
+        cur.execute(LEAD_RECORDS_SQL + "SELECT DISTINCT COALESCE(NULLIF(source, ''), payload->>'source', 'Not recorded') FROM records ORDER BY 1")
+        sources = [row[0] for row in cur.fetchall()]
+        return dict(leads=leads, total_leads=total, queued_leads=queued, matched_leads=matched,
+                    segment_counts=segments, sources=sources, page=page, has_next=page * limit < matched,
+                    current_segment=segment, current_source=source, current_status=delivery, current_channel=channel,
+                    messages_only=messages_only, search_query=search,
+                    fetched_at=datetime.now(timezone.utc).isoformat())
+    finally:
+        if cur is not None:
+            cur.close()
         conn.close()
 
-        return render_template_string(ADMIN_DASHBOARD_TEMPLATE,
-                                      leads=leads,
-                                      total_leads=total_leads,
-                                      queued_leads=queued_leads,
+
+@app.route('/api/mission-control/leads')
+def mission_control_leads():
+    # A separate read-only credential never grants admin mutations or Zapier replay.
+    token = os.environ.get('MISSION_CONTROL_LEADS_TOKEN', '').strip()
+    if not token and MANYCHAT_WEBHOOK_SECRET:
+        token = hmac.new(MANYCHAT_WEBHOOK_SECRET.encode(), b'mission-control-leads:v1', hashlib.sha256).hexdigest()
+    supplied = request.headers.get('Authorization', '')
+    if not token or not secrets.compare_digest(supplied, 'Bearer ' + token):
+        return jsonify({'error': 'unauthorized'}), 401
+    try:
+        return jsonify(read_lead_dashboard(request.args))
+    except ValueError:
+        return jsonify({'error': 'invalid_page'}), 400
+    except Exception:
+        app.logger.exception('Mission Control lead read failed')
+        return jsonify({'error': 'lead_data_unavailable'}), 503
+
+
+@app.route('/admin/dashboard')
+@app.route('/admin/mission-control')
+@login_required
+def admin_dashboard():
+    """Show saved lead messages, all submitted fields, and delivery evidence."""
+    try:
+        data = read_lead_dashboard(request.args)
+        def page_url(page):
+            args = request.args.to_dict()
+            args['page'] = page
+            return request.path + '?' + urlencode(args)
+        return render_template_string(ADMIN_DASHBOARD_TEMPLATE, **data,
+                                      mission_view=request.path.endswith('mission-control'),
+                                      page_url=page_url,
                                       integration_status=integration_readiness(),
-                                      delivery_result=request.args.get('delivery', ''),
-                                      segment_counts=segment_counts,
-                                      current_segment=segment_filter,
-                                      search_query=search)
-    except Exception as e:
-        error_msg = f"Database error: {str(e)}"
-        print(error_msg)
-        return render_template_string('''
-            <!DOCTYPE html>
-            <html>
-            <head><title>Dashboard Error</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-            </head>
-            <body class="bg-gray-100 min-h-screen flex items-center justify-center">
-                <div class="bg-white rounded-xl shadow-lg p-8 max-w-lg">
-                    <h1 class="text-2xl font-bold text-red-600 mb-4">Database Connection Error</h1>
-                    <p class="text-gray-700 mb-4">{{ error }}</p>
-                    <p class="text-gray-600 text-sm mb-4">This usually means the production database needs to be set up. Please contact support if this persists.</p>
-                    <a href="/admin/logout" class="bg-blue-600 text-white px-4 py-2 rounded">Logout</a>
-                </div>
-            </body>
-            </html>
-        ''',
-                                      error=error_msg)
+                                      delivery_result=request.args.get('delivery', ''))
+    except ValueError:
+        return 'Invalid page number', 400
+    except Exception:
+        app.logger.exception('Lead dashboard read failed')
+        return render_template('lead_result.html', title='Leads temporarily unavailable',
+                               message='Your saved leads could not be loaded. Please try again.', back_url='/admin/dashboard'), 503
 
 
 ADMIN_LOGIN_TEMPLATE = '''
@@ -2199,26 +2288,26 @@ ADMIN_LOGIN_TEMPLATE = '''
             <h1 class="text-3xl font-bold text-navy">Admin Login</h1>
             <p class="text-gray-600 mt-2">DR. Mortgage USA Lead Dashboard</p>
         </div>
-        
+
         {% if error %}
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {{ error }}
         </div>
         {% endif %}
-        
+
         <form method="POST" action="/admin/login">
             <div class="mb-6">
                 <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                <input type="password" name="password" 
+                <input type="password" name="password"
                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold focus:outline-none"
                        placeholder="Enter admin password" required>
             </div>
-            <button type="submit" 
+            <button type="submit"
                     class="w-full bg-gold text-navy font-bold py-3 px-6 rounded-lg hover:bg-yellow-500 transition-colors">
                 Login
             </button>
         </form>
-        
+
         <div class="mt-6 text-center">
             <a href="/" class="text-navy hover:text-gold">Back to Website</a>
         </div>
@@ -2258,8 +2347,14 @@ ADMIN_DASHBOARD_TEMPLATE = '''
             </div>
         </div>
     </nav>
-    
+
     <div class="container mx-auto p-6">
+        <nav class="flex flex-wrap gap-4 mb-6" aria-label="Admin tabs">
+            <a href="/admin/dashboard" class="font-bold {% if not mission_view %}underline{% endif %}">Lead Dashboard</a>
+            <a href="/admin/mission-control" class="font-bold {% if mission_view %}underline{% endif %}">Mission Control</a>
+            <a href="https://mc.drmortgageusa.com/website-leads" class="text-blue-700">Open Hermes Mission Control &rarr;</a>
+        </nav>
+        {% if mission_view %}<section class="bg-white rounded-xl p-6 shadow mb-6"><h2 class="text-2xl font-bold text-navy">Leads in Mission Control</h2><p class="mt-2">The same saved website, Instagram / ManyChat, and RefiWatch leads, messages, and delivery status are available here and in Hermes Mission Control's Leads tab.</p></section>{% endif %}
         <div class="grid md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-xl shadow p-6 text-center">
                 <div class="text-4xl font-bold text-navy">{{ total_leads }}</div>
@@ -2287,7 +2382,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                 </div>
                 <div class="text-right">
                     <div class="text-3xl font-bold {% if queued_leads %}text-amber-600{% else %}text-green-600{% endif %}">{{ queued_leads }}</div>
-                    <div class="text-sm text-gray-600">Leads waiting for Bonzo</div>
+                    <div class="text-sm text-gray-600">Website leads waiting for Zapier</div>
                 </div>
             </div>
 
@@ -2324,9 +2419,8 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                 </div>
                 <div class="rounded-lg border p-4">
                     <div class="font-semibold text-navy">ManyChat</div>
-                    <div class="text-sm mt-1 {% if integration_status.manychat %}text-green-700{% else %}text-amber-700{% endif %}">
-                        {% if integration_status.manychat %}Ready{% else %}Waiting for credentials{% endif %}
-                    </div>
+                    <div class="text-sm mt-1 {% if integration_status.manychat_capture %}text-green-700{% else %}text-amber-700{% endif %}">Capture: {{ 'Configured' if integration_status.manychat_capture else 'Not configured' }}</div>
+                    <div class="text-sm mt-1 text-gray-600">Outbound API: {{ 'Configured' if integration_status.manychat_sending else 'Not configured' }}</div>
                 </div>
             </div>
 
@@ -2335,30 +2429,30 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                 <button type="submit"
                         class="bg-navy text-white font-bold px-5 py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         {% if not integration_status.zapier_bonzo or not queued_leads %}disabled{% endif %}>
-                    Send queued leads to Bonzo
+                    Retry queued website leads
                 </button>
             </form>
         </section>
-        
+
         <div class="bg-white rounded-xl shadow mb-6 p-4">
             <form class="flex flex-wrap gap-4 items-end">
                 <div class="flex-1 min-w-[200px]">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Search</label>
-                    <input type="text" name="search" value="{{ search_query }}" 
-                           placeholder="Search by name, email, or phone..."
+                    <input type="text" name="search" value="{{ search_query }}"
+                           placeholder="Search contact, message, campaign, or submitted answer..."
                            class="w-full px-4 py-2 border rounded-lg focus:border-gold focus:outline-none">
                 </div>
                 <div class="min-w-[150px]">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Segment</label>
                     <select name="segment" class="w-full px-4 py-2 border rounded-lg focus:border-gold focus:outline-none">
                         <option value="">All Segments</option>
-                        <option value="first-time" {% if current_segment == 'first-time' %}selected{% endif %}>First-Time Buyer</option>
-                        <option value="veteran" {% if current_segment == 'veteran' %}selected{% endif %}>Veteran</option>
-                        <option value="credit" {% if current_segment == 'credit' %}selected{% endif %}>Credit Improvement</option>
-                        <option value="repeat-buyer" {% if current_segment == 'repeat-buyer' %}selected{% endif %}>Repeat Buyer</option>
-                        <option value="investor" {% if current_segment == 'investor' %}selected{% endif %}>Investor</option>
+                        {% for segment in segment_counts if segment %}<option value="{{ segment }}" {% if current_segment == segment %}selected{% endif %}>{{ segment }}</option>{% endfor %}
                     </select>
                 </div>
+                <div><label for="channel" class="block text-sm font-semibold">Channel</label><select id="channel" name="channel" class="border rounded-lg p-2"><option value="">All channels</option>{% for value, label in [('website', 'Website forms'), ('manychat', 'Instagram / ManyChat'), ('refiwatch', 'RefiWatch')] %}<option value="{{ value }}" {% if current_channel == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+                <div><label for="source" class="block text-sm font-semibold">Source</label><select id="source" name="source" class="border rounded-lg p-2 max-w-xs"><option value="">All sources</option>{% for source in sources %}<option {% if current_source == source %}selected{% endif %}>{{ source }}</option>{% endfor %}</select></div>
+                <div><label for="status" class="block text-sm font-semibold">Delivery</label><select id="status" name="status" class="border rounded-lg p-2"><option value="">All statuses</option><option value="sent" {% if current_status == 'sent' %}selected{% endif %}>Accepted by Zapier</option><option value="pending" {% if current_status == 'pending' %}selected{% endif %}>Not delivered</option></select></div>
+                <label class="text-sm"><input type="checkbox" name="messages" value="1" {% if messages_only %}checked{% endif %}> Has a message</label>
                 <button type="submit" class="bg-gold text-navy font-bold px-6 py-2 rounded-lg hover:bg-yellow-500">
                     Filter
                 </button>
@@ -2367,7 +2461,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                 </a>
             </form>
         </div>
-        
+
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -2378,8 +2472,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                             <th class="px-4 py-3 text-left">Email</th>
                             <th class="px-4 py-3 text-left">Phone</th>
                             <th class="px-4 py-3 text-left">Segment</th>
-                            <th class="px-4 py-3 text-left">Timeline</th>
-                            <th class="px-4 py-3 text-left">Price Range</th>
+                            <th class="px-4 py-3 text-left">Message &amp; source</th>
                             <th class="px-4 py-3 text-center">Zapier</th>
                             <th class="px-4 py-3 text-center">Action</th>
                         </tr>
@@ -2406,28 +2499,35 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                                     {{ lead.segment or 'Unknown' }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-sm">{{ lead.timeline or 'N/A' }}</td>
-                            <td class="px-4 py-3 text-sm">{{ lead.price_range or 'N/A' }}</td>
+                            <td class="px-4 py-3 text-sm" style="min-width:260px;max-width:420px"><p class="text-gray-500 mb-2">{{ lead.source }}</p><p class="whitespace-pre-wrap break-words">{{ lead.message[:180] if lead.message else 'No message recorded' }}{% if lead.message|length > 180 %}…{% endif %}</p></td>
                             <td class="px-4 py-3 text-center">
-                                {% if lead.zapier_forwarded %}
-                                <span class="text-green-600">&#10003;</span>
-                                {% else %}
-                                <span class="text-red-600">&#10007;</span>
-                                {% endif %}
+                                <span class="text-sm {% if lead.zapier_forwarded %}text-green-700{% else %}text-amber-700{% endif %}">{{ lead.delivery_status }}</span>
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <form method="POST" action="/admin/delete/{{ lead.id }}" 
+                                {% if lead.channel == 'website' %}<form method="POST" action="/admin/delete/{{ lead.id }}"
                                       onsubmit="return confirm('Delete this lead? This only removes it from the dashboard, not from Zapier.');">
                                     <button type="submit" class="text-red-600 hover:text-red-800 hover:bg-red-100 px-2 py-1 rounded text-sm">
                                         Delete
                                     </button>
-                                </form>
+                                </form>{% else %}<span class="text-sm text-gray-500">{{ lead.channel }}</span>{% endif %}
                             </td>
                         </tr>
+                        <tr class="border-b"><td colspan="8" class="px-4 pb-4">
+                        <details class="rounded-lg border p-4"><summary class="cursor-pointer font-bold text-navy">View full lead: {{ lead.first_name or lead.email or lead.id }}</summary>
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <section><h3 class="font-bold mb-2">Message from the lead</h3><p class="whitespace-pre-wrap break-words bg-gray-50 rounded-lg p-4">{{ lead.message or 'No message was recorded for this submission.' }}</p>
+                                <h3 class="font-bold mt-4 mb-2">Zapier delivery</h3><p>{{ lead.delivery_status }}</p>{% if lead.channel != 'manychat' %}<p>Attempts: {{ lead.zapier_attempts if lead.zapier_attempts is defined else 'Not recorded' }} · Last attempt: {{ lead.zapier_last_attempt_at or 'Not recorded' }}</p><p>Last error: {{ lead.zapier_last_error or 'None recorded' }}</p><p class="text-sm text-gray-500 mt-2">Accepted means Zapier received the request. It does not confirm that Bonzo completed its steps.</p>{% else %}<p class="mt-2">Instagram: {{ lead.ig_username or 'Not captured' }} · Keyword: {{ lead.keyword }}</p><p>Subscriber: {{ lead.subscriber_id }} · Follow-up: {{ 'Processed' if lead.processed else 'Unprocessed' }}</p><p class="text-sm text-gray-500 mt-2">Messages and answers appear when your ManyChat flow sends them to the webhook.</p>{% endif %}</section>
+                                <section><h3 class="font-bold mb-2">Saved profile &amp; contact permissions</h3><dl class="grid grid-cols-2 gap-2 text-sm">{% for key in ['timeline', 'price_range', 'down_payment', 'credit_score', 'military_status', 'property_type', 'investor_loan_type', 'email_consent', 'call_consent', 'sms_consent', 'event_id', 'meta_capi_sent'] %}<dt class="font-semibold">{{ key|replace('_', ' ')|title }}</dt><dd class="break-words">{{ lead.get(key) if lead.get(key) is not none else 'Not recorded' }}</dd>{% endfor %}</dl></section>
+                            </div>
+                            <h3 class="font-bold mt-6 mb-2">{{ 'Captured ManyChat fields' if lead.channel == 'manychat' else ('Saved RefiWatch fields' if lead.channel == 'refiwatch' else 'All submitted fields / Zapier payload') }}</h3>
+                            {% if lead.fields %}<dl class="grid md:grid-cols-2 gap-3">{% for field in lead.fields %}<div class="bg-gray-50 rounded p-3 min-w-0"><dt class="text-sm font-semibold text-gray-600">{{ field.name }}</dt><dd class="whitespace-pre-wrap break-words">{{ field.value }}</dd></div>{% endfor %}</dl>
+                            <details class="mt-4"><summary class="cursor-pointer">View saved JSON</summary><pre class="bg-gray-100 p-4 rounded whitespace-pre-wrap break-all text-xs">{{ lead.payload_json }}</pre></details>
+                            {% else %}<p>No original payload was saved for this older lead. Its saved profile is shown above.</p>{% endif %}
+                        </details></td></tr>
                         {% endfor %}
                         {% else %}
                         <tr>
-                            <td colspan="9" class="px-4 py-8 text-center text-gray-500">
+                            <td colspan="8" class="px-4 py-8 text-center text-gray-500">
                                 No leads found. Quiz submissions will appear here.
                             </td>
                         </tr>
@@ -2436,6 +2536,7 @@ ADMIN_DASHBOARD_TEMPLATE = '''
                 </table>
             </div>
         </div>
+        <nav class="flex justify-between items-center py-5" aria-label="Lead pages"><span>{{ matched_leads }} matching leads · Page {{ page }}</span><div class="flex gap-4">{% if page > 1 %}<a href="{{ page_url(page - 1) }}" class="text-blue-700">Previous</a>{% endif %}{% if has_next %}<a href="{{ page_url(page + 1) }}" class="text-blue-700">Next</a>{% endif %}</div></nav>
     </div>
 </body>
 </html>
@@ -2522,7 +2623,10 @@ def add_cache_headers(response):
             response.headers['X-Robots-Tag'] = (
                 'noindex, nofollow, noarchive, nosnippet'
             )
-        if response.headers.get('Cache-Control'):
+        if request.path.startswith('/admin') or request.path == '/api/mission-control/leads':
+            response.headers['Cache-Control'] = 'private, no-store'
+            response.headers['X-Robots-Tag'] = 'noindex, nofollow, noarchive'
+        elif response.headers.get('Cache-Control'):
             pass
         # Static assets: cache for 1 week
         elif response.content_type and any(
