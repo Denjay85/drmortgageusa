@@ -1,0 +1,79 @@
+<section class="page-hero">
+  <div class="shell page-hero-inner">
+    <p class="eyebrow">{{ page.eyebrow }}</p>
+    <h1>{{ page.hero_title }}</h1>
+    <p>{{ page.hero_lead }}</p>
+    <div class="hero-actions">
+      <a class="button button-gold" href="{{ page.primary_cta[1] }}">{{ page.primary_cta[0] }}</a>
+      <a class="button button-outline-light" href="{{ page.secondary_cta[1] }}">{{ page.secondary_cta[0] }}</a>
+      <a class="service-guide-link" href="{{ page.support_cta[1] }}">{{ page.support_cta[0] }} <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+<section class="trust-strip" aria-label="Mortgage planning highlights">
+  <div class="shell trust-strip-grid service-benefits">
+    {% for title, body in page.hero_stats %}<div><strong>{{ title }}</strong><span>{{ body }}</span></div>{% endfor %}
+  </div>
+</section>
+<section class="section section-cream">
+  <div class="shell contact-grid">
+    <div class="form-card service-review-card" id="request-review" tabindex="-1" aria-labelledby="review-heading">
+      <p class="eyebrow">Start with a conversation</p>
+      <h2 id="review-heading">{{ page.form_heading }}</h2>
+      <p>{{ page.form_text }}</p>
+      {{ form|safe }}
+    </div>
+    <aside class="contact-aside">
+      <p class="eyebrow">Clear numbers. Human guidance.</p>
+      <h2>{{ page.get('trust_heading', 'Why clients trust Dennis') }}</h2>
+      {% for title, body in page.trust_points %}<div class="contact-option"><strong>{{ title }}</strong><p>{{ body }}</p></div>{% endfor %}
+      <a class="text-link service-profile-link" href="/about">Meet Dennis <span aria-hidden="true">→</span></a>
+    </aside>
+  </div>
+</section>
+<section class="content-section">
+  <div class="shell">
+    {% for section in page.sections %}
+    <article class="option-row">
+      <div><p class="eyebrow">Build your mortgage plan</p><h2>{{ section.title }}</h2></div>
+      <div class="option-row-copy"><p>{{ section.body }}</p><ul class="check-list">{% for item in section['items'] %}<li>{{ item }}</li>{% endfor %}</ul></div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+<section class="section section-cream">
+  <div class="shell">
+    <div class="section-heading"><p class="eyebrow">A clearer path</p><h2>What happens next</h2></div>
+    <div class="process-grid service-process">
+      {% for number, title, body in page.process_points %}<article><span>{{ number }}</span><h3>{{ title }}</h3><p>{{ body }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="shell">
+    <div class="section-heading"><p class="eyebrow">Keep learning</p><h2>Resources for your next mortgage decision</h2><p>Explore the questions behind this mortgage path, then bring your scenario to Dennis for a review.</p></div>
+    <ul class="service-guide-grid">{% for label, href in guides %}<li><a href="{{ href }}">{{ label }}<span aria-hidden="true">→</span></a></li>{% endfor %}</ul>
+  </div>
+</section>
+<section class="section section-cream">
+  <div class="shell">
+    <div class="section-heading"><p class="eyebrow">Your questions</p><h2>Frequently asked questions</h2></div>
+    <div class="service-faq-list">{% for question, answer in page.faqs %}<details class="faq-item"><summary><strong>{{ question }}</strong><i aria-hidden="true"></i></summary><div class="faq-answer"><p>{{ answer }}</p></div></details>{% endfor %}</div>
+  </div>
+</section>
+<section class="final-cta">
+  <div class="shell final-cta-inner">
+    <div><p class="eyebrow">Your next move</p><h2>Ready for the next step?</h2><p>{{ page.cta_text }}</p></div>
+    <div class="final-cta-actions">
+      <a class="button button-gold" href="#request-review">Request a review</a>
+      <a class="button button-outline-light" href="tel:+18503468514">Call Dennis</a>
+      <a class="service-guide-link" href="https://home1st.my1003app.com/2018381/register">Open the secure mortgage application →</a>
+    </div>
+  </div>
+</section>
+<section class="section service-credentials">
+  <div class="shell">
+    <p>Verify <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2018381">Dennis Ross, NMLS 2018381</a>, view his <a href="https://myhome1st.com/dennis/">official Home 1st Lending profile</a>, or <a href="https://www.google.com/maps?cid=3829412552217676351">read client reviews on Google</a>.</p>
+    <p>1130 Business Center Dr, Suite 1000, Lake Mary, FL 32746</p>
+  </div>
+</section>

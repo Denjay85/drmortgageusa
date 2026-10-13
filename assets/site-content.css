@@ -1,0 +1,84 @@
+/* File-backed pages inherit the current main-site stylesheet and navigation.
+   Scope old article utilities here so they can never restyle the shared shell. */
+.site-article { padding: 80px 0 96px; }
+.site-article > div { width: min(860px, calc(100% - 40px)); margin-inline: auto; }
+.site-article h1 { font-size: clamp(2.6rem, 5.7vw, 4.9rem); margin-bottom: 28px; }
+.site-article h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); margin: 46px 0 22px; }
+.site-article h3 { font-size: clamp(1.4rem, 2.8vw, 1.85rem); margin: 32px 0 18px; }
+.site-article h1, .site-article h2, .site-article h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; color: var(--ink-900); }
+.site-article p, .site-article li { color: var(--ink-700); line-height: 1.85; }
+.site-article p, .site-article ul, .site-article ol { margin-bottom: 22px; }
+.site-article ul, .site-article ol { padding-left: 26px; }
+.site-article li { margin-bottom: 10px; }
+.site-article a:not(.button) { color: var(--blue-600); text-decoration: underline; text-underline-offset: 3px; }
+.site-article a:not(.button):hover { color: var(--navy-950); }
+.site-article .prose { margin-top: 32px; }
+.site-article .article-cta { margin-top: 48px; padding: clamp(24px, 4vw, 40px); background: var(--navy-900); border-top: 3px solid var(--gold-500); text-align: center; }
+.site-article .article-cta h2, .site-article .article-cta h3 { color: var(--white); margin-top: 0; }
+.site-article .article-cta p { color: #d5dee7; }
+.site-article .article-cta a:not(.button) { color: var(--gold-500); }
+.site-article .article-cta .button { margin: 4px 0; text-decoration: none; }
+.site-article .article-cta .button-gold { color: var(--navy-950); }
+.site-article .article-cta .button-outline-light { color: var(--white); }
+.site-article .article-disclosure { padding-top: 30px; margin-top: 40px; border-top: 1px solid var(--sand-200); font-size: .85rem; }
+.site-article .flex { display: flex; flex-wrap: wrap; }
+.site-article .items-center { align-items: center; }
+.site-article .justify-center { justify-content: center; }
+.site-article .gap-3 { gap: 12px; }
+.site-article .gap-4 { gap: 16px; }
+.site-article .text-center { text-align: center; }
+.site-article header.text-center { text-align: left; }
+.site-article header .justify-center { justify-content: flex-start; }
+.site-article .text-sm, .site-article .meta, .site-policy .updated { font-size: .85rem; color: var(--ink-500); }
+.site-article .text-xs { font-size: .8rem; }
+.site-article .mb-4 { margin-bottom: 16px; }
+.site-article .mb-6 { margin-bottom: 24px; }
+.site-article .mb-8 { margin-bottom: 32px; }
+.site-article .mb-12 { margin-bottom: 48px; }
+.site-article .mt-8 { margin-top: 32px; }
+.site-article .mt-12 { margin-top: 48px; }
+.site-article .my-8 { margin-block: 32px; }
+.site-article .callout, .site-article .border-l-4, .site-article .bg-gray-100,
+.site-article .bg-blue-50, .site-article .bg-gray-50, .site-article .formula {
+  padding: 24px; margin-block: 28px; background: var(--cream-100); border-left: 3px solid var(--gold-600);
+}
+.site-article .callout > :last-child, .site-article .border-l-4 > :last-child { margin-bottom: 0; }
+.site-article .badge { display: inline-block; padding: 5px 10px; margin-bottom: 16px; background: var(--gold-500); font-size: .72rem; font-weight: 800; letter-spacing: .08em; }
+.site-article table { display: block; overflow-x: auto; max-width: 100%; width: 100%; border-collapse: collapse; margin: 30px 0; font-size: .9rem; }
+.site-article table:focus-visible { outline: 3px solid var(--gold-600); outline-offset: 4px; }
+.site-article th { background: var(--navy-900); color: var(--white); text-align: left; font-weight: 650; }
+.site-article td, .site-article th { padding: 14px 18px; border: 1px solid var(--sand-200); vertical-align: top; min-width: 130px; }
+.site-article tr:nth-child(even) td { background: var(--cream-100); }
+.site-article .overflow-x-auto { overflow-x: auto; }
+.site-article [id] { scroll-margin-top: 130px; }
+.service-guide-link { color: var(--gold-500); font-size: .85rem; font-weight: 750; }
+.service-guide-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.service-benefits, .service-process { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.service-review-card { min-width: 0; scroll-margin-top: 140px; }
+.service-review-card h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 16px; }
+.service-review-card > p:not(.eyebrow) { color: var(--ink-500); margin-bottom: 26px; }
+.service-review-card .button { width: 100%; margin-top: 12px; }
+.service-review-card .field-grid > * { min-width: 0; }
+.service-review-card .form-note { margin: 18px 0 0; }
+.service-review-card .form-note a { text-decoration: underline; }
+.service-review-card [data-form-message] { margin: 16px 0 0; font-size: .9rem; color: var(--ink-700); scroll-margin-top: 120px; }
+.service-review-card [data-form-message]:empty { display: none; }
+.service-review-card [data-form-message].is-success { padding: 16px; background: #e4f1eb; color: var(--success); }
+.service-profile-link { margin-top: 26px; }
+.service-guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0; list-style: none; }
+.service-guide-grid a { display: flex; justify-content: space-between; gap: 24px; padding: 24px; height: 100%; border: 1px solid var(--sand-200); background: var(--white); font-weight: 650; }
+.service-guide-grid a:hover { border-color: var(--gold-600); }
+.service-guide-grid a span { color: var(--gold-600); }
+.service-faq-list { display: grid; gap: 14px; }
+.service-credentials { padding-block: 32px; font-size: .82rem; }
+.service-credentials a { text-decoration: underline; }
+.site-result { min-height: 55vh; }
+@media (max-width: 850px) { .service-process { grid-template-columns: 1fr; } }
+@media (max-width: 620px) {
+  .site-article { padding-block: 48px 64px; }
+  .site-article > div { width: calc(100% - 28px); }
+  .site-article h1 { font-size: clamp(2.3rem, 10vw, 3.2rem); }
+  .site-article .article-cta .button { width: 100%; }
+  .service-benefits, .service-guide-grid { grid-template-columns: 1fr; }
+  .service-review-card { scroll-margin-top: 110px; }
+}
