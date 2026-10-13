@@ -163,6 +163,29 @@ test("server-renders the DR. Mortgage USA homepage and key resource paths", asyn
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
+test("VA page shares the main site design while keeping its search and lead contracts", async () => {
+  const response = await render("/va-loans-orlando");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  for (const className of ["site-header", "site-footer", "page-hero", "mobile-menu"]) {
+    assert.ok(html.includes(`class="${className}"`), className);
+  }
+  assert.match(html, /form-card va-review-card/);
+  assert.match(html, /<h1>VA Loans in Orlando Without the Confusion<\/h1>/);
+  assert.match(html, /rel="canonical" href="https:\/\/drmortgageusa.com\/va-loans-orlando"/);
+  assert.match(html, /property="og:url" content="https:\/\/drmortgageusa.com\/va-loans-orlando"/);
+  assert.match(html, /id="request-review"/);
+  assert.match(html, /<form(?=[^>]*method="post")(?=[^>]*action="\/request-review")[^>]*>/);
+  assert.match(html, /name="twitter:image" content="https:\/\/drmortgageusa.com\/dennis-ross-headshot.png"/);
+  assert.match(html, /name="source" value="service-page-va-loans-orlando"/);
+  assert.match(html, /name="segment" value="veteran"/);
+  assert.doesNotMatch(html, /data-lead-form|assets\/lead-forms\.js|service-pages\.css/);
+  const content = JSON.parse(await readFile(new URL("../app/va-loans-orlando/content.json", import.meta.url), "utf8"));
+  const graphs = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)].map((match) => JSON.parse(match[1]));
+  assert.deepEqual(graphs, [content.schema, content.faqSchema]);
+  assert.equal((html.match(/<h1[ >]/g) ?? []).length, 1);
+});
+
 test("renders the blog, DPA, and HELOC destinations", async () => {
   const cases = [
     ["/blog", /Search the library/, /Publishing since February 2026/],

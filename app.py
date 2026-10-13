@@ -939,6 +939,10 @@ def serve_dpa():
 @app.route('/heloc-orlando')
 def serve_service_page():
     page_slug = request.path.lstrip('/')
+    if page_slug == 'va-loans-orlando':
+        redesign = send_redesign_page(page_slug)
+        if redesign is not None:
+            return redesign
     return send_file(os.path.join(BASE_DIR, SERVICE_PAGE_MAP[page_slug]),
                      mimetype='text/html')
 

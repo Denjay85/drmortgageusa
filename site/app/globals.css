@@ -8421,3 +8421,37 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
   .blog-ask-panel { grid-template-columns: 1fr; }
   .blog-ask-copy .button { width: 100%; }
 }
+
+/* VA uses the shared page shell and form system; these rules only arrange its content. */
+.va-hero-guide { color: var(--gold-500); font-size: .85rem; font-weight: 750; }
+.va-hero-guide:hover, .va-secure-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.va-benefit-grid, .va-process-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.va-review-card { min-width: 0; scroll-margin-top: 140px; }
+.va-review-card h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 16px; }
+.va-form-intro { color: var(--ink-500); margin-bottom: 26px; }
+.va-review-card .button { width: 100%; margin-top: 12px; }
+.va-review-card .form-note { margin: 18px 0 0; }
+.va-review-card .form-note a { text-decoration: underline; }
+.va-review-card .field-grid > * { min-width: 0; }
+.va-profile-link { margin-top: 26px; }
+.va-resources h2 { font-size: clamp(2rem, 3.2vw, 3rem); }
+.va-resources p a, .va-resource-links a { text-decoration: underline; text-underline-offset: 3px; }
+.va-resource-links { padding-left: 20px; margin-block: 24px; }
+.va-resource-links li { margin-bottom: 12px; }
+.va-guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0; list-style: none; margin: 0 0 24px; }
+.va-guide-grid a { display: flex; justify-content: space-between; align-items: center; gap: 24px; height: 100%; padding: 24px; border: 1px solid var(--sand-200); background: var(--white); font-weight: 650; }
+.va-guide-grid a:hover { border-color: var(--gold-600); }
+.va-guide-grid a span { color: var(--gold-600); }
+.va-faq-list { display: grid; gap: 14px; }
+.va-faq-answer { padding: 0 26px 24px; color: var(--ink-700); }
+.va-faq-answer p { margin-bottom: 0; }
+.va-secure-link { color: var(--gold-500); font-size: .8rem; text-align: center; }
+@media (max-width: 850px) {
+  .va-process-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .va-benefit-grid, .va-guide-grid { grid-template-columns: 1fr; }
+  .va-hero-guide { padding-block: 10px; }
+  .va-review-card { scroll-margin-top: 110px; }
+  .va-faq-answer { padding-inline: 20px; }
+}
