@@ -707,6 +707,7 @@ class RedesignIntegrationTests(unittest.TestCase):
                 production_app.ADMIN_DASHBOARD_TEMPLATE,
                 leads=[],
                 total_leads=4,
+                matched_leads=4, page=1, has_next=False,
                 queued_leads=2,
                 integration_status={
                     'zapier_bonzo': False,
@@ -723,7 +724,7 @@ class RedesignIntegrationTests(unittest.TestCase):
 
         self.assertIn('DR. Mortgage USA', dashboard)
         self.assertIn('Integration readiness', dashboard)
-        self.assertIn('Leads waiting for Bonzo', dashboard)
+        self.assertIn('Website leads waiting for Zapier', dashboard)
         self.assertIn('Waiting for credentials', dashboard)
 
     def test_production_tracking_script_contains_configured_ad_destinations(self):
