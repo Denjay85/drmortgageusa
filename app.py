@@ -703,27 +703,49 @@ def site_tracking():
     return eventId;
   }}
 
+  // Page-local receipt deduplication: no cookies, storage, or new customer data.
+  // Keep destinations independent so a blocked optional SDK cannot suppress others.
+  var recordedLeadEvents = Object.create(null);
+  function emitLeadOnce(eventId, destination, emit) {{
+    var sent = recordedLeadEvents[eventId] || (recordedLeadEvents[eventId] = Object.create(null));
+    if (sent[destination]) return;
+    sent[destination] = true;
+    try {{ emit(); }} catch (error) {{ delete sent[destination]; }}
+  }}
+
   function trackLeadSubmit(details) {{
     var eventId = (details && details.eventId) || createEventId('lead_submit');
     var payload = buildTrackingPayload({{
       content_name: document.title,
       content_category: 'lead-form'
     }}, details);
-    pushDataLayerEvent('dr_lead_form_submit', payload);
+    emitLeadOnce(eventId, 'dataLayer', function() {{
+      pushDataLayerEvent('dr_lead_form_submit', payload);
+    }});
 
     if (typeof window.fbq === 'function') {{
-      window.fbq('track', 'Lead', {{
-        content_name: payload.content_name,
-        content_category: payload.content_category
-      }}, {{ eventID: eventId }});
+      emitLeadOnce(eventId, 'meta', function() {{
+        window.fbq('track', 'Lead', {{
+          content_name: payload.content_name,
+          content_category: payload.content_category
+        }}, {{ eventID: eventId }});
+      }});
     }}
 
-    trackGoogleEvent('generate_lead', {{
-      event_category: 'form',
-      event_label: payload.source || payload.content_category,
-      page_path: payload.page_path
-    }});
-    sendGoogleAdsConversion(googleAdsLeadFormLabel, eventId);
+    if (typeof window.gtag === 'function') {{
+      emitLeadOnce(eventId, 'googleEvent', function() {{
+        trackGoogleEvent('generate_lead', {{
+          event_category: 'form',
+          event_label: payload.source || payload.content_category,
+          page_path: payload.page_path
+        }});
+      }});
+      if (googleAdsId && googleAdsLeadFormLabel) {{
+        emitLeadOnce(eventId, 'googleAds', function() {{
+          sendGoogleAdsConversion(googleAdsLeadFormLabel, eventId);
+        }});
+      }}
+    }}
     return eventId;
   }}
 
