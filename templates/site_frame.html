@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{ metadata|safe }}
+  <link rel="icon" href="/media/logo.webp">
+  {{ chrome.styles|safe }}
+  <link rel="stylesheet" href="/assets/site-content.css?v=20261013-1">
+  {% if tracking %}
+  <script src="/assets/lead-context.js?v=20261008-1" defer></script>
+  <script src="/site-tracking.js" defer></script>
+  {% endif %}
+  {% if service %}<script src="/assets/lead-forms.js?v=20261008-2" defer></script>{% endif %}
+</head>
+<body data-page-category="{{ category }}"{% if intent %} data-page-intent="{{ intent }}"{% endif %}>
+  {{ chrome.header|safe }}
+  <main>{{ content|safe }}</main>
+  {{ chrome.footer|safe }}
+  {{ chrome.mobile_actions|safe }}
+</body>
+</html>

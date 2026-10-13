@@ -23,6 +23,8 @@ from flask_compress import Compress
 import mimetypes
 
 from update_rates import MND_URL, fetch_mnd_snapshot, snapshot_is_fresh
+from site_presentation import shared_chrome, metadata as page_metadata, article_content, privacy_content, service_form
+from scripts.generate_service_pages import PAGES as SERVICE_PAGES, RELATED_GUIDES
 
 app = Flask(__name__, static_folder=None)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -127,6 +129,41 @@ def send_redesign_page(path=''):
                 mimetype=mimetype or 'text/html',
                 conditional=True,
             )
+    return None
+
+
+def shared_public_page(metadata, content, category='content', tracking=True,
+                       service=False, status=200, intent=''):
+    """Use the current frontend header/footer for file-backed public pages."""
+    return Response(render_template(
+        'site_frame.html', chrome=shared_chrome(REDESIGN_OUT_DIR),
+        metadata=metadata, content=content, category=category,
+        tracking=tracking, service=service, intent=intent,
+    ), status=status, mimetype='text/html')
+
+
+@app.before_request
+def canonical_public_aliases():
+    """Old file links must not expose a second, visually outdated website."""
+    if is_refiwatch_request() or request.method not in ('GET', 'HEAD'):
+        return None
+    aliases = {
+        '/index.html': '/', '/simple.html': '/', '/dpa.html': '/dpa',
+        '/heloc-calculator.html': '/heloc-calculator', '/privacy.html': '/privacy',
+        '/blog_posts/index.html': '/blog', '/blog/index.html': '/blog',
+        '/blog/florida-mortgage-reserves-explained-buyers-investors': '/blog/florida-mortgage-reserves-buyers-investors',
+        **{'/' + filename: '/' + slug for slug, filename in SERVICE_PAGE_MAP.items()},
+    }
+    target = aliases.get(request.path)
+    if not target:
+        match = re.fullmatch(r'/(?:blog_posts/([a-z0-9-]+)\.html|blog/([a-z0-9-]+)(?:\.html|/index\.html|/))', request.path)
+        if match:
+            slug = match.group(1) or match.group(2)
+            if os.path.isfile(os.path.join(BASE_DIR, 'blog_posts', slug + '.html')):
+                target = '/blog/' + slug
+    if target:
+        query = request.query_string.decode('utf-8', errors='replace')
+        return redirect(target + ('?' + query if query else ''), code=301)
     return None
 
 
@@ -965,22 +1002,43 @@ def serve_service_page():
         redesign = send_redesign_page(page_slug)
         if redesign is not None:
             return redesign
+    elif os.path.isfile(os.path.join(REDESIGN_OUT_DIR, 'index.html')):
+        page = next(page for page in SERVICE_PAGES if page['slug'] == page_slug)
+        with open(os.path.join(BASE_DIR, SERVICE_PAGE_MAP[page_slug]), encoding='utf-8') as source:
+            document = source.read()
+        content = render_template('service_page.html', page=page,
+                                  guides=RELATED_GUIDES[page_slug],
+                                  form=service_form(document))
+        return shared_public_page(page_metadata(document), content,
+                                  category='service', service=True, intent=page['segment'])
     return send_file(os.path.join(BASE_DIR, SERVICE_PAGE_MAP[page_slug]),
                      mimetype='text/html')
 
 
 @app.route('/privacy')
 def privacy():
+    if os.path.isfile(os.path.join(REDESIGN_OUT_DIR, 'index.html')):
+        with open(os.path.join(BASE_DIR, 'privacy.html'), encoding='utf-8') as source:
+            document = source.read()
+        return shared_public_page(page_metadata(document) +
+                                  '<link rel="canonical" href="https://drmortgageusa.com/privacy">',
+                                  privacy_content(document), category='privacy', tracking=False)
     return send_file(os.path.join(BASE_DIR, 'privacy.html'),
                      mimetype='text/html')
 
 @app.route('/blog/<path:slug>')
 def serve_blog_post(slug):
+    if not re.fullmatch(r'[a-z0-9-]+', slug):
+        return page_not_found(None)
     blog_path = os.path.join(BASE_DIR, 'blog_posts', f'{slug}.html')
     if os.path.isfile(blog_path):
+        if os.path.isfile(os.path.join(REDESIGN_OUT_DIR, 'index.html')):
+            with open(blog_path, encoding='utf-8') as source:
+                document = source.read()
+            return shared_public_page(page_metadata(document), article_content(document),
+                                      category='blog', intent='education')
         return send_file(blog_path, mimetype='text/html')
-    return send_file(os.path.join(BASE_DIR, 'index.html'),
-                     mimetype='text/html'), 404
+    return page_not_found(None)
 
 @app.route('/robots.txt')
 def serve_robots():
@@ -1584,6 +1642,9 @@ def serve_static(path):
         if response is not None:
             return response
 
+    if path == '404.html' and not is_refiwatch_request():
+        return page_not_found(None)
+
     redesign = send_redesign_page(path)
     if redesign is not None:
         return redesign
@@ -1601,8 +1662,7 @@ def serve_static(path):
     if is_refiwatch_request() and refiwatch_build_ready():
         return send_refiwatch_index()
 
-    return send_file(os.path.join(BASE_DIR, 'index.html'),
-                     mimetype='text/html')
+    return page_not_found(None)
 
 
 @app.route('/api/quiz-submit', methods=['GET'])
@@ -1797,11 +1857,14 @@ def quiz_submit():
 
 
 def review_result_page(title, message, status=200, back_url='/'):
-    response = Response(render_template(
+    content = render_template(
         'lead_result.html', title=title, message=message,
         back_url=back_url,
-        back_label='Back to the form' if status >= 400 else 'Return to the website',
-    ), status=status, mimetype='text/html')
+        back_label='Back to the form' if status >= 400 and back_url != '/' else 'Return to the website',
+    )
+    metadata = '<title>' + html_lib.escape(title) + ' | DR. Mortgage USA</title><meta name="robots" content="noindex, nofollow">'
+    response = shared_public_page(metadata, content, category='confirmation',
+                                  tracking=False, status=status)
     response.headers['X-Robots-Tag'] = 'noindex, nofollow'
     response.headers['Cache-Control'] = 'no-store'
     return response
@@ -2445,11 +2508,7 @@ def blog_index():
 
 @app.route('/blog/<slug>')
 def blog_post(slug):
-    filename = f"{slug}.html"
-    filepath = os.path.join(BASE_DIR, 'blog_posts', filename)
-    if os.path.exists(filepath):
-        return send_from_directory(os.path.join(BASE_DIR, 'blog_posts'), filename)
-    return send_from_directory(BASE_DIR, 'index.html'), 404
+    return serve_blog_post(slug)
 
 
 # --- Performance: Caching Headers ---
@@ -2488,20 +2547,24 @@ def add_cache_headers(response):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    try:
-        return send_file(os.path.join(BASE_DIR, '404.html'),
-                         mimetype='text/html'), 404
-    except Exception:
-        return '<h1>404 - Page Not Found</h1>', 404
+    return review_result_page('This page took a wrong turn',
+                              'The page you are looking for does not exist or may have moved. Use the navigation to find your next step.',
+                              status=404)
 
 
 @app.errorhandler(500)
 def server_error(e):
     try:
-        return send_file(os.path.join(BASE_DIR, '404.html'),
-                         mimetype='text/html'), 500
-    except Exception:
-        return '<h1>500 - Server Error</h1>', 500
+        return review_result_page('Please try again shortly',
+                                  'We could not load this page. You can return to the website or call Dennis for help.',
+                                  status=500)
+    except (OSError, ValueError):
+        # A missing/damaged build must not cause a recursive error renderer.
+        response = Response('<h1>Please try again shortly</h1><p>Call Dennis at 850-346-8514.</p>',
+                            status=500, mimetype='text/html')
+        response.headers['X-Robots-Tag'] = 'noindex, nofollow'
+        response.headers['Cache-Control'] = 'no-store'
+        return response
 
 
 @app.route('/api/db/migrate', methods=['POST'])
