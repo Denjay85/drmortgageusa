@@ -333,6 +333,27 @@ test("renders a searchable, categorized mortgage FAQ", async () => {
   assert.match(html, /Ask Dennis/);
 });
 
+test("Ask Dr. Mortgage lives on the main site with internal blog entry points", async () => {
+  const blog = await (await render("/blog")).text();
+  assert.doesNotMatch(blog, /chatgpt\.site/);
+  assert.equal((blog.match(/href="\/ask-dr-mortgage(?:\?|\")/g) ?? []).length, 5);
+  assert.match(blog, /question=What%20is%20an%20IRRRL%3F/);
+  const response = await render("/ask-dr-mortgage");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /rel="canonical" href="https:\/\/drmortgageusa\.com\/ask-dr-mortgage"/);
+  assert.match(html, /What’s on your mind|What&#x27;s on your mind|What&#x2019;s on your mind/);
+  assert.match(html, /id="mortgage-question"/);
+  assert.match(html, /Browse the guides/);
+  assert.match(html, /seven days/);
+  assert.match(html, /90-day retention/);
+  assert.doesNotMatch(html, /<iframe|chatgpt\.site/);
+  const privacy = await (await render("/ask-dr-mortgage/privacy")).text();
+  assert.match(privacy, /Your questions and privacy/);
+  assert.match(privacy, /same guide-backed answer service/);
+  assert.doesNotMatch(privacy, /chatgpt\.site/);
+});
+
 test("renders every public route without em dashes", async () => {
   const forbiddenCharacter = String.fromCodePoint(0x2014);
   const forbiddenEntities = [
