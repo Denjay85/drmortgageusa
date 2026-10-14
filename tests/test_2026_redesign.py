@@ -21,6 +21,8 @@ class FakeCursor:
         self.executions.append((query, params))
 
     def fetchone(self):
+        if "SELECT id, payload, meta_capi_sent" in self.executions[-1][0]:
+            return None
         return (101,)
 
     def close(self):
@@ -174,7 +176,7 @@ class RedesignIntegrationTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.get_json()['success'])
-        insert_params = connection.cursor_instance.executions[0][1]
+        insert_params = next(params for query, params in connection.cursor_instance.executions if "INSERT INTO leads" in query)
         self.assertEqual(insert_params[11], 'redesign-build-my-plan')
         self.assertEqual(insert_params[12], 'lead_test_123')
         self.assertEqual(insert_params[13:16], (True, False, True))
@@ -668,7 +670,7 @@ class RedesignIntegrationTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.get_json()['success'])
-        update_params = connection.cursor_instance.executions[1][1]
+        update_params = next(params for query, params in connection.cursor_instance.executions if "UPDATE leads" in query)
         self.assertFalse(update_params[0])
         self.assertEqual(update_params[2], 'not_configured')
 

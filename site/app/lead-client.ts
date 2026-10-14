@@ -24,6 +24,10 @@ function createFallbackEventId(prefix: string) {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
+// Keep uncertain attempts only in this page's memory, never browser storage.
+// Identical retries reuse the complete request; confirmed success starts a new inquiry.
+const uncertainSubmissions = new Map<string, string>();
+
 export async function submitLead(payload: LeadPayload) {
   if ((payload.callConsent === true || payload.smsConsent === true) && !String(payload.phone || "").trim()) {
     throw new Error("Please add a phone number for calls or texts, or leave those permissions unchecked.");
@@ -44,10 +48,13 @@ export async function submitLead(payload: LeadPayload) {
     pageUrl: window.location.origin + window.location.pathname,
   };
 
+  const inquiryKey = JSON.stringify(Object.keys(payload).sort().map(key => [key, payload[key]]));
+  const serializedBody = uncertainSubmissions.get(inquiryKey) || JSON.stringify(body);
+  uncertainSubmissions.set(inquiryKey, serializedBody);
   const response = await fetch("/api/quiz-submit", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: serializedBody,
   });
 
   const result = await response.json().catch(() => null) as {
@@ -58,6 +65,8 @@ export async function submitLead(payload: LeadPayload) {
       ? result.errors.join(" ") : "We could not confirm delivery. Please call 850-346-8514 before sending again.";
     throw new Error(validation);
   }
+
+  if (uncertainSubmissions.get(inquiryKey) === serializedBody) uncertainSubmissions.delete(inquiryKey);
 
   if (result.preview !== true) {
     try {

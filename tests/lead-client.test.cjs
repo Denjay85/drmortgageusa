@@ -91,3 +91,20 @@ test('optional phone permissions require a phone without sending an incomplete r
   await assert.rejects(h.submit({ smsConsent: true, phone: '' }), /add a phone number/);
   assert.equal(h.requests.length, 0);
 });
+
+
+test('uncertain retries reuse the full request and event ID without local storage', async () => {
+  const h = harness({ rejectFetch: true });
+  await assert.rejects(h.submit());
+  await assert.rejects(h.submit());
+  assert.equal(h.requests[0].options.body, h.requests[1].options.body);
+  await assert.rejects(h.submit({ message: 'A distinct inquiry' }));
+  assert.notEqual(JSON.parse(h.requests[0].options.body).eventId, JSON.parse(h.requests[2].options.body).eventId);
+});
+
+test('a new inquiry after confirmed success gets a distinct event ID', async () => {
+  const h = harness();
+  await h.submit();
+  await h.submit();
+  assert.notEqual(JSON.parse(h.requests[0].options.body).eventId, JSON.parse(h.requests[1].options.body).eventId);
+});

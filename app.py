@@ -1724,6 +1724,39 @@ def quiz_submit_read():
     return response
 
 
+def existing_submission(cur, event_id, payload):
+    """Serialize one event in PostgreSQL; the saved lead is its durable receipt.
+
+    The lock is transaction-scoped and released by commit/rollback, including on
+    worker death. Hash collisions only serialize unrelated IDs: lookup still
+    compares the full event ID. No expiry can accidentally permit a late replay.
+    """
+    lock_key = int.from_bytes(hashlib.sha256(
+        ('website-lead:' + event_id).encode()).digest()[:8], 'big', signed=True)
+    cur.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED")
+    cur.execute("SET LOCAL lock_timeout = '5s'")
+    cur.execute('SELECT pg_advisory_xact_lock(%s)', (lock_key,))
+    cur.execute(
+        'SELECT id, payload, meta_capi_sent FROM leads '
+        'WHERE event_id = %s ORDER BY id LIMIT 1', (event_id,))
+    saved = cur.fetchone()
+    if saved is None:
+        return None
+    saved_payload = saved[1]
+    if isinstance(saved_payload, str):
+        saved_payload = json.loads(saved_payload)
+    # Reusing an ID must not overwrite a different inquiry or expose its receipt.
+    if saved_payload != payload:
+        raise SubmissionConflict()
+    return {'success': True, 'lead_id': saved[0], 'event_id': event_id,
+            'replayed': True, 'meta_capi': {'sent': bool(saved[2]),
+                                         'reason': 'existing_submission'}}
+
+
+class SubmissionConflict(Exception):
+    pass
+
+
 @app.route('/api/quiz-submit', methods=['POST'])
 def quiz_submit():
     """Receive quiz submission, store in DB, forward to Zapier"""
@@ -1755,6 +1788,8 @@ def quiz_submit():
         sms_consent = as_bool(data.get('smsConsent', data.get('sms_consent')))
 
         errors = []
+        if not isinstance(event_id, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:-]{0,149}', event_id):
+            errors.append('valid event ID is required')
         service_sources = {f'service-page-{slug}' for slug in SERVICE_PAGE_MAP}
         named_form_sources = service_sources | {'redesign-contact', 'redesign-dpa-review', 'redesign-build-my-plan'}
         email_form_sources = named_form_sources | {'redesign-rate-watch', 'redesign-calculator-save'}
@@ -1804,6 +1839,10 @@ def quiz_submit():
 
         conn = get_db_connection()
         cur = conn.cursor()
+        saved = existing_submission(cur, event_id, data)
+        if saved is not None:
+            conn.commit()
+            return jsonify(saved)
 
         cur.execute(
             """
@@ -1884,6 +1923,17 @@ def quiz_submit():
             "meta_capi": meta_result,
         })
 
+    except SubmissionConflict:
+        if conn is not None:
+            conn.rollback()
+        return jsonify({'success': False, 'error': 'This submission ID was already used for different details.'}), 409
+    except psycopg2.errors.LockNotAvailable:
+        if conn is not None:
+            conn.rollback()
+        response = jsonify({'success': False, 'error': 'Submission is still being saved. Retry the same request.'})
+        response.status_code = 503
+        response.headers['Retry-After'] = '1'
+        return response
     except Exception as e:
         app.logger.error('Quiz submission failed: %s', type(e).__name__)
         if conn is not None:
