@@ -1,0 +1,53 @@
+.ask-mortgage-section { padding-top: 0; }
+.ask-tabs { display: flex; gap: 1.5rem; border-bottom: 1px solid #d9dee5; margin-bottom: 2rem; }
+.ask-tabs button { padding: 1rem .25rem; border: 0; background: transparent; border-bottom: 3px solid transparent; color: #425166; font: inherit; cursor: pointer; }
+.ask-tabs button[aria-selected="true"] { color: #12223b; border-bottom-color: #c7a154; }
+.ask-panel { max-width: 960px; margin: 0 auto; color: #233147; }
+.ask-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 2rem; }
+.ask-heading p { margin: .25rem 0; }
+.ask-actions, .ask-feedback, .ask-followups, .ask-categories { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.ask-actions button, .ask-feedback button, .ask-followups button, .ask-categories button, .ask-thinking button, .ask-error button { background: #fff; border: 1px solid #d2d9e1; border-radius: 8px; padding: .65rem .9rem; color: #20334e; font: inherit; cursor: pointer; }
+.ask-examples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.75rem 0; }
+.ask-examples button { display: grid; text-align: left; gap: .65rem; background: #fff; border: 1px solid #d2d9e1; border-radius: 12px; padding: 1.25rem; font: inherit; color: #20334e; cursor: pointer; }
+.ask-examples small { text-transform: uppercase; letter-spacing: .1em; color: #6a7180; font-size: .7rem; }
+.ask-examples span { font-weight: 650; }
+.ask-composer { padding: 1rem; border: 1px solid #c7d0dd; border-radius: 14px; background: #fff; margin-top: 1.5rem; }
+.ask-composer textarea { width: 100%; border: 0; background: transparent; color: #162741; padding: .5rem; font: inherit; line-height: 1.6; resize: vertical; min-height: 100px; }
+.ask-composer textarea:focus { outline: 2px solid #c7a154; outline-offset: 2px; }
+.ask-composer-footer { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+.ask-composer-footer small, .ask-disclosure { color: #5e6878; }
+.ask-disclosure { font-size: .82rem; line-height: 1.7; margin: 1rem 0 0; }
+.ask-disclosure a, .ask-panel a { color: #234767; text-decoration: underline; text-underline-offset: 3px; }
+.ask-turn { margin: 1.5rem 0; }
+.ask-user-question { margin-left: auto; width: fit-content; max-width: 85%; padding: 1rem 1.25rem; border-radius: 14px; background: #172d49; color: #fff; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ask-answer { background: #fff; padding: 1.5rem; border: 1px solid #dde2e8; border-radius: 14px; }
+.ask-answer-text { line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ask-sources { border-top: 1px solid #dde2e8; margin-top: 1.25rem; padding-top: 1rem; }
+.ask-sources > div { margin-bottom: 1rem; }
+.ask-sources a { font-weight: 650; }
+.ask-sources small { display: block; margin-top: .5rem; }
+.ask-sources blockquote { margin: .75rem 0; border-left: 3px solid #c7a154; padding-left: 1rem; color: #59657b; line-height: 1.65; }
+.ask-feedback { font-size: .85rem; border-top: 1px solid #dde2e8; padding-top: 1rem; margin-top: 1.25rem; }
+.ask-followups { margin-top: 1rem; }
+.ask-thinking { padding: 1rem; color: #425166; }
+.ask-error { padding: 1rem; border: 1px solid #dfb0a9; border-radius: 10px; color: #843c30; background: #fff6f3; }
+.ask-panel button:disabled { cursor: wait; opacity: .55; }
+.ask-search-label { display: block; margin: 1.5rem 0 .5rem; font-weight: 650; }
+#ask-guide-search { width: 100%; border: 1px solid #c7d0dd; border-radius: 10px; padding: 1rem; font: inherit; color: #233147; background: #fff; }
+.ask-categories { margin: 1.25rem 0; }
+.ask-categories button[aria-pressed="true"] { color: #fff; background: #172d49; border-color: #172d49; }
+.ask-guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.ask-guide-grid article { background: #fff; border: 1px solid #d2d9e1; border-radius: 12px; padding: 1.5rem; }
+.ask-guide-grid h3 { font-size: 1.2rem; line-height: 1.45; }
+.ask-guide-grid p { line-height: 1.7; }
+.ask-privacy-copy { max-width: 860px; line-height: 1.8; }
+.ask-privacy-copy h2 { margin-top: 2rem; }
+@media (max-width: 620px) {
+  .ask-examples, .ask-guide-grid { grid-template-columns: 1fr; }
+  .ask-heading, .ask-composer-footer { flex-direction: column; align-items: stretch; }
+  .ask-tabs { gap: 1rem; }
+  .ask-tabs button { font-size: .9rem; }
+  .ask-answer { padding: 1rem; }
+  .ask-user-question { max-width: 95%; }
+  .ask-composer-footer .button { width: 100%; }
+}

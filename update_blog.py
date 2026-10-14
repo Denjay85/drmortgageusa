@@ -26,6 +26,7 @@ BASE_URL = "https://drmortgageusa.com"
 STATIC_PAGES = [
     ("/dpa", "monthly", "0.9"),
     ("/heloc-calculator", "monthly", "0.7"),
+    ("/ask-dr-mortgage", "weekly", "0.8"),
     ("/mortgage-options", "monthly", "0.8"),
     ("/tools", "monthly", "0.8"),
     ("/resources", "weekly", "0.8"),

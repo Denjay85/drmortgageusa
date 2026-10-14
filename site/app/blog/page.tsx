@@ -22,7 +22,7 @@ export default function BlogPage() {
         title="Start with the question already on your mind."
         body="I write about the real questions Florida buyers, veterans, homeowners, and self-employed borrowers bring to me. Search the library the same way you would ask the question."
       >
-        <a className="button button-gold" href="https://ask-dr-mortgage.denjay85.chatgpt.site/">Ask Dr. Mortgage</a>
+        <a className="button button-gold" href="/ask-dr-mortgage">Ask Dr. Mortgage</a>
         <a className="button button-outline-light" href="#blog-library">Browse the complete archive</a>
       </PageHero>
 
@@ -33,7 +33,7 @@ export default function BlogPage() {
               <p className="eyebrow">Ask it in your own words</p>
               <h2 id="ask-dr-mortgage-title">A question is a good place to start.</h2>
               <p>Something your lender said. Money for closing. Using your VA benefit again. Ask Dr. Mortgage looks through my articles for an answer and takes you to the part that explains it.</p>
-              <a className="button button-gold" href="https://ask-dr-mortgage.denjay85.chatgpt.site/">Ask your question <span aria-hidden="true">→</span></a>
+              <a className="button button-gold" href="/ask-dr-mortgage">Ask your question <span aria-hidden="true">→</span></a>
               <p className="blog-ask-note">Answers from my guides, not a live chat with me. Need to talk through your situation? <a href="tel:+18503468514">Call Dennis.</a></p>
             </div>
             <div className="blog-ask-examples">
@@ -43,7 +43,7 @@ export default function BlogPage() {
                 "Can my parents help with my down payment?",
                 "Can I use my VA loan a second time?",
               ].map((question) => (
-                <a key={question} href={`https://ask-dr-mortgage.denjay85.chatgpt.site/?question=${encodeURIComponent(question)}`}>
+                <a key={question} href={`/ask-dr-mortgage?question=${encodeURIComponent(question)}`}>
                   <span>{question}</span><span aria-hidden="true">↗</span>
                 </a>
               ))}

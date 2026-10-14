@@ -27,7 +27,10 @@ from update_rates import MND_URL, fetch_mnd_snapshot, snapshot_is_fresh
 from site_presentation import shared_chrome, metadata as page_metadata, article_content, privacy_content, service_form
 from scripts.generate_service_pages import PAGES as SERVICE_PAGES, RELATED_GUIDES
 
+from ask_mortgage import blueprint as ask_mortgage_blueprint
+
 app = Flask(__name__, static_folder=None)
+app.register_blueprint(ask_mortgage_blueprint)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 REDESIGN_OUT_DIR = os.path.join(BASE_DIR, 'site', 'dist', 'client')
 SERVICE_PAGE_MAP = {
