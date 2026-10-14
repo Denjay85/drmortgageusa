@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import HelocCalculator from "./HelocCalculator";
 import CalculatorNumberInput from "../CalculatorNumberInput";
 import { readMortgageScenario } from "../scenario-store";
 import { submitLead } from "../lead-client";
+import { readRateIndexSelection, resolveIndexAssumption, type IndexAssumption, type RateModelIndex } from "../rate-model";
 
 type Mode =
   | "purchase"
@@ -248,12 +249,42 @@ function ScenarioLayout({
   );
 }
 
-function PurchaseCalculator() {
+// Apply the selected verified index once. An edit made while the feed is
+// loading takes precedence, and no subsequent render overwrites user inputs.
+function useIndexRate(defaultRate: number, defaultYears: number, assumption?: IndexAssumption) {
+  const [rate, restoreRate] = useState(defaultRate);
+  const [years, restoreYears] = useState(defaultYears);
+  const rateEdited = useRef(false);
+  const termEdited = useRef(false);
+  const setRate = useCallback((value: number) => {
+    rateEdited.current = true;
+    restoreRate(value);
+  }, []);
+  const setYears = useCallback((value: number) => {
+    termEdited.current = true;
+    restoreYears(value);
+  }, []);
+
+  useEffect(() => {
+    if (!assumption) return;
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
+      if (!rateEdited.current) restoreRate(assumption.rate);
+      if (!termEdited.current) restoreYears(assumption.years);
+    });
+    return () => { active = false; };
+  }, [assumption]);
+
+  return { rate, years, setRate, setYears, restoreRate };
+}
+
+function PurchaseCalculator({ indexAssumption }: { indexAssumption?: IndexAssumption }) {
   const [homePrice, setHomePrice] = useState(400000);
   const [downPayment, setDownPayment] = useState(20000);
   const [loanType, setLoanType] = useState<LoanType>("Conventional");
-  const [years, setYears] = useState(30);
-  const [rate, setRate] = useState(6.65);
+  const { years, rate, setRate, setYears, restoreRate } = useIndexRate(6.65, 30, indexAssumption);
+  const loanTypeEdited = useRef(false);
   const [taxes, setTaxes] = useState(4800);
   const [insurance, setInsurance] = useState(2400);
   const [hoa, setHoa] = useState(0);
@@ -261,15 +292,29 @@ function PurchaseCalculator() {
   useEffect(() => {
     const saved = readMortgageScenario();
     if (!saved || !["purchase", "va", "fha"].includes(saved.goal)) return;
-    const frame = window.requestAnimationFrame(() => {
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
       setHomePrice(saved.homePrice);
       setDownPayment(saved.downPayment);
-      setRate(saved.rate);
-      if (saved.goal === "va") setLoanType("VA");
-      if (saved.goal === "fha") setLoanType("FHA");
+      if (!readRateIndexSelection(window.location.search)) {
+        restoreRate(saved.rate);
+        if (saved.goal === "va") setLoanType("VA");
+        if (saved.goal === "fha") setLoanType("FHA");
+      }
     });
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+    return () => { active = false; };
+  }, [restoreRate]);
+
+  useEffect(() => {
+    if (!indexAssumption) return;
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
+      if (!loanTypeEdited.current) setLoanType("Conventional");
+    });
+    return () => { active = false; };
+  }, [indexAssumption]);
 
   const result = useMemo(() => {
     const baseLoan = Math.max(0, homePrice - downPayment);
@@ -308,7 +353,7 @@ function PurchaseCalculator() {
     >
       <NumberField label="Home price" value={homePrice} onChange={setHomePrice} step={5000} min={50000} />
       <NumberField label="Down payment" value={downPayment} onChange={setDownPayment} step={1000} />
-      <SelectField label="Loan type" value={loanType} onChange={(value) => setLoanType(value as LoanType)} options={[
+      <SelectField label="Loan type" value={loanType} onChange={(value) => { loanTypeEdited.current = true; setLoanType(value as LoanType); }} options={[
         { value: "Conventional", label: "Conventional" },
         { value: "FHA", label: "FHA" },
         { value: "VA", label: "VA, first-use fee assumption" },
@@ -397,11 +442,10 @@ function AffordabilityCalculator() {
   );
 }
 
-function FhaCalculator() {
+function FhaCalculator({ indexAssumption }: { indexAssumption?: IndexAssumption }) {
   const [price, setPrice] = useState(350000);
   const [downPercent, setDownPercent] = useState(3.5);
-  const [rate, setRate] = useState(6.25);
-  const [years, setYears] = useState(30);
+  const { years, rate, setRate, setYears, restoreRate } = useIndexRate(6.25, 30, indexAssumption);
   const [taxes, setTaxes] = useState(4200);
   const [insurance, setInsurance] = useState(2400);
   const [hoa, setHoa] = useState(0);
@@ -409,13 +453,15 @@ function FhaCalculator() {
   useEffect(() => {
     const saved = readMortgageScenario();
     if (!saved || saved.goal !== "fha") return;
-    const frame = window.requestAnimationFrame(() => {
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
       setPrice(saved.homePrice);
       setDownPercent(saved.homePrice ? saved.downPayment / saved.homePrice * 100 : 0);
-      setRate(saved.rate);
+      if (!readRateIndexSelection(window.location.search)) restoreRate(saved.rate);
     });
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+    return () => { active = false; };
+  }, [restoreRate]);
 
   const result = useMemo(() => {
     const down = price * downPercent / 100;
@@ -601,11 +647,10 @@ function RentVsBuyCalculator() {
   );
 }
 
-function VaPurchaseCalculator() {
+function VaPurchaseCalculator({ indexAssumption }: { indexAssumption?: IndexAssumption }) {
   const [price, setPrice] = useState(450000);
   const [downPercent, setDownPercent] = useState(0);
-  const [rate, setRate] = useState(6.25);
-  const [years, setYears] = useState(30);
+  const { years, rate, setRate, setYears, restoreRate } = useIndexRate(6.25, 30, indexAssumption);
   const [taxes, setTaxes] = useState(5400);
   const [insurance, setInsurance] = useState(3000);
   const [hoa, setHoa] = useState(0);
@@ -615,13 +660,15 @@ function VaPurchaseCalculator() {
   useEffect(() => {
     const saved = readMortgageScenario();
     if (!saved || saved.goal !== "va") return;
-    const frame = window.requestAnimationFrame(() => {
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
       setPrice(saved.homePrice);
       setDownPercent(saved.homePrice ? saved.downPayment / saved.homePrice * 100 : 0);
-      setRate(saved.rate);
+      if (!readRateIndexSelection(window.location.search)) restoreRate(saved.rate);
     });
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+    return () => { active = false; };
+  }, [restoreRate]);
 
   const result = useMemo(() => {
     const down = price * downPercent / 100;
@@ -927,14 +974,54 @@ function ScenarioOptIn({ activeMode }: { activeMode: Mode }) {
   );
 }
 
+type IndexHandoff =
+  | { status: "none" }
+  | { status: "loading"; index: RateModelIndex }
+  | { status: "ready"; assumption: IndexAssumption }
+  | { status: "unavailable" };
+
+function IndexContext({ handoff }: { handoff: IndexHandoff }) {
+  if (handoff.status === "none") return null;
+  return (
+    <div className="studio-index-context" role="status" aria-live="polite">
+      {handoff.status === "loading" ? (
+        <p>Loading the latest published {handoff.index.label} index from Mortgage News Daily...</p>
+      ) : handoff.status === "unavailable" ? (
+        <p>The selected national index could not be loaded. The calculator&apos;s inputs remain editable assumptions, not current Mortgage News Daily pricing.</p>
+      ) : (
+        <>
+          <p><strong>Starting index: {handoff.assumption.label}, {handoff.assumption.rate.toFixed(2)}%</strong>{" · as of "}{handoff.assumption.asOf}</p>
+          <p>Mortgage News Daily national index, not a quote, APR, or offer to lend. The rate and term remain editable.</p>
+          {handoff.assumption.id === "jumbo-30" ? <p>This uses the Jumbo index in the purchase-payment model. Jumbo loan limits and lender-specific underwriting are not modeled.</p> : null}
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function MortgageStudio() {
   const [activeMode, setActiveMode] = useState<Mode>("purchase");
+  const [selectedIndex, setSelectedIndex] = useState<RateModelIndex | null>(null);
+  const [indexHandoff, setIndexHandoff] = useState<IndexHandoff>({ status: "none" });
 
   useEffect(() => {
     const syncFromHash = () => {
       const hash = window.location.hash.replace("#", "") as Mode;
-      if (modes.some((mode) => mode.id === hash)) {
-        setActiveMode(hash);
+      let index = readRateIndexSelection(window.location.search);
+      // A different calculator anchor is a new user choice, not an instruction
+      // to reapply a rate from the previous program.
+      if (index && modes.some((item) => item.id === hash) && hash !== index.mode) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("rateIndex");
+        window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+        index = null;
+      }
+      const mode = index?.mode ?? hash;
+      setSelectedIndex(index);
+      if (!index) setIndexHandoff(new URLSearchParams(window.location.search).has("rateIndex")
+        ? { status: "unavailable" } : { status: "none" });
+      if (modes.some((item) => item.id === mode)) {
+        setActiveMode(mode);
         window.requestAnimationFrame(() => {
           document.getElementById("studio-workspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
         });
@@ -942,14 +1029,57 @@ export default function MortgageStudio() {
     };
     syncFromHash();
     window.addEventListener("hashchange", syncFromHash);
-    return () => window.removeEventListener("hashchange", syncFromHash);
+    window.addEventListener("popstate", syncFromHash);
+    return () => {
+      window.removeEventListener("hashchange", syncFromHash);
+      window.removeEventListener("popstate", syncFromHash);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!selectedIndex) return;
+    const controller = new AbortController();
+    Promise.resolve().then(() => {
+      if (!controller.signal.aborted) setIndexHandoff({ status: "loading", index: selectedIndex });
+    });
+    const timeout = window.setTimeout(() => {
+      controller.abort();
+      setIndexHandoff({ status: "unavailable" });
+    }, 15000);
+    fetch("/api/rates?source=mnd-daily-v2", { signal: controller.signal, cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error("Rate source request failed");
+        return response.json() as Promise<unknown>;
+      })
+      .then((payload) => {
+        if (controller.signal.aborted) return;
+        const assumption = resolveIndexAssumption(selectedIndex, payload);
+        setIndexHandoff(assumption ? { status: "ready", assumption } : { status: "unavailable" });
+      })
+      .catch(() => {
+        // Cleanup aborts must not replace a newer selection or manual mode.
+        if (!controller.signal.aborted) setIndexHandoff({ status: "unavailable" });
+      })
+      .finally(() => window.clearTimeout(timeout));
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [selectedIndex]);
 
   const chooseMode = (mode: Mode) => {
     setActiveMode(mode);
-    window.history.replaceState(null, "", `#${mode}`);
+    setSelectedIndex(null);
+    setIndexHandoff({ status: "none" });
+    const url = new URL(window.location.href);
+    url.searchParams.delete("rateIndex");
+    url.hash = mode;
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
     document.getElementById("studio-workspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const indexAssumption = indexHandoff.status === "ready" && indexHandoff.assumption.mode === activeMode
+    ? indexHandoff.assumption : undefined;
 
   return (
     <div className="mortgage-studio" id="mortgage-studio">
@@ -982,12 +1112,13 @@ export default function MortgageStudio() {
       </div>
 
       <div className="studio-workspace anchor-target" id="studio-workspace" role="tabpanel" key={activeMode}>
-        {activeMode === "purchase" ? <PurchaseCalculator /> : null}
+        <IndexContext handoff={indexHandoff} />
+        {activeMode === "purchase" ? <PurchaseCalculator indexAssumption={indexAssumption} /> : null}
         {activeMode === "affordability" ? <AffordabilityCalculator /> : null}
-        {activeMode === "fha" ? <FhaCalculator /> : null}
+        {activeMode === "fha" ? <FhaCalculator indexAssumption={indexAssumption} /> : null}
         {activeMode === "refinance" ? <RefinanceCalculator /> : null}
         {activeMode === "rent-buy" ? <RentVsBuyCalculator /> : null}
-        {activeMode === "va-purchase" ? <VaPurchaseCalculator /> : null}
+        {activeMode === "va-purchase" ? <VaPurchaseCalculator indexAssumption={indexAssumption} /> : null}
         {activeMode === "va-refinance" ? <VaRefinanceCalculator /> : null}
         {activeMode === "dscr" ? <DscrCalculator /> : null}
         {activeMode === "fix-flip" ? <FixFlipCalculator /> : null}

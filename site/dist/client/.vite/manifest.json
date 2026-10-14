@@ -1,60 +1,24 @@
 {
-  "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/layout-segment-context.js": {
-    "file": "assets/layout-segment-context-CKfUL4l7.js",
-    "name": "layout-segment-context",
-    "src": "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/layout-segment-context.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-S-ySWqyJ.js",
-      "virtual:vinext-app-browser-entry",
-      "_framework-CXnKph_e.js"
-    ]
-  },
-  "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/router.js": {
-    "file": "assets/router-doJXBDnx.js",
-    "name": "router",
-    "src": "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/router.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-S-ySWqyJ.js",
-      "virtual:vinext-app-browser-entry",
-      "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
-    ],
-    "dynamicImports": [
-      "_framework-CXnKph_e.js"
-    ]
-  },
-  "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/script.js": {
-    "file": "assets/script-69-dYS1D.js",
-    "name": "script",
-    "src": "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/script.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-S-ySWqyJ.js",
-      "_framework-CXnKph_e.js"
-    ]
-  },
-  "_CalculatorNumberInput-Bq2Vrn9y.js": {
-    "file": "assets/CalculatorNumberInput-Bq2Vrn9y.js",
+  "_CalculatorNumberInput-D4FNufV0.js": {
+    "file": "assets/CalculatorNumberInput-D4FNufV0.js",
     "name": "CalculatorNumberInput",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js"
     ]
   },
-  "_ScenarioDock-ChKPgleg.js": {
-    "file": "assets/ScenarioDock-ChKPgleg.js",
+  "_ScenarioDock-Csy4txva.js": {
+    "file": "assets/ScenarioDock-Csy4txva.js",
     "name": "ScenarioDock",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
-      "_scenario-store-MkZrAjn7.js",
+      "_scenario-store-BOvyoKqk.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
-  "_SiteAtmosphere-y5rYPo95.js": {
-    "file": "assets/SiteAtmosphere-y5rYPo95.js",
+  "_SiteAtmosphere-BQUd8fZL.js": {
+    "file": "assets/SiteAtmosphere-BQUd8fZL.js",
     "name": "SiteAtmosphere",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
@@ -68,8 +32,8 @@
       "_rolldown-runtime-S-ySWqyJ.js"
     ]
   },
-  "_image-Cf00dpIo.js": {
-    "file": "assets/image-Cf00dpIo.js",
+  "_image-CJKOxGFA.js": {
+    "file": "assets/image-CJKOxGFA.js",
     "name": "image",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
@@ -80,8 +44,8 @@
     "file": "assets/lead-client-BL87Kwk4.js",
     "name": "lead-client"
   },
-  "_link-Dq5c7F63.js": {
-    "file": "assets/link-Dq5c7F63.js",
+  "_link-C-HVg2_u.js": {
+    "file": "assets/link-C-HVg2_u.js",
     "name": "link",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
@@ -89,66 +53,71 @@
       "_framework-CXnKph_e.js"
     ],
     "dynamicImports": [
-      "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/router.js"
+      "node_modules/vinext/dist/shims/router.js"
     ]
+  },
+  "_rate-model-CU-0w1ht.js": {
+    "file": "assets/rate-model-CU-0w1ht.js",
+    "name": "rate-model"
   },
   "_rolldown-runtime-S-ySWqyJ.js": {
     "file": "assets/rolldown-runtime-S-ySWqyJ.js",
     "name": "rolldown-runtime"
   },
-  "_scenario-store-MkZrAjn7.js": {
-    "file": "assets/scenario-store-MkZrAjn7.js",
+  "_scenario-store-BOvyoKqk.js": {
+    "file": "assets/scenario-store-BOvyoKqk.js",
     "name": "scenario-store"
   },
   "app/LiveRatesPanel.tsx": {
-    "file": "assets/LiveRatesPanel-BaitBOmC.js",
+    "file": "assets/LiveRatesPanel-C2bVjCMo.js",
     "name": "LiveRatesPanel",
     "src": "app/LiveRatesPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_lead-client-BL87Kwk4.js",
+      "_rate-model-CU-0w1ht.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
   "app/MortgageFlightDeck.tsx": {
-    "file": "assets/MortgageFlightDeck-EvhZu39c.js",
+    "file": "assets/MortgageFlightDeck-B8icpSX3.js",
     "name": "MortgageFlightDeck",
     "src": "app/MortgageFlightDeck.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
-      "_CalculatorNumberInput-Bq2Vrn9y.js",
-      "_scenario-store-MkZrAjn7.js",
+      "_CalculatorNumberInput-D4FNufV0.js",
+      "_scenario-store-BOvyoKqk.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
   "app/MortgagePathwaySection.tsx": {
-    "file": "assets/MortgagePathwaySection-CBbywPF4.js",
+    "file": "assets/MortgagePathwaySection-CwhJBaeS.js",
     "name": "MortgagePathwaySection",
     "src": "app/MortgagePathwaySection.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
   "app/PremiumProcess.tsx": {
-    "file": "assets/PremiumProcess-DbLalUXA.js",
+    "file": "assets/PremiumProcess-BKtz2VZ6.js",
     "name": "PremiumProcess",
     "src": "app/PremiumProcess.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
   "app/ask-dr-mortgage/AskExperience.tsx": {
-    "file": "assets/AskExperience-CoRTifxz.js",
+    "file": "assets/AskExperience-UGNg-pvF.js",
     "name": "AskExperience",
     "src": "app/ask-dr-mortgage/AskExperience.tsx",
     "isDynamicEntry": true,
@@ -158,7 +127,7 @@
     ]
   },
   "app/blog/BlogLibrary.tsx": {
-    "file": "assets/BlogLibrary-EawOOPm5.js",
+    "file": "assets/BlogLibrary-BK3lQd3g.js",
     "name": "BlogLibrary",
     "src": "app/blog/BlogLibrary.tsx",
     "isDynamicEntry": true,
@@ -168,7 +137,7 @@
     ]
   },
   "app/blog/LatestBlogPosts.tsx": {
-    "file": "assets/LatestBlogPosts-JRlJ9AIq.js",
+    "file": "assets/LatestBlogPosts-BU-miZsB.js",
     "name": "LatestBlogPosts",
     "src": "app/blog/LatestBlogPosts.tsx",
     "isDynamicEntry": true,
@@ -178,7 +147,7 @@
     ]
   },
   "app/contact/ContactForm.tsx": {
-    "file": "assets/ContactForm-DHGA-YyM.js",
+    "file": "assets/ContactForm-CVY0GrLp.js",
     "name": "ContactForm",
     "src": "app/contact/ContactForm.tsx",
     "isDynamicEntry": true,
@@ -189,7 +158,7 @@
     ]
   },
   "app/down-payment-assistance/DpaCheck.tsx": {
-    "file": "assets/DpaCheck-Dm45YWTw.js",
+    "file": "assets/DpaCheck-DauJTJ5Y.js",
     "name": "DpaCheck",
     "src": "app/down-payment-assistance/DpaCheck.tsx",
     "isDynamicEntry": true,
@@ -200,70 +169,71 @@
     ]
   },
   "app/down-payment-assistance/DpaRateTracker.tsx": {
-    "file": "assets/DpaRateTracker-FyfkEMqM.js",
+    "file": "assets/DpaRateTracker-YbWrLzt5.js",
     "name": "DpaRateTracker",
     "src": "app/down-payment-assistance/DpaRateTracker.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
   "app/faq/FaqLibrary.tsx": {
-    "file": "assets/FaqLibrary-BzCx7Qf1.js",
+    "file": "assets/FaqLibrary-4LqtvYaW.js",
     "name": "FaqLibrary",
     "src": "app/faq/FaqLibrary.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
   "app/get-started/PathFinder.tsx": {
-    "file": "assets/PathFinder-D44jiOiH.js",
+    "file": "assets/PathFinder-DzLPKEMA.js",
     "name": "PathFinder",
     "src": "app/get-started/PathFinder.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
-      "_ScenarioDock-ChKPgleg.js",
-      "_SiteAtmosphere-y5rYPo95.js",
+      "_ScenarioDock-Csy4txva.js",
+      "_SiteAtmosphere-BQUd8fZL.js",
       "_lead-client-BL87Kwk4.js",
-      "_image-Cf00dpIo.js",
+      "_image-CJKOxGFA.js",
       "_framework-CXnKph_e.js",
-      "_link-Dq5c7F63.js"
+      "_link-C-HVg2_u.js"
     ]
   },
   "app/tools/HelocCalculator.tsx": {
-    "file": "assets/HelocCalculator-Dk9OZP1a.js",
+    "file": "assets/HelocCalculator-BkI4xo_6.js",
     "name": "HelocCalculator",
     "src": "app/tools/HelocCalculator.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
-      "_CalculatorNumberInput-Bq2Vrn9y.js",
-      "_scenario-store-MkZrAjn7.js",
+      "_CalculatorNumberInput-D4FNufV0.js",
+      "_scenario-store-BOvyoKqk.js",
       "_framework-CXnKph_e.js"
     ]
   },
   "app/tools/MortgageStudio.tsx": {
-    "file": "assets/MortgageStudio-ByDvhPD4.js",
+    "file": "assets/MortgageStudio-CEGmNXdH.js",
     "name": "MortgageStudio",
     "src": "app/tools/MortgageStudio.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
-      "_CalculatorNumberInput-Bq2Vrn9y.js",
+      "_CalculatorNumberInput-D4FNufV0.js",
       "_lead-client-BL87Kwk4.js",
-      "_scenario-store-MkZrAjn7.js",
+      "_rate-model-CU-0w1ht.js",
+      "_scenario-store-BOvyoKqk.js",
       "app/tools/HelocCalculator.tsx",
       "_framework-CXnKph_e.js"
     ]
   },
   "app/va-loans-orlando/VaReviewForm.tsx": {
-    "file": "assets/VaReviewForm-D9YiNyCw.js",
+    "file": "assets/VaReviewForm-JhQCpYBu.js",
     "name": "VaReviewForm",
     "src": "app/va-loans-orlando/VaReviewForm.tsx",
     "isDynamicEntry": true,
@@ -273,8 +243,44 @@
       "_framework-CXnKph_e.js"
     ]
   },
+  "node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "assets/layout-segment-context-44-4CkWM.js",
+    "name": "layout-segment-context",
+    "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "node_modules/vinext/dist/shims/router.js": {
+    "file": "assets/router-CES-utRT.js",
+    "name": "router",
+    "src": "node_modules/vinext/dist/shims/router.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-CXnKph_e.js",
+      "_link-C-HVg2_u.js"
+    ],
+    "dynamicImports": [
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "node_modules/vinext/dist/shims/script.js": {
+    "file": "assets/script-DicpyzRt.js",
+    "name": "script",
+    "src": "node_modules/vinext/dist/shims/script.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ]
+  },
   "virtual:vinext-app-browser-entry": {
-    "file": "assets/index-DFsJZyVt.js",
+    "file": "assets/index-CkYkqeZ8.js",
     "name": "index",
     "src": "virtual:vinext-app-browser-entry",
     "isEntry": true,
@@ -285,26 +291,26 @@
     "dynamicImports": [
       "app/LiveRatesPanel.tsx",
       "app/blog/BlogLibrary.tsx",
+      "node_modules/vinext/dist/shims/layout-segment-context.js",
       "app/down-payment-assistance/DpaCheck.tsx",
       "app/tools/MortgageStudio.tsx",
       "app/get-started/PathFinder.tsx",
       "app/faq/FaqLibrary.tsx",
       "app/va-loans-orlando/VaReviewForm.tsx",
       "app/PremiumProcess.tsx",
-      "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/script.js",
+      "virtual:vinext-app-browser-entry",
+      "node_modules/vinext/dist/shims/script.js",
       "app/MortgagePathwaySection.tsx",
       "app/tools/HelocCalculator.tsx",
-      "virtual:vinext-app-browser-entry",
       "app/ask-dr-mortgage/AskExperience.tsx",
       "app/contact/ContactForm.tsx",
       "app/MortgageFlightDeck.tsx",
-      "_image-Cf00dpIo.js",
+      "_image-CJKOxGFA.js",
       "app/down-payment-assistance/DpaRateTracker.tsx",
-      "../../personal-ga4-correction/site/node_modules/vinext/dist/shims/layout-segment-context.js",
-      "_link-Dq5c7F63.js",
+      "_link-C-HVg2_u.js",
       "app/blog/LatestBlogPosts.tsx",
-      "_ScenarioDock-ChKPgleg.js",
-      "_SiteAtmosphere-y5rYPo95.js"
+      "_ScenarioDock-Csy4txva.js",
+      "_SiteAtmosphere-BQUd8fZL.js"
     ]
   }
 }

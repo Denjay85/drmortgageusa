@@ -3,16 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import RateWatchMini from "./RateWatchMini";
+import { modelPaymentHref, rateModelIndexes } from "./rate-model";
 
 type RateItem = { label: string; rate: string; href: string };
 
-const rateLinks = [
-  { label: "Conventional 30-year", href: "/tools#purchase" },
-  { label: "Conventional 15-year", href: "/tools#purchase" },
-  { label: "FHA 30-year", href: "/tools#fha" },
-  { label: "VA 30-year", href: "/tools#va-purchase" },
-  { label: "Jumbo 30-year", href: "/tools#purchase" },
-];
+const rateLinks = rateModelIndexes.map((index) => ({ ...index, href: modelPaymentHref(index) }));
 
 type RatePayload = {
   status?: "verified" | "unavailable";
