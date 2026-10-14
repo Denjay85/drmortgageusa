@@ -553,22 +553,11 @@ def site_tracking():
 
     ga_measurement_id = os.environ.get('GA_MEASUREMENT_ID', '').strip()
     gtm_container_id = os.environ.get('GTM_CONTAINER_ID', '').strip()
-    # Render Blueprint env vars do not backfill existing services reliably.
-    # These browser-side Google Ads identifiers are public, so keep live
-    # tracking resilient if the service env is currently unset.
-    google_ads_id = os.environ.get('GOOGLE_ADS_ID', 'AW-18055212874').strip()
-    google_ads_apply_label = os.environ.get(
-        'GOOGLE_ADS_APPLY_CONVERSION_LABEL',
-        'ZoE7CPuPg6kcEMresqFD',
-    ).strip()
-    google_ads_phone_label = os.environ.get(
-        'GOOGLE_ADS_PHONE_CONVERSION_LABEL',
-        'pIxfCP6Pg6kcEMresqFD',
-    ).strip()
-    google_ads_lead_form_label = os.environ.get(
-        'GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL',
-        '90H9CJrk-agcEMresqFD',
-    ).strip()
+    # Direct Ads destinations must be explicit; never fall back to a former account.
+    google_ads_id = os.environ.get('GOOGLE_ADS_ID', '').strip()
+    google_ads_apply_label = os.environ.get('GOOGLE_ADS_APPLY_CONVERSION_LABEL', '').strip()
+    google_ads_phone_label = os.environ.get('GOOGLE_ADS_PHONE_CONVERSION_LABEL', '').strip()
+    google_ads_lead_form_label = os.environ.get('GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL', '').strip()
     js = f"""
 (function() {{
   if (window.__drSiteTrackingLoaded) return;
@@ -645,9 +634,36 @@ def site_tracking():
     return true;
   }}
 
+  // Keep paid-click attribution, but never forward arbitrary query strings,
+  // fragments, referrer paths, or form fields to Analytics. CRM attribution
+  // remains in lead-context.js and is deliberately unchanged.
+  function googlePageContext() {{
+    var page = new URL(window.location.origin + window.location.pathname);
+    var query = new URLSearchParams(window.location.search);
+    ['gclid', 'gbraid', 'wbraid'].forEach(function(key) {{
+      var value = query.get(key) || '';
+      if (/^[A-Za-z0-9_-]{{1,512}}$/.test(value)) page.searchParams.set(key, value);
+    }});
+    var referrer = '';
+    try {{
+      var ref = new URL(document.referrer);
+      if (ref.protocol === 'https:' || ref.protocol === 'http:') referrer = ref.origin + '/';
+    }} catch (error) {{}}
+    var source = query.get('utm_source') || '';
+    var medium = query.get('utm_medium') || '';
+    return {{
+      page_location: page.href,
+      page_referrer: referrer,
+      page_path: window.location.pathname,
+      campaign_source: /^(google|bing|facebook|instagram|youtube|newsletter|direct)$/.test(source) ? source : '',
+      campaign_medium: /^(cpc|ppc|paid_search|paid_social|email|referral|organic|social|display)$/.test(medium) ? medium : '',
+      campaign_name: '', campaign_id: '', campaign_term: '', campaign_content: ''
+    }};
+  }}
+
   function configGoogleTag(tagId, config) {{
     if (!window.gtag || !tagId) return;
-    window.gtag('config', tagId, config || {{}});
+    window.gtag('config', tagId, Object.assign({{}}, config || {{}}, googlePageContext()));
   }}
 
   function initGoogle() {{
@@ -683,7 +699,7 @@ def site_tracking():
 
   function trackGoogleEvent(eventName, params) {{
     if (!window.gtag) return;
-    var payload = Object.assign({{}}, params || {{}});
+    var payload = Object.assign({{}}, params || {{}}, googlePageContext());
     if (!gaMeasurementId && googleAdsId) {{
       payload.send_to = googleAdsId;
     }}
@@ -715,7 +731,7 @@ def site_tracking():
 
     trackGoogleEvent('application_opened', {{
       event_category: 'engagement',
-      event_label: payload.href || payload.content_category,
+      event_label: payload.content_category,
       page_path: payload.page_path
     }});
     sendGoogleAdsConversion(googleAdsApplyLabel, eventId);
@@ -739,7 +755,7 @@ def site_tracking():
 
     trackGoogleEvent('phone_click', {{
       event_category: 'engagement',
-      event_label: payload.href || payload.content_category,
+      event_label: payload.content_category,
       page_path: payload.page_path
     }});
     sendGoogleAdsConversion(googleAdsPhoneLabel, eventId);
