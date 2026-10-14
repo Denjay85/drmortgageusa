@@ -9,13 +9,17 @@ const env = { ...process.env, ENABLE_RATE_UPDATER: '0', PREVIEW_MODE: 'false', I
   PYTHONDONTWRITEBYTECODE: '1', GA_MEASUREMENT_ID: 'G-LOCALTEST', GTM_CONTAINER_ID: '',
   GOOGLE_ADS_ID: 'AW-LOCALTEST', GOOGLE_ADS_APPLY_CONVERSION_LABEL: 'apply-label',
   GOOGLE_ADS_PHONE_CONVERSION_LABEL: 'phone-label', GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL: 'lead-label' };
-delete env.DATABASE_URL;
-const script = execFileSync(process.env.TEST_PYTHON || 'python3', ['-c',
+for (const key of ['DATABASE_URL', 'ZAPIER_WEBHOOK_URL', 'META_CONVERSIONS_API_TOKEN', 'MANYCHAT_API_KEY']) delete env[key];
+function renderScript(overrides = {}) { return execFileSync(process.env.TEST_PYTHON || 'python3', ['-c',
   'import contextlib, io\nwith contextlib.redirect_stdout(io.StringIO()):\n import app\nprint(app.app.test_client().get("/site-tracking.js").get_data(as_text=True))'],
-{ cwd: path.join(__dirname, '..'), env, encoding: 'utf8' });
+{ cwd: path.join(__dirname, '..'), env: { ...env, ...overrides }, encoding: 'utf8' }); }
+const script = renderScript();
+const personalScript = renderScript({ GA_MEASUREMENT_ID: 'G-WP0F27FV60', GOOGLE_ADS_ID: '', GOOGLE_ADS_APPLY_CONVERSION_LABEL: '', GOOGLE_ADS_PHONE_CONVERSION_LABEL: '', GOOGLE_ADS_LEAD_FORM_CONVERSION_LABEL: '' });
 
 function harness({ result = { success: true, lead_id: 42, event_id: 'server-id' }, ok = true,
-  brokenCookies = false, trackingThrows = false, fetchImpl } = {}) {
+  brokenCookies = false, trackingThrows = false, fetchImpl, trackingScript = script,
+  pageUrl = 'https://drmortgageusa.com/contact?utm_source=google&email=private%40example.test',
+  referrer = '' } = {}) {
   const google = [], meta = [], requests = [];
   let submitHandler, clickHandler, resets = 0;
   const message = { textContent: '', classList: { add() {}, remove() {} } };
@@ -26,11 +30,11 @@ function harness({ result = { success: true, lead_id: 42, event_id: 'server-id' 
     reset: () => { resets += 1; } };
   const context = { URL, URLSearchParams, FormData: function () { return new Map([
     ['firstName', 'Local'], ['email', 'local@example.test'], ['source', 'legacy-form'], ['emailConsent', 'on']
-  ]); }, document: { title: 'Local test', referrer: '', readyState: 'complete', body: { dataset: {} },
+  ]); }, document: { title: 'Local test', referrer, readyState: 'complete', body: { dataset: {} },
     addEventListener: (type, callback) => { if (type === 'click') clickHandler = callback; },
     querySelectorAll: selector => selector === 'form[data-lead-form]' ? [form] : [],
     createElement() { throw Error('No network allowed in tests'); } },
-  window: { location: new URL('https://drmortgageusa.com/contact?utm_source=google&email=private%40example.test'),
+  window: { location: new URL(pageUrl),
     navigator: {}, sessionStorage: { getItem: () => null, setItem() {}, removeItem() {} },
     gtag: (...args) => { if (trackingThrows) throw Error('blocked'); google.push(args); },
     fbq: (...args) => { if (trackingThrows) throw Error('blocked'); meta.push(args); },
@@ -41,7 +45,7 @@ function harness({ result = { success: true, lead_id: 42, event_id: 'server-id' 
   } };
   Object.defineProperty(context.document, 'cookie', { get() { if (brokenCookies) throw Error('blocked'); return ''; },
     set() { if (brokenCookies) throw Error('blocked'); } });
-  vm.runInNewContext(script, context);
+  vm.runInNewContext(trackingScript, context);
   return { google, meta, requests, context, button, message, form,
     get resets() { return resets; }, tracking: context.window.DrMortgageTracking,
     submit: async () => { submitHandler({ preventDefault() {} }); await new Promise(setImmediate); },
@@ -173,3 +177,50 @@ test('legacy forms ignore repeated submissions while waiting for receipt', async
   await new Promise(setImmediate);
   assert.equal(h.resets, 1);
 });
+
+
+test('personal stream excludes borrower/query data and keeps paid click attribution', () => {
+  const h = harness({ trackingScript: personalScript,
+    pageUrl: 'https://drmortgageusa.com/contact?gclid=Opaque_Google-123&gbraid=Opaque_Braid-456&wbraid=Opaque_Wbraid-789&utm_source=google&utm_medium=cpc&utm_campaign=private%40example.test&email=private%40example.test&phone=5551234567#private',
+    referrer: 'https://www.google.com/search?q=private%40example.test#private' });
+  const config = h.google.find(args => args[0] === 'config' && args[1] === 'G-WP0F27FV60')[2];
+  assert.equal(config.page_location, 'https://drmortgageusa.com/contact?gclid=Opaque_Google-123&gbraid=Opaque_Braid-456&wbraid=Opaque_Wbraid-789');
+  assert.equal(config.page_referrer, 'https://www.google.com/');
+  assert.equal(config.campaign_source, 'google');
+  assert.equal(config.campaign_medium, 'cpc');
+  assert.equal(config.campaign_name, '');
+  h.tracking.trackLeadSubmit({ eventId: 'receipt', source: 'redesign-contact', email: 'private@example.test', message: 'private message' });
+  h.tracking.trackLeadSubmit({ eventId: 'receipt', source: 'redesign-contact' });
+  h.tracking.trackApplyClick({ href: 'https://example.test/?email=private@example.test' });
+  h.tracking.trackPhoneClick({ href: 'tel:5551234567' });
+  assert.equal(h.google.filter(args => args[1] === 'generate_lead').length, 1);
+  assert.ok(h.google.filter(args => args[0] === 'config').every(args => args[1] === 'G-WP0F27FV60'));
+  assert.ok(!h.google.some(args => args[1] === 'conversion'));
+  assert.ok(!/AW-|private|5551234567/.test(JSON.stringify(h.google)));
+});
+
+test('malformed attribution and referrers are omitted from Analytics', () => {
+  const h = harness({ trackingScript: personalScript,
+    pageUrl: 'https://drmortgageusa.com/contact?gclid=private%40example.test&utm_source=private%40example.test&utm_medium=private',
+    referrer: 'javascript:private' });
+  const config = h.google.find(args => args[0] === 'config')[2];
+  assert.equal(config.page_location, 'https://drmortgageusa.com/contact');
+  assert.equal(config.page_referrer, '');
+  assert.equal(config.campaign_source, '');
+  assert.equal(config.campaign_medium, '');
+});
+
+for (const [name, result, ok, expected] of [
+  ['saved', { success: true, lead_id: 42, event_id: 'server-id' }, true, 1],
+  ['HTTP failure', { success: true, lead_id: 42 }, false, 0],
+  ['rejected', { success: false }, true, 0],
+  ['missing receipt', { success: true }, true, 0],
+  ['preview', { success: true, preview: true }, true, 0],
+]) {
+  test('personal GA4-only mode preserves ' + name + ' submission behavior', async () => {
+    const h = harness({ trackingScript: personalScript, result, ok });
+    await h.submit();
+    assert.equal(h.google.filter(args => args[1] === 'generate_lead').length, expected);
+    assert.ok(!h.google.some(args => args[1] === 'conversion'));
+  });
+}
