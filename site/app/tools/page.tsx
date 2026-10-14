@@ -17,8 +17,8 @@ export default function ToolsPage() {
         title="Choose the question you are trying to answer."
         body="Buying, refinancing, using a VA benefit, comparing rent with ownership, or investing all require different math. Pick the calculator that matches your situation and put in the numbers you know."
       >
-        <Link className="button button-gold" href="#mortgage-studio">View all 10 calculators</Link>
-        <Link className="button button-outline-light" href="#va-purchase">VA calculator</Link>
+        <a className="button button-gold" href="#mortgage-studio">View all 10 calculators</a>
+        <a className="button button-outline-light" href="#va-purchase">VA calculator</a>
         <Link className="button button-outline-light" href="/contact">Review it with Dennis</Link>
       </PageHero>
       <section className="section calculator-suite-section anchor-target" id="calculator-suite">

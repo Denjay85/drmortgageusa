@@ -5639,6 +5639,27 @@ main > section:not(.home-hero):not(.page-hero):not(.section-navy):not(.final-cta
   scroll-margin-top: 110px;
 }
 
+.studio-index-context {
+  margin-bottom: 20px;
+  padding: 18px 22px;
+  border: 1px solid rgba(7, 23, 42, 0.12);
+  border-left: 4px solid var(--gold-500);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  color: var(--ink-700);
+  overflow-wrap: anywhere;
+}
+
+.studio-index-context p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.studio-index-context p + p {
+  margin-top: 6px;
+}
+
 .studio-scenario-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(390px, 0.95fr);
