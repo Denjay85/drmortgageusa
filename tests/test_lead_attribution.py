@@ -12,7 +12,7 @@ class LeadAttributionTests(unittest.TestCase):
         self.client = production_app.app.test_client()
         self.connection = Mock()
         self.cursor = self.connection.cursor.return_value
-        self.cursor.fetchone.return_value = (42,)
+        self.cursor.fetchone.side_effect = [None, (42,)]
         self.payload = {'firstName': 'Local test', 'email': 'local@example.test',
                         'source': 'redesign-contact', 'eventId': 'local-test-id',
                         'emailConsent': True, 'smsConsent': False, 'callConsent': False}
@@ -42,7 +42,7 @@ class LeadAttributionTests(unittest.TestCase):
                                  referrer='https://example.test/search?q=private')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(events, ['commit', 'zapier', 'meta', 'commit'])
-        saved = json.loads(self.cursor.execute.call_args_list[0].args[1][-1])
+        saved = json.loads(next(call.args[1][-1] for call in self.cursor.execute.call_args_list if "INSERT INTO leads" in call.args[0]))
         self.assertEqual(saved, forward.call_args.args[0])
         self.assertEqual(saved['gclid'], 'test-click')
         self.assertEqual(saved['utm_source'], 'google')
@@ -101,7 +101,7 @@ class LeadAttributionTests(unittest.TestCase):
             response = self.post()
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.get_json()['success'])
-        self.assertFalse(self.cursor.execute.call_args_list[1].args[1][0])
+        self.assertFalse(next(call.args[1][0] for call in self.cursor.execute.call_args_list if "UPDATE leads" in call.args[0]))
 
     def test_non_object_json_is_rejected_without_integrations(self):
         with patch.object(production_app, 'get_db_connection') as database:
