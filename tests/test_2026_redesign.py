@@ -2,6 +2,7 @@ import os
 import json
 import re
 import unittest
+import gzip
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -11,6 +12,53 @@ os.environ['ENABLE_RATE_UPDATER'] = '0'
 import app as production_app
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class RscExportTests(unittest.TestCase):
+    def setUp(self):
+        self.client = production_app.app.test_client()
+
+    def test_all_exported_flight_payloads_have_rsc_content_type(self):
+        export = Path(production_app.REDESIGN_OUT_DIR)
+        paths = list(export.rglob('*.rsc'))
+        self.assertGreater(len(paths), 10)
+        for path in paths:
+            route = '/' + path.relative_to(export).as_posix()
+            with self.subTest(route=route), self.client.get(route + '?_rsc') as response:
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.mimetype, 'text/x-component')
+                self.assertEqual(response.data, path.read_bytes())
+                self.assertEqual(response.headers['Cache-Control'],
+                                 'public, max-age=0, must-revalidate')
+
+    def test_root_navigation_alias_serves_index_flight_payload(self):
+        with self.client.get('/.rsc?_rsc=route-context') as response:
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.mimetype, 'text/x-component')
+            self.assertEqual(response.data,
+                             (Path(production_app.REDESIGN_OUT_DIR) / 'index.rsc').read_bytes())
+
+    def test_rsc_is_compressed_and_revalidated_without_resending_body(self):
+        headers = {'Accept-Encoding': 'gzip'}
+        with self.client.get('/va-loans-orlando.rsc?_rsc', headers=headers) as response:
+            self.assertEqual(response.headers.get('Content-Encoding'), 'gzip')
+            self.assertIn('Accept-Encoding', response.headers.get('Vary', ''))
+            self.assertEqual(gzip.decompress(response.data),
+                             (Path(production_app.REDESIGN_OUT_DIR) / 'va-loans-orlando.rsc').read_bytes())
+            etag = response.headers['ETag']
+        with self.client.get('/va-loans-orlando.rsc?_rsc',
+                             headers={**headers, 'If-None-Match': etag}) as response:
+            self.assertEqual(response.status_code, 304)
+            self.assertEqual(response.data, b'')
+
+    def test_html_and_missing_payloads_keep_their_response_contract(self):
+        with self.client.get('/va-loans-orlando') as response:
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.mimetype, 'text/html')
+            self.assertTrue(b'Request my VA review' in response.data)
+        with self.client.get('/missing-route.rsc?_rsc') as response:
+            self.assertEqual(response.status_code, 404)
+            self.assertNotEqual(response.mimetype, 'text/x-component')
 
 
 class FakeCursor:
