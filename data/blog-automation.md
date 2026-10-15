@@ -103,7 +103,7 @@ If a prior run staged a complete draft but failed before publication:
 64. ✅ Home equity loan vs cash-out refinance for Florida homeowners (published 2026-10-03)
 65. ✅ Orlando homebuyers guide to appraisal reconsideration of value (published 2026-10-06)
 66. ✅ Should you pay off your car before buying a home in Florida? (published 2026-10-12)
-67. ☐ Earnest money deposits and mortgage documentation for Florida buyers
+67. ✅ Earnest money deposits and mortgage documentation for Florida buyers (published 2026-10-15)
 68. ☐ Buying a Florida home while your current home is listed but not sold
 69. ☐ What Orlando buyers should check when comparing HOA and non-HOA homes
 70. ☐ Mortgage shopping credit inquiries for Florida homebuyers
