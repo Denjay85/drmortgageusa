@@ -41,11 +41,12 @@ SERVICE_PAGE_MAP = {
     'heloc-orlando': 'heloc-orlando.html',
 }
 
-# Enable gzip compression for all responses
-Compress(app)
-app.config['COMPRESS_MIMETYPES'] = ['text/html', 'text/css', 'application/javascript', 'application/json']
+# Configure compression before the extension reads its MIME type allowlist.
+app.config['COMPRESS_MIMETYPES'] = ['text/html', 'text/css', 'application/javascript',
+                                 'application/json', 'text/x-component']
 app.config['COMPRESS_LEVEL'] = 6
 app.config['COMPRESS_MIN_SIZE'] = 500
+Compress(app)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 ZAPIER_WEBHOOK_URL = os.environ.get('ZAPIER_WEBHOOK_URL', '').strip()
@@ -112,6 +113,9 @@ def send_refiwatch_asset(path):
 def send_redesign_page(path=''):
     """Serve a statically exported redesign page when the build is present."""
     cleaned = (path or '').strip('/')
+    # The exported client requests /.rsc when navigating to the homepage.
+    if cleaned == '.rsc':
+        cleaned = 'index.rsc'
     if not cleaned:
         candidates = [os.path.join(REDESIGN_OUT_DIR, 'index.html')]
     else:
@@ -127,6 +131,19 @@ def send_redesign_page(path=''):
         if not absolute.startswith(redesign_root + os.sep):
             continue
         if os.path.isfile(absolute):
+            if absolute.endswith('.rsc'):
+                # Flight payloads are not HTML. A non-RSC content type makes
+                # the client reject the payload and fall back to a full load.
+                response = send_file(absolute, mimetype='text/x-component',
+                                     conditional=True, max_age=0)
+                # Small exported payloads can be buffered so compression and
+                # representation-specific conditional requests work together.
+                response.direct_passthrough = False
+                response.get_data()
+                # These URLs are not content-hashed: revalidate across deploys
+                # rather than caching an old component tree as immutable.
+                response.headers['Cache-Control'] = 'public, max-age=0, must-revalidate'
+                return response
             mimetype, _ = mimetypes.guess_type(absolute)
             return send_file(
                 absolute,
