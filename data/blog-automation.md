@@ -106,7 +106,7 @@ If a prior run staged a complete draft but failed before publication:
 67. ✅ Earnest money deposits and mortgage documentation for Florida buyers (published 2026-10-15)
 68. ✅ Buying a Florida home while your current home is listed but not sold (published 2026-10-18)
 69. ✅ What Orlando buyers should check when comparing HOA and non-HOA homes (published 2026-10-21)
-70. ☐ Mortgage shopping credit inquiries for Florida homebuyers
+70. ✅ Mortgage shopping credit inquiries for Florida homebuyers (published 2026-10-24)
 71. ☐ First mortgage payment after closing in Florida, timing and budgeting
 
 ## Queue Continuity Rule
