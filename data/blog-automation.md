@@ -107,7 +107,7 @@ If a prior run staged a complete draft but failed before publication:
 68. ✅ Buying a Florida home while your current home is listed but not sold (published 2026-10-18)
 69. ✅ What Orlando buyers should check when comparing HOA and non-HOA homes (published 2026-10-21)
 70. ✅ Mortgage shopping credit inquiries for Florida homebuyers (published 2026-10-24)
-71. ☐ First mortgage payment after closing in Florida, timing and budgeting
+71. ✅ First mortgage payment after closing in Florida, timing and budgeting (published 2026-10-27)
 
 ## Queue Continuity Rule
 If every topic in the queue is marked published, generate six SEO topics from current content gaps, Scout/Scribe reports, borrower questions, and the DrMortgageUSA content calendar, append them to the queue, and continue autonomous publication. Verify substantive mortgage claims against authoritative sources.
