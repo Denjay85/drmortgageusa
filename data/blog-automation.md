@@ -108,6 +108,14 @@ If a prior run staged a complete draft but failed before publication:
 69. ✅ What Orlando buyers should check when comparing HOA and non-HOA homes (published 2026-10-21)
 70. ✅ Mortgage shopping credit inquiries for Florida homebuyers (published 2026-10-24)
 71. ✅ First mortgage payment after closing in Florida, timing and budgeting (published 2026-10-27)
+72. ✅ Mortgage wire fraud at Florida closings, verifying instructions before sending funds (published 2026-10-30)
+73. ☐ Extra mortgage principal payments in Florida, balance reduction versus required payment
+74. ☐ Home insurance renewal and mortgage escrow in Florida, what to review before switching
+75. ☐ Orlando seller rent-back agreements and mortgage occupancy, questions before an offer
+76. ☐ Expired mortgage preapprovals in Florida, what to refresh before shopping again
+77. ☐ Mortgage servicing transfers in Florida, verifying where your next payment goes
+
+Queue extension October 30, 2026: prior 71 topics exhausted. Wire-fraud, rent-back, preapproval-expiry, and servicing-transfer angles are gaps against the current article inventory. Extra-principal and insurance-renewal angles are research leads from the October 30 Scout report, not verified guideline claims. All six require separate current primary-source checks before writing; no Reddit claim is underwriting authority.
 
 ## Queue Continuity Rule
 If every topic in the queue is marked published, generate six SEO topics from current content gaps, Scout/Scribe reports, borrower questions, and the DrMortgageUSA content calendar, append them to the queue, and continue autonomous publication. Verify substantive mortgage claims against authoritative sources.
