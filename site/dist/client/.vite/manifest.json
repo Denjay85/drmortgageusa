@@ -1,4 +1,40 @@
 {
+  "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "assets/layout-segment-context-DWxgugNM.js",
+    "name": "layout-segment-context",
+    "src": "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/router.js": {
+    "file": "assets/router-BNyZFwH5.js",
+    "name": "router",
+    "src": "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/router.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-CXnKph_e.js",
+      "_link-C_9giiJ8.js"
+    ],
+    "dynamicImports": [
+      "_framework-CXnKph_e.js"
+    ]
+  },
+  "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/script.js": {
+    "file": "assets/script-DicpyzRt.js",
+    "name": "script",
+    "src": "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/script.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-S-ySWqyJ.js",
+      "_framework-CXnKph_e.js"
+    ]
+  },
   "_CalculatorNumberInput-D4FNufV0.js": {
     "file": "assets/CalculatorNumberInput-D4FNufV0.js",
     "name": "CalculatorNumberInput",
@@ -7,14 +43,14 @@
       "_framework-CXnKph_e.js"
     ]
   },
-  "_ScenarioDock-Csy4txva.js": {
-    "file": "assets/ScenarioDock-Csy4txva.js",
+  "_ScenarioDock-BUIZjH5_.js": {
+    "file": "assets/ScenarioDock-BUIZjH5_.js",
     "name": "ScenarioDock",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_scenario-store-BOvyoKqk.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "_SiteAtmosphere-BQUd8fZL.js": {
@@ -44,8 +80,8 @@
     "file": "assets/lead-client-BL87Kwk4.js",
     "name": "lead-client"
   },
-  "_link-C-HVg2_u.js": {
-    "file": "assets/link-C-HVg2_u.js",
+  "_link-C_9giiJ8.js": {
+    "file": "assets/link-C_9giiJ8.js",
     "name": "link",
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
@@ -53,7 +89,7 @@
       "_framework-CXnKph_e.js"
     ],
     "dynamicImports": [
-      "node_modules/vinext/dist/shims/router.js"
+      "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/router.js"
     ]
   },
   "_rate-model-CU-0w1ht.js": {
@@ -69,7 +105,7 @@
     "name": "scenario-store"
   },
   "app/LiveRatesPanel.tsx": {
-    "file": "assets/LiveRatesPanel-C2bVjCMo.js",
+    "file": "assets/LiveRatesPanel-OWD-Axdy.js",
     "name": "LiveRatesPanel",
     "src": "app/LiveRatesPanel.tsx",
     "isDynamicEntry": true,
@@ -78,11 +114,11 @@
       "_lead-client-BL87Kwk4.js",
       "_rate-model-CU-0w1ht.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "app/MortgageFlightDeck.tsx": {
-    "file": "assets/MortgageFlightDeck-B8icpSX3.js",
+    "file": "assets/MortgageFlightDeck-Dyyz8xuR.js",
     "name": "MortgageFlightDeck",
     "src": "app/MortgageFlightDeck.tsx",
     "isDynamicEntry": true,
@@ -91,29 +127,29 @@
       "_CalculatorNumberInput-D4FNufV0.js",
       "_scenario-store-BOvyoKqk.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "app/MortgagePathwaySection.tsx": {
-    "file": "assets/MortgagePathwaySection-CwhJBaeS.js",
+    "file": "assets/MortgagePathwaySection-CruogIVK.js",
     "name": "MortgagePathwaySection",
     "src": "app/MortgagePathwaySection.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "app/PremiumProcess.tsx": {
-    "file": "assets/PremiumProcess-BKtz2VZ6.js",
+    "file": "assets/PremiumProcess-btqmojs0.js",
     "name": "PremiumProcess",
     "src": "app/PremiumProcess.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "app/ask-dr-mortgage/AskExperience.tsx": {
@@ -169,40 +205,40 @@
     ]
   },
   "app/down-payment-assistance/DpaRateTracker.tsx": {
-    "file": "assets/DpaRateTracker-YbWrLzt5.js",
+    "file": "assets/DpaRateTracker-BMcGNk20.js",
     "name": "DpaRateTracker",
     "src": "app/down-payment-assistance/DpaRateTracker.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "app/faq/FaqLibrary.tsx": {
-    "file": "assets/FaqLibrary-4LqtvYaW.js",
+    "file": "assets/FaqLibrary-qrUug7kv.js",
     "name": "FaqLibrary",
     "src": "app/faq/FaqLibrary.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "app/get-started/PathFinder.tsx": {
-    "file": "assets/PathFinder-DzLPKEMA.js",
+    "file": "assets/PathFinder-238-9nSY.js",
     "name": "PathFinder",
     "src": "app/get-started/PathFinder.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-S-ySWqyJ.js",
-      "_ScenarioDock-Csy4txva.js",
+      "_ScenarioDock-BUIZjH5_.js",
       "_SiteAtmosphere-BQUd8fZL.js",
       "_lead-client-BL87Kwk4.js",
       "_image-CJKOxGFA.js",
       "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
+      "_link-C_9giiJ8.js"
     ]
   },
   "app/tools/HelocCalculator.tsx": {
@@ -243,44 +279,8 @@
       "_framework-CXnKph_e.js"
     ]
   },
-  "node_modules/vinext/dist/shims/layout-segment-context.js": {
-    "file": "assets/layout-segment-context-44-4CkWM.js",
-    "name": "layout-segment-context",
-    "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-S-ySWqyJ.js",
-      "virtual:vinext-app-browser-entry",
-      "_framework-CXnKph_e.js"
-    ]
-  },
-  "node_modules/vinext/dist/shims/router.js": {
-    "file": "assets/router-CES-utRT.js",
-    "name": "router",
-    "src": "node_modules/vinext/dist/shims/router.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-S-ySWqyJ.js",
-      "virtual:vinext-app-browser-entry",
-      "_framework-CXnKph_e.js",
-      "_link-C-HVg2_u.js"
-    ],
-    "dynamicImports": [
-      "_framework-CXnKph_e.js"
-    ]
-  },
-  "node_modules/vinext/dist/shims/script.js": {
-    "file": "assets/script-DicpyzRt.js",
-    "name": "script",
-    "src": "node_modules/vinext/dist/shims/script.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-S-ySWqyJ.js",
-      "_framework-CXnKph_e.js"
-    ]
-  },
   "virtual:vinext-app-browser-entry": {
-    "file": "assets/index-CkYkqeZ8.js",
+    "file": "assets/index-Em3Ha8WJ.js",
     "name": "index",
     "src": "virtual:vinext-app-browser-entry",
     "isEntry": true,
@@ -291,15 +291,14 @@
     "dynamicImports": [
       "app/LiveRatesPanel.tsx",
       "app/blog/BlogLibrary.tsx",
-      "node_modules/vinext/dist/shims/layout-segment-context.js",
       "app/down-payment-assistance/DpaCheck.tsx",
       "app/tools/MortgageStudio.tsx",
       "app/get-started/PathFinder.tsx",
       "app/faq/FaqLibrary.tsx",
       "app/va-loans-orlando/VaReviewForm.tsx",
       "app/PremiumProcess.tsx",
+      "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/script.js",
       "virtual:vinext-app-browser-entry",
-      "node_modules/vinext/dist/shims/script.js",
       "app/MortgagePathwaySection.tsx",
       "app/tools/HelocCalculator.tsx",
       "app/ask-dr-mortgage/AskExperience.tsx",
@@ -307,9 +306,10 @@
       "app/MortgageFlightDeck.tsx",
       "_image-CJKOxGFA.js",
       "app/down-payment-assistance/DpaRateTracker.tsx",
-      "_link-C-HVg2_u.js",
+      "_link-C_9giiJ8.js",
       "app/blog/LatestBlogPosts.tsx",
-      "_ScenarioDock-Csy4txva.js",
+      "../../../../../Volumes/GORD Portable Sto 1/AI Agent Storage/Hermes/workspace/drmortgageusa-blog-publisher/site/node_modules/vinext/dist/shims/layout-segment-context.js",
+      "_ScenarioDock-BUIZjH5_.js",
       "_SiteAtmosphere-BQUd8fZL.js"
     ]
   }

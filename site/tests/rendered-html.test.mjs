@@ -189,7 +189,7 @@ test("VA page shares the main site design while keeping its search and lead cont
 test("renders the blog, DPA, and HELOC destinations", async () => {
   const cases = [
     ["/blog", /Search the library/, /Publishing since February 2026/],
-    ["/dpa", /major assistance programs are pricing today/, /Have Dennis review my options/],
+    ["/dpa", /latest verified assistance program rates/, /Have Dennis review my options/],
     ["/heloc-calculator", /How much equity could you use/, /Modeled available line/],
   ];
 
@@ -231,9 +231,8 @@ test("renders the blog, DPA, and HELOC destinations", async () => {
 
   const dpaResponse = await render("/dpa");
   const dpaHtml = await dpaResponse.text();
-  assert.match(dpaHtml, /Standard Bond/);
-  assert.match(dpaHtml, /Hometown Heroes Bond/);
-  assert.match(dpaHtml, /Connected to the official source|Last verified program snapshot/);
+  assert.match(dpaHtml, /Checking the official rate sheet/);
+  assert.doesNotMatch(dpaHtml, /July 15, 2026|7\.000%|7\.500%/);
   assert.match(dpaHtml, /Program lock rates are not ordinary retail rate quotes/);
 });
 

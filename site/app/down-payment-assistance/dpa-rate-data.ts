@@ -25,72 +25,134 @@ export type DpaRateSnapshot = {
 };
 
 export const fallbackDpaRateSnapshot: DpaRateSnapshot = {
-  asOf: "July 15, 2026",
-  notice: "Over $45 Million Available in Hometown Heroes 2026 DPA. You may not switch an existing reservation to HTH.",
-  heroesFunding: "Over $45 Million Available in Hometown Heroes 2026 DPA",
-  source: dpaRateSource,
-  groups: [
+  "asOf": "November 3, 2026",
+  "notice": "Over $20 Million Available in Hometown Heroes DPA",
+  "heroesFunding": "Over $20 Million Available in Hometown Heroes DPA",
+  "source": "https://www.ehousingplus.com/homeownership/florida-housing-finance-corporation/program-highlights/",
+  "groups": [
     {
-      id: "standard-bond",
-      label: "Standard Bond",
-      assistance: "FL Assist $10,000 or FL HLP $12,500",
-      fico: "640 minimum program score",
-      entries: [
-        { label: "FHA, VA, or USDA-RD", rate: "7.000%" },
-        { label: "Fannie Mae HFA Preferred", rate: "7.500%" },
-        { label: "Freddie Mac HFA Advantage", rate: "7.250%" },
-      ],
+      "id": "standard-bond",
+      "label": "Standard Bond",
+      "assistance": "FL Assist $10k or FL HLP $12.5k",
+      "fico": "640 minimum program score",
+      "entries": [
+        {
+          "label": "FHA, VA, or USDA-RD",
+          "rate": "8.000%"
+        },
+        {
+          "label": "Fannie Mae HFA Preferred",
+          "rate": "8.250%"
+        },
+        {
+          "label": "Freddie Mac HFA Advantage",
+          "rate": "7.750%"
+        }
+      ]
     },
     {
-      id: "standard-tba",
-      label: "Standard TBA",
-      assistance: "FL Assist $10,000 or FL HLP $12,500",
-      fico: "640 minimum program score",
-      entries: [
-        { label: "FHA, VA, or USDA-RD", rate: "7.125%" },
-        { label: "Freddie Mac HFA Advantage", detail: "At or below 80% AMI", rate: "7.250%" },
-        { label: "Freddie Mac HFA Advantage", detail: "Over 80% AMI", rate: "7.375%" },
-      ],
+      "id": "standard-tba",
+      "label": "Standard TBA",
+      "assistance": "FL Assist $10k or FL HLP $12.5k",
+      "fico": "640 minimum program score",
+      "entries": [
+        {
+          "label": "FHA, VA, or USDA-RD",
+          "rate": "8.250%"
+        },
+        {
+          "label": "Freddie Mac HFA Advantage",
+          "detail": "At or below 80% AMI",
+          "rate": "7.875%"
+        },
+        {
+          "label": "Freddie Mac HFA Advantage",
+          "detail": "Over 80% AMI",
+          "rate": "8.000%"
+        }
+      ]
     },
     {
-      id: "plus-tba",
-      label: "PLUS TBA",
-      assistance: "Forgivable assistance based on total loan amount",
-      fico: "640 minimum program score",
-      entries: [
-        { label: "3% DPA", detail: "At or below 80% AMI", rate: "7.125%" },
-        { label: "4% DPA", detail: "At or below 80% AMI", rate: "7.375%" },
-        { label: "5% DPA", detail: "At or below 80% AMI", rate: "7.750%" },
-        { label: "3% DPA", detail: "Over 80% AMI", rate: "7.250%" },
-        { label: "4% DPA", detail: "Over 80% AMI", rate: "7.500%" },
-        { label: "5% DPA", detail: "Over 80% AMI", rate: "7.875%" },
-      ],
+      "id": "plus-tba",
+      "label": "PLUS TBA",
+      "assistance": "Forgivable assistance based on total loan amount",
+      "fico": "640 minimum program score",
+      "entries": [
+        {
+          "label": "3% DPA",
+          "detail": "At or below 80% AMI",
+          "rate": "7.750%"
+        },
+        {
+          "label": "4% DPA",
+          "detail": "At or below 80% AMI",
+          "rate": "8.000%"
+        },
+        {
+          "label": "5% DPA",
+          "detail": "At or below 80% AMI",
+          "rate": "8.375%"
+        },
+        {
+          "label": "3% DPA",
+          "detail": "Over 80% AMI",
+          "rate": "7.875%"
+        },
+        {
+          "label": "4% DPA",
+          "detail": "Over 80% AMI",
+          "rate": "8.250%"
+        },
+        {
+          "label": "5% DPA",
+          "detail": "Over 80% AMI",
+          "rate": "8.500%"
+        }
+      ]
     },
     {
-      id: "heroes-bond",
-      label: "Hometown Heroes Bond",
-      assistance: "5% of the first mortgage, up to $35,000",
-      fico: "640 minimum program score",
-      status: "Available",
-      entries: [
-        { label: "FHA, VA, or USDA-RD", rate: "6.250%" },
-        { label: "Fannie Mae HFA Preferred", rate: "6.750%" },
-        { label: "Freddie Mac HFA Advantage", rate: "6.500%" },
-      ],
+      "id": "heroes-bond",
+      "label": "Hometown Heroes Bond",
+      "assistance": "5% (max $35,000)",
+      "fico": "640 minimum program score",
+      "entries": [
+        {
+          "label": "FHA, VA, or USDA-RD",
+          "rate": "7.000%"
+        },
+        {
+          "label": "Fannie Mae HFA Preferred",
+          "rate": "7.500%"
+        },
+        {
+          "label": "Freddie Mac HFA Advantage",
+          "rate": "7.000%"
+        }
+      ]
     },
     {
-      id: "heroes-tba",
-      label: "Hometown Heroes TBA",
-      assistance: "5% of the first mortgage, up to $35,000",
-      fico: "640 minimum program score",
-      status: "Available",
-      entries: [
-        { label: "FHA, VA, or USDA-RD", rate: "6.500%" },
-        { label: "Freddie Mac HFA Advantage", detail: "At or below 80% AMI", rate: "6.625%" },
-        { label: "Freddie Mac HFA Advantage", detail: "Over 80% AMI", rate: "6.750%" },
-      ],
-    },
-  ],
+      "id": "heroes-tba",
+      "label": "Hometown Heroes TBA",
+      "assistance": "5% (max $35,000)",
+      "fico": "640 minimum program score",
+      "entries": [
+        {
+          "label": "FHA, VA, or USDA-RD",
+          "rate": "7.125%"
+        },
+        {
+          "label": "Freddie Mac HFA Advantage",
+          "detail": "At or below 80% AMI",
+          "rate": "7.250%"
+        },
+        {
+          "label": "Freddie Mac HFA Advantage",
+          "detail": "Over 80% AMI",
+          "rate": "7.375%"
+        }
+      ]
+    }
+  ]
 };
 
 const sectionSpecs: Array<[string, string, number[]]> = [
