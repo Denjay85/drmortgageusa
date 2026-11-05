@@ -110,7 +110,7 @@ If a prior run staged a complete draft but failed before publication:
 71. ✅ First mortgage payment after closing in Florida, timing and budgeting (published 2026-10-27)
 72. ✅ Mortgage wire fraud at Florida closings, verifying instructions before sending funds (published 2026-10-30)
 73. ✅ Extra mortgage principal payments in Florida, balance reduction versus required payment (published 2026-11-02)
-74. ☐ Home insurance renewal and mortgage escrow in Florida, what to review before switching
+74. ✅ Home insurance renewal and mortgage escrow in Florida, what to review before switching (published 2026-11-05)
 75. ☐ Orlando seller rent-back agreements and mortgage occupancy, questions before an offer
 76. ☐ Expired mortgage preapprovals in Florida, what to refresh before shopping again
 77. ☐ Mortgage servicing transfers in Florida, verifying where your next payment goes
