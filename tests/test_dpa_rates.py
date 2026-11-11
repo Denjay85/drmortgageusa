@@ -1,4 +1,5 @@
 import copy
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import tempfile
@@ -14,9 +15,18 @@ FIXTURE = (Path(__file__).parent / 'fixtures/dpa-2026-11-03.html').read_text()
 
 class DpaRateTests(unittest.TestCase):
     def setUp(self):
+        # The source fixture is historical. Keep its clock fixed so freshness
+        # assertions do not expire as the real calendar advances.
+        clock_patch = patch.object(dpa, 'datetime', wraps=datetime)
+        self.clock = clock_patch.start()
+        self.addCleanup(clock_patch.stop)
+        self.set_clock(datetime(2026, 11, 3, 17, tzinfo=timezone.utc))
         self.temp = tempfile.TemporaryDirectory()
         self.cache = dpa.DpaRateCache(Path(self.temp.name) / 'sheet.json')
         self.response = Mock(text=FIXTURE)
+
+    def set_clock(self, instant):
+        self.clock.now.side_effect = lambda tz=None: instant.astimezone(tz)
 
     def tearDown(self):
         self.temp.cleanup()
@@ -43,6 +53,28 @@ class DpaRateTests(unittest.TestCase):
         self.assertTrue(self.cache.payload()['live'])
         restored = dpa.DpaRateCache(self.cache.path)
         self.assertEqual(restored.record, self.cache.record)
+
+    def test_sheet_freshness_expires_after_four_days(self):
+        with patch.object(dpa.requests, 'get', return_value=self.response):
+            self.cache.refresh()
+        for day, stale in [(7, False), (8, True), (11, True)]:
+            with self.subTest(day=day):
+                self.set_clock(datetime(2026, 11, day, 17, tzinfo=timezone.utc))
+                payload = self.cache.payload()
+                self.assertEqual(payload['stale'], stale)
+                self.assertEqual(payload['live'], not stale)
+                self.assertEqual(payload['status'], 'stale' if stale else 'verified')
+
+    def test_sheet_freshness_uses_new_york_midnight(self):
+        with patch.object(dpa.requests, 'get', return_value=self.response):
+            self.cache.refresh()
+        # November 8 UTC is still November 7 in New York until 05:00 UTC.
+        for hour, minute, stale in [(4, 59, False), (5, 0, True)]:
+            with self.subTest(hour=hour, minute=minute):
+                self.set_clock(datetime(2026, 11, 8, hour, minute, tzinfo=timezone.utc))
+                payload = self.cache.payload()
+                self.assertEqual(payload['stale'], stale)
+                self.assertEqual(payload['live'], not stale)
 
     def test_exhausted_timeouts_preserve_last_good_and_back_off(self):
         before = copy.deepcopy(self.cache.record)
