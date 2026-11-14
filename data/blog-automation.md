@@ -112,7 +112,7 @@ If a prior run staged a complete draft but failed before publication:
 73. ✅ Extra mortgage principal payments in Florida, balance reduction versus required payment (published 2026-11-02)
 74. ✅ Home insurance renewal and mortgage escrow in Florida, what to review before switching (published 2026-11-05)
 75. ✅ Orlando seller rent-back agreements and mortgage occupancy, questions before an offer (published 2026-11-11)
-76. ☐ Expired mortgage preapprovals in Florida, what to refresh before shopping again
+76. ✅ Expired mortgage preapprovals in Florida, what to refresh before shopping again (published 2026-11-14)
 77. ☐ Mortgage servicing transfers in Florida, verifying where your next payment goes
 
 Queue extension October 30, 2026: prior 71 topics exhausted. Wire-fraud, rent-back, preapproval-expiry, and servicing-transfer angles are gaps against the current article inventory. Extra-principal and insurance-renewal angles are research leads from the October 30 Scout report, not verified guideline claims. All six require separate current primary-source checks before writing; no Reddit claim is underwriting authority.
