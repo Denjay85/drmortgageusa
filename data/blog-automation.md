@@ -114,6 +114,14 @@ If a prior run staged a complete draft but failed before publication:
 75. ✅ Orlando seller rent-back agreements and mortgage occupancy, questions before an offer (published 2026-11-11)
 76. ✅ Expired mortgage preapprovals in Florida, what to refresh before shopping again (published 2026-11-14)
 77. ✅ Mortgage servicing transfers in Florida, verifying where your next payment goes (published 2026-11-17)
+78. ✅ Mortgage PMI removal in Florida, original value versus a new appraisal (published 2026-11-20)
+79. ☐ Closing Disclosure payment went up in Orlando, how to trace which estimate changed
+80. ☐ Mortgage payoff quote vs principal balance in Florida, what to check before selling
+81. ☐ Refinance break-even in Florida, how to compare closing costs and time in the home
+82. ☐ Orlando condo dues vs reserves, what the budget can tell a buyer before the offer
+83. ☐ Buying an Orlando resale home with leased solar panels, documents to collect before underwriting
+
+Queue extension November 20, 2026: prior 77 topics exhausted. November 20 Scout/Scribe and the content calendar informed the payment reconciliation and refinance decision angles. Other topics fill bounded gaps in the current archive; future drafts require their own primary-source checks.
 
 Queue extension October 30, 2026: prior 71 topics exhausted. Wire-fraud, rent-back, preapproval-expiry, and servicing-transfer angles are gaps against the current article inventory. Extra-principal and insurance-renewal angles are research leads from the October 30 Scout report, not verified guideline claims. All six require separate current primary-source checks before writing; no Reddit claim is underwriting authority.
 
